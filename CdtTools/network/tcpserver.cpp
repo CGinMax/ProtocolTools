@@ -18,7 +18,9 @@ void TcpServer::open()
         return;
     }
 
-    m_server->listen(QHostAddress(m_ip), m_port);
+    if (!m_server->listen(QHostAddress(m_ip), m_port)) {
+        // failed notify
+    }
 }
 
 void TcpServer::close()

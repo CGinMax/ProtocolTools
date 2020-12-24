@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "network/tcpserver.h"
-
+#include "network/tcpclient.h"
 namespace Ui {
 class TabPage;
 }

@@ -13,3 +13,11 @@ SOURCES += \
 HEADERS += \
     ../CdtTools/network/networkbase.h \
     ../CdtTools/network/tcpserver.h
+
+
+CONFIG(debug, debug|release){
+    DESTDIR = $$PWD/../bin/debug
+}
+else {
+    DESTDIR = $$PWD/../bin/release
+}
