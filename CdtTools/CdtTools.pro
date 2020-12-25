@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,7 +30,13 @@ SOURCES += \
     network/networkbase.cpp \
     network/tcpserver.cpp \
     ui/tabpage.cpp \
-    network/tcpclient.cpp
+    network/tcpclient.cpp \
+    common/threadpool.cpp \
+    common/workerthread.cpp \
+    protocol/cdtcycle.cpp \
+    protocol/cdtinteracte.cpp \
+    protocol/cdtframe.cpp \
+    protocol/checkhelper.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,7 +44,13 @@ HEADERS += \
     enums.h \
     network/tcpserver.h \
     ui/tabpage.h \
-    network/tcpclient.h
+    network/tcpclient.h \
+    common/threadpool.h \
+    common/workerthread.h \
+    protocol/cdtcycle.h \
+    protocol/cdtinteracte.h \
+    protocol/cdtframe.h \
+    protocol/checkhelper.h
 
 FORMS += \
         mainwindow.ui \

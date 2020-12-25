@@ -4,8 +4,10 @@
 // add necessary includes here
 #include <QString>
 #include <QSignalSpy>
+#include <QtConcurrent>
 #include "../CdtTools/network/networkbase.h"
 #include "../CdtTools/network/tcpserver.h"
+#include "../CdtTools/common/threadpool.h"
 
 class networkTest : public QObject
 {
@@ -19,6 +21,8 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void test_tcpserver();
+    void test_worker();
+    void test_threadpool();
 
 public:
     TcpServer* m_tcpServer;
@@ -66,6 +70,41 @@ void networkTest::test_tcpserver()
 
     QVERIFY(m_tcpServer->write("aaaa"));
 
+}
+
+void networkTest::test_worker()
+{
+    WorkerThread worker;
+    int sum = 0;
+    QEventLoop eventloop;
+    QtConcurrent::run([&worker, &sum](QEventLoop* event){
+
+        worker.run([&sum](){
+            sum += 10;
+        });
+        event->quit();
+    }, &eventloop);
+    eventloop.exec();
+    while(eventloop.isRunning()) {
+        QThread::msleep(100);
+    }
+    QCOMPARE(sum, 10);
+}
+
+void networkTest::test_threadpool()
+{
+    int sum = 0;
+    {
+        ThreadPool pool(10);
+        for (int i = 0; i < pool.maxCount(); i++) {
+            pool.run([i, &sum](){
+                sum += i;
+            });
+        }
+    }
+
+
+    QCOMPARE(sum, 45);
 }
 
 QTEST_MAIN(networkTest)
