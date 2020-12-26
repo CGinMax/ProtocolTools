@@ -41,6 +41,16 @@ public:
     // 循环上送电度量
     void cycleSendAcc();
 
+    void ykExecuted(int ptId);
+
+    void yKCancel(uint8_t objNo);
+
+    void yKNotAllow(int ptId);
+
+    void yKAllNotAllow();
+
+    // 非全部点遥控帧，则要传入点号
+    CDTFrame createCycleYKFrame(bool isAllPoint, int ptId = -1);
 
 protected:
     double bcdToValue(int bcdValue);
@@ -50,6 +60,8 @@ protected:
 
     QByteArray m_recvBuffer;
     QQueue<CDTFrame> m_frameQueue;
+
+    bool isRunYK;
 };
 
 #endif // CDTCYCLE_H

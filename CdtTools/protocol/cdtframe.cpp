@@ -80,6 +80,14 @@ InfoFieldEntity::InfoFieldEntity()
 
 }
 
+InfoFieldEntity::InfoFieldEntity(uint8_t code, uint8_t data[])
+{
+    funCode = code;
+    memcpy(dataArray, data, sizeof(dataArray) / sizeof(uint8_t));
+    crcCode = CheckHelper::CheckCRC8(reinterpret_cast<uchar*>(this->toBytes().data()), 0, 5);
+
+}
+
 void InfoFieldEntity::setValue(uint8_t funCode, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
 {
     this->funCode = funCode;

@@ -90,7 +90,8 @@ enum eCDTExFunCode {
 // 信息字数据结构
 struct InfoFieldEntity
 {
-    InfoFieldEntity();
+    explicit InfoFieldEntity();
+    InfoFieldEntity(uint8_t code, uint8_t data[]);
     uint8_t funCode;     // 功能码
     uint8_t dataArray[4];// 信息、数据
     uint8_t crcCode;     // CRC码

@@ -123,9 +123,6 @@ void CDTCycle::processFrame()
 
 void CDTCycle::ykCommand(uint8_t ctrlCode, uint8_t objNo)
 {
-//    ykAckTimer = GlobalVar::SecondCounter;
-
-    createCmdFrame(eCDTFrameType::RmtControlSelectType, eCDTFunCode::RmtControlSelectCode, ctrlCode, objNo);
 
 }
 
@@ -244,6 +241,77 @@ void CDTCycle::accResponse(QList<InfoFieldEntity> &infoFieldList)
         }
 
     }
+}
+
+void CDTCycle::ykExecuted(int ptId)
+{
+    CDTFrame frame = createCycleYKFrame(false, ptId);
+    // 信息字索引
+    int fieldIndex = (ptId - 1) / 32;
+    // 在信息字中的偏移量
+    int fieldOffset = (ptId - 1) % 32;
+
+    int dataIdx = fieldOffset / 8;
+    int dataOffset = fieldOffset % 8;
+    frame.infoFields[fieldIndex].dataArray[dataIdx] |= 1 << dataOffset;
+
+    //QByteArray frameBytes = frame.toAllByteArray();
+    //ShowMsgArray(eMsgType::eMsgSend, QString("发送遥控解锁命令"), frameBytes, frameBytes.size());
+    isRunYK = true;
+    //sendFrameQueue.push_back(frame);
+}
+
+void CDTCycle::yKCancel(uint8_t objNo)
+{
+
+}
+
+void CDTCycle::yKNotAllow(int ptId)
+{
+    CDTFrame frame = createCycleYKFrame(false, ptId);
+    QByteArray frameBytes = frame.toAllByteArray();
+    //ShowMsgArray(eMsgType::eMsgSend, QString("发送遥控闭锁命令"), frameBytes, frameBytes.size());
+    //sendFrameQueue.push_back(frame);
+}
+
+void CDTCycle::yKAllNotAllow()
+{
+    CDTFrame frame = createCycleYKFrame(true);
+    QByteArray frameBytes = frame.toAllByteArray();
+    //ShowMsgArray(eMsgType::eMsgSend, QString("发送遥控闭锁命令"), frameBytes, frameBytes.size());
+    //sendFrameQueue.push_back(frame);
+}
+
+CDTFrame CDTCycle::createCycleYKFrame(bool isAllPoint, int ptId)
+{
+    CDTFrame cmdFrame;
+
+    uint8_t infoFieldCount = 0;
+    if (isAllPoint) {
+        int doCount = 0;
+        // TODO:获取Di数量
+        //    for (const auto& dev : RtuObj->ListDev) {
+        //        doCount += dev->ListDo.size();
+        //    }
+        infoFieldCount = qRound(static_cast<double>(doCount) / 32.0);
+    }
+    else {
+        infoFieldCount = qRound(static_cast<double>(ptId) / 32.0);
+    }
+
+    // 0xF0-0xFF, 16
+    uint8_t funCode = infoFieldCount < 16 ? 0xF0 : 0x80;
+    // 设置控制字值
+    cmdFrame.frameControl.setValue(eCDTFrameControlType::StandardType, 0xF1, infoFieldCount, 0, 0);
+    // 填充空数据
+    for (uint8_t i = 0; i < infoFieldCount; i++) {
+        uint8_t datas[4] = {0, 0, 0, 0};
+
+        InfoFieldEntity entity(funCode, datas);
+        funCode++;
+        cmdFrame.infoFields.append(entity);
+    }
+    return  cmdFrame;
 }
 
 double CDTCycle::bcdToValue(int bcdValue)
