@@ -55,11 +55,13 @@ void TabPage::on_btnStart_clicked()
     connect(m_network.get(), &NetworkBase::connected, [=](){
         qDebug("Connect");
     });
-    m_network->open();
     m_protocol.reset(new CDTProtocol(m_network, eStationType::Minitor));
     ThreadPool::instance()->run([this](){
         this->m_protocol->start();
     });
+    m_network->open();
+    ui->btnStart->setEnabled(false);
+
 }
 
 void TabPage::on_btnStop_clicked()

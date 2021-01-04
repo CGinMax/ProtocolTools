@@ -13,7 +13,7 @@ CDTCycle::~CDTCycle()
 
 void CDTCycle::run()
 {
-    if (m_network->isActived()) {
+    if (!m_network->isActived()) {
         QThread::msleep(2000);// 2s
     }
 

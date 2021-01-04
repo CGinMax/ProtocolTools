@@ -33,7 +33,7 @@ void CDTProtocol::run()
      * 解析
      * 循环发送
      */
-    if (m_network->isActived()) {
+    if (!m_network->isActived()) {
         QThread::msleep(2000);// 2s
     }
 

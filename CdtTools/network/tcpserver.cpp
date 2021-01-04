@@ -20,6 +20,7 @@ void TcpServer::open()
 
     if (!m_server->listen(QHostAddress(m_ip), m_port)) {
         // failed notify
+        qDebug("listen failed");
     }
 }
 
@@ -46,7 +47,11 @@ bool TcpServer::write(const QByteArray &data)
 
 QByteArray TcpServer::read()
 {
-    return QByteArray();
+    QByteArray ba;
+    for (auto& socket : m_sockets) {
+        ba.append(socket->readAll());
+    }
+    return ba;
 }
 
 bool TcpServer::isActived()
