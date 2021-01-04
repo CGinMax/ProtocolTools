@@ -37,10 +37,12 @@ enum eCDTFrameType{
     RmtInformation = 0xF4,      // 遥信
     ACCType = 0x85,             // 电度
 
+    RmtControlType = 0x57, // 遥控
+    RmtControlTypeCycle = 0xF1, // 循环式遥控
+
     // 下行
-    RmtControlSelectType = 0x61, // 遥控选择
-    RmtControlExecuteType = 0xC2,// 遥控执行
-    RmtControlCancelType = 0xB3, // 遥控撤销
+//    RmtControlExecuteType = 0xC2,// 遥控执行
+//    RmtControlCancelType = 0xB3, // 遥控撤销
 
     UpDownSelectType = 0xF4,     // 升降选择
     UpDownExecuteType = 0x85,    // 升降执行
@@ -96,7 +98,7 @@ struct InfoFieldEntity
     uint8_t dataArray[4];// 信息、数据
     uint8_t crcCode;     // CRC码
 
-    void setValue(uint8_t funCode, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
+    void fillData(uint8_t funCode, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
     QByteArray toBytes();
 };
 
@@ -111,7 +113,7 @@ struct ControlEntity
     uint8_t destAddr;  // 目的地址
     uint8_t crcCode;   // CRC码
 
-    void setValue(uint8_t control, uint8_t type, uint8_t dataNum, uint8_t sourceAddr, uint8_t destAddr);
+    void fillData(uint8_t control, uint8_t type, uint8_t dataNum, uint8_t sourceAddr, uint8_t destAddr);
 
     QByteArray toBytes();
 };

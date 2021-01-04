@@ -4,6 +4,8 @@
 #include <QWidget>
 #include "network/tcpserver.h"
 #include "network/tcpclient.h"
+#include "protocol/protocolbase.h"
+
 namespace Ui {
 class TabPage;
 }
@@ -28,6 +30,7 @@ private slots:
 private:
     Ui::TabPage *ui;
     QSharedPointer<NetworkBase> m_network;
+    QSharedPointer<ProtocolBase> m_protocol;
 };
 
 #endif // TABPAGE_H

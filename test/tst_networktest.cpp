@@ -5,9 +5,13 @@
 #include <QString>
 #include <QSignalSpy>
 #include <QtConcurrent>
+#include <QTimer>
+#include <QQueue>
 #include "../CdtTools/network/networkbase.h"
 #include "../CdtTools/network/tcpserver.h"
 #include "../CdtTools/common/threadpool.h"
+#include "../CdtTools/protocol/cdtprotocol.h"
+#include "../CdtTools/protocol/checkhelper.h"
 
 class networkTest : public QObject
 {
@@ -23,6 +27,7 @@ private slots:
     void test_tcpserver();
     void test_worker();
     void test_threadpool();
+    void test_cdt();
 
 public:
     TcpServer* m_tcpServer;
@@ -33,9 +38,7 @@ networkTest::networkTest()
 {
     m_tcpServer = new TcpServer("127.0.0.1", 8011);
     m_testClient = new QTcpSocket;
-//    connect(m_testClient, &QTcpSocket::connected, [=](){
 
-//    });
 }
 
 networkTest::~networkTest()
@@ -102,9 +105,25 @@ void networkTest::test_threadpool()
             });
         }
     }
-
-
     QCOMPARE(sum, 45);
+
+}
+
+void networkTest::test_cdt()
+{
+    CDTProtocol cdt;
+    char rawData[] ={(char)0xEB, (char)0x90, (char)0xEB, (char)0x90, (char)0xEB, (char)0x90, 0x71, (char)0xF4, 0x01, 0x00, 0x00, 0x33, (char)0xF0, 0x38, 0x00, 0x00, 0x00, (char)0xEF};
+    QByteArray yxBytes(rawData, sizeof(rawData) / sizeof(char));
+
+//    cdt.m_recvBuffer = yxBytes;
+//    cdt.parseRecvData();
+//    QCOMPARE(cdt.m_frameQueue.size(), 1);
+
+    // processFrame
+//    cdt.m_testYxList.clear();
+//    cdt.processFrame();
+//    QCOMPARE(cdt.m_testYxList.at(2), 0);
+//    QCOMPARE(cdt.m_testYxList.at(3), 1);
 }
 
 QTEST_MAIN(networkTest)

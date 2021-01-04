@@ -2,10 +2,15 @@
 #define ENUMS_H
 
 enum NetworkType{
-    TcpServer = 0,
-    TcpClient,
-    Udp,
-    SerialPort
+    eTcpServer = 0,
+    eTcpClient,
+    eUdp,
+    eSerialPort
+};
+
+enum eStationType{
+    WF = 0, // 五防
+    Minitor,// 监控
 };
 
 #endif // ENUMS_H

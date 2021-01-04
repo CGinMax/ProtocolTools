@@ -91,12 +91,3 @@ unsigned char CheckHelper::CheckSum8(unsigned char buff[], int offset, int len)
 
     return result;
 }
-
-// 获取字节个数
-int CheckHelper::GetByteSize(eValType valType)
-{
-    if (valType == eValType::Int16 || valType == eValType::Uint16) return 2;
-    if (valType == eValType::Int32 || valType == eValType::Uint32 || valType == eValType::Float32) return 4;
-    if (valType == eValType::Double64 || valType == eValType::Int64 || valType == eValType::Uint64) return 8;
-    return 1;
-}

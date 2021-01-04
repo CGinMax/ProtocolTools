@@ -37,6 +37,20 @@
       <widget class="QLineEdit" name="editPort"/>
      </item>
      <item>
+      <widget class="QComboBox" name="comboBox">
+       <item>
+        <property name="text">
+         <string>Minitor</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>WF</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
       <widget class="QComboBox" name="cbbProtocl">
        <item>
         <property name="text">

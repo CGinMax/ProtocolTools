@@ -1,8 +1,11 @@
 #include "tabpage.h"
 #include "ui_tabpage.h"
-#include "enums.h"
 #include <QRegularExpressionValidator>
 #include <QIntValidator>
+#include "enums.h"
+#include "../common/threadpool.h"
+#include "../protocol/cdtprotocol.h"
+#include "../protocol/cdtcycle.h"
 
 TabPage::TabPage(QWidget *parent)
     : QWidget(parent)
@@ -36,28 +39,33 @@ void TabPage::on_cbbProtocl_currentIndexChanged(int index)
 void TabPage::on_btnStart_clicked()
 {
     m_network.clear();
+    m_protocol.clear();
     switch (ui->cbbProtocl->currentIndex()) {
-    case NetworkType::TcpServer:
-        m_network.reset(new class TcpServer(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
+    case NetworkType::eTcpServer:
+        m_network.reset(new TcpServer(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
         break;
-    case NetworkType::TcpClient:
-        m_network.reset(new class TcpClient(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
+    case NetworkType::eTcpClient:
+        m_network.reset(new TcpClient(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
         break;
-    case NetworkType::Udp:
+    case NetworkType::eUdp:
         break;
-    case NetworkType::SerialPort:
+    case NetworkType::eSerialPort:
         break;
     }
     connect(m_network.get(), &NetworkBase::connected, [=](){
         qDebug("Connect");
     });
     m_network->open();
+    m_protocol.reset(new CDTProtocol(m_network, eStationType::Minitor));
+    ThreadPool::instance()->run([this](){
+        this->m_protocol->start();
+    });
 }
 
 void TabPage::on_btnStop_clicked()
 {
     if (m_network->isActived()) {
         m_network->close();
-
     }
+    m_protocol->stop();
 }

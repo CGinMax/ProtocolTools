@@ -53,7 +53,7 @@ ControlEntity::ControlEntity()
 {}
 
 
-void ControlEntity::setValue(uint8_t control, uint8_t type, uint8_t dataNum, uint8_t sourceAddr, uint8_t destAddr)
+void ControlEntity::fillData(uint8_t control, uint8_t type, uint8_t dataNum, uint8_t sourceAddr, uint8_t destAddr)
 {
     this->control = control;
     this->type = type;
@@ -88,7 +88,7 @@ InfoFieldEntity::InfoFieldEntity(uint8_t code, uint8_t data[])
 
 }
 
-void InfoFieldEntity::setValue(uint8_t funCode, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
+void InfoFieldEntity::fillData(uint8_t funCode, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
 {
     this->funCode = funCode;
     this->dataArray[0] = d0;

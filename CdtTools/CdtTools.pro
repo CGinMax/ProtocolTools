@@ -33,10 +33,12 @@ SOURCES += \
     network/tcpclient.cpp \
     common/threadpool.cpp \
     common/workerthread.cpp \
-    protocol/cdtcycle.cpp \
     protocol/cdtinteracte.cpp \
     protocol/cdtframe.cpp \
-    protocol/checkhelper.cpp
+    protocol/checkhelper.cpp \
+    protocol/cdtprotocol.cpp \
+    protocol/protocolbase.cpp \
+    protocol/cdtcycle.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,10 +49,12 @@ HEADERS += \
     network/tcpclient.h \
     common/threadpool.h \
     common/workerthread.h \
-    protocol/cdtcycle.h \
     protocol/cdtinteracte.h \
     protocol/cdtframe.h \
-    protocol/checkhelper.h
+    protocol/checkhelper.h \
+    protocol/cdtprotocol.h \
+    protocol/protocolbase.h \
+    protocol/cdtcycle.h
 
 FORMS += \
         mainwindow.ui \

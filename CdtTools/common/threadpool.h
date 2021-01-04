@@ -15,12 +15,16 @@ class ThreadPool : public QObject
 {
     Q_OBJECT
 public:
+    static ThreadPool* instance();
     explicit ThreadPool(int threadCount = 20);
     ~ThreadPool() override;
 
     void run(const std::function<void()>& callback);
 
+    void waitRun(const std::function<void()>& callback);
+
     int maxCount() const;
+
 signals:
 
 public slots:
