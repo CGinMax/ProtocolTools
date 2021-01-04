@@ -49,11 +49,7 @@ QByteArray TcpServer::read()
 {
     QByteArray ba;
     for (auto& socket : m_sockets) {
-        //qDebug("%s:%d", qPrintable(socket->peerAddress().toString()), socket->peerPort());
-        //char data[4096]={0};
-        //qDebug("%d",socket->read(data, 4096));
-//        ba.append(socket->read(4096));
-//        ba.append(socket->readAll());
+        ba.append(socket->readAll());
     }
     return ba;
 }
@@ -85,9 +81,9 @@ void TcpServer::onNewConnection()
 void TcpServer::onReadyRead()
 {
     auto socket = qobject_cast<QTcpSocket*>(sender());
-    auto readData = socket->readAll();
+//    auto readData = socket->readAll();
 
-    emit recvData(readData);
+//    emit recvData(readData);
 }
 
 void TcpServer::onDisconnected()

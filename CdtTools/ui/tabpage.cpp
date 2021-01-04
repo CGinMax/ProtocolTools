@@ -39,27 +39,27 @@ void TabPage::on_cbbProtocl_currentIndexChanged(int index)
 void TabPage::on_btnStart_clicked()
 {
     m_protocol.clear();
-//    m_network.clear();
-//    switch (ui->cbbProtocl->currentIndex()) {
-//    case NetworkType::eTcpServer:
-//        m_network.reset(new TcpServer(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
-//        break;
-//    case NetworkType::eTcpClient:
-//        m_network.reset(new TcpClient(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
-//        break;
-//    case NetworkType::eUdp:
-//        break;
-//    case NetworkType::eSerialPort:
-//        break;
-//    }
-//    connect(m_network.get(), &NetworkBase::connected, [=](){
-//        qDebug("Connect");
-//    });
+    m_network.clear();
+    switch (ui->cbbProtocl->currentIndex()) {
+    case NetworkType::eTcpServer:
+        m_network.reset(new TcpServer(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
+        break;
+    case NetworkType::eTcpClient:
+        m_network.reset(new TcpClient(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
+        break;
+    case NetworkType::eUdp:
+        break;
+    case NetworkType::eSerialPort:
+        break;
+    }
+    connect(m_network.get(), &NetworkBase::connected, [=](){
+        qDebug("Connect");
+    });
     m_protocol.reset(new CDTProtocol(m_network, eStationType::Minitor));
     ThreadPool::instance()->run([this](){
         this->m_protocol->start();
     });
-//    m_network->open();
+    m_network->open();
     ui->btnStart->setEnabled(false);
 
 }

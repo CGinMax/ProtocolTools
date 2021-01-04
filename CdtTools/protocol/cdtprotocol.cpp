@@ -44,8 +44,7 @@ void CDTProtocol::run()
     processCommand();
 
     auto bytes = m_network->read();
-    bytes.append('a');
-    m_network->write(bytes);
+
     if (!bytes.isEmpty()) {
         m_recvBuffer.append(bytes);
         //处理数据
@@ -60,11 +59,11 @@ void CDTProtocol::run()
 
 void CDTProtocol::start()
 {
-    m_network.reset(new TcpServer("127.0.0.1", 2406));
-    QObject::connect(m_network.data(), &TcpServer::connected,[](){
-        qDebug("connect");
-    });
-    m_network->open();
+//    m_network.reset(new TcpServer("127.0.0.1", 2406));
+//    QObject::connect(m_network.data(), &TcpServer::connected,[](){
+//        qDebug("connect");
+//    });
+//    m_network->open();
     if (!m_timer) {
         m_timer = new QTimer;
         QObject::connect(m_timer, &QTimer::timeout, [this](){
