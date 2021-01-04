@@ -49,7 +49,11 @@ QByteArray TcpServer::read()
 {
     QByteArray ba;
     for (auto& socket : m_sockets) {
-        ba.append(socket->readAll());
+        //qDebug("%s:%d", qPrintable(socket->peerAddress().toString()), socket->peerPort());
+        //char data[4096]={0};
+        //qDebug("%d",socket->read(data, 4096));
+//        ba.append(socket->read(4096));
+//        ba.append(socket->readAll());
     }
     return ba;
 }
