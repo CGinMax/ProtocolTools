@@ -14,9 +14,12 @@ public:
     // NetworkBase interface
     void open() override;
     void close() override;
+    bool write(const char* data, int size) override;
     bool write(const QByteArray &data) override;
-    QByteArray read() override;
+    int read(char* data, int size) override;
+    QByteArray readAll() override;
     bool isActived() override;
+    QString toString() override;
 signals:
 
 public slots:

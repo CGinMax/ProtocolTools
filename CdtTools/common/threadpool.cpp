@@ -1,7 +1,7 @@
 #include "threadpool.h"
 #include <QtConcurrent>
 #include <QSemaphore>
-
+#include <QPointer>
 
 ThreadPool *ThreadPool::instance()
 {
@@ -35,11 +35,12 @@ ThreadPool::ThreadPool(int threadCount)
 
 ThreadPool::~ThreadPool()
 {
-    for (const auto& eventLoop : m_eventLoops) {
-        QMetaObject::invokeMethod(eventLoop.data(), &QEventLoop::quit, Qt::QueuedConnection);
+    for (auto& eventLoop : m_eventLoops) {
+        eventLoop->quit();
+        //QMetaObject::invokeMethod(eventLoop.data(), &QEventLoop::quit);
     }
 
-    m_threadPool->waitForDone();
+    m_threadPool->waitForDone(3000);
 }
 
 void ThreadPool::run(const std::function<void()> &callback)

@@ -2,6 +2,7 @@
 #include "ui_tabpage.h"
 #include <QRegularExpressionValidator>
 #include <QIntValidator>
+#include <QButtonGroup>
 #include "enums.h"
 #include "../common/threadpool.h"
 #include "../protocol/cdtprotocol.h"
@@ -30,6 +31,11 @@ void TabPage::initWidget()
     ui->editPort->setText("2404");
     ui->editIp->setValidator(regValid);
     ui->editPort->setValidator(intValid);
+
+    auto btnGroup = new QButtonGroup(this);
+    btnGroup->addButton(ui->btnStart);
+    btnGroup->addButton(ui->btnStop);
+    btnGroup->setExclusive(true);
 }
 
 void TabPage::on_cbbProtocl_currentIndexChanged(int index)
@@ -54,11 +60,13 @@ void TabPage::on_btnStart_clicked()
     }
     connect(m_network.get(), &NetworkBase::connected, [=](){
         qDebug("Connect");
+
+        m_protocol.reset(new CDTProtocol(m_network, eStationType::Minitor));
+        ThreadPool::instance()->run([this](){
+            this->m_protocol->start();
+        });
     });
-    m_protocol.reset(new CDTProtocol(m_network, eStationType::Minitor));
-    ThreadPool::instance()->run([this](){
-        this->m_protocol->start();
-    });
+
     m_network->open();
     ui->btnStart->setEnabled(false);
 
@@ -66,8 +74,9 @@ void TabPage::on_btnStart_clicked()
 
 void TabPage::on_btnStop_clicked()
 {
+    m_protocol->stop();
     if (m_network->isActived()) {
         m_network->close();
     }
-    m_protocol->stop();
+    ui->btnStart->setEnabled(true);
 }

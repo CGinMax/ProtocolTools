@@ -7,7 +7,7 @@ class CDTCycle : public CDTProtocol
 {
 public:
     CDTCycle();
-    ~CDTCycle();
+    ~CDTCycle() override;
 
     // CDTProtocol interface
     void run() override;

@@ -59,11 +59,6 @@ void CDTProtocol::run()
 
 void CDTProtocol::start()
 {
-//    m_network.reset(new TcpServer("127.0.0.1", 2406));
-//    QObject::connect(m_network.data(), &TcpServer::connected,[](){
-//        qDebug("connect");
-//    });
-//    m_network->open();
     if (!m_timer) {
         m_timer = new QTimer;
         QObject::connect(m_timer, &QTimer::timeout, [this](){

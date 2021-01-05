@@ -3,9 +3,16 @@
 TcpServer::TcpServer(const QString &ip, ushort port, QObject *parent)
     : m_ip(ip)
     , m_port(port)
-    , m_server(new QTcpServer(this))
+    , m_socket(nullptr)
 {
-    connect(m_server.get(), &QTcpServer::newConnection, this, &TcpServer::onNewConnection);
+    setParent(parent);
+    //connect(m_server.get(), &QTcpServer::newConnection, this, &TcpServer::onNewConnection);
+}
+
+TcpServer::TcpServer(QTcpSocket *socket, QObject *parent)
+    : m_socket(socket)
+{
+    setParent(parent);
 }
 
 TcpServer::~TcpServer()
@@ -18,45 +25,48 @@ void TcpServer::open()
         return;
     }
 
-    if (!m_server->listen(QHostAddress(m_ip), m_port)) {
-        // failed notify
-        qDebug("listen failed");
-    }
+    //    if (!m_server->listen(QHostAddress(m_ip), m_port)) {
+
+    //        qDebug("listen failed");
+    //    }
 }
 
 void TcpServer::close()
 {
-    m_server->close();
-    for (auto& socket : m_sockets) {
-        socket->close();
-    }
-    QList<QTcpSocket*>().swap(m_sockets);
+    m_socket->close();
+}
+
+bool TcpServer::write(const char *data, int size)
+{
+    return m_socket->write(data, size) > 0;
 }
 
 bool TcpServer::write(const QByteArray &data)
 {
-    bool ok = false;
-    for (auto& socket : m_sockets) {
-        if (socket->write(data) >= 0) {
-            ok = true;
-        }
-    }
-
-    return ok;
+    return m_socket->write(data) > 0;
 }
 
-QByteArray TcpServer::read()
+int TcpServer::read(char *data, int size)
 {
-    QByteArray ba;
-    for (auto& socket : m_sockets) {
-        ba.append(socket->readAll());
-    }
-    return ba;
+    return m_socket->read(data, size);
+}
+
+QByteArray TcpServer::readAll()
+{
+    return m_socket->readAll();
 }
 
 bool TcpServer::isActived()
 {
-    return !m_server.isNull() && m_server->isListening();
+    return m_socket != nullptr && m_socket->state() == QAbstractSocket::ConnectedState;
+}
+
+QString TcpServer::toString()
+{
+    if (isActived()) {
+        return QString("%1:%2").arg(m_socket->peerName()).arg(m_socket->peerPort());
+    }
+    return QLatin1String("Unnamed");
 }
 
 ushort TcpServer::port() const
@@ -69,26 +79,27 @@ QString TcpServer::ip() const
     return m_ip;
 }
 
-void TcpServer::onNewConnection()
-{
-    auto socket = m_server->nextPendingConnection();
-    connect(socket, &QTcpSocket::readyRead, this,&TcpServer::onReadyRead);
-    connect(socket, &QTcpSocket::disconnected, this, &TcpServer::onDisconnected);
-    m_sockets.append(socket);
-    emit connected();
-}
+//void TcpServer::onNewConnection()
+//{
+//    auto socket = m_server->nextPendingConnection();
+//    connect(socket, &QTcpSocket::readyRead, this,&TcpServer::onReadyRead);
+//    connect(socket, &QTcpSocket::disconnected, this, &TcpServer::onDisconnected);
+//    m_sockets.append(socket);
+//    emit connected();
+//}
 
-void TcpServer::onReadyRead()
-{
-    auto socket = qobject_cast<QTcpSocket*>(sender());
-//    auto readData = socket->readAll();
+//void TcpServer::onReadyRead()
+//{
+//    auto socket = qobject_cast<QTcpSocket*>(sender());
+////    auto readData = socket->readAll();
 
-//    emit recvData(readData);
-}
+////    emit recvData(readData);
+//}
 
-void TcpServer::onDisconnected()
-{
-    auto socket = qobject_cast<QTcpSocket*>(sender());
-    m_sockets.removeAt(m_sockets.indexOf(socket));
-//            m_sockets.erase()
-}
+//void TcpServer::onDisconnected()
+//{
+//    auto socket = qobject_cast<QTcpSocket*>(sender());
+//    m_sockets.removeAt(m_sockets.indexOf(socket));
+//    // fix me
+//    socket->deleteLater();
+//}

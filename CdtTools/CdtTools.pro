@@ -38,7 +38,10 @@ SOURCES += \
     protocol/checkhelper.cpp \
     protocol/cdtprotocol.cpp \
     protocol/protocolbase.cpp \
-    protocol/cdtcycle.cpp
+    protocol/cdtcycle.cpp \
+    ui/clientpage.cpp \
+    ui/serverpage.cpp \
+    ui/cdtwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,11 +57,15 @@ HEADERS += \
     protocol/checkhelper.h \
     protocol/cdtprotocol.h \
     protocol/protocolbase.h \
-    protocol/cdtcycle.h
+    protocol/cdtcycle.h \
+    ui/clientpage.h \
+    ui/serverpage.h \
+    ui/cdtwidget.h
 
 FORMS += \
         mainwindow.ui \
-    ui/tabpage.ui
+    ui/tabpage.ui \
+    ui/cdtwidget.ui
 
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug

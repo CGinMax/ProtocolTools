@@ -29,18 +29,35 @@ void TcpClient::close()
     }
 }
 
-bool TcpClient::write(const QByteArray &data)
+bool TcpClient::write(const char *data, int size)
 {
-    qint64 writeLen = m_socket->write(data);
-    return writeLen > 0;
+    return m_socket->write(data, size) > 0;
 }
 
-QByteArray TcpClient::read()
+bool TcpClient::write(const QByteArray &data)
 {
-    return QByteArray();
+    return m_socket->write(data) > 0;
+}
+
+int TcpClient::read(char *data, int size)
+{
+    return m_socket->read(data, size);
+}
+
+QByteArray TcpClient::readAll()
+{
+    return m_socket->readAll();
 }
 
 bool TcpClient::isActived()
 {
     return !m_socket.isNull() && m_socket->state() == QTcpSocket::ConnectedState;
+}
+
+QString TcpClient::toString()
+{
+    if (isActived()) {
+        return QString("%1:%2").arg(m_socket->peerName()).arg(m_socket->peerPort());
+    }
+    return QLatin1String("Unnamed");
 }

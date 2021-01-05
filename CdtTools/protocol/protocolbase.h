@@ -9,7 +9,7 @@ class ProtocolBase
 public:
     ProtocolBase();
     ProtocolBase(const QSharedPointer<NetworkBase>& network);
-    ~ProtocolBase();
+    virtual ~ProtocolBase();
 
     virtual void run() {}
 

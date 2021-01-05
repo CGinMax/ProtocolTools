@@ -15,7 +15,7 @@ class CDTProtocol : public ProtocolBase
 public:
     CDTProtocol();
     CDTProtocol(const QSharedPointer<NetworkBase>& network, eStationType stationType);
-    ~CDTProtocol();
+    virtual ~CDTProtocol() override;
 
     virtual void run() override;
     void start() override;

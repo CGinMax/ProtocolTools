@@ -11,9 +11,12 @@ public:
 
     virtual void open() = 0;
     virtual void close() = 0;
+    virtual bool write(const char* data, int size) = 0;
     virtual bool write(const QByteArray& data) = 0;
-    virtual QByteArray read() = 0;
+    virtual int read(char* data, int size) = 0;
+    virtual QByteArray readAll() = 0;
     virtual bool isActived() = 0;
+    virtual QString toString() = 0;
 
 signals:
     void connected();

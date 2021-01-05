@@ -12,15 +12,19 @@ class TcpServer : public NetworkBase
     Q_OBJECT
 public:
     explicit TcpServer(const QString& ip, ushort port, QObject* parent = nullptr);
+    TcpServer(QTcpSocket* socket, QObject* parent = nullptr);
     ~TcpServer() override;
 
     // NetworkBase interface
 public:
     void open() override;
     void close() override;
+    bool write(const char* data, int size) override;
     bool write(const QByteArray& data) override;
-    QByteArray read() override;
+    int read(char* data, int size) override;
+    QByteArray readAll() override;
     bool isActived() override;
+    QString toString() override;
 
     QString ip() const;
     ushort port() const;
@@ -28,15 +32,16 @@ public:
 signals:
 
 public:
-    void onNewConnection();
-    void onReadyRead();
-    void onDisconnected();
+//    void onNewConnection();
+//    void onReadyRead();
+//    void onDisconnected();
 
 private:
     QString m_ip;
     ushort m_port;
-    QScopedPointer<QTcpServer> m_server;
-    QList<QTcpSocket*> m_sockets;
+    QTcpSocket* m_socket;
+//    QScopedPointer<QTcpServer> m_server;
+//    QList<QTcpSocket*> m_sockets;
 };
 
 #endif // TCPSERVER_H
