@@ -14,7 +14,8 @@ SOURCES += \
     ../CdtTools/protocol/cdtinteracte.cpp \
     ../CdtTools/protocol/cdtprotocol.cpp \
     ../CdtTools/protocol/checkhelper.cpp \
-    ../CdtTools/protocol/protocolbase.cpp
+    ../CdtTools/protocol/protocolbase.cpp \
+    ../CdtTools/common/util.cpp
 
 
 HEADERS += \
@@ -26,7 +27,8 @@ HEADERS += \
     ../CdtTools/protocol/cdtinteracte.h \
     ../CdtTools/protocol/cdtprotocol.h \
     ../CdtTools/protocol/checkhelper.h \
-    ../CdtTools/protocol/protocolbase.h
+    ../CdtTools/protocol/protocolbase.h \
+    ../CdtTools/common/util.h
 
 
 CONFIG(debug, debug|release){

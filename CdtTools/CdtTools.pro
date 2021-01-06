@@ -41,7 +41,8 @@ SOURCES += \
     protocol/cdtcycle.cpp \
     ui/clientpage.cpp \
     ui/serverpage.cpp \
-    ui/cdtwidget.cpp
+    ui/cdtsettingdlg.cpp \
+    common/util.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,12 +61,14 @@ HEADERS += \
     protocol/cdtcycle.h \
     ui/clientpage.h \
     ui/serverpage.h \
-    ui/cdtwidget.h
+    ui/cdtsettingdlg.h \
+    common/util.h
 
 FORMS += \
         mainwindow.ui \
     ui/tabpage.ui \
-    ui/cdtwidget.ui
+    ui/cdtwidget.ui \
+    ui/cdtsettingdlg.ui
 
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug

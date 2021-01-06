@@ -23,7 +23,7 @@ void CDTCycle::run()
     // 处理命令
     processCommand();
 
-    auto bytes = m_network->read();
+    auto bytes = m_network->readAll();
     if (!bytes.isEmpty()) {
         m_recvBuffer.append(bytes);
         //处理数据

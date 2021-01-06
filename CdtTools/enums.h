@@ -13,4 +13,11 @@ enum eStationType{
     Minitor,// 监控
 };
 
+enum eProtocol {
+    CDTStandard = 0,// 标准
+    CDTGc,  // 共创
+    CDTUt,  // 优特
+    CDTNr,  // 南瑞
+};
+
 #endif // ENUMS_H
