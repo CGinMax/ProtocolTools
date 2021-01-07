@@ -15,7 +15,14 @@ SOURCES += \
     ../CdtTools/protocol/cdtprotocol.cpp \
     ../CdtTools/protocol/checkhelper.cpp \
     ../CdtTools/protocol/protocolbase.cpp \
-    ../CdtTools/common/util.cpp
+    ../CdtTools/common/util.cpp \
+    ../CdtTools/ui/tables/delegates/comboboxdelegate.cpp \
+    ../CdtTools/ui/tables/didata.cpp \
+    ../CdtTools/ui/tables/ditablemodel.cpp \
+    ../CdtTools/ui/cdtworkwidget.cpp \
+    ../CdtTools/ui/tables/aitablemodel.cpp \
+    ../CdtTools/ui/tables/aidata.cpp \
+    ../CdtTools/ui/tables/delegates/digitlimitedelegate.cpp
 
 
 HEADERS += \
@@ -28,7 +35,14 @@ HEADERS += \
     ../CdtTools/protocol/cdtprotocol.h \
     ../CdtTools/protocol/checkhelper.h \
     ../CdtTools/protocol/protocolbase.h \
-    ../CdtTools/common/util.h
+    ../CdtTools/common/util.h \
+    ../CdtTools/ui/tables/delegates/comboboxdelegate.h \
+    ../CdtTools/ui/tables/didata.h \
+    ../CdtTools/ui/tables/ditablemodel.h \
+    ../CdtTools/ui/cdtworkwidget.h \
+    ../CdtTools/ui/tables/aitablemodel.h \
+    ../CdtTools/ui/tables/aidata.h \
+    ../CdtTools/ui/tables/delegates/digitlimitedelegate.h
 
 
 CONFIG(debug, debug|release){
@@ -37,3 +51,6 @@ CONFIG(debug, debug|release){
 else {
     DESTDIR = $$PWD/../bin/release
 }
+
+FORMS += \
+    ../CdtTools/ui/cdtworkwidget.ui

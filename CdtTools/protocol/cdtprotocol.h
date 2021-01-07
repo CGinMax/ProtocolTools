@@ -13,8 +13,7 @@
 class CDTProtocol : public ProtocolBase
 {
 public:
-    CDTProtocol();
-    CDTProtocol(const QSharedPointer<NetworkBase>& network, eStationType stationType);
+    CDTProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     virtual ~CDTProtocol() override;
 
     virtual void run() override;
@@ -35,6 +34,10 @@ public:
 
     void send(CDTFrame& frame);
 
+    void sendAllDi();
+    void sendAllAi();
+    void sendVirtualYX();
+
     // 遥信
     void yxResponse(QList<InfoFieldEntity> &infoFieldList);
 
@@ -45,7 +48,7 @@ public:
 
     void ykSelect(uint8_t operCode, uint8_t ptNo);
 
-    void yKSelectBack(uint8_t operCode, uint8_t ptNo);
+    void ykSelectBack(uint8_t operCode, uint8_t ptNo);
 
     void yKExecute(uint8_t operCode, uint8_t ptNo);
 
@@ -58,6 +61,8 @@ public:
 
     void yKAllNotAllow();
 
+    CDTFrame buildYXFrame(uint8_t startFuncode);
+
     // 非全部点遥控帧，则要传入点号
     CDTFrame createCycleYKFrame(bool isAllPoint, int ptId = -1);
 
@@ -66,7 +71,7 @@ protected:
 
     uint32_t valueToBCD(double value);
 
-    eStationType m_stationType;
+
     QMutex m_mtx;
     QByteArray m_recvBuffer;
     QQueue<CDTFrame> m_frameQueue;

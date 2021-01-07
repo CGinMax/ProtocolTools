@@ -42,7 +42,15 @@ SOURCES += \
     ui/clientpage.cpp \
     ui/serverpage.cpp \
     ui/cdtsettingdlg.cpp \
-    common/util.cpp
+    common/util.cpp \
+    ui/tables/ditablemodel.cpp \
+    ui/tables/didata.cpp \
+    ui/cdtworkwidget.cpp \
+    ui/tables/delegates/comboboxdelegate.cpp \
+    ui/tables/aitablemodel.cpp \
+    ui/tables/aidata.cpp \
+    ui/tables/delegates/digitlimitedelegate.cpp \
+    ui/ptcfg.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -62,13 +70,22 @@ HEADERS += \
     ui/clientpage.h \
     ui/serverpage.h \
     ui/cdtsettingdlg.h \
-    common/util.h
+    common/util.h \
+    ui/tables/ditablemodel.h \
+    ui/tables/didata.h \
+    ui/cdtworkwidget.h \
+    ui/tables/delegates/comboboxdelegate.h \
+    ui/tables/aitablemodel.h \
+    ui/tables/aidata.h \
+    ui/tables/delegates/digitlimitedelegate.h \
+    ui/ptcfg.h
 
 FORMS += \
         mainwindow.ui \
     ui/tabpage.ui \
     ui/cdtwidget.ui \
-    ui/cdtsettingdlg.ui
+    ui/cdtsettingdlg.ui \
+    ui/cdtworkwidget.ui
 
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug

@@ -10,7 +10,9 @@
 
 TabPage::TabPage(QWidget *parent)
     : QWidget(parent)
+    , m_ptCfg(new PtCfg)
     , ui(new Ui::TabPage)
+
 {
     ui->setupUi(this);
     initWidget();
@@ -47,15 +49,15 @@ void TabPage::on_btnStart_clicked()
     m_protocol.clear();
     m_network.clear();
     switch (ui->cbbProtocl->currentIndex()) {
-    case NetworkType::eTcpServer:
+    case eNetworkType::eTcpServer:
         m_network.reset(new TcpServer(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
         break;
-    case NetworkType::eTcpClient:
+    case eNetworkType::eTcpClient:
         m_network.reset(new TcpClient(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
         break;
-    case NetworkType::eUdp:
+    case eNetworkType::eUdp:
         break;
-    case NetworkType::eSerialPort:
+    case eNetworkType::eSerialPort:
         break;
     }
     connect(m_network.get(), &NetworkBase::connected, [=](){

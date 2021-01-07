@@ -1,7 +1,7 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-enum NetworkType{
+enum eNetworkType{
     eTcpServer = 0,
     eTcpClient,
     eUdp,

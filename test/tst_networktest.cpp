@@ -14,6 +14,8 @@
 #include "../CdtTools/protocol/checkhelper.h"
 #include "../CdtTools/common/util.h"
 
+#include "../CdtTools/ui/cdtworkwidget.h"
+
 class networkTest : public QObject
 {
     Q_OBJECT
@@ -30,6 +32,8 @@ private slots:
     void test_worker();
     void test_threadpool();
     void test_cdt();
+
+    void test_ui();
 
 public:
     TcpServer* m_tcpServer;
@@ -137,7 +141,14 @@ void networkTest::test_cdt()
 //    cdt.m_testYxList.clear();
 //    cdt.processFrame();
 //    QCOMPARE(cdt.m_testYxList.at(2), 0);
-//    QCOMPARE(cdt.m_testYxList.at(3), 1);
+    //    QCOMPARE(cdt.m_testYxList.at(3), 1);
+}
+
+void networkTest::test_ui()
+{
+    CDTWorkWidget widget;
+    widget.setGeometry(200, 200, 400, 250);
+    widget.show();
 }
 
 QTEST_MAIN(networkTest)

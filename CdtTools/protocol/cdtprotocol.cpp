@@ -4,15 +4,8 @@
 #include <QMutexLocker>
 #include "../network/tcpserver.h"
 
-CDTProtocol::CDTProtocol()
-    : m_stationType(eStationType::WF)
-{
-
-}
-
-CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, eStationType stationType)
-    : ProtocolBase(network)
-    , m_stationType(stationType)
+CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
+    : ProtocolBase(network, settingData)
 {
 
 }
@@ -181,9 +174,9 @@ void CDTProtocol::processFrame()
         // 0xF4,遥信
         case eCDTFrameType::RmtInformation:
             //ShowMsgArray(eMsgType::eMsgRecv, "接收到遥信帧，正在处理...", ba, ba.size());
-            if (m_stationType == eStationType::WF) {
+            if (m_settingData->m_stationType == eStationType::WF) {
                 yxResponse(frame.infoFields);
-            } else if (m_stationType == eStationType::Minitor) {
+            } else if (m_settingData->m_stationType == eStationType::Minitor) {
                 // 监控接收虚遥信
 
             }
@@ -224,6 +217,89 @@ void CDTProtocol::send(CDTFrame &frame)
     }
 }
 
+void CDTProtocol::sendAllDi()
+{
+    if (m_settingData->m_ptCfg->m_globalDiList->isEmpty()) {
+        return ;
+    }
+    auto frame = buildYXFrame(m_settingData->m_ptCfg->m_yxFuncode);
+    // 标准虚遥信
+    frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_yxFrameType, frame.infoFields.size(), 0, 0);
+    m_sendList.append(frame);
+}
+
+void CDTProtocol::sendAllAi()
+{
+
+    CDTFrame frame;
+
+    uint8_t curCode = m_settingData->m_ptCfg->m_ycFuncode;
+
+    int aiNum = m_settingData->m_ptCfg->m_globalAiList->size();
+    int n = 0;
+    while (n < aiNum && curCode < 0x80)
+    {
+        uint8_t ptBinaryArr[4] = {0, 0, 0, 0};
+        for (int j = 0; j < 2 && n < aiNum; j++)
+        {
+            int ycValue = (*m_settingData->m_ptCfg->m_globalAiList)[n].value();
+            uint8_t valueBytes[2]{0};
+            ptBinaryArr[j * 2] = ycValue >> 8;
+            ptBinaryArr[j * 2 + 1] = ycValue;
+
+//            bool sign = ptValue < 0 ? true : false;
+
+//            bool overflow = false;
+//            uint16_t transValue = ptValue;
+//            // 溢出
+//            if (ptValue > 0x03FF || ptValue < -0x03FF) {
+//                overflow = true;
+//            }
+//            // 负数
+//            if (sign)
+//            {
+//                // 取反加1
+//                transValue = -ptValue;
+//                transValue = ~transValue;
+//                transValue++;
+//            }
+
+//            // 拼接发送数据的字节
+//            uint16_t byteValue = valid ? 0 : 1;
+//            // 溢出位
+//            byteValue = (byteValue << 1) | overflow;
+//            // 符号位
+//            byteValue = (byteValue << 4) | sign;
+//            // 拼接数据位
+//            byteValue = (byteValue << 10) | (transValue & 0x03FF);
+//            // 低位字节在后，高位字节在前
+//            ptBinaryArr[j * 2 + 1] = (uint8_t)byteValue;
+//            ptBinaryArr[j * 2] = (uint8_t)(byteValue >> 8);
+            n++;
+        }
+
+        InfoFieldEntity entity(curCode, ptBinaryArr);
+        frame.infoFields.append(entity);
+        curCode++;
+    }
+
+    frame.frameControl.fillData(eCDTFrameControlType::StandardType, eCDTFrameType::RmtMeasurement, frame.infoFields.size(), 0, 0);
+    m_sendList.append(frame);
+//    Send(frame);
+
+}
+
+void CDTProtocol::sendVirtualYX()
+{
+    if (m_settingData->m_ptCfg->m_globalDiList->isEmpty()) {
+        return ;
+    }
+    auto frame = buildYXFrame(m_settingData->m_ptCfg->m_vyxFuncode);
+    // 标准虚遥信
+    frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_vyxFrameType, frame.infoFields.size(), 0, 0);
+    m_sendList.append(frame);
+}
+
 void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
 {
     for (InfoFieldEntity &entity : infoFieldList) {
@@ -245,7 +321,10 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
             yxValue = (combineNum >> i) & 0x01; // 从最低位开始获取每一位
 
             nSeq = curPointStartAddr + i + 1;  // 点号
-            // TODO
+            // 0号开始
+            if(nSeq <  m_settingData->m_ptCfg->m_globalDiList->size()) {
+                (*m_settingData->m_ptCfg->m_globalDiList)[nSeq].setValue(yxValue>0);
+            }
         }
     }
 
@@ -256,35 +335,19 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
     for (InfoFieldEntity &entity : infoFieldList)
     {
         int nSeq = 0;
-        int16_t ycAccept = 0;
-        bool valid = false;
-        bool overflow = false;
+        double ycAccept = 0;
 
         for (int i = 0; i < 4; i += 2)
         {
-            // 将两个字节合并到16位的整数中
-            uint16_t combineNum = entity.dataArray[i + 1];
-            combineNum = (combineNum << 8) | entity.dataArray[i];
+            uint8_t valueBytes[2]{0};
+            valueBytes[0] = entity.dataArray[i + 1];
+            valueBytes[1] = entity.dataArray[i];
+            memcpy(&ycAccept, valueBytes, 2);
             // 点号
             nSeq = entity.funCode + (i / 2) + 1;
-
-            // 0~11为有效数据
-            ycAccept = (combineNum & 0x03FF);
-            // 解析符号位
-            uint8_t sig = (combineNum >> 10) & (uint8_t)0x01;
-            if (sig)
-            {
-                // 负号，减1取反
-                ycAccept--;
-                ycAccept = int16_t((~ycAccept) & 0x03FF);
-                ycAccept = -ycAccept;
+            if (nSeq < m_settingData->m_ptCfg->m_globalAiList->size()) {
+                (*m_settingData->m_ptCfg->m_globalAiList)[nSeq].setValue(nSeq);
             }
-            // 该遥测值是否有效
-            valid = !(combineNum >> 14 & 0x01);
-            // 该遥测值是否溢出
-            overflow = combineNum >> 13 & 0x01;
-
-            // TODO
 
         }
     }
@@ -292,35 +355,35 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
 
 void CDTProtocol::ykResponse(CDTFrame &frame)
 {
-    InfoFieldEntity firstInfoData = frame.infoFields.front();
-    uint8_t funCode = firstInfoData.funCode;
-    uint8_t ctrlCode = firstInfoData.dataArray[0];
-    // true开,false关
-    bool status = ctrlCode == eControlLockCode::CloseValidLock;
-    int ptId = firstInfoData.dataArray[2];
-    ptId |= firstInfoData.dataArray[3] << 8;
+//    InfoFieldEntity firstInfoData = frame.infoFields.front();
+//    uint8_t funCode = firstInfoData.funCode;
+//    uint8_t ctrlCode = firstInfoData.dataArray[0];
+//    // true开,false关
+//    bool status = ctrlCode == eControlLockCode::CloseValidLock;
+//    int ptId = firstInfoData.dataArray[2];
+//    ptId |= firstInfoData.dataArray[3] << 8;
 
-    // 遥控执行
-    auto frameBytes = frame.toAllByteArray();
-    //ShowMsgArray(eMsgType::eMsgRecv, "接收到遥控帧，正在处理...", frameBytes, frameBytes.count());
-    switch (funCode) {
-    case eCDTFunCode::RmtControlSelectCode:
-        yKSelectBack(ctrlCode, static_cast<uint8_t>(ptId));
-        break;
-    case eCDTFunCode::RmtControlBackCode:
-        yKExecute(ctrlCode, static_cast<uint8_t>(ptId));
-        break;
+//    // 遥控执行
+//    auto frameBytes = frame.toAllByteArray();
+//    //ShowMsgArray(eMsgType::eMsgRecv, "接收到遥控帧，正在处理...", frameBytes, frameBytes.count());
+//    switch (funCode) {
+//    case eCDTFunCode::RmtControlSelectCode:
+//        ykSelectBack(ctrlCode, static_cast<uint8_t>(ptId));
+//        break;
+//    case eCDTFunCode::RmtControlBackCode:
+//        yKExecute(ctrlCode, static_cast<uint8_t>(ptId));
+//        break;
 
-    case eCDTFunCode::RmtControlExecuteCode:
-    {
-        // TODO: 执行遥控变位
-    }
-        break;
-    case eCDTFunCode::RmtControlCancelCode:
-    {
-    }
-        break;
-    }
+//    case eCDTFunCode::RmtControlExecuteCode:
+//    {
+//        // TODO: 执行遥控变位
+//    }
+//        break;
+//    case eCDTFunCode::RmtControlCancelCode:
+//    {
+//    }
+//        break;
+//    }
 }
 
 void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
@@ -329,7 +392,7 @@ void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
     //    Send(frame, QStringLiteral("遥控选择"));
 }
 
-void CDTProtocol::yKSelectBack(uint8_t operCode, uint8_t ptNo)
+void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlBackCode, operCode, ptNo);
     //    Send(frame, QStringLiteral("遥控选择应答"));
@@ -376,6 +439,45 @@ void CDTProtocol::yKAllNotAllow()
     QByteArray frameBytes = frame.toAllByteArray();
     //ShowMsgArray(eMsgType::eMsgSend, QString("发送遥控闭锁命令"), frameBytes, frameBytes.size());
     //sendFrameQueue.push_back(frame);
+}
+
+CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)
+{
+    QList<uchar> combineByteList;
+    uchar val = 0;
+    int index = 0;
+    for (const auto& di: *m_settingData->m_ptCfg->m_globalDiList) {
+        if (index % 8 == 0) {
+            combineByteList.append(val);
+            val = 0;
+            index = 0;
+        }
+        bool diVal = di.value();
+        if (diVal) {
+            val |= (1 << index % 8);
+        }
+        index++;
+    }
+    if ((index - 1) % 8 != 0) {
+        combineByteList.append(val);
+    }
+    int offset = combineByteList.count() % 4;
+    if (offset != 0) {
+        for (int i = 0; i < 4 - offset; i++) {
+            combineByteList.append(0);
+        }
+    }
+
+    uint8_t funCode = startFuncode;
+    CDTFrame frame;
+    for (int j = 0; j < combineByteList.count() / 4; j++)
+    {
+        InfoFieldEntity entity;
+        entity.fillData(funCode, combineByteList.at(j * 4), combineByteList.at(j * 4 + 1), combineByteList.at(j * 4 + 2), combineByteList.at(j * 4 + 2));
+        frame.infoFields.append(entity);
+        funCode++;
+    }
+    return frame;
 }
 
 CDTFrame CDTProtocol::createCycleYKFrame(bool isAllPoint, int ptId)

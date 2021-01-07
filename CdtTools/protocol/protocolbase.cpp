@@ -7,8 +7,9 @@ ProtocolBase::ProtocolBase()
 
 }
 
-ProtocolBase::ProtocolBase(const QSharedPointer<NetworkBase> &network)
+ProtocolBase::ProtocolBase(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
     : m_network(network)
+    , m_settingData(settingData)
 {
 
 }

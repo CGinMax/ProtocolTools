@@ -5,7 +5,8 @@
 #include "network/tcpserver.h"
 #include "network/tcpclient.h"
 #include "protocol/protocolbase.h"
-
+#include "serverpage.h"
+#include "clientpage.h"
 namespace Ui {
 class TabPage;
 }
@@ -28,9 +29,10 @@ private slots:
     void on_btnStop_clicked();
 
 private:
-    Ui::TabPage *ui;
+    QSharedPointer<PtCfg> m_ptCfg;
     QSharedPointer<NetworkBase> m_network;
     QSharedPointer<ProtocolBase> m_protocol;
+    Ui::TabPage *ui;
 };
 
 #endif // TABPAGE_H
