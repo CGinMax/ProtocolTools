@@ -1,7 +1,8 @@
 #include "cdtcycle.h"
 #include <QThread>
 
-CDTCycle::CDTCycle()
+CDTCycle::CDTCycle(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData)
+    : CDTProtocol (network, settingData)
 {
 
 }
@@ -35,9 +36,9 @@ void CDTCycle::run()
     // 发送报文
     sendAllFrames();
 
-//    if (m_stationType == eStationType::WF && !isRunYK) {
-//        ykAllNotAllow();
-//    }
+    if (m_settingData->m_stationType == eStationType::WF && !isRunYK) {
+        ykAllNotAllow();
+    }
 
 }
 
@@ -59,18 +60,18 @@ void CDTCycle::processFrame()
         // 0xF4,遥信
         case eCDTFrameType::RmtInformation:
             //ShowMsgArray(eMsgType::eMsgRecv, "接收到遥信帧，正在处理...", ba, ba.size());
-//            if (m_stationType == eStationType::WF) {
-//                // 五防接收到变位遥信
-//                if (isRunYK) {
-//                    changedYXResponse(frame.infoFields);
-//                } else {
-//                    yxResponse(frame.infoFields);
+            if (m_settingData->m_stationType == eStationType::WF) {
+                // 五防接收到变位遥信
+                if (isRunYK) {
+                    changedYXResponse(frame.infoFields);
+                } else {
+                    yxResponse(frame.infoFields);
 
-//                }
-//            } else if (m_stationType == eStationType::Minitor) {
-//                // 监控接收虚遥信
+                }
+            } else if (m_settingData->m_stationType == eStationType::Minitor) {
+                // 监控接收虚遥信
 
-//            }
+            }
             break;
 
         case eCDTFrameType::RmtControlTypeCycle:

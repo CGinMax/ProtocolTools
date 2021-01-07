@@ -1,11 +1,13 @@
 #ifndef CDTINTERACTE_H
 #define CDTINTERACTE_H
 
+#include "cdtprotocol.h"
 
-class CDTInteracte
+class CDTInteracte : public CDTProtocol
 {
+    Q_OBJECT
 public:
-    CDTInteracte();
+    CDTInteracte(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
 };
 
 #endif // CDTINTERACTE_H

@@ -14,7 +14,9 @@ ServerPage::ServerPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent
     auto layout = new QVBoxLayout(this);
     layout->addWidget(m_tabClients.data());
     layout->setContentsMargins(0, 0, 0, 0);
+    m_tabClients->setTabsClosable(true);
 
+    connect(m_tabClients.data(), &QTabWidget::tabCloseRequested, this, &ServerPage::onTabCloseRequested);
     connect(m_tcpServer.data(), &QTcpServer::newConnection, this, &ServerPage::onNewConnection);
 }
 
@@ -77,4 +79,9 @@ void ServerPage::onNewConnection()
     ThreadPool::instance()->run([protocol](){
         protocol->start();
     });
+}
+
+void ServerPage::onTabCloseRequested(int index)
+{
+
 }

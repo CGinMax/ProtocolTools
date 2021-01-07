@@ -5,8 +5,9 @@
 
 class CDTCycle : public CDTProtocol
 {
+    Q_OBJECT
 public:
-    CDTCycle();
+    CDTCycle(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTCycle() override;
 
     // CDTProtocol interface

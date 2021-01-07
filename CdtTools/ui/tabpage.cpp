@@ -60,14 +60,14 @@ void TabPage::on_btnStart_clicked()
     case eNetworkType::eSerialPort:
         break;
     }
-    connect(m_network.get(), &NetworkBase::connected, [=](){
-        qDebug("Connect");
+//    connect(m_network.get(), &NetworkBase::connected, [=](){
+//        qDebug("Connect");
 
-        m_protocol.reset(new CDTProtocol(m_network, eStationType::Minitor));
-        ThreadPool::instance()->run([this](){
-            this->m_protocol->start();
-        });
-    });
+//        m_protocol.reset(new CDTProtocol(m_network, eStationType::Minitor));
+//        ThreadPool::instance()->run([this](){
+//            this->m_protocol->start();
+//        });
+//    });
 
     m_network->open();
     ui->btnStart->setEnabled(false);

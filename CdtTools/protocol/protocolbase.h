@@ -1,12 +1,14 @@
 #ifndef PROTOCOLBASE_H
 #define PROTOCOLBASE_H
 
+#include <QObject>
 #include <QSharedPointer>
 #include "../network/networkbase.h"
 #include "../ui/ptcfg.h"
 
-class ProtocolBase
+class ProtocolBase : public QObject
 {
+    Q_OBJECT
 public:
     ProtocolBase();
     ProtocolBase(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
