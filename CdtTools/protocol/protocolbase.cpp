@@ -1,5 +1,6 @@
 #include "protocolbase.h"
 #include <QTime>
+#include <QDateTime>
 #include <QThread>
 
 ProtocolBase::ProtocolBase()
@@ -109,4 +110,111 @@ bool ProtocolBase::initConnection()
     */
 
     return false;
+}
+
+bool ProtocolBase::isConnection()
+{
+    return m_network->isActived();
+}
+
+void ProtocolBase::showMessage(ProtocolBase::eMsgType type, const QString &msg)
+{
+    sendHumanizeMsg(type, msg, QByteArray());
+}
+
+void ProtocolBase::showMessageBuffer(ProtocolBase::eMsgType type, const QString &msg, const char *buffer, int len)
+{
+    sendHumanizeMsg(type, msg, buffer, len);
+}
+
+void ProtocolBase::showMessageBuffer(ProtocolBase::eMsgType type, const QString &msg, const QByteArray &buffer)
+{
+    sendHumanizeMsg(type, msg, buffer);
+}
+
+void ProtocolBase::sendHumanizeMsg(ProtocolBase::eMsgType type, const QString &msg, const char *buffer, int len)
+{
+    auto hexString = bytes2String(buffer, len);
+    auto packString = decorateMsg(type, msg, hexString, len);
+    m_network->showMessage(packString);
+}
+
+void ProtocolBase::sendHumanizeMsg(ProtocolBase::eMsgType type, const QString &msg, const QByteArray &buffer)
+{
+    auto hexString = bytes2String(buffer);
+    auto packString = decorateMsg(type, msg, hexString, buffer.length());
+    m_network->showMessage(packString);
+}
+
+QString ProtocolBase::bytes2String(const char *buffer, int length)
+{
+    QString bufstr;
+    if (length > 0 && buffer != nullptr)
+    {
+        QString bufstr;
+        const uchar *ubuff = (const uchar *)buffer;
+        for(int i=0;i<length;i++)
+        {
+            bufstr.append(QString::number((ubuff[i] >> 4), 16));
+            bufstr.append(QString::number(ubuff[i] & 0xF, 16) + " ");
+        }
+        bufstr = bufstr.trimmed().toUpper();
+    }
+    return bufstr;
+}
+
+QString ProtocolBase::bytes2String(const QByteArray &buffer)
+{
+    QString bufstr(buffer.toHex(' ').toUpper());
+    return bufstr;
+}
+
+QString ProtocolBase::decorateMsg(eMsgType type, const QString &desc, const QString &bufrString, int buflen)
+{
+    // 报文时间
+    QString strBuilder;
+    strBuilder.append(QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss.zzz"));
+
+    if (buflen > 0)
+    {// 报文长度
+        strBuilder.append(" (");
+        strBuilder.append(QString::number(buflen));
+        strBuilder.append(" ");
+        strBuilder.append("bytes");
+        strBuilder.append(")");
+    }
+
+
+    strBuilder.append("<br \\>");
+
+    QString fontColor = QString("<font color=\"%1\">%2</font>");
+    // 报文类型
+    if (type == eMsgType::eMsgLink) {
+        strBuilder.append("连接");
+        fontColor = fontColor.arg("#FF0000");// QString("<font color=\"#FF0000\">%1</font>");
+    }
+    else if ( type == eMsgType::eMsgSend ) {
+        strBuilder.append("发送");
+        fontColor = fontColor.arg("#0000FF");
+    }
+    else if ( type == eMsgType::eMsgRecv ) {
+        strBuilder.append("接收");
+        fontColor = fontColor.arg("#008000");
+    }
+    else if ( type == eMsgType::eMsgOther ) {
+        strBuilder.append("其他");
+        fontColor = fontColor.arg("#000000");
+    }
+    strBuilder.append(": ");
+
+    // 报文及描述
+    if (buflen > 0)
+    {
+        strBuilder.append(bufrString);
+        strBuilder.append("<br \\>");
+    }
+    if (desc != "") strBuilder.append(desc);
+
+    //strBuilder = ;
+    return fontColor.arg(strBuilder);
 }

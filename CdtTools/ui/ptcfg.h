@@ -52,10 +52,14 @@ struct PtCfg
 };
 
 struct SettingData{
-    QString m_ip;
-    int m_port;
-    eNetworkType m_networkType;
-    eStationType m_stationType;
+    SettingData()
+        : m_ptCfg(new PtCfg)
+    {}
+
+    QString m_ip{QLatin1Literal("0.0.0.0")};
+    int m_port{2404};
+    eNetworkType m_networkType{eNetworkType::eTcpServer};
+    eStationType m_stationType{eStationType::Minitor};
     QSharedPointer<PtCfg> m_ptCfg;
 };
 

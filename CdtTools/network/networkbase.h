@@ -22,6 +22,8 @@ signals:
     void connected();
     void disconnected();
     void recvData(const QByteArray& data);
+
+    void showMessage(const QString& msg);
 };
 
 #endif // NETWORKBASE_H

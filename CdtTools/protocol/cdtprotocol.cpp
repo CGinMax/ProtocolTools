@@ -46,8 +46,11 @@ void CDTProtocol::run()
     // 处理帧
     processFrame();
 
-    // 发送报文
-    sendAllFrames();
+    if (m_settingData->m_stationType == eStationType::Minitor) {
+        sendAllAi();
+        sendAllDi();
+    }
+
 }
 
 void CDTProtocol::start()
@@ -161,20 +164,18 @@ void CDTProtocol::processFrame()
     while (!m_frameQueue.isEmpty()) {
         CDTFrame frame = m_frameQueue.dequeue();
 
-        //QByteArray ba = frame.toAllByteArray();
-
         switch (frame.frameControl.type)
         {
         // 0x61，遥测
         case eCDTFrameType::RmtMeasurement:
-            //ShowMsgArray(eMsgType::eMsgRecv, "接收到遥测帧，正在处理...", ba, ba.size());
+            showMessageBuffer(eMsgType::eMsgRecv, "接收到遥测帧，正在处理...", frame.toAllByteArray());
             yxResponse(frame.infoFields);
             break;
 
         // 0xF4,遥信
         case eCDTFrameType::RmtInformation:
-            //ShowMsgArray(eMsgType::eMsgRecv, "接收到遥信帧，正在处理...", ba, ba.size());
             if (m_settingData->m_stationType == eStationType::WF) {
+                showMessageBuffer(eMsgType::eMsgRecv, "接收到遥信帧，正在处理...", frame.toAllByteArray());
                 yxResponse(frame.infoFields);
             } else if (m_settingData->m_stationType == eStationType::Minitor) {
                 // 监控接收虚遥信
@@ -193,27 +194,15 @@ void CDTProtocol::processFrame()
 
 }
 
-void CDTProtocol::sendAllFrames()
-{
-    QMutexLocker locker(&m_mtx);
-    for (auto& frame : m_sendList) {
-        send(frame);
-    }
-    m_sendList.clear();
-}
 
 void CDTProtocol::send(CDTFrame &frame)
 {
     QByteArray bytes = frame.toAllByteArray();
 
-    if (bytes.size() > 0)
-    {
-        if (m_network->write(bytes))
-        {
-            //ShowMsgArray(eMsgType::eMsgSend, msg, bytes, bytes.size());
+    if (bytes.size() > 0) {
+        if (m_network->write(bytes)) {
             return ;
         }
-        //ShowMsgArray(eMsgType::eMsgSend, msg + "失败", bytes, bytes.size(), 0, false);
     }
 }
 
@@ -225,7 +214,8 @@ void CDTProtocol::sendAllDi()
     auto frame = buildYXFrame(m_settingData->m_ptCfg->m_yxFuncode);
     // 标准虚遥信
     frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_yxFrameType, frame.infoFields.size(), 0, 0);
-    m_sendList.append(frame);
+    showMessageBuffer(eMsgType::eMsgSend, "发送全遥信", frame.toAllByteArray());
+    send(frame);
 }
 
 void CDTProtocol::sendAllAi()
@@ -284,8 +274,8 @@ void CDTProtocol::sendAllAi()
     }
 
     frame.frameControl.fillData(eCDTFrameControlType::StandardType, eCDTFrameType::RmtMeasurement, frame.infoFields.size(), 0, 0);
-    m_sendList.append(frame);
-//    Send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, "发送全遥测", frame.toAllByteArray());
+    send(frame);
 
 }
 
@@ -297,7 +287,8 @@ void CDTProtocol::sendVirtualYX()
     auto frame = buildYXFrame(m_settingData->m_ptCfg->m_vyxFuncode);
     // 标准虚遥信
     frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_vyxFrameType, frame.infoFields.size(), 0, 0);
-    m_sendList.append(frame);
+    showMessageBuffer(eMsgType::eMsgSend, "发送虚遥信", frame.toAllByteArray());
+    send(frame);
 }
 
 void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
@@ -389,25 +380,30 @@ void CDTProtocol::ykResponse(CDTFrame &frame)
 void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlSelectCode, operCode, ptNo);
-    //    Send(frame, QStringLiteral("遥控选择"));
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择"), frame.toAllByteArray());
+    send(frame);
 }
 
 void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlBackCode, operCode, ptNo);
     //    Send(frame, QStringLiteral("遥控选择应答"));
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择应答"), frame.toAllByteArray());
+    send(frame);
 }
 
 void CDTProtocol::yKExecute(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlExecuteCode, operCode, ptNo);
-    //    Send(frame, QStringLiteral("遥控执行"));
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控执行"), frame.toAllByteArray());
+    send(frame);
 }
 
 void CDTProtocol::yKCancel(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlCancelCode, operCode, ptNo);
-    //    Send(frame, QStringLiteral("遥控取消"));
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控取消"), frame.toAllByteArray());
+    send(frame);
 }
 
 
@@ -428,17 +424,15 @@ CDTFrame CDTProtocol::interactYKFrame(uint8_t ctrlCode, uint8_t type, uint8_t fu
 void CDTProtocol::yKNotAllow(int ptId)
 {
     CDTFrame frame = createCycleYKFrame(false, ptId);
-    QByteArray frameBytes = frame.toAllByteArray();
-    //ShowMsgArray(eMsgType::eMsgSend, QString("发送遥控闭锁命令"), frameBytes, frameBytes.size());
-    //sendFrameQueue.push_back(frame);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控闭锁命令"), frame.toAllByteArray());
+    send(frame);
 }
 
 void CDTProtocol::yKAllNotAllow()
 {
     CDTFrame frame = createCycleYKFrame(true);
-    QByteArray frameBytes = frame.toAllByteArray();
-    //ShowMsgArray(eMsgType::eMsgSend, QString("发送遥控闭锁命令"), frameBytes, frameBytes.size());
-    //sendFrameQueue.push_back(frame);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控全闭锁命令"), frame.toAllByteArray());
+    send(frame);
 }
 
 CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)

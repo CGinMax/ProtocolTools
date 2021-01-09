@@ -4,13 +4,16 @@
 #include <QIntValidator>
 #include <QButtonGroup>
 #include "enums.h"
+#include "cdtsettingdlg.h"
 #include "../common/threadpool.h"
 #include "../protocol/cdtprotocol.h"
 #include "../protocol/cdtcycle.h"
 
 TabPage::TabPage(QWidget *parent)
     : QWidget(parent)
-    , m_ptCfg(new PtCfg)
+    , m_settingData(new SettingData)
+    , m_serverPage(new ServerPage(m_settingData, this))
+    , m_clientPage(new ClientPage(this))
     , ui(new Ui::TabPage)
 
 {
@@ -38,47 +41,63 @@ void TabPage::initWidget()
     btnGroup->addButton(ui->btnStart);
     btnGroup->addButton(ui->btnStop);
     btnGroup->setExclusive(true);
+
+    ui->stackedWidget->addWidget(m_serverPage.data());
+    ui->stackedWidget->addWidget(m_clientPage.data());
 }
 
-void TabPage::on_cbbProtocl_currentIndexChanged(int index)
+void TabPage::resetSettingData()
 {
+    m_settingData->m_ip = ui->editIp->text();
+    m_settingData->m_port = ui->editPort->text().toInt();
+    m_settingData->m_networkType = eNetworkType(ui->cbbNetworkType->currentIndex());
+    m_settingData->m_stationType = eStationType(ui->cbbStationType->currentIndex());
+
+}
+
+void TabPage::on_cbbNetworkType_currentIndexChanged(int index)
+{
+    ui->stackedWidget->setCurrentIndex(index);
 }
 
 void TabPage::on_btnStart_clicked()
 {
-    m_protocol.clear();
-    m_network.clear();
-    switch (ui->cbbProtocl->currentIndex()) {
+    resetSettingData();
+    switch (ui->cbbNetworkType->currentIndex()) {
     case eNetworkType::eTcpServer:
-        m_network.reset(new TcpServer(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
+        m_serverPage->start();
         break;
     case eNetworkType::eTcpClient:
-        m_network.reset(new TcpClient(ui->editIp->text(), static_cast<ushort>(ui->editPort->text().toInt())));
+        m_clientPage->start();
         break;
     case eNetworkType::eUdp:
         break;
     case eNetworkType::eSerialPort:
         break;
     }
-//    connect(m_network.get(), &NetworkBase::connected, [=](){
-//        qDebug("Connect");
-
-//        m_protocol.reset(new CDTProtocol(m_network, eStationType::Minitor));
-//        ThreadPool::instance()->run([this](){
-//            this->m_protocol->start();
-//        });
-//    });
-
-    m_network->open();
     ui->btnStart->setEnabled(false);
 
 }
 
 void TabPage::on_btnStop_clicked()
 {
-    m_protocol->stop();
-    if (m_network->isActived()) {
-        m_network->close();
+    switch (ui->cbbNetworkType->currentIndex()) {
+    case eNetworkType::eTcpServer:
+        m_serverPage->stop();
+        break;
+    case eNetworkType::eTcpClient:
+        //m_clientPage->start();
+        break;
+    case eNetworkType::eUdp:
+        break;
+    case eNetworkType::eSerialPort:
+        break;
     }
     ui->btnStart->setEnabled(true);
+}
+
+void TabPage::on_btnSetting_clicked()
+{
+    CDTSettingDlg dlg(m_settingData->m_ptCfg, this);
+    dlg.exec();
 }

@@ -14,6 +14,8 @@ class ClientPage : public QWidget
 public:
     explicit ClientPage(QWidget *parent = nullptr);
     ~ClientPage();
+
+    void start();
 signals:
 
 public slots:

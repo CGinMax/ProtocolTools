@@ -20,18 +20,22 @@ public:
     ~TabPage() override;
     void initWidget();
 
+    void resetSettingData();
+
 
 private slots:
-    void on_cbbProtocl_currentIndexChanged(int index);
+    void on_cbbNetworkType_currentIndexChanged(int index);
 
     void on_btnStart_clicked();
 
     void on_btnStop_clicked();
 
+    void on_btnSetting_clicked();
+
 private:
-    QSharedPointer<PtCfg> m_ptCfg;
-    QSharedPointer<NetworkBase> m_network;
-    QSharedPointer<ProtocolBase> m_protocol;
+    QSharedPointer<SettingData> m_settingData;
+    QScopedPointer<ServerPage> m_serverPage;
+    QScopedPointer<ClientPage> m_clientPage;
     Ui::TabPage *ui;
 };
 

@@ -50,7 +50,8 @@ SOURCES += \
     ui/tables/aitablemodel.cpp \
     ui/tables/aidata.cpp \
     ui/tables/delegates/digitlimitedelegate.cpp \
-    ui/ptcfg.cpp
+    ui/ptcfg.cpp \
+    protocol/frame.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -78,7 +79,8 @@ HEADERS += \
     ui/tables/aitablemodel.h \
     ui/tables/aidata.h \
     ui/tables/delegates/digitlimitedelegate.h \
-    ui/ptcfg.h
+    ui/ptcfg.h \
+    protocol/frame.h
 
 FORMS += \
         mainwindow.ui \

@@ -31,8 +31,6 @@ public:
 
     virtual void processFrame();
 
-    void sendAllFrames();
-
     void send(CDTFrame& frame);
 
     void sendAllDi();
@@ -76,7 +74,6 @@ protected:
     QMutex m_mtx;
     QByteArray m_recvBuffer;
     QQueue<CDTFrame> m_frameQueue;
-    QList<CDTFrame> m_sendList;
 
     QTimer *m_timer{nullptr};
 };

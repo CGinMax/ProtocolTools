@@ -9,8 +9,8 @@ enum eNetworkType{
 };
 
 enum eStationType{
-    WF = 0, // 五防
-    Minitor,// 监控
+    Minitor = 0,// 监控
+    WF, // 五防
 };
 
 enum eProtocol {

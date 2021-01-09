@@ -6,7 +6,7 @@ TcpServer::TcpServer(const QString &ip, ushort port, QObject *parent)
     , m_socket(nullptr)
 {
     setParent(parent);
-    //connect(m_server.get(), &QTcpServer::newConnection, this, &TcpServer::onNewConnection);
+
 }
 
 TcpServer::TcpServer(QTcpSocket *socket, QObject *parent)
@@ -25,10 +25,6 @@ void TcpServer::open()
         return;
     }
 
-    //    if (!m_server->listen(QHostAddress(m_ip), m_port)) {
-
-    //        qDebug("listen failed");
-    //    }
 }
 
 void TcpServer::close()

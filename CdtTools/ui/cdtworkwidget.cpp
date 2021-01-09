@@ -71,3 +71,18 @@ void CDTWorkWidget::resetAiRandom(bool start)
         m_aiTimer.stop();
     }
 }
+
+void CDTWorkWidget::stop()
+{
+    m_protocol->stop();
+}
+
+bool CDTWorkWidget::isConnection()
+{
+    return m_protocol->isConnection();
+}
+
+void CDTWorkWidget::recvMessage(const QString &msg)
+{
+    ui->textBrowser->append(msg);
+}

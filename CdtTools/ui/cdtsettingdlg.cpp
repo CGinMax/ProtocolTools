@@ -7,6 +7,7 @@ CDTSettingDlg::CDTSettingDlg(const QSharedPointer<PtCfg> &ptcfg, QWidget *parent
     , m_ptCfg(ptcfg)
     , ui(new Ui::CDTSettingDlg)
 {
+    ui->setupUi(this);
     initWidgetData(*ptcfg.data());
 }
 
@@ -17,7 +18,7 @@ CDTSettingDlg::~CDTSettingDlg()
 
 void CDTSettingDlg::initWidgetData(const PtCfg &setting)
 {
-    ui->cbbProtocol->setCurrentIndex(setting.m_protocol);
+    ui->cbbProtocol->setCurrentIndex(int(setting.m_protocol));
     ui->edControlType->setText(Util::num2Hex(setting.m_controlType));
     ui->edYxType->setText(Util::num2Hex(setting.m_yxFrameType));
     ui->edYxFuncode->setText(Util::num2Hex(setting.m_yxFuncode));
@@ -65,15 +66,15 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_vyxNum       = Util::hexString2Num(ui->edVYxNum->text());
     m_ptCfg->m_vyxStartIo   = Util::hexString2Num(ui->edVYxStartIo->text());
 
-    delete m_ptCfg->m_globalDiList;
     m_ptCfg->m_globalDiList->clear();
+    delete m_ptCfg->m_globalDiList;
     m_ptCfg->m_globalDiList = new QList<DiData>;
     for (int i = 0; i < m_ptCfg->m_yxNum; i++) {
         m_ptCfg->m_globalDiList->append(DiData(i, QString("Pt%1").arg(i), false));
     }
 
-    delete m_ptCfg->m_globalAiList;
     m_ptCfg->m_globalAiList->clear();
+    delete m_ptCfg->m_globalAiList;
     m_ptCfg->m_globalAiList = new QList<AiData>;
     for (int i = 0; i < m_ptCfg->m_ycNum; i++) {
         m_ptCfg->m_globalAiList->append(AiData(i, QString("Pt%1").arg(i), 0));

@@ -2,7 +2,7 @@
 #define CDTFRAME_H
 
 
-#include <QByteArray>
+#include "frame.h"
 #include <QList>
 
 // "字"的长度：6个字节

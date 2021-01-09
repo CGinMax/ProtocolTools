@@ -33,9 +33,6 @@ void CDTCycle::run()
     // 处理帧
     processFrame();
 
-    // 发送报文
-    sendAllFrames();
-
     if (m_settingData->m_stationType == eStationType::WF && !isRunYK) {
         ykAllNotAllow();
     }
@@ -134,13 +131,13 @@ int CDTCycle::findPositive(uint32_t num)
 void CDTCycle::ykNotAllow(int ptId)
 {
     CDTFrame frame = createCycleYKFrame(false, ptId);
-    m_sendList.append(frame);
+//    m_sendList.append(frame);
 }
 
 void CDTCycle::ykAllNotAllow()
 {
     CDTFrame frame = createCycleYKFrame(true);
-    m_sendList.append(frame);
+//    m_sendList.append(frame);
 
     //ShowMsgArray(eMsgType::eMsgSend, QString("发送遥控全闭锁命令"), frameBytes, frameBytes.size());
 }

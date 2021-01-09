@@ -38,9 +38,15 @@ private slots:
 public:
     TcpServer* m_tcpServer;
     QTcpSocket* m_testClient;
+    QSharedPointer<NetworkBase> m_network;
+    QSharedPointer<SettingData> m_settingData;
+    QSharedPointer<ProtocolBase> m_protocol;
 };
 
 networkTest::networkTest()
+    : m_network(new TcpServer("127.0.0.1", 5555))
+    , m_settingData(new SettingData())
+    , m_protocol(new CDTProtocol(m_network, m_settingData))
 {
     m_tcpServer = new TcpServer("127.0.0.1", 8011);
     m_testClient = new QTcpSocket;
@@ -129,7 +135,9 @@ void networkTest::test_threadpool()
 
 void networkTest::test_cdt()
 {
-    CDTProtocol cdt;
+    QSharedPointer<NetworkBase> network(new TcpServer("127.0.0.1", 5555));
+    QSharedPointer<SettingData> settingData(new SettingData());
+    CDTProtocol cdt(network, settingData);
     char rawData[] ={(char)0xEB, (char)0x90, (char)0xEB, (char)0x90, (char)0xEB, (char)0x90, 0x71, (char)0xF4, 0x01, 0x00, 0x00, 0x33, (char)0xF0, 0x38, 0x00, 0x00, 0x00, (char)0xEF};
     QByteArray yxBytes(rawData, sizeof(rawData) / sizeof(char));
 
@@ -146,7 +154,8 @@ void networkTest::test_cdt()
 
 void networkTest::test_ui()
 {
-    CDTWorkWidget widget;
+
+    CDTWorkWidget widget(m_settingData->m_ptCfg, m_protocol.data());
     widget.setGeometry(200, 200, 400, 250);
     widget.show();
 }

@@ -13,3 +13,8 @@ ClientPage::~ClientPage()
 {
     delete ui;
 }
+
+void ClientPage::start()
+{
+
+}

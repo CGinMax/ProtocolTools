@@ -23,9 +23,15 @@ public:
 
 
     void resetAiRandom(bool start);
+
+    void stop();
+    bool isConnection();
+
 signals:
 
 public slots:
+
+    void recvMessage(const QString& msg);
 
 private:
     DiTableModel* m_diModel;
