@@ -13,6 +13,7 @@ ProtocolBase::ProtocolBase(const QSharedPointer<NetworkBase> &network, const QSh
     , m_settingData(settingData)
 {
 
+    connect(this, &ProtocolBase::write, network.data(), &NetworkBase::writeData);
 }
 
 ProtocolBase::~ProtocolBase()
@@ -136,14 +137,15 @@ void ProtocolBase::sendHumanizeMsg(ProtocolBase::eMsgType type, const QString &m
 {
     auto hexString = bytes2String(buffer, len);
     auto packString = decorateMsg(type, msg, hexString, len);
-    m_network->showMessage(packString);
+    emit sendProtocolMsg(packString);
 }
 
 void ProtocolBase::sendHumanizeMsg(ProtocolBase::eMsgType type, const QString &msg, const QByteArray &buffer)
 {
     auto hexString = bytes2String(buffer);
     auto packString = decorateMsg(type, msg, hexString, buffer.length());
-    m_network->showMessage(packString);
+
+    emit sendProtocolMsg(packString);
 }
 
 QString ProtocolBase::bytes2String(const char *buffer, int length)

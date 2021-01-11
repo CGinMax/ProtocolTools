@@ -155,9 +155,9 @@ void networkTest::test_cdt()
 void networkTest::test_ui()
 {
 
-    CDTWorkWidget widget(m_settingData->m_ptCfg, m_protocol.data());
-    widget.setGeometry(200, 200, 400, 250);
-    widget.show();
+//    CDTWorkWidget widget(m_settingData);
+//    widget.setGeometry(200, 200, 400, 250);
+//    widget.show();
 }
 
 QTEST_MAIN(networkTest)

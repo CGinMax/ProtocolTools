@@ -22,8 +22,10 @@ signals:
     void connected();
     void disconnected();
     void recvData(const QByteArray& data);
-
     void showMessage(const QString& msg);
+
+public slots:
+    virtual void writeData(const QByteArray& data) = 0;
 };
 
 #endif // NETWORKBASE_H

@@ -12,26 +12,25 @@ QT_FORWARD_DECLARE_CLASS(AiTableModel);
 
 namespace Ui {
     class CDTWorkWidget;
-} // namespace Ui
+}
 
 class CDTWorkWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CDTWorkWidget(const QSharedPointer<PtCfg>& ptcfg, ProtocolBase* protocol, QWidget *parent = nullptr);
+    explicit CDTWorkWidget(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData, QWidget *parent = nullptr);
     ~CDTWorkWidget() override;
 
-
     void resetAiRandom(bool start);
-
-    void stop();
+    void stopCommunication();
     bool isConnection();
 
 signals:
+    void stop();
 
 public slots:
-
     void recvMessage(const QString& msg);
+    void on_btnExecute_clicked();
 
 private:
     DiTableModel* m_diModel;
@@ -39,6 +38,7 @@ private:
     DiTableModel* m_vyxModel;
     QTimer m_aiTimer;
     ProtocolBase* m_protocol;
+    QSharedPointer<NetworkBase> m_network;
     QScopedPointer<Ui::CDTWorkWidget> ui;
 
 };

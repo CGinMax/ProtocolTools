@@ -32,7 +32,6 @@ public slots:
     void onTabCloseRequested(int index);
 
 private:
-    QList<QSharedPointer<NetworkBase>> m_tcpClients;
     QScopedPointer<QTcpServer> m_tcpServer;
     //QScopedPointer<ThreadPool> m_socketPool;
     QScopedPointer<QTabWidget> m_tabClients;

@@ -3,11 +3,6 @@
 
 #include <QWidget>
 
-
-namespace Ui {
-    class CDTWorkWidget;
-} // namespace Ui
-
 class ClientPage : public QWidget
 {
     Q_OBJECT
@@ -19,9 +14,5 @@ public:
 signals:
 
 public slots:
-
-private:
-    Ui::CDTWorkWidget *ui;
 };
-
 #endif // CLIENTPAGE_H

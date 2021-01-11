@@ -7,13 +7,12 @@
 CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
     : ProtocolBase(network, settingData)
 {
-
+    isRunYK = false;
 }
 
 CDTProtocol::~CDTProtocol()
 {
-    delete m_timer;
-    m_timer = nullptr;
+
 }
 
 void CDTProtocol::run()
@@ -46,11 +45,10 @@ void CDTProtocol::run()
     // 处理帧
     processFrame();
 
-    if (m_settingData->m_stationType == eStationType::Minitor) {
+    if (!isRunYK && m_settingData->m_stationType == eStationType::Minitor) {
         sendAllAi();
         sendAllDi();
     }
-
 }
 
 void CDTProtocol::start()
@@ -67,8 +65,9 @@ void CDTProtocol::start()
 void CDTProtocol::stop()
 {
     if (m_timer->isActive()) {
-        QMetaObject::invokeMethod(m_timer, &QTimer::stop);
-
+        m_timer->stop();
+        delete m_timer;
+        m_timer = nullptr;
     }
 }
 
@@ -195,14 +194,15 @@ void CDTProtocol::processFrame()
 }
 
 
-void CDTProtocol::send(CDTFrame &frame)
+void CDTProtocol::send(const CDTFrame &frame)
 {
     QByteArray bytes = frame.toAllByteArray();
 
     if (bytes.size() > 0) {
-        if (m_network->write(bytes)) {
-            return ;
-        }
+        emit write(bytes);
+//        if (m_network->write(bytes)) {
+//            return ;
+//        }
     }
 }
 
@@ -220,7 +220,9 @@ void CDTProtocol::sendAllDi()
 
 void CDTProtocol::sendAllAi()
 {
-
+    if (m_settingData->m_ptCfg->m_globalAiList->isEmpty()) {
+        return;
+    }
     CDTFrame frame;
 
     uint8_t curCode = m_settingData->m_ptCfg->m_ycFuncode;
@@ -387,7 +389,6 @@ void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
 void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlBackCode, operCode, ptNo);
-    //    Send(frame, QStringLiteral("遥控选择应答"));
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择应答"), frame.toAllByteArray());
     send(frame);
 }
@@ -441,7 +442,7 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)
     uchar val = 0;
     int index = 0;
     for (const auto& di: *m_settingData->m_ptCfg->m_globalDiList) {
-        if (index % 8 == 0) {
+        if (index % 8 == 0 && index != 0) {
             combineByteList.append(val);
             val = 0;
             index = 0;
@@ -504,6 +505,11 @@ CDTFrame CDTProtocol::createCycleYKFrame(bool isAllPoint, int ptId)
         cmdFrame.infoFields.append(entity);
     }
     return  cmdFrame;
+}
+
+void CDTProtocol::startYK(int ptId, bool offon)
+{
+
 }
 
 double CDTProtocol::bcdToValue(int bcdValue)

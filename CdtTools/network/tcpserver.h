@@ -31,7 +31,8 @@ public:
 
 signals:
 
-public:
+public slots:
+    void writeData(const QByteArray &data) override;
 //    void onNewConnection();
 //    void onReadyRead();
 //    void onDisconnected();

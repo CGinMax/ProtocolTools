@@ -61,3 +61,8 @@ QString TcpClient::toString()
     }
     return QLatin1String("Unnamed");
 }
+
+void TcpClient::writeData(const QByteArray &data)
+{
+    m_socket->write(data);
+}

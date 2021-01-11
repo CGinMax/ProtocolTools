@@ -70,14 +70,14 @@ void CDTSettingDlg::on_btnOk_clicked()
     delete m_ptCfg->m_globalDiList;
     m_ptCfg->m_globalDiList = new QList<DiData>;
     for (int i = 0; i < m_ptCfg->m_yxNum; i++) {
-        m_ptCfg->m_globalDiList->append(DiData(i, QString("Pt%1").arg(i), false));
+        m_ptCfg->m_globalDiList->append(DiData(m_ptCfg->m_yxStartIo + i, QString("Pt%1").arg(m_ptCfg->m_yxStartIo + i), false));
     }
 
     m_ptCfg->m_globalAiList->clear();
     delete m_ptCfg->m_globalAiList;
     m_ptCfg->m_globalAiList = new QList<AiData>;
     for (int i = 0; i < m_ptCfg->m_ycNum; i++) {
-        m_ptCfg->m_globalAiList->append(AiData(i, QString("Pt%1").arg(i), 0));
+        m_ptCfg->m_globalAiList->append(AiData(m_ptCfg->m_ycStartIo + i, QString("Pt%1").arg(m_ptCfg->m_ycStartIo + i), 0));
     }
     accept();
 }

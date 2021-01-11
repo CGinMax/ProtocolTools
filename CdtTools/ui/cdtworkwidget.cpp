@@ -4,11 +4,16 @@
 #include "tables/aitablemodel.h"
 #include "tables/delegates/comboboxdelegate.h"
 #include "tables/delegates/digitlimitedelegate.h"
+#include "../protocol/cdtprotocol.h"
+#include "../protocol/cdtinteracte.h"
+#include "../common/threadpool.h"
 #include <QDebug>
+#include <QThread>
 
-CDTWorkWidget::CDTWorkWidget(const QSharedPointer<PtCfg>& ptcfg, ProtocolBase *protocol, QWidget *parent)
+CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData, QWidget *parent)
     : QWidget(parent)
-    , m_protocol(protocol)
+    , m_protocol(nullptr)
+    , m_network(network)
     , ui(new Ui::CDTWorkWidget)
 {
     ui->setupUi(this);
@@ -18,7 +23,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<PtCfg>& ptcfg, ProtocolBase *p
     ui->vecSplitter->setCollapsible(0, false);
     ui->vecSplitter->setCollapsible(1, false);
 
-    m_diModel = new DiTableModel({"Id", "Name", "Value"}, ptcfg, ui->viewDi);
+    m_diModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg, ui->viewDi);
     ui->viewDi->setModel(m_diModel);
     ui->viewDi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewDi->verticalHeader()->setVisible(false);
@@ -29,7 +34,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<PtCfg>& ptcfg, ProtocolBase *p
     ui->viewDi->setItemDelegateForColumn(2, diDelegate);
 
 
-    m_aiModel = new AiTableModel({"Id", "Name", "Value"}, ptcfg, ui->viewAi);
+    m_aiModel = new AiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg, ui->viewAi);
     ui->viewAi->setModel(m_aiModel);
     ui->viewAi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewAi->verticalHeader()->setVisible(false);
@@ -38,7 +43,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<PtCfg>& ptcfg, ProtocolBase *p
     auto aiDelegate = new DigitLimiteDelegate();
     ui->viewAi->setItemDelegateForColumn(2, aiDelegate);
 
-    m_vyxModel = new DiTableModel({"Id", "Name", "Value"}, ptcfg, ui->viewVYx);
+    m_vyxModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg, ui->viewVYx);
     ui->viewVYx->setModel(m_vyxModel);
     ui->viewVYx->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewVYx->verticalHeader()->setVisible(false);
@@ -52,12 +57,37 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<PtCfg>& ptcfg, ProtocolBase *p
         m_aiModel->randomNumber();
         ui->viewAi->viewport()->update();
     });
+
+    ThreadPool::instance()->run([&network, &settingData, this](){
+        switch (settingData->m_ptCfg->m_protocol) {
+        case eProtocol::CDTStandard:
+            this->m_protocol = new CDTProtocol(network, settingData);
+            break;
+        case eProtocol::CDTUt:
+            break;
+        case eProtocol::CDTNr:
+            break;
+        case eProtocol::CDTGc:
+            this->m_protocol = new CDTInteracte(network, settingData);
+            break;
+        default:
+            break;
+        }
+        connect(this->m_protocol, &ProtocolBase::ykExecuteFinish, [=](){
+            qDebug("cdt work widget yk finished");
+            ui->btnExecute->setEnabled(true);
+        });
+        connect(this->m_protocol, &ProtocolBase::sendProtocolMsg, this, &CDTWorkWidget::recvMessage);
+        connect(this, &CDTWorkWidget::stop, this->m_protocol, &ProtocolBase::stop);
+        this->m_protocol->start();
+    });
 }
 
 CDTWorkWidget::~CDTWorkWidget()
 {
     if (m_protocol) {
-        delete m_protocol;
+//        delete m_protocol;
+        m_protocol->deleteLater();
         m_protocol = nullptr;
     }
 }
@@ -72,9 +102,10 @@ void CDTWorkWidget::resetAiRandom(bool start)
     }
 }
 
-void CDTWorkWidget::stop()
+void CDTWorkWidget::stopCommunication()
 {
-    m_protocol->stop();
+    emit stop();
+    m_network->close();
 }
 
 bool CDTWorkWidget::isConnection()
@@ -85,4 +116,12 @@ bool CDTWorkWidget::isConnection()
 void CDTWorkWidget::recvMessage(const QString &msg)
 {
     ui->textBrowser->append(msg);
+}
+
+void CDTWorkWidget::on_btnExecute_clicked()
+{
+    //auto cdt = qobject_cast<CDTProtocol*>(m_protocol);
+    //cdt->startYK(ui->edPtId->value(), ui->cbbYKOper->currentIndex() > 0);
+    qDebug("start yk");
+//    ui->btnExecute->setEnabled(false);
 }

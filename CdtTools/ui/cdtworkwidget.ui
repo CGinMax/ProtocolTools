@@ -110,6 +110,32 @@
        <property name="title">
         <string>操作</string>
        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QSpinBox" name="edPtId"/>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbYKOper">
+          <item>
+           <property name="text">
+            <string>分</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>合</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnExecute">
+          <property name="text">
+           <string>执行</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
      <widget class="QTextBrowser" name="textBrowser"/>

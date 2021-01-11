@@ -1,4 +1,6 @@
 #include "tcpserver.h"
+#include <QDebug>
+#include <QThread>
 
 TcpServer::TcpServer(const QString &ip, ushort port, QObject *parent)
     : m_ip(ip)
@@ -39,6 +41,7 @@ bool TcpServer::write(const char *data, int size)
 
 bool TcpServer::write(const QByteArray &data)
 {
+    qDebug() << "socket" << QThread::currentThread();
     return m_socket->write(data) > 0;
 }
 
@@ -60,7 +63,7 @@ bool TcpServer::isActived()
 QString TcpServer::toString()
 {
     if (isActived()) {
-        return QString("%1:%2").arg(m_socket->peerName()).arg(m_socket->peerPort());
+        return QString("%1:%2").arg(m_socket->peerAddress().toString()).arg(m_socket->peerPort());
     }
     return QLatin1String("Unnamed");
 }
@@ -68,6 +71,11 @@ QString TcpServer::toString()
 ushort TcpServer::port() const
 {
     return m_port;
+}
+
+void TcpServer::writeData(const QByteArray &data)
+{
+    m_socket->write(data);
 }
 
 QString TcpServer::ip() const

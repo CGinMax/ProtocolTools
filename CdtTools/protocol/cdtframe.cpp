@@ -25,7 +25,7 @@ QByteArray CDTFrame::toByteArray()
     return rawArray;
 }
 
-QByteArray CDTFrame::toAllByteArray()
+QByteArray CDTFrame::toAllByteArray() const
 {
     QByteArray rawArray;
     for (int i = 0; i < 6; i++) {

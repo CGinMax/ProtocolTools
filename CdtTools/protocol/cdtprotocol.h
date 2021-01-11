@@ -18,8 +18,6 @@ public:
     virtual ~CDTProtocol();
 
     void run() override;
-    void start() override;
-    void stop() override;
 
     // 处理命令
     void processCommand();
@@ -31,7 +29,7 @@ public:
 
     virtual void processFrame();
 
-    void send(CDTFrame& frame);
+    void send(const CDTFrame& frame);
 
     void sendAllDi();
     void sendAllAi();
@@ -65,6 +63,14 @@ public:
     // 非全部点遥控帧，则要传入点号
     CDTFrame createCycleYKFrame(bool isAllPoint, int ptId = -1);
 
+    virtual void startYK(int ptId, bool offon);
+
+signals:
+public slots:
+
+    void start() override;
+    void stop() override;
+
 protected:
     double bcdToValue(int bcdValue);
 
@@ -74,7 +80,7 @@ protected:
     QMutex m_mtx;
     QByteArray m_recvBuffer;
     QQueue<CDTFrame> m_frameQueue;
-
+    bool isRunYK;
     QTimer *m_timer{nullptr};
 };
 

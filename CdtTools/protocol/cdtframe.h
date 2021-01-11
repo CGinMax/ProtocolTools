@@ -130,7 +130,7 @@ public:
     QList<InfoFieldEntity> infoFields; // 信息字集合
 
     QByteArray toByteArray();
-    QByteArray toAllByteArray();
+    QByteArray toAllByteArray() const;
 };
 
 

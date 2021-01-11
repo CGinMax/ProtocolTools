@@ -23,11 +23,13 @@ public:
 signals:
 
 public slots:
+    void writeData(const QByteArray &data) override;
 
 private:
     QString m_ip;
     ushort m_port;
     QScopedPointer<QTcpSocket> m_socket;
+
 };
 
 #endif // TCPCLIENT_H

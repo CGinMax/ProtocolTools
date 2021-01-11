@@ -26,8 +26,6 @@ public:
 
     virtual void run() {}
 
-    virtual void start(){}
-    virtual void stop(){}
 
     bool initConnection();
 
@@ -42,6 +40,17 @@ public:
     QString bytes2String(const char *buffer, int length);
     QString bytes2String(const QByteArray& buffer);
     QString decorateMsg(eMsgType type, const QString& desc, const QString& bufrString=QString(), int buflen=0);
+
+signals:
+    void write(const QByteArray& data);
+    void sendProtocolMsg(const QString& msg);
+    void ykExecuteFinish();
+
+public slots:
+
+    virtual void start(){}
+    virtual void stop(){}
+
 protected:
     QSharedPointer<NetworkBase> m_network;
     QSharedPointer<SettingData> m_settingData;
