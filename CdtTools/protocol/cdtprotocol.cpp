@@ -7,7 +7,9 @@
 CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
     : ProtocolBase(network, settingData)
 {
-    isRunYK = false;
+    m_isRunYK = false;
+    m_cycleCounter = 0;
+    connect(m_network.data(), &NetworkBase::disconnected, this, &CDTProtocol::onDisconnected);
 }
 
 CDTProtocol::~CDTProtocol()
@@ -45,9 +47,10 @@ void CDTProtocol::run()
     // 处理帧
     processFrame();
 
-    if (!isRunYK && m_settingData->m_stationType == eStationType::Minitor) {
+    if (!m_isRunYK && m_cycleCounter > 2000 && m_settingData->m_stationType == eStationType::Minitor) {
         sendAllAi();
         sendAllDi();
+        m_cycleCounter = 0;
     }
 }
 
@@ -56,6 +59,7 @@ void CDTProtocol::start()
     if (!m_timer) {
         m_timer = new QTimer;
         QObject::connect(m_timer, &QTimer::timeout, [this](){
+            this->m_cycleCounter += 100;
             this->run();
         });
     }
@@ -64,7 +68,7 @@ void CDTProtocol::start()
 
 void CDTProtocol::stop()
 {
-    if (m_timer->isActive()) {
+    if (m_timer && m_timer->isActive()) {
         m_timer->stop();
         delete m_timer;
         m_timer = nullptr;
@@ -182,7 +186,7 @@ void CDTProtocol::processFrame()
             }
             break;
 
-        case eCDTFrameType::RmtControlType:
+        case eCDTFrameType::RmtControlTypeCycle:
             ykResponse(frame);
             break;
 
@@ -235,9 +239,8 @@ void CDTProtocol::sendAllAi()
         for (int j = 0; j < 2 && n < aiNum; j++)
         {
             int ycValue = (*m_settingData->m_ptCfg->m_globalAiList)[n].value();
-            uint8_t valueBytes[2]{0};
-            ptBinaryArr[j * 2] = ycValue >> 8;
-            ptBinaryArr[j * 2 + 1] = ycValue;
+            ptBinaryArr[j * 2] = static_cast<uint8_t>(ycValue >> 8);
+            ptBinaryArr[j * 2 + 1] = static_cast<uint8_t>(ycValue);
 
 //            bool sign = ptValue < 0 ? true : false;
 
@@ -348,35 +351,30 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
 
 void CDTProtocol::ykResponse(CDTFrame &frame)
 {
-//    InfoFieldEntity firstInfoData = frame.infoFields.front();
-//    uint8_t funCode = firstInfoData.funCode;
-//    uint8_t ctrlCode = firstInfoData.dataArray[0];
-//    // true开,false关
-//    bool status = ctrlCode == eControlLockCode::CloseValidLock;
-//    int ptId = firstInfoData.dataArray[2];
-//    ptId |= firstInfoData.dataArray[3] << 8;
+    // 解析报文，找解锁
+    int allowIndex = -1;
+    for (int idx = 0; idx < frame.infoFields.count(); idx++) {
+        // 组合成一个四字节整数
+        uint32_t combineNum = 0;
+        for (int i = 0; i < 4; i++) {
+            uint32_t convNum = frame.infoFields.at(idx).dataArray[i];
+            combineNum |= convNum << i * 8;
+        }
+        // 提取里面是否有1的bit，有且只有一个
+        auto positiveIdx = findPositive(combineNum);
+        if (positiveIdx > -1) {
+            allowIndex = idx * 32 + positiveIdx;
+            break;
+        }
+    }
 
-//    // 遥控执行
-//    auto frameBytes = frame.toAllByteArray();
-//    //ShowMsgArray(eMsgType::eMsgRecv, "接收到遥控帧，正在处理...", frameBytes, frameBytes.count());
-//    switch (funCode) {
-//    case eCDTFunCode::RmtControlSelectCode:
-//        ykSelectBack(ctrlCode, static_cast<uint8_t>(ptId));
-//        break;
-//    case eCDTFunCode::RmtControlBackCode:
-//        yKExecute(ctrlCode, static_cast<uint8_t>(ptId));
-//        break;
-
-//    case eCDTFunCode::RmtControlExecuteCode:
-//    {
-//        // TODO: 执行遥控变位
-//    }
-//        break;
-//    case eCDTFunCode::RmtControlCancelCode:
-//    {
-//    }
-//        break;
-//    }
+    // 闭锁或全闭锁
+    if (allowIndex == -1) {
+        return;
+    }
+    //TODO: 解锁：对应地址的di进行变位
+    qDebug("chang di");
+    (*m_settingData->m_ptCfg->m_globalDiList)[allowIndex].setValue(!m_settingData->m_ptCfg->m_globalDiList->at(allowIndex).value());
 }
 
 void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
@@ -507,9 +505,26 @@ CDTFrame CDTProtocol::createCycleYKFrame(bool isAllPoint, int ptId)
     return  cmdFrame;
 }
 
+int CDTProtocol::findPositive(uint32_t num)
+{
+    if (num > 0) {
+        for (int i = 0; i < 32; i++) {
+            if ((num >> i) & 0x01) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 void CDTProtocol::startYK(int ptId, bool offon)
 {
 
+}
+
+void CDTProtocol::onDisconnected()
+{
+    stop();
 }
 
 double CDTProtocol::bcdToValue(int bcdValue)

@@ -33,7 +33,7 @@ void CDTCycle::run()
     // 处理帧
     processFrame();
 
-    if (m_settingData->m_stationType == eStationType::WF && !isRunYK) {
+    if (m_settingData->m_stationType == eStationType::WF && !m_isRunYK) {
         ykAllNotAllow();
     }
 
@@ -59,7 +59,7 @@ void CDTCycle::processFrame()
             //ShowMsgArray(eMsgType::eMsgRecv, "接收到遥信帧，正在处理...", ba, ba.size());
             if (m_settingData->m_stationType == eStationType::WF) {
                 // 五防接收到变位遥信
-                if (isRunYK) {
+                if (m_isRunYK) {
                     changedYXResponse(frame.infoFields);
                 } else {
                     yxResponse(frame.infoFields);

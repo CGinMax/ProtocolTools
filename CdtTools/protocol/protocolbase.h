@@ -47,9 +47,12 @@ signals:
     void ykExecuteFinish();
 
 public slots:
-
     virtual void start(){}
     virtual void stop(){}
+    virtual void startYK(int ptId, bool offon){
+        Q_UNUSED(ptId)
+        Q_UNUSED(offon)
+    }
 
 protected:
     QSharedPointer<NetworkBase> m_network;

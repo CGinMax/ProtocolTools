@@ -27,6 +27,7 @@ public:
 
 signals:
     void stop();
+    void startYK(int ptId, bool offon);
 
 public slots:
     void recvMessage(const QString& msg);
@@ -36,7 +37,7 @@ private:
     DiTableModel* m_diModel;
     AiTableModel* m_aiModel;
     DiTableModel* m_vyxModel;
-    QTimer m_aiTimer;
+    QTimer m_viewTimer;
     ProtocolBase* m_protocol;
     QSharedPointer<NetworkBase> m_network;
     QScopedPointer<Ui::CDTWorkWidget> ui;

@@ -108,17 +108,44 @@
        </widget>
       </item>
       <item row="0" column="5">
-       <widget class="QLineEdit" name="edYxNum"/>
+       <widget class="QLineEdit" name="edYxNum">
+        <property name="text">
+         <string>10</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>起始功能码</string>
+         <string>起始IO地址</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="edYxStartIo"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_19">
+        <property name="text">
+         <string>循环发送时间</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QSpinBox" name="edYxTime">
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="suffix">
+         <string>ms</string>
+        </property>
+        <property name="maximum">
+         <number>999999999</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -157,17 +184,44 @@
        </widget>
       </item>
       <item row="0" column="5">
-       <widget class="QLineEdit" name="edYcNum"/>
+       <widget class="QLineEdit" name="edYcNum">
+        <property name="text">
+         <string>10</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>起始功能码</string>
+         <string>起始IO地址</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="edYcStartIo"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_20">
+        <property name="text">
+         <string>循环发送时间</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QSpinBox" name="edYcTime">
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="suffix">
+         <string>ms</string>
+        </property>
+        <property name="maximum">
+         <number>999999999</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -206,17 +260,44 @@
        </widget>
       </item>
       <item row="0" column="5">
-       <widget class="QLineEdit" name="edVYxNum"/>
+       <widget class="QLineEdit" name="edVYxNum">
+        <property name="text">
+         <string>10</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_18">
         <property name="text">
-         <string>起始功能码</string>
+         <string>起始IO地址</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="edVYxStartIo"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_21">
+        <property name="text">
+         <string>循环发送时间</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QSpinBox" name="edVYxTime">
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="suffix">
+         <string>ms</string>
+        </property>
+        <property name="maximum">
+         <number>999999999</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

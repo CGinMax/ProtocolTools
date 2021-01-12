@@ -14,7 +14,7 @@ AiData::AiData(int io, const QString &name, int value, QObject *parent)
 
 }
 
-AiData::AiData(const AiData &other)
+AiData::AiData(const AiData &other): QObject(nullptr)
 {
     *this = other;
 }

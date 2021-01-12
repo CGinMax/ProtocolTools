@@ -55,6 +55,13 @@ void TabPage::resetSettingData()
 
 }
 
+void TabPage::setConfigureWidgetEnabled(bool enabled)
+{
+    ui->btnSetting->setEnabled(enabled);
+    ui->btnStart->setEnabled(enabled);
+    ui->btnStop->setEnabled(!enabled);
+}
+
 void TabPage::on_cbbNetworkType_currentIndexChanged(int index)
 {
     ui->stackedWidget->setCurrentIndex(index);
@@ -75,7 +82,7 @@ void TabPage::on_btnStart_clicked()
     case eNetworkType::eSerialPort:
         break;
     }
-    ui->btnStart->setEnabled(false);
+    setConfigureWidgetEnabled(false);
 
 }
 
@@ -93,7 +100,7 @@ void TabPage::on_btnStop_clicked()
     case eNetworkType::eSerialPort:
         break;
     }
-    ui->btnStart->setEnabled(true);
+    setConfigureWidgetEnabled(true);
 }
 
 void TabPage::on_btnSetting_clicked()

@@ -63,13 +63,16 @@ public:
     // 非全部点遥控帧，则要传入点号
     CDTFrame createCycleYKFrame(bool isAllPoint, int ptId = -1);
 
-    virtual void startYK(int ptId, bool offon);
+    int findPositive(uint32_t num);
+
 
 signals:
 public slots:
 
     void start() override;
     void stop() override;
+    void startYK(int ptId, bool offon) override;
+    void onDisconnected();
 
 protected:
     double bcdToValue(int bcdValue);
@@ -80,7 +83,8 @@ protected:
     QMutex m_mtx;
     QByteArray m_recvBuffer;
     QQueue<CDTFrame> m_frameQueue;
-    bool isRunYK;
+    bool m_isRunYK;
+    uint m_cycleCounter;
     QTimer *m_timer{nullptr};
 };
 

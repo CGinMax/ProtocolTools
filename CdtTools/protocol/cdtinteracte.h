@@ -19,12 +19,11 @@ public:
 
     // 遥控帧
     CDTFrame interactYKFrame(uint8_t funCode, uint8_t operCode, uint8_t vaild, int ptId);
+    void processFrame() override;
 
+public slots:
     void startYK(int ptId, bool offon) override;
 
-    // CDTProtocol interface
-public:
-    void processFrame() override;
 };
 
 #endif // CDTINTERACTE_H

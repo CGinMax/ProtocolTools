@@ -53,9 +53,10 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     vyxDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
     ui->viewDi->setItemDelegateForColumn(2, vyxDelegate);
 
-    connect(&m_aiTimer, &QTimer::timeout, [=]{
+    connect(&m_viewTimer, &QTimer::timeout, [=]{
         m_aiModel->randomNumber();
         ui->viewAi->viewport()->update();
+        ui->viewDi->viewport()->update();
     });
 
     ThreadPool::instance()->run([&network, &settingData, this](){
@@ -79,6 +80,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
         });
         connect(this->m_protocol, &ProtocolBase::sendProtocolMsg, this, &CDTWorkWidget::recvMessage);
         connect(this, &CDTWorkWidget::stop, this->m_protocol, &ProtocolBase::stop);
+        connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::startYK);
         this->m_protocol->start();
     });
 }
@@ -95,10 +97,10 @@ CDTWorkWidget::~CDTWorkWidget()
 void CDTWorkWidget::resetAiRandom(bool start)
 {
     if (start) {
-        m_aiTimer.start(2000);
+        m_viewTimer.start(1000);
     }
     else {
-        m_aiTimer.stop();
+        m_viewTimer.stop();
     }
 }
 
@@ -120,8 +122,7 @@ void CDTWorkWidget::recvMessage(const QString &msg)
 
 void CDTWorkWidget::on_btnExecute_clicked()
 {
-    //auto cdt = qobject_cast<CDTProtocol*>(m_protocol);
-    //cdt->startYK(ui->edPtId->value(), ui->cbbYKOper->currentIndex() > 0);
+    emit startYK(ui->edPtId->value(), ui->cbbYKOper->currentIndex() > 0);
     qDebug("start yk");
 //    ui->btnExecute->setEnabled(false);
 }

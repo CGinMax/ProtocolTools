@@ -7,6 +7,7 @@ TcpClient::TcpClient(const QString &ip, ushort port, QObject *parent)
 {
     setParent(parent);
     connect(m_socket.get(), &QTcpSocket::connected, this, &TcpClient::connected);
+    connect(m_socket.get(), &QTcpSocket::disconnected, this, &TcpClient::disconnected);
 }
 
 TcpClient::~TcpClient()

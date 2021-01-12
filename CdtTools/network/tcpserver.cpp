@@ -8,13 +8,13 @@ TcpServer::TcpServer(const QString &ip, ushort port, QObject *parent)
     , m_socket(nullptr)
 {
     setParent(parent);
-
 }
 
 TcpServer::TcpServer(QTcpSocket *socket, QObject *parent)
     : m_socket(socket)
 {
     setParent(parent);
+    connect(m_socket, &QTcpSocket::disconnected, this, &TcpServer::disconnected);
 }
 
 TcpServer::~TcpServer()

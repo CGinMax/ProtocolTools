@@ -40,6 +40,10 @@ void CDTSettingDlg::initWidgetData(const PtCfg &setting)
     ui->edYkOpen->setText(Util::num2Hex(setting.m_ykOpen));
     ui->edYkLock->setText(Util::num2Hex(setting.m_ykLock));
     ui->edYkUnlock->setText(Util::num2Hex(setting.m_ykUnlock));
+
+    ui->edYxTime->setValue(setting.m_yxTime);
+    ui->edYcTime->setValue(setting.m_ycTime);
+    ui->edVYxTime->setValue(setting.m_vyxTime);
 }
 
 
@@ -65,6 +69,16 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_vyxFuncode   = Util::hexString2Num(ui->edVYxFuncode->text());
     m_ptCfg->m_vyxNum       = Util::hexString2Num(ui->edVYxNum->text());
     m_ptCfg->m_vyxStartIo   = Util::hexString2Num(ui->edVYxStartIo->text());
+
+    m_ptCfg->m_ykFrameType  = Util::hexString2Num(ui->edYkType->text());
+    m_ptCfg->m_ykOpen       = Util::hexString2Num(ui->edYkOpen->text());
+    m_ptCfg->m_ykClose      = Util::hexString2Num(ui->edYkClose->text());
+    m_ptCfg->m_ykLock       = Util::hexString2Num(ui->edYkLock->text());
+    m_ptCfg->m_ykUnlock     = Util::hexString2Num(ui->edYkUnlock->text());
+
+    m_ptCfg->m_yxTime       = ui->edYxTime->value();
+    m_ptCfg->m_ycTime       = ui->edYcTime->value();
+    m_ptCfg->m_vyxTime      = ui->edVYxTime->value();
 
     m_ptCfg->m_globalDiList->clear();
     delete m_ptCfg->m_globalDiList;

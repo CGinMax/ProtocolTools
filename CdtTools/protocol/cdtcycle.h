@@ -27,7 +27,7 @@ public:
 
 private:
 
-    bool isRunYK;
+    bool m_isRunYK;
 
 };
 

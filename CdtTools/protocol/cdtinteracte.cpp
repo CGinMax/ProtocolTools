@@ -27,15 +27,15 @@ void CDTInteracte::ykResponse(CDTFrame &frame)
     switch (funCode) {
     case eCDTFunCode::RmtControlSelectCode:
     {
-        if (!isRunYK) {// 接收到遥控选择
+        if (!m_isRunYK) {// 接收到遥控选择
             // 直接返回校核
             ykSelectBack(ctrlCode, static_cast<uint8_t>(ykAddr));
             // 进入遥控执行状态
-            isRunYK = true;
+            m_isRunYK = true;
         }
         else {// 接收到遥控执行
             // 退出遥控执行状态
-            isRunYK = false;
+            m_isRunYK = false;
         }
         break;
     }
@@ -52,14 +52,14 @@ void CDTInteracte::ykResponse(CDTFrame &frame)
     {
         bool success = firstInfoData.dataArray[1] == 0xAA;
         if (success){
-            (*m_settingData->m_ptCfg->m_globalDiList)[ykAddr].setValue(status);
+            (*m_settingData->m_ptCfg->m_globalDiList)[ykAddr - 1].setValue(status);
             emit ykExecuteFinish();
         }
         else {
             // emit failed msg;
             showMessage(eMsgRecv, QStringLiteral("遥控解闭锁应答失败"));
         }
-        isRunYK = false;
+        m_isRunYK = false;
 
         break;
     }
@@ -114,11 +114,9 @@ void CDTInteracte::startYK(int ptId, bool offon)
         return ;
 
     eControlLockCode code = offon ? eControlLockCode::CloseValidLock : eControlLockCode::OpenValidLock;
-    QMetaObject::invokeMethod(this, [=](){
-        this->ykSelect(code, static_cast<uint8_t>(ptId));
-    });
-//    ykSelect(code, static_cast<uint8_t>(ptId));
-    isRunYK = true;
+
+    ykSelect(code, static_cast<uint8_t>(ptId));
+    m_isRunYK = true;
 }
 
 void CDTInteracte::processFrame()

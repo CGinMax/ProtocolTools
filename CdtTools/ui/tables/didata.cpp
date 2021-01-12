@@ -14,7 +14,7 @@ DiData::DiData(int io, const QString &name, bool value, QObject *parent)
 
 }
 
-DiData::DiData(const DiData &other)
+DiData::DiData(const DiData &other): QObject(nullptr)
 {
     *this = other;
 }
