@@ -32,7 +32,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     auto diDelegate = new ComboBoxDelegate(ui->viewDi);
     diDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
     ui->viewDi->setItemDelegateForColumn(2, diDelegate);
-
+//    ui->viewDi->openPersistentEditor(m_diModel->index(0, 2));
 
     m_aiModel = new AiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg, ui->viewAi);
     ui->viewAi->setModel(m_aiModel);

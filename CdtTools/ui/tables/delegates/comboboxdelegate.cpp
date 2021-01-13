@@ -27,6 +27,7 @@ void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
     QComboBox *comboBox=static_cast<QComboBox*>(editor);
     int curIndex=comboBox->findText(text);
     comboBox->setCurrentIndex(curIndex);
+
 }
 
 void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
