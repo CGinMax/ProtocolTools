@@ -29,7 +29,7 @@ public slots:
 
 private:
     int m_io{0};
-    QString m_name{QString()};
+    QString m_name{QString("Pt0")};
     bool m_value{false};
 };
 

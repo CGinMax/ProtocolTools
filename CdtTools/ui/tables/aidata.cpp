@@ -1,6 +1,7 @@
 #include "aidata.h"
 
-AiData::AiData(QObject *parent) : QObject(parent)
+AiData::AiData(QObject *parent)
+    : QObject(parent)
 {
 
 }

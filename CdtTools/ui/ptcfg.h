@@ -15,6 +15,8 @@ struct PtCfg
         : m_globalDiList(new QList<DiData>)
         , m_globalAiList(new QList<AiData>)
     {
+        m_globalDiList->append(DiData());
+        m_globalAiList->append(AiData());
     }
     ~PtCfg() {
         qDebug("dctor");

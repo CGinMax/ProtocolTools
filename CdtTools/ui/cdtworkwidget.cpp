@@ -53,11 +53,17 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     vyxDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
     ui->viewDi->setItemDelegateForColumn(2, vyxDelegate);
 
-    connect(&m_viewTimer, &QTimer::timeout, [=]{
-        m_aiModel->randomNumber();
+    m_cbRandom = new QCheckBox(QStringLiteral("Value"), this);
+    m_cbRandom->resize(60, 40);
+    auto aiHorHeader = ui->viewAi->horizontalHeader();
+    aiHorHeader->setIndexWidget(m_aiModel->index(0, 2), m_cbRandom);
+    connect(&m_viewTimer, &QTimer::timeout, [this]{
+        if (this->m_cbRandom->isChecked())
+            m_aiModel->randomNumber();
         ui->viewAi->viewport()->update();
         ui->viewDi->viewport()->update();
     });
+    m_viewTimer.start(2000);
 
     ThreadPool::instance()->run([&network, &settingData, this](){
         switch (settingData->m_ptCfg->m_protocol) {
@@ -92,6 +98,7 @@ CDTWorkWidget::~CDTWorkWidget()
         m_protocol->deleteLater();
         m_protocol = nullptr;
     }
+    m_viewTimer.stop();
 }
 
 void CDTWorkWidget::resetAiRandom(bool start)

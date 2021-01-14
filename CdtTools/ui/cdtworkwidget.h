@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QScopedPointer>
 #include <QTimer>
+#include <QCheckBox>
 #include "../protocol/protocolbase.h"
 #include "ptcfg.h"
 
@@ -37,6 +38,7 @@ private:
     DiTableModel* m_diModel;
     AiTableModel* m_aiModel;
     DiTableModel* m_vyxModel;
+    QCheckBox* m_cbRandom;
     QTimer m_viewTimer;
     ProtocolBase* m_protocol;
     QSharedPointer<NetworkBase> m_network;
