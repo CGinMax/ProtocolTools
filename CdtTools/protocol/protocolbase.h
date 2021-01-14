@@ -45,6 +45,7 @@ signals:
     void write(const QByteArray& data);
     void sendProtocolMsg(const QString& msg);
     void ykExecuteFinish();
+    void notifyYK(int ptId);
 
 public slots:
     virtual void start(){}

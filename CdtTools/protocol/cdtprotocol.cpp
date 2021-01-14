@@ -167,32 +167,25 @@ void CDTProtocol::processFrame()
     while (!m_frameQueue.isEmpty()) {
         CDTFrame frame = m_frameQueue.dequeue();
 
-        switch (frame.frameControl.type)
-        {
-        // 0x61，遥测
-        case eCDTFrameType::RmtMeasurement:
+        if (frame.frameControl.type == m_settingData->m_ptCfg->m_ycFrameType) {
             showMessageBuffer(eMsgType::eMsgRecv, "接收到遥测帧，正在处理...", frame.toAllByteArray());
             yxResponse(frame.infoFields);
-            break;
-
-        // 0xF4,遥信
-        case eCDTFrameType::RmtInformation:
+        }
+        else if (frame.frameControl.type == m_settingData->m_ptCfg->m_yxFrameType) {
             if (m_settingData->m_stationType == eStationType::WF) {
                 showMessageBuffer(eMsgType::eMsgRecv, "接收到遥信帧，正在处理...", frame.toAllByteArray());
                 yxResponse(frame.infoFields);
             } else if (m_settingData->m_stationType == eStationType::Minitor) {
                 // 监控接收虚遥信
-
             }
-            break;
-
-        case eCDTFrameType::RmtControlTypeCycle:
-            ykResponse(frame);
-            break;
-
-        default :
-            break;
         }
+        else if (frame.frameControl.type == m_settingData->m_ptCfg->m_ykFrameType) {
+            if (!m_isRunYK) {
+                ykResponse(frame);
+                m_isRunYK = true;
+            }
+        }
+
     }
 
 }
@@ -373,8 +366,10 @@ void CDTProtocol::ykResponse(CDTFrame &frame)
         return;
     }
     //TODO: 解锁：对应地址的di进行变位
-    qDebug("chang di");
-    (*m_settingData->m_ptCfg->m_globalDiList)[allowIndex].setValue(!m_settingData->m_ptCfg->m_globalDiList->at(allowIndex).value());
+    qDebug("change di");
+    m_isRunYK = true;
+    emit notifyYK(allowIndex);
+    //(*m_settingData->m_ptCfg->m_globalDiList)[allowIndex].setValue(!m_settingData->m_ptCfg->m_globalDiList->at(allowIndex).value());
 }
 
 void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)

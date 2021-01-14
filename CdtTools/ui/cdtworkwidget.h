@@ -32,6 +32,7 @@ signals:
 
 public slots:
     void recvMessage(const QString& msg);
+    void onNotifyYK(int ptId);
     void on_btnExecute_clicked();
 
 private:

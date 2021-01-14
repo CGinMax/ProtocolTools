@@ -19,7 +19,6 @@ struct PtCfg
         m_globalAiList->append(AiData());
     }
     ~PtCfg() {
-        qDebug("dctor");
         delete m_globalDiList;
         m_globalDiList = nullptr;
         delete m_globalAiList;

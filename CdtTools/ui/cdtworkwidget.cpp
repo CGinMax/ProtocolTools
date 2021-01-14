@@ -7,6 +7,7 @@
 #include "../protocol/cdtprotocol.h"
 #include "../protocol/cdtinteracte.h"
 #include "../common/threadpool.h"
+#include "dialog/ykdialog.h"
 #include <QDebug>
 #include <QThread>
 
@@ -87,6 +88,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
         connect(this->m_protocol, &ProtocolBase::sendProtocolMsg, this, &CDTWorkWidget::recvMessage);
         connect(this, &CDTWorkWidget::stop, this->m_protocol, &ProtocolBase::stop);
         connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::startYK);
+        connect(this->m_protocol, &ProtocolBase::notifyYK, this, &CDTWorkWidget::onNotifyYK);
         this->m_protocol->start();
     });
 }
@@ -125,6 +127,16 @@ bool CDTWorkWidget::isConnection()
 void CDTWorkWidget::recvMessage(const QString &msg)
 {
     ui->textBrowser->append(msg);
+}
+
+void CDTWorkWidget::onNotifyYK(int ptId)
+{
+    QString info = QStringLiteral("是否对点%1进行变位").arg(ptId);
+    YKDialog dialog(info, "Dialog");
+    int ret = dialog.exec();
+    if (ret == QDialog::Accepted) {
+
+    }
 }
 
 void CDTWorkWidget::on_btnExecute_clicked()

@@ -29,6 +29,7 @@ SOURCES += \
         mainwindow.cpp \
     network/networkbase.cpp \
     network/tcpserver.cpp \
+    ui/dialog/ykdialog.cpp \
     ui/tabpage.cpp \
     network/tcpclient.cpp \
     common/threadpool.cpp \
@@ -58,6 +59,7 @@ HEADERS += \
     network/networkbase.h \
     enums.h \
     network/tcpserver.h \
+    ui/dialog/ykdialog.h \
     ui/tabpage.h \
     network/tcpclient.h \
     common/threadpool.h \
