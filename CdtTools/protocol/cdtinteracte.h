@@ -18,8 +18,7 @@ public:
     void ykExecuteBack(uint8_t ctrlCode, uint8_t ptId, bool success = true);
 
     // 遥控帧
-    CDTFrame interactYKFrame(uint8_t funCode, uint8_t operCode, uint8_t vaild, int ptId);
-    void processFrame() override;
+    CDTFrame interactYKFrame(uint8_t frameType, uint8_t funCode, uint8_t operCode, uint8_t vaild, int ptId);
 
 public slots:
     void startYK(int ptId, bool offon) override;

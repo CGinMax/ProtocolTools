@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QAbstractTableModel>
-#include "../ptcfg.h"
+#include "didata.h"
 
 QT_FORWARD_DECLARE_CLASS(DiData);
 
@@ -12,7 +12,7 @@ class DiTableModel : public QAbstractTableModel
     Q_OBJECT
 public:
     explicit DiTableModel(const QStringList& headers, QObject *parent = nullptr);
-    explicit DiTableModel(const QStringList& headers, const QSharedPointer<PtCfg>& ptcfg, QObject *parent = nullptr);
+    explicit DiTableModel(const QStringList& headers, QList<DiData*>* diDatas, QObject *parent = nullptr);
     ~DiTableModel() override;
 
     int rowCount(const QModelIndex &parent) const override;
@@ -22,10 +22,8 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-    void insertRow(const DiData& diData, const QModelIndex& parent = QModelIndex());
+    void insertRow(DiData* diData, const QModelIndex& parent = QModelIndex());
     void resetDatas(int num);
-
-    void setPtCfg(QSharedPointer<PtCfg>& ptcfg);
 
 signals:
 
@@ -33,8 +31,7 @@ public slots:
 
 private:
     QStringList m_headers;
-
-    QSharedPointer<PtCfg> m_ptCfg;
+    QList<DiData*>* m_diDatas;
 };
 
 #endif // DITABLEMODEL_H

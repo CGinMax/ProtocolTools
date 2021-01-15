@@ -27,24 +27,27 @@ ServerPage::~ServerPage()
     stop();
 }
 
-void ServerPage::start()
+bool ServerPage::start()
 {
     if (!m_settingData.isNull()) {
-        start(m_settingData->m_ip, m_settingData->m_port);
+        return start(m_settingData->m_ip, m_settingData->m_port);
     }
     else {
         qInfo("settin data empty");
+        return false;
     }
 }
 
-void ServerPage::start(const QString &ip, int port)
+bool ServerPage::start(const QString &ip, int port)
 {
+    QHostAddress address;
     if (ip == "0.0.0.0") {
-        m_tcpServer->listen(QHostAddress::Any, port);
+        address = QHostAddress::Any;
     }
     else {
-        m_tcpServer->listen(QHostAddress(ip), port);
+        address = QHostAddress(ip);
     }
+    return m_tcpServer->listen(address, port);
 }
 
 void ServerPage::stopListen()

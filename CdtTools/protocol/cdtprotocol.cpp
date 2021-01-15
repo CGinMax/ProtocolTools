@@ -166,6 +166,7 @@ void CDTProtocol::processFrame()
 {
     while (!m_frameQueue.isEmpty()) {
         CDTFrame frame = m_frameQueue.dequeue();
+        uint8_t ykType = m_settingData->m_stationType == eStationType::WF ? m_settingData->m_ptCfg->m_ykReqType : m_settingData->m_ptCfg->m_ykAckType;
 
         if (frame.frameControl.type == m_settingData->m_ptCfg->m_ycFrameType) {
             showMessageBuffer(eMsgType::eMsgRecv, "接收到遥测帧，正在处理...", frame.toAllByteArray());
@@ -179,11 +180,9 @@ void CDTProtocol::processFrame()
                 // 监控接收虚遥信
             }
         }
-        else if (frame.frameControl.type == m_settingData->m_ptCfg->m_ykFrameType) {
-            if (!m_isRunYK) {
-                ykResponse(frame);
-                m_isRunYK = true;
-            }
+        else if (frame.frameControl.type == ykType) {
+            ykResponse(frame);
+
         }
 
     }
@@ -231,7 +230,7 @@ void CDTProtocol::sendAllAi()
         uint8_t ptBinaryArr[4] = {0, 0, 0, 0};
         for (int j = 0; j < 2 && n < aiNum; j++)
         {
-            int ycValue = (*m_settingData->m_ptCfg->m_globalAiList)[n].value();
+            int ycValue = m_settingData->m_ptCfg->m_globalAiList->at(n)->value();
             ptBinaryArr[j * 2] = static_cast<uint8_t>(ycValue >> 8);
             ptBinaryArr[j * 2 + 1] = static_cast<uint8_t>(ycValue);
 
@@ -271,7 +270,7 @@ void CDTProtocol::sendAllAi()
         curCode++;
     }
 
-    frame.frameControl.fillData(eCDTFrameControlType::StandardType, eCDTFrameType::RmtMeasurement, frame.infoFields.size(), 0, 0);
+    frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ycFrameType, frame.infoFields.size(), 0, 0);
     showMessageBuffer(eMsgType::eMsgSend, "发送全遥测", frame.toAllByteArray());
     send(frame);
 
@@ -312,7 +311,7 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
             nSeq = curPointStartAddr + i + 1;  // 点号
             // 0号开始
             if(nSeq <  m_settingData->m_ptCfg->m_globalDiList->size()) {
-                (*m_settingData->m_ptCfg->m_globalDiList)[nSeq].setValue(yxValue>0);
+                m_settingData->m_ptCfg->m_globalDiList->takeAt(nSeq)->setValue(yxValue > 0);
             }
         }
     }
@@ -335,7 +334,7 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
             // 点号
             nSeq = entity.funCode + (i / 2) + 1;
             if (nSeq < m_settingData->m_ptCfg->m_globalAiList->size()) {
-                (*m_settingData->m_ptCfg->m_globalAiList)[nSeq].setValue(nSeq);
+                m_settingData->m_ptCfg->m_globalAiList->takeAt(nSeq)->setValue(ycAccept);
             }
 
         }
@@ -344,37 +343,39 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
 
 void CDTProtocol::ykResponse(CDTFrame &frame)
 {
-    // 解析报文，找解锁
-    int allowIndex = -1;
-    for (int idx = 0; idx < frame.infoFields.count(); idx++) {
-        // 组合成一个四字节整数
-        uint32_t combineNum = 0;
-        for (int i = 0; i < 4; i++) {
-            uint32_t convNum = frame.infoFields.at(idx).dataArray[i];
-            combineNum |= convNum << i * 8;
+    if (!m_isRunYK) {
+        // 解析报文，找解锁
+        int allowIndex = -1;
+        for (int idx = 0; idx < frame.infoFields.count(); idx++) {
+            // 组合成一个四字节整数
+            uint32_t combineNum = 0;
+            for (int i = 0; i < 4; i++) {
+                uint32_t convNum = frame.infoFields.at(idx).dataArray[i];
+                combineNum |= convNum << i * 8;
+            }
+            // 提取里面是否有1的bit，有且只有一个
+            auto positiveIdx = findPositive(combineNum);
+            if (positiveIdx > -1) {
+                allowIndex = idx * 32 + positiveIdx;
+                break;
+            }
         }
-        // 提取里面是否有1的bit，有且只有一个
-        auto positiveIdx = findPositive(combineNum);
-        if (positiveIdx > -1) {
-            allowIndex = idx * 32 + positiveIdx;
-            break;
+
+        // 闭锁或全闭锁
+        if (allowIndex == -1) {
+            return;
         }
+        //TODO: 解锁：对应地址的di进行变位
+        qDebug("change di");
+        m_isRunYK = true;
+        emit notifyYK(allowIndex);
     }
 
-    // 闭锁或全闭锁
-    if (allowIndex == -1) {
-        return;
-    }
-    //TODO: 解锁：对应地址的di进行变位
-    qDebug("change di");
-    m_isRunYK = true;
-    emit notifyYK(allowIndex);
-    //(*m_settingData->m_ptCfg->m_globalDiList)[allowIndex].setValue(!m_settingData->m_ptCfg->m_globalDiList->at(allowIndex).value());
 }
 
 void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlSelectCode, operCode, ptNo);
+    auto frame = interactYKFrame(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择"), frame.toAllByteArray());
     send(frame);
 }
@@ -440,7 +441,7 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)
             val = 0;
             index = 0;
         }
-        bool diVal = di.value();
+        bool diVal = di->value();
         if (diVal) {
             val |= (1 << index % 8);
         }
@@ -514,7 +515,17 @@ int CDTProtocol::findPositive(uint32_t num)
 
 void CDTProtocol::startYK(int ptId, bool offon)
 {
+    Q_UNUSED(ptId);
+    Q_UNUSED(offon);
+}
 
+void CDTProtocol::reverseYx(int ptId)
+{
+    auto di = m_settingData->m_ptCfg->m_globalDiList->takeAt(ptId);
+    di->setValue(!di->value());
+    sendAllDi();
+    m_isRunYK = false;
+    qDebug("遥控变位完成");
 }
 
 void CDTProtocol::onDisconnected()

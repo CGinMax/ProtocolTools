@@ -6,8 +6,11 @@
 #include "tables/delegates/digitlimitedelegate.h"
 #include "../protocol/cdtprotocol.h"
 #include "../protocol/cdtinteracte.h"
+#include "../protocol/cdtcycle.h"
+#include "../protocol/cdtexnr.h"
+#include "../protocol/cdtexut.h"
 #include "../common/threadpool.h"
-#include "dialog/ykdialog.h"
+#include "./dialog/ykdialog.h"
 #include <QDebug>
 #include <QThread>
 
@@ -15,6 +18,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     : QWidget(parent)
     , m_protocol(nullptr)
     , m_network(network)
+    , m_floatBtnGroup(new FloatButtonGroup(this))
     , ui(new Ui::CDTWorkWidget)
 {
     ui->setupUi(this);
@@ -24,7 +28,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->vecSplitter->setCollapsible(0, false);
     ui->vecSplitter->setCollapsible(1, false);
 
-    m_diModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg, ui->viewDi);
+    m_diModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalDiList, ui->viewDi);
     ui->viewDi->setModel(m_diModel);
     ui->viewDi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewDi->verticalHeader()->setVisible(false);
@@ -35,7 +39,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->viewDi->setItemDelegateForColumn(2, diDelegate);
 //    ui->viewDi->openPersistentEditor(m_diModel->index(0, 2));
 
-    m_aiModel = new AiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg, ui->viewAi);
+    m_aiModel = new AiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalAiList, ui->viewAi);
     ui->viewAi->setModel(m_aiModel);
     ui->viewAi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewAi->verticalHeader()->setVisible(false);
@@ -44,7 +48,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     auto aiDelegate = new DigitLimiteDelegate();
     ui->viewAi->setItemDelegateForColumn(2, aiDelegate);
 
-    m_vyxModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg, ui->viewVYx);
+    m_vyxModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalDiList, ui->viewVYx);
     ui->viewVYx->setModel(m_vyxModel);
     ui->viewVYx->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewVYx->verticalHeader()->setVisible(false);
@@ -66,28 +70,44 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     });
     m_viewTimer.start(2000);
 
+    auto btn = new QPushButton(tr("clear"), this);
+    connect(btn, &QPushButton::clicked, [this](){
+        this->ui->textBrowser->clear();
+    });
+    m_floatBtnGroup->addButton(btn);
+    m_floatBtnGroup->move(ui->textBrowser->x() + width() - 18 - m_floatBtnGroup->width(), ui->textBrowser->y() + 9);
+    m_floatBtnGroup->raise();
+
     ThreadPool::instance()->run([&network, &settingData, this](){
         switch (settingData->m_ptCfg->m_protocol) {
         case eProtocol::CDTStandard:
             this->m_protocol = new CDTProtocol(network, settingData);
             break;
-        case eProtocol::CDTUt:
-            break;
-        case eProtocol::CDTNr:
-            break;
-        case eProtocol::CDTGc:
+        case eProtocol::CDTGcInterace:
             this->m_protocol = new CDTInteracte(network, settingData);
             break;
+        case eProtocol::CDTGcCycle:
+            this->m_protocol = new CDTCycle(network, settingData);
+            break;
+        case eProtocol::CDTUt:
+            this->m_protocol = new CDTExUt(network, settingData);
+            break;
+        case eProtocol::CDTNr:
+            this->m_protocol = new CDTExNr(network, settingData);
+            break;
+
         default:
             break;
         }
-        connect(this->m_protocol, &ProtocolBase::ykExecuteFinish, [=](){
+        connect(this->m_protocol, &ProtocolBase::ykExecuteFinish, [=](const QString& msg){
             qDebug("cdt work widget yk finished");
+            ui->textBrowser->append(msg);
             ui->btnExecute->setEnabled(true);
         });
         connect(this->m_protocol, &ProtocolBase::sendProtocolMsg, this, &CDTWorkWidget::recvMessage);
         connect(this, &CDTWorkWidget::stop, this->m_protocol, &ProtocolBase::stop);
         connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::startYK);
+        connect(this, &CDTWorkWidget::reverseYx, this->m_protocol, &ProtocolBase::reverseYx);
         connect(this->m_protocol, &ProtocolBase::notifyYK, this, &CDTWorkWidget::onNotifyYK);
         this->m_protocol->start();
     });
@@ -124,6 +144,16 @@ bool CDTWorkWidget::isConnection()
     return m_protocol->isConnection();
 }
 
+void CDTWorkWidget::resizeEvent(QResizeEvent *event)
+{
+    if ((width() + 36) <= m_floatBtnGroup->width() || height() <= m_floatBtnGroup->height()) {
+        return ;
+    }
+
+    m_floatBtnGroup->move(ui->textBrowser->x() + width() - 18 - m_floatBtnGroup->width(), ui->textBrowser->y() + 9);
+    QWidget::resizeEvent(event);
+}
+
 void CDTWorkWidget::recvMessage(const QString &msg)
 {
     ui->textBrowser->append(msg);
@@ -133,9 +163,11 @@ void CDTWorkWidget::onNotifyYK(int ptId)
 {
     QString info = QStringLiteral("是否对点%1进行变位").arg(ptId);
     YKDialog dialog(info, "Dialog");
+    auto globalPos = mapToGlobal(QPoint(x(), y()));
+    dialog.move(globalPos.x() + width() / 2 - dialog.width() / 2, globalPos.y() + height() / 2 - dialog.height() / 2);
     int ret = dialog.exec();
     if (ret == QDialog::Accepted) {
-
+        emit reverseYx(ptId);
     }
 }
 

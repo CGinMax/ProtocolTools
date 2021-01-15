@@ -11,7 +11,7 @@ class AiTableModel : public QAbstractTableModel
     Q_OBJECT
 public:
     explicit AiTableModel(const QStringList &headers, QObject *parent = nullptr);
-    explicit AiTableModel(const QStringList &headers, const QSharedPointer<PtCfg>& ptCfg, QObject *parent = nullptr);
+    explicit AiTableModel(const QStringList &headers, QList<AiData*>* aiDatas, QObject *parent = nullptr);
     ~AiTableModel() override;
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
@@ -30,7 +30,7 @@ public slots:
 
 private:
     QStringList m_headers;
-    QSharedPointer<PtCfg> m_ptCfg;
+    QList<AiData*>* m_aiDatas;
 };
 
 #endif // AITABLEMODEL_H

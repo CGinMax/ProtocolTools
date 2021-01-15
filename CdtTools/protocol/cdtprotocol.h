@@ -72,6 +72,7 @@ public slots:
     void start() override;
     void stop() override;
     void startYK(int ptId, bool offon) override;
+    void reverseYx(int ptId) override;
     void onDisconnected();
 
 protected:

@@ -3,6 +3,7 @@
 #include <QRegularExpressionValidator>
 #include <QIntValidator>
 #include <QButtonGroup>
+#include <QMessageBox>
 #include "enums.h"
 #include "cdtsettingdlg.h"
 #include "../common/threadpool.h"
@@ -72,7 +73,12 @@ void TabPage::on_btnStart_clicked()
     resetSettingData();
     switch (ui->cbbNetworkType->currentIndex()) {
     case eNetworkType::eTcpServer:
-        m_serverPage->start();
+    {
+        if (!m_serverPage->start()) {
+            QMessageBox::critical(this, tr("错误"), tr("打开通讯端口失败"), QMessageBox::Ok, QMessageBox::Cancel);
+            return ;
+        }
+    }
         break;
     case eNetworkType::eTcpClient:
         m_clientPage->start();

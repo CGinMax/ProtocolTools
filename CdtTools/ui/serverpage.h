@@ -18,8 +18,8 @@ public:
     explicit ServerPage(const QSharedPointer<SettingData>& settingData, QWidget *parent = nullptr);
     ~ServerPage() override;
 
-    void start();
-    void start(const QString& ip, int port);
+    bool start();
+    bool start(const QString& ip, int port);
 
     void stopListen();
     void stop();

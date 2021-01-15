@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include "ui/tabpage.h"
+#include <QPushButton>
+
 namespace Ui {
 class MainWindow;
 }
@@ -14,10 +16,12 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
-
+public slots:
+    void onAddTabPage();
 private:
     Ui::MainWindow *ui;
     TabPage* m_page;
+    QPushButton* m_addTabBtn;
 };
 
 #endif // MAINWINDOW_H

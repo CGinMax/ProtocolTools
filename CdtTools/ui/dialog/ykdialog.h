@@ -10,7 +10,6 @@ class YKDialog : public QDialog
     Q_OBJECT
 public:
     explicit YKDialog(const QString& text, const QString& title=QString(), QWidget* parent = nullptr);
-    ~YKDialog() override;
 
 private:
     QLabel m_infoText;

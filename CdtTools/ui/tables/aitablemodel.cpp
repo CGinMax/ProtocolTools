@@ -5,15 +5,15 @@
 AiTableModel::AiTableModel(const QStringList &headers, QObject *parent)
     : QAbstractTableModel(parent)
     , m_headers(headers)
-    , m_ptCfg(new PtCfg)
+    , m_aiDatas(nullptr)
 {
 
 }
 
-AiTableModel::AiTableModel(const QStringList &headers, const QSharedPointer<PtCfg> &ptCfg, QObject *parent)
+AiTableModel::AiTableModel(const QStringList &headers, QList<AiData *> *aiDatas, QObject *parent)
     : QAbstractTableModel(parent)
     , m_headers(headers)
-    , m_ptCfg(ptCfg)
+    , m_aiDatas(aiDatas)
 {
 
 }
@@ -26,7 +26,7 @@ AiTableModel::~AiTableModel()
 int AiTableModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_ptCfg->m_globalAiList->count();
+    return m_aiDatas->count();
 }
 
 int AiTableModel::columnCount(const QModelIndex &parent) const
@@ -44,11 +44,11 @@ QVariant AiTableModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0://序号
-            return m_ptCfg->m_globalAiList->at(index.row()).io();
+            return m_aiDatas->at(index.row())->io();
         case 1:
-            return m_ptCfg->m_globalAiList->at(index.row()).name();
+            return m_aiDatas->at(index.row())->name();
         case 2:
-            return m_ptCfg->m_globalAiList->at(index.row()).value();
+            return m_aiDatas->at(index.row())->value();
         }
     }
 
@@ -66,7 +66,7 @@ bool AiTableModel::setData(const QModelIndex &index, const QVariant &value, int 
             if (!value.canConvert<double>()) {
                 return false;
             }
-            (*m_ptCfg->m_globalAiList)[index.row()].setValue(value.toInt());
+            m_aiDatas->takeAt(index.row())->setValue(value.toInt());
             dataChanged(index, index);
             return true;
         }
@@ -103,27 +103,30 @@ QVariant AiTableModel::headerData(int section, Qt::Orientation orientation, int 
 
 void AiTableModel::appendRow(const QModelIndex &parent)
 {
-    int row = m_ptCfg->m_globalAiList->count();
+    int row = m_aiDatas->count();
     beginInsertRows(parent, row, row);
-    AiData di(0, "0", 100);
-
-    m_ptCfg->m_globalAiList->append(di);
+    auto ai = new AiData(0, "0", 100);
+    m_aiDatas->append(ai);
     endInsertRows();
 }
 
 void AiTableModel::resetDatas(int num)
 {
     beginResetModel();
-    m_ptCfg->m_globalAiList->clear();
+    for (auto& ai : *m_aiDatas) {
+        delete ai;
+        ai = nullptr;
+    }
+    m_aiDatas->clear();
     for (int i = 0; i < num; i++) {
-        m_ptCfg->m_globalAiList->append(AiData(i, QString("Pt%1").arg(i), num + 1));
+        m_aiDatas->append(new AiData(i, QString("Pt%1").arg(i), num + 1));
     }
     endResetModel();
 }
 
 void AiTableModel::randomNumber()
 {
-    for (int i = 0; i < m_ptCfg->m_globalAiList->size(); i++) {
-        (*m_ptCfg->m_globalAiList)[i].setValue(QRandomGenerator::global()->bounded(0, 255));
+    for (int i = 0; i < m_aiDatas->size(); i++) {
+        m_aiDatas->takeAt(i)->setValue(QRandomGenerator::global()->bounded(0, 255));
     }
 }

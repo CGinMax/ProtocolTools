@@ -22,9 +22,7 @@ YKDialog::YKDialog(const QString &text, const QString &title, QWidget *parent)
     setLayout(mainLayout);
     connect(&m_btnYes, &QPushButton::clicked, this, &QDialog::accept);
     connect(&m_btnNo, &QPushButton::clicked, this, &QDialog::reject);
+
+    resize(200, 100);
 }
 
-YKDialog::~YKDialog()
-{
-
-}

@@ -5,14 +5,14 @@
 DiTableModel::DiTableModel(const QStringList &headers, QObject *parent)
     : QAbstractTableModel(parent)
     , m_headers(headers)
-    , m_ptCfg(new PtCfg)
+    , m_diDatas(nullptr)
 {
 }
 
-DiTableModel::DiTableModel(const QStringList &headers, const QSharedPointer<PtCfg> &ptcfg, QObject *parent)
+DiTableModel::DiTableModel(const QStringList &headers, QList<DiData *> *diDatas, QObject *parent)
     : QAbstractTableModel(parent)
     , m_headers(headers)
-    , m_ptCfg(ptcfg)
+    , m_diDatas(diDatas)
 {
 
 }
@@ -25,7 +25,7 @@ DiTableModel::~DiTableModel()
 int DiTableModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_ptCfg->m_globalDiList->size();
+    return m_diDatas->size();
 }
 
 int DiTableModel::columnCount(const QModelIndex &parent) const
@@ -43,11 +43,11 @@ QVariant DiTableModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0://序号
-            return m_ptCfg->m_globalDiList->at(index.row()).io();
+            return m_diDatas->at(index.row())->io();
         case 1:
-            return m_ptCfg->m_globalDiList->at(index.row()).name();
+            return m_diDatas->at(index.row())->name();
         case 2:
-            return m_ptCfg->m_globalDiList->at(index.row()).value() ? QStringLiteral("合") : QStringLiteral("分");
+            return m_diDatas->at(index.row())->value() ? QStringLiteral("合") : QStringLiteral("分");
         }
     }
 
@@ -64,7 +64,7 @@ bool DiTableModel::setData(const QModelIndex &index, const QVariant &value, int 
         if (index.column() == 2) {
 
             bool offon = value.toString() == QStringLiteral("合") ? true : false;
-            (*m_ptCfg->m_globalDiList)[index.row()].setValue(offon);
+            m_diDatas->takeAt(index.row())->setValue(offon);
             dataChanged(index, index);
             return true;
         }
@@ -100,27 +100,25 @@ QVariant DiTableModel::headerData(int section, Qt::Orientation orientation, int 
 }
 
 
-void DiTableModel::insertRow(const DiData &diData, const QModelIndex &parent)
+void DiTableModel::insertRow(DiData *diData, const QModelIndex &parent)
 {
-    int row = m_ptCfg->m_globalDiList->count();
+    int row = m_diDatas->count();
     beginInsertRows(parent, row, row);
-    m_ptCfg->m_globalDiList->append(diData);
+    m_diDatas->append(diData);
     endInsertRows();
 }
 
 void DiTableModel::resetDatas(int num)
 {
     beginResetModel();
-    m_ptCfg->m_globalDiList->clear();
+    for (auto& di : *m_diDatas) {
+        delete di;
+        di = nullptr;
+    }
+    m_diDatas->clear();
     for (int i = 0; i < num; i++) {
-        m_ptCfg->m_globalDiList->append(DiData(i, QString("Pt%1").arg(i), false));
+        m_diDatas->append(new DiData(i, QString("Pt%1").arg(i), false));
     }
     endResetModel();
 
 }
-
-void DiTableModel::setPtCfg(QSharedPointer<PtCfg> &ptcfg)
-{
-    m_ptCfg = ptcfg;
-}
-

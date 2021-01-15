@@ -35,7 +35,11 @@ void CDTSettingDlg::initWidgetData(const PtCfg &setting)
     ui->edVYxNum->setText(Util::num2Hex(setting.m_vyxNum));
     ui->edVYxStartIo->setText(Util::num2Hex(setting.m_vyxStartIo));
 
-    ui->edYkType->setText(Util::num2Hex(setting.m_ykFrameType));
+    ui->edYkReqType->setText(Util::num2Hex(setting.m_ykReqType));
+    ui->edYkAckType->setText(Util::num2Hex(setting.m_ykAckType));
+    ui->edYkReqCode->setText(Util::num2Hex(setting.m_ykReqCode));
+    ui->edYkAckCode->setText(Util::num2Hex(setting.m_ykAckCode));
+    ui->edYkExeCode->setText(Util::num2Hex(setting.m_ykExeCode));
     ui->edYkClose->setText(Util::num2Hex(setting.m_ykClose));
     ui->edYkOpen->setText(Util::num2Hex(setting.m_ykOpen));
     ui->edYkLock->setText(Util::num2Hex(setting.m_ykLock));
@@ -70,7 +74,11 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_vyxNum       = Util::hexString2Num(ui->edVYxNum->text());
     m_ptCfg->m_vyxStartIo   = Util::hexString2Num(ui->edVYxStartIo->text());
 
-    m_ptCfg->m_ykFrameType  = Util::hexString2Num(ui->edYkType->text());
+    m_ptCfg->m_ykReqType    = Util::hexString2Num(ui->edYkReqType->text());
+    m_ptCfg->m_ykAckType    = Util::hexString2Num(ui->edYkAckType->text());
+    m_ptCfg->m_ykReqCode    = Util::hexString2Num(ui->edYkReqCode->text());
+    m_ptCfg->m_ykAckCode    = Util::hexString2Num(ui->edYkAckCode->text());
+    m_ptCfg->m_ykExeCode    = Util::hexString2Num(ui->edYkExeCode->text());
     m_ptCfg->m_ykOpen       = Util::hexString2Num(ui->edYkOpen->text());
     m_ptCfg->m_ykClose      = Util::hexString2Num(ui->edYkClose->text());
     m_ptCfg->m_ykLock       = Util::hexString2Num(ui->edYkLock->text());
@@ -80,19 +88,18 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_ycTime       = ui->edYcTime->value();
     m_ptCfg->m_vyxTime      = ui->edVYxTime->value();
 
-    m_ptCfg->m_globalDiList->clear();
-    delete m_ptCfg->m_globalDiList;
-    m_ptCfg->m_globalDiList = new QList<DiData>;
+    m_ptCfg->clearPoints();
+
+    m_ptCfg->m_globalDiList = new QList<DiData*>;
     for (int i = 0; i < m_ptCfg->m_yxNum; i++) {
-        m_ptCfg->m_globalDiList->append(DiData(m_ptCfg->m_yxStartIo + i, QString("Pt%1").arg(m_ptCfg->m_yxStartIo + i), false));
+        m_ptCfg->m_globalDiList->append(new DiData(m_ptCfg->m_yxStartIo + i, QString("Pt%1").arg(m_ptCfg->m_yxStartIo + i), false));
     }
 
-    m_ptCfg->m_globalAiList->clear();
-    delete m_ptCfg->m_globalAiList;
-    m_ptCfg->m_globalAiList = new QList<AiData>;
+    m_ptCfg->m_globalAiList = new QList<AiData*>;
     for (int i = 0; i < m_ptCfg->m_ycNum; i++) {
-        m_ptCfg->m_globalAiList->append(AiData(m_ptCfg->m_ycStartIo + i, QString("Pt%1").arg(m_ptCfg->m_ycStartIo + i), 0));
+        m_ptCfg->m_globalAiList->append(new AiData(m_ptCfg->m_ycStartIo + i, QString("Pt%1").arg(m_ptCfg->m_ycStartIo + i), 0));
     }
+    m_ptCfg->initMap();
     accept();
 }
 

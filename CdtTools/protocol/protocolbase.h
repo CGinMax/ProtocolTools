@@ -44,7 +44,7 @@ public:
 signals:
     void write(const QByteArray& data);
     void sendProtocolMsg(const QString& msg);
-    void ykExecuteFinish();
+    void ykExecuteFinish(const QString& msg);
     void notifyYK(int ptId);
 
 public slots:
@@ -53,6 +53,9 @@ public slots:
     virtual void startYK(int ptId, bool offon){
         Q_UNUSED(ptId)
         Q_UNUSED(offon)
+    }
+    virtual void reverseYx(int ptId){
+        Q_UNUSED(ptId)
     }
 
 protected:

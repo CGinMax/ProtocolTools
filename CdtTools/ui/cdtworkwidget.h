@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QCheckBox>
 #include "../protocol/protocolbase.h"
+#include "floatbuttongroup.h"
 #include "ptcfg.h"
 
 QT_FORWARD_DECLARE_CLASS(DiTableModel);
@@ -25,10 +26,12 @@ public:
     void resetAiRandom(bool start);
     void stopCommunication();
     bool isConnection();
-
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 signals:
     void stop();
     void startYK(int ptId, bool offon);
+    void reverseYx(int ptId);
 
 public slots:
     void recvMessage(const QString& msg);
@@ -43,6 +46,7 @@ private:
     QTimer m_viewTimer;
     ProtocolBase* m_protocol;
     QSharedPointer<NetworkBase> m_network;
+    QScopedPointer<FloatButtonGroup> m_floatBtnGroup;
     QScopedPointer<Ui::CDTWorkWidget> ui;
 
 };

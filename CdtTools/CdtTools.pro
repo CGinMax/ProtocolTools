@@ -52,7 +52,10 @@ SOURCES += \
     ui/tables/aidata.cpp \
     ui/tables/delegates/digitlimitedelegate.cpp \
     ui/ptcfg.cpp \
-    protocol/frame.cpp
+    protocol/frame.cpp \
+    ui/floatbuttongroup.cpp \
+    protocol/cdtexut.cpp \
+    protocol/cdtexnr.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -82,7 +85,10 @@ HEADERS += \
     ui/tables/aidata.h \
     ui/tables/delegates/digitlimitedelegate.h \
     ui/ptcfg.h \
-    protocol/frame.h
+    protocol/frame.h \
+    ui/floatbuttongroup.h \
+    protocol/cdtexut.h \
+    protocol/cdtexnr.h
 
 FORMS += \
         mainwindow.ui \
