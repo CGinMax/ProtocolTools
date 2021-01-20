@@ -93,7 +93,6 @@ HEADERS += \
 FORMS += \
         mainwindow.ui \
     ui/tabpage.ui \
-    ui/cdtwidget.ui \
     ui/cdtsettingdlg.ui \
     ui/cdtworkwidget.ui
 

@@ -1,16 +1,38 @@
 #include "clientpage.h"
+#include <QVBoxLayout>
+#include <QHostAddress>
 
-ClientPage::ClientPage(QWidget *parent)
+ClientPage::ClientPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent)
     : QWidget(parent)
+    , m_tcpClient(new TcpClient())
+    , m_settingData(ptCfg)
+    , m_centerWidget(new CDTWorkWidget(m_tcpClient, ptCfg, this))
 {
-
+    auto layout = new QVBoxLayout(this);
+    layout->addWidget(m_centerWidget.data());
+    layout->setContentsMargins(0, 0, 0, 0);
 }
 
 ClientPage::~ClientPage()
 {
 }
 
-void ClientPage::start()
+bool ClientPage::start()
+{
+    if (!m_settingData.isNull()) {
+        m_tcpClient->open(m_settingData->m_ip, m_settingData->m_port);
+        m_centerWidget->startCommunication(m_settingData);
+        return true;
+    }
+    else {
+        qInfo("setting data empty");
+        return false;
+    }
+}
+
+void ClientPage::stop()
 {
 
+    m_centerWidget->stopCommunication();
 }
+

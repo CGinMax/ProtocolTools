@@ -149,7 +149,8 @@ void CDTProtocol::processFrame()
 
         if (frame.frameControl.type == m_settingData->m_ptCfg->m_ycFrameType) {
             showMessageBuffer(eMsgType::eMsgRecv, "接收到遥测帧，正在处理...", frame.toAllByteArray());
-            yxResponse(frame.infoFields);
+//            yxResponse(frame.infoFields);
+            ycResponse(frame.infoFields);
         }
         else if (frame.frameControl.type == m_settingData->m_ptCfg->m_yxFrameType) {
             if (m_settingData->m_stationType == eStationType::WF) {
@@ -198,53 +199,53 @@ void CDTProtocol::sendAllAi()
     CDTFrame frame;
 
     uint8_t curCode = m_settingData->m_ptCfg->m_ycFuncode;
-
+    QVector<uint8_t> combineList;
     int aiNum = m_settingData->m_ptCfg->m_globalAiList->size();
-    int n = 0;
-    while (n < aiNum && curCode < 0x80)
-    {
-        uint8_t ptBinaryArr[4] = {0, 0, 0, 0};
-        for (int j = 0; j < 2 && n < aiNum; j++)
-        {
-            int ycValue = m_settingData->m_ptCfg->m_globalAiList->at(n)->value();
-            ptBinaryArr[j * 2] = static_cast<uint8_t>(ycValue >> 8);
-            ptBinaryArr[j * 2 + 1] = static_cast<uint8_t>(ycValue);
-
-//            bool sign = ptValue < 0 ? true : false;
-
-//            bool overflow = false;
-//            uint16_t transValue = ptValue;
-//            // 溢出
-//            if (ptValue > 0x03FF || ptValue < -0x03FF) {
-//                overflow = true;
-//            }
-//            // 负数
-//            if (sign)
-//            {
-//                // 取反加1
-//                transValue = -ptValue;
-//                transValue = ~transValue;
-//                transValue++;
-//            }
-
-//            // 拼接发送数据的字节
-//            uint16_t byteValue = valid ? 0 : 1;
-//            // 溢出位
-//            byteValue = (byteValue << 1) | overflow;
-//            // 符号位
-//            byteValue = (byteValue << 4) | sign;
-//            // 拼接数据位
-//            byteValue = (byteValue << 10) | (transValue & 0x03FF);
-//            // 低位字节在后，高位字节在前
-//            ptBinaryArr[j * 2 + 1] = (uint8_t)byteValue;
-//            ptBinaryArr[j * 2] = (uint8_t)(byteValue >> 8);
-            n++;
+    for (int i = 0; i < aiNum; i++) {
+        auto aiValue = m_settingData->m_ptCfg->m_globalAiList->at(i)->value();
+        combineList.append(static_cast<uint8_t>(aiValue >> 8));
+        combineList.append(static_cast<uint8_t>(aiValue));
+    }
+    int offset = combineList.size() % 4;
+    if (offset != 0) {
+        for (int i = 0; i < offset; i++) {
+            combineList.append(0);
         }
-
-        InfoFieldEntity entity(curCode, ptBinaryArr);
+    }
+    for (int i = 0; i < combineList.size() / 4; i++) {
+        InfoFieldEntity entity;
+        entity.fillData(curCode, combineList[i * 4], combineList[i * 4 + 1], combineList[i * 4 + 2], combineList[i * 4 + 3]);
         frame.infoFields.append(entity);
         curCode++;
     }
+    //            bool sign = ptValue < 0 ? true : false;
+
+    //            bool overflow = false;
+    //            uint16_t transValue = ptValue;
+    //            // 溢出
+    //            if (ptValue > 0x03FF || ptValue < -0x03FF) {
+    //                overflow = true;
+    //            }
+    //            // 负数
+    //            if (sign)
+    //            {
+    //                // 取反加1
+    //                transValue = -ptValue;
+    //                transValue = ~transValue;
+    //                transValue++;
+    //            }
+
+    //            // 拼接发送数据的字节
+    //            uint16_t byteValue = valid ? 0 : 1;
+    //            // 溢出位
+    //            byteValue = (byteValue << 1) | overflow;
+    //            // 符号位
+    //            byteValue = (byteValue << 4) | sign;
+    //            // 拼接数据位
+    //            byteValue = (byteValue << 10) | (transValue & 0x03FF);
+    //            // 低位字节在后，高位字节在前
+    //            ptBinaryArr[j * 2 + 1] = (uint8_t)byteValue;
+    //            ptBinaryArr[j * 2] = (uint8_t)(byteValue >> 8);
 
     frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ycFrameType, frame.infoFields.size(), 0, 0);
     showMessageBuffer(eMsgType::eMsgSend, "发送全遥测", frame.toAllByteArray());
@@ -266,6 +267,8 @@ void CDTProtocol::sendVirtualYX()
 
 void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
 {
+    int startOffset = m_settingData->m_ptCfg->m_globalDiList->first()->io();
+    int diSize = m_settingData->m_ptCfg->m_globalDiList->size();
     for (InfoFieldEntity &entity : infoFieldList) {
         // 当前信息字的遥信点起始地址,funCode：F0-FF
         int curPointStartAddr = (entity.funCode & 0x0F) * 32;
@@ -284,9 +287,9 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
         {
             yxValue = (combineNum >> i) & 0x01; // 从最低位开始获取每一位
 
-            nSeq = curPointStartAddr + i + 1;  // 点号
+            nSeq = curPointStartAddr + i + startOffset;  // 点号
             // 0号开始
-            if(nSeq <  m_settingData->m_ptCfg->m_globalDiList->size()) {
+            if(nSeq < (startOffset + diSize)) {
                 m_settingData->m_ptCfg->m_globalDiList->at(nSeq)->setValue(yxValue > 0);
             }
         }

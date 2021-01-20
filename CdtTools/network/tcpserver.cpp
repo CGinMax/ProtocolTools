@@ -29,6 +29,12 @@ void TcpServer::open()
 
 }
 
+void TcpServer::open(const QString &ip, ushort port)
+{
+    Q_UNUSED(ip)
+    Q_UNUSED(port)
+}
+
 void TcpServer::close()
 {
     m_socket->close();

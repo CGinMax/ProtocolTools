@@ -37,7 +37,6 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     auto diDelegate = new ComboBoxDelegate(ui->viewDi);
     diDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
     ui->viewDi->setItemDelegateForColumn(2, diDelegate);
-//    ui->viewDi->openPersistentEditor(m_diModel->index(0, 2));
 
     m_aiModel = new AiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalAiList, ui->viewAi);
     ui->viewAi->setModel(m_aiModel);
@@ -58,10 +57,9 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     vyxDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
     ui->viewDi->setItemDelegateForColumn(2, vyxDelegate);
 
-    m_cbRandom = new QCheckBox(QStringLiteral("Value"), this);
-    m_cbRandom->resize(60, 40);
-    auto aiHorHeader = ui->viewAi->horizontalHeader();
-    aiHorHeader->setIndexWidget(m_aiModel->index(0, 2), m_cbRandom);
+    m_cbRandom = new QCheckBox(tr("Generate random number"), this);
+    auto aiLayout = qobject_cast<QVBoxLayout*>(ui->tabAi->layout());
+    aiLayout->insertWidget(0, this->m_cbRandom);
     connect(&m_viewTimer, &QTimer::timeout, [this]{
         if (this->m_cbRandom->isChecked())
             m_aiModel->randomNumber();
@@ -78,22 +76,36 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     m_floatBtnGroup->move(ui->textBrowser->x() + width() - 18 - m_floatBtnGroup->width(), ui->textBrowser->y() + 9);
     m_floatBtnGroup->raise();
 
-    ThreadPool::instance()->run([&network, &settingData, this](){
+
+}
+
+CDTWorkWidget::~CDTWorkWidget()
+{
+    if (m_protocol) {
+        delete m_protocol;
+        m_protocol = nullptr;
+    }
+    m_viewTimer.stop();
+}
+
+void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settingData)
+{
+    ThreadPool::instance()->run([&settingData, this](){
         switch (settingData->m_ptCfg->m_protocol) {
         case eProtocol::CDTStandard:
-            this->m_protocol = new CDTProtocol(network, settingData);
+            this->m_protocol = new CDTProtocol(this->m_network, settingData);
             break;
         case eProtocol::CDTGcInterace:
-            this->m_protocol = new CDTInteracte(network, settingData);
+            this->m_protocol = new CDTInteracte(this->m_network, settingData);
             break;
         case eProtocol::CDTGcCycle:
-            this->m_protocol = new CDTCycle(network, settingData);
+            this->m_protocol = new CDTCycle(this->m_network, settingData);
             break;
         case eProtocol::CDTUt:
-            this->m_protocol = new CDTExUt(network, settingData);
+            this->m_protocol = new CDTExUt(this->m_network, settingData);
             break;
         case eProtocol::CDTNr:
-            this->m_protocol = new CDTExNr(network, settingData);
+            this->m_protocol = new CDTExNr(this->m_network, settingData);
             break;
 
         default:
@@ -111,16 +123,6 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
         connect(this->m_protocol, &ProtocolBase::notifyYK, this, &CDTWorkWidget::onNotifyYK);
         this->m_protocol->start();
     });
-}
-
-CDTWorkWidget::~CDTWorkWidget()
-{
-    if (m_protocol) {
-        delete m_protocol;
-//        m_protocol->deleteLater();
-        m_protocol = nullptr;
-    }
-    m_viewTimer.stop();
 }
 
 void CDTWorkWidget::resetAiRandom(bool start)
@@ -174,5 +176,4 @@ void CDTWorkWidget::on_btnExecute_clicked()
 {
     emit startYK(ui->edPtId->value(), ui->cbbYKOper->currentIndex() > 0);
     qDebug("start yk");
-//    ui->btnExecute->setEnabled(false);
 }

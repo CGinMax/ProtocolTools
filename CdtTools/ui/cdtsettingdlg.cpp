@@ -60,8 +60,8 @@ void CDTSettingDlg::initDefaultCfgs()
     }
     CDTSettingDlg::s_defaultCfgs.resize(5);
 
-    PtCfg* standard = new PtCfg;
-    PtCfg* interace = new PtCfg;
+    auto standard = new PtCfg;
+    auto interace = new PtCfg;
     interace->m_protocol = eProtocol::CDTGcInterace;
     interace->m_ycFrameType = 0x64;
     interace->m_ykReqType = 0xA8;
@@ -69,21 +69,21 @@ void CDTSettingDlg::initDefaultCfgs()
     interace->m_ykReqCode = 0xE0;
     interace->m_ykAckCode = 0xE1;
     interace->m_ykExeCode = 0xE2;
-    PtCfg* cycle = new PtCfg;
+    auto cycle = new PtCfg;
     cycle->m_protocol = eProtocol::CDTGcCycle;
     cycle->m_ycFrameType = 0x64;
     cycle->m_ykReqType = 0xF1;
     cycle->m_ykAckType = 0xF1;
     cycle->m_ykReqCode = 0x00;
     cycle->m_ykAckCode = 0x00;
-    PtCfg* ut = new PtCfg;
+    auto ut = new PtCfg;
     ut->m_protocol = eProtocol::CDTUt;
     ut->m_vyxFrameType = 0xA8;
     ut->m_ykReqType = 0x57;
     ut->m_ykAckType = 0xD9;
     ut->m_ykReqCode = 0xE9;
     ut->m_ykAckCode = 0xEA;
-    PtCfg* nr = new PtCfg;
+    auto nr = new PtCfg;
     nr->m_protocol = eProtocol::CDTNr;
     nr->m_ykReqType = 0xB9;
     nr->m_ykAckType = 0xB9;
@@ -99,7 +99,7 @@ void CDTSettingDlg::initDefaultCfgs()
 
 void CDTSettingDlg::on_btnReset_clicked()
 {
-    initWidgetData(PtCfg());
+    initWidgetData(*CDTSettingDlg::s_defaultCfgs[ui->cbbProtocol->currentIndex()]);
 }
 
 void CDTSettingDlg::on_btnOk_clicked()

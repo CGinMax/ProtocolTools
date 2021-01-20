@@ -14,7 +14,7 @@ TabPage::TabPage(QWidget *parent)
     : QWidget(parent)
     , m_settingData(new SettingData)
     , m_serverPage(new ServerPage(m_settingData, this))
-    , m_clientPage(new ClientPage(this))
+    , m_clientPage(new ClientPage(m_settingData,this))
     , ui(new Ui::TabPage)
 
 {
@@ -70,23 +70,25 @@ void TabPage::on_cbbNetworkType_currentIndexChanged(int index)
 
 void TabPage::on_btnStart_clicked()
 {
+    bool success = false;
     resetSettingData();
     switch (ui->cbbNetworkType->currentIndex()) {
     case eNetworkType::eTcpServer:
     {
-        if (!m_serverPage->start()) {
-            QMessageBox::critical(this, tr("错误"), tr("打开通讯端口失败"), QMessageBox::Ok, QMessageBox::Cancel);
-            return ;
-        }
+        success = m_serverPage->start();
     }
         break;
     case eNetworkType::eTcpClient:
-        m_clientPage->start();
+        success = m_clientPage->start();
         break;
     case eNetworkType::eUdp:
         break;
     case eNetworkType::eSerialPort:
         break;
+    }
+    if (!success) {
+        QMessageBox::critical(this, tr("错误"), tr("打开通讯端口失败"), QMessageBox::Ok, QMessageBox::Cancel);
+        return ;
     }
     setConfigureWidgetEnabled(false);
 
@@ -99,7 +101,7 @@ void TabPage::on_btnStop_clicked()
         m_serverPage->stop();
         break;
     case eNetworkType::eTcpClient:
-        //m_clientPage->start();
+        m_clientPage->stop();
         break;
     case eNetworkType::eUdp:
         break;

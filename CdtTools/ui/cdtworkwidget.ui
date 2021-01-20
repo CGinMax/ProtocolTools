@@ -41,7 +41,7 @@
        </property>
        <widget class="QWidget" name="tabDi">
         <attribute name="title">
-         <string>遥信</string>
+         <string>Di</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <property name="leftMargin">
@@ -63,7 +63,7 @@
        </widget>
        <widget class="QWidget" name="tabAi">
         <attribute name="title">
-         <string>遥测</string>
+         <string>Ai</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="leftMargin">
@@ -85,7 +85,7 @@
        </widget>
        <widget class="QWidget" name="tabVYx">
         <attribute name="title">
-         <string>虚遥信</string>
+         <string>Virtual Di</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <property name="leftMargin">
@@ -108,32 +108,58 @@
       </widget>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
-        <string>操作</string>
+        <string>YK</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="QSpinBox" name="edPtId"/>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbYKOper">
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <property name="text">
-            <string>分</string>
-           </property>
+           <widget class="QSpinBox" name="edPtId"/>
           </item>
           <item>
-           <property name="text">
-            <string>合</string>
-           </property>
+           <widget class="QComboBox" name="cbbYKOper">
+            <item>
+             <property name="text">
+              <string>Off</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>On</string>
+             </property>
+            </item>
+           </widget>
           </item>
-         </widget>
+          <item>
+           <widget class="QPushButton" name="btnExecute">
+            <property name="text">
+             <string>Execute</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="btnExecute">
-          <property name="text">
-           <string>执行</string>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-         </widget>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>135</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>

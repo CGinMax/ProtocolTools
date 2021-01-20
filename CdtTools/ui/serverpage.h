@@ -33,7 +33,6 @@ public slots:
 
 private:
     QScopedPointer<QTcpServer> m_tcpServer;
-    //QScopedPointer<ThreadPool> m_socketPool;
     QScopedPointer<QTabWidget> m_tabClients;
 
     QScopedPointer<CDTWorkWidget> m_centerWidget;

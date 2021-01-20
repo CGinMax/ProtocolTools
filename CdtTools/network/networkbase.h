@@ -10,6 +10,7 @@ public:
     virtual ~NetworkBase();
 
     virtual void open() = 0;
+    virtual void open(const QString& ip, ushort port) = 0;
     virtual void close() = 0;
     virtual bool write(const char* data, int size) = 0;
     virtual bool write(const QByteArray& data) = 0;

@@ -10,6 +10,12 @@ TcpClient::TcpClient(const QString &ip, ushort port, QObject *parent)
     connect(m_socket.get(), &QTcpSocket::disconnected, this, &TcpClient::disconnected);
 }
 
+TcpClient::TcpClient(QObject *parent)
+    : m_socket(new QTcpSocket(this))
+{
+    setParent(parent);
+}
+
 TcpClient::~TcpClient()
 {
 
@@ -21,6 +27,14 @@ void TcpClient::open()
         return;
     }
     m_socket->connectToHost(m_ip, m_port);
+}
+
+void TcpClient::open(const QString &ip, ushort port)
+{
+    if (isActived()) {
+        return;
+    }
+    m_socket->connectToHost(ip, port);
 }
 
 void TcpClient::close()

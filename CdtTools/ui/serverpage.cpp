@@ -76,6 +76,7 @@ void ServerPage::onNewConnection()
     QSharedPointer<NetworkBase> server(new TcpServer(m_tcpServer->nextPendingConnection()));
 
     auto centerWidget = new CDTWorkWidget(server, m_settingData);
+    centerWidget->startCommunication(m_settingData);
     m_tabClients->insertTab(0, centerWidget, server->toString());
     m_tabClients->setCurrentIndex(0);
     m_tabClients->addTab(centerWidget, server->toString());

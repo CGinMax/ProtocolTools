@@ -23,6 +23,8 @@ public:
     explicit CDTWorkWidget(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData, QWidget *parent = nullptr);
     ~CDTWorkWidget() override;
 
+    void startCommunication(const QSharedPointer<SettingData> &settingData);
+
     void resetAiRandom(bool start);
     void stopCommunication();
     bool isConnection();
@@ -48,6 +50,7 @@ private:
     QSharedPointer<NetworkBase> m_network;
     QScopedPointer<FloatButtonGroup> m_floatBtnGroup;
     QScopedPointer<Ui::CDTWorkWidget> ui;
+
 
 };
 

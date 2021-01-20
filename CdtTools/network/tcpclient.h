@@ -9,10 +9,13 @@ class TcpClient : public NetworkBase
     Q_OBJECT
 public:
     explicit TcpClient(const QString& ip, ushort port, QObject *parent = nullptr);
+    explicit TcpClient(QObject* parent = nullptr);
+
     ~TcpClient() override;
 
     // NetworkBase interface
     void open() override;
+    void open(const QString& ip, ushort port);
     void close() override;
     bool write(const char* data, int size) override;
     bool write(const QByteArray &data) override;
