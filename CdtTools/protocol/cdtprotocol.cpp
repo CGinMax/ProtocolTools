@@ -9,7 +9,7 @@ CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, const QShar
 {
     m_isRunYK = false;
     m_cycleCounter = 0;
-    connect(m_network.data(), &NetworkBase::disconnected, this, &CDTProtocol::onDisconnected);
+    connect(m_network.data(), &NetworkBase::disconnected, this, &CDTProtocol::onDisconnected, Qt::BlockingQueuedConnection);
 }
 
 CDTProtocol::~CDTProtocol()
@@ -51,27 +51,6 @@ void CDTProtocol::run()
         sendAllAi();
         sendAllDi();
         m_cycleCounter = 0;
-    }
-}
-
-void CDTProtocol::start()
-{
-    if (!m_timer) {
-        m_timer = new QTimer;
-        QObject::connect(m_timer, &QTimer::timeout, [this](){
-            this->m_cycleCounter += 100;
-            this->run();
-        });
-    }
-    m_timer->start(100);
-}
-
-void CDTProtocol::stop()
-{
-    if (m_timer && m_timer->isActive()) {
-        m_timer->stop();
-        delete m_timer;
-        m_timer = nullptr;
     }
 }
 
@@ -311,7 +290,7 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
             nSeq = curPointStartAddr + i + 1;  // 点号
             // 0号开始
             if(nSeq <  m_settingData->m_ptCfg->m_globalDiList->size()) {
-                m_settingData->m_ptCfg->m_globalDiList->takeAt(nSeq)->setValue(yxValue > 0);
+                m_settingData->m_ptCfg->m_globalDiList->at(nSeq)->setValue(yxValue > 0);
             }
         }
     }
@@ -334,7 +313,7 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
             // 点号
             nSeq = entity.funCode + (i / 2) + 1;
             if (nSeq < m_settingData->m_ptCfg->m_globalAiList->size()) {
-                m_settingData->m_ptCfg->m_globalAiList->takeAt(nSeq)->setValue(ycAccept);
+                m_settingData->m_ptCfg->m_globalAiList->at(nSeq)->setValue(ycAccept);
             }
 
         }
@@ -521,7 +500,7 @@ void CDTProtocol::startYK(int ptId, bool offon)
 
 void CDTProtocol::reverseYx(int ptId)
 {
-    auto di = m_settingData->m_ptCfg->m_globalDiList->takeAt(ptId);
+    auto di = m_settingData->m_ptCfg->m_globalDiList->at(ptId);
     di->setValue(!di->value());
     sendAllDi();
     m_isRunYK = false;
@@ -531,6 +510,12 @@ void CDTProtocol::reverseYx(int ptId)
 void CDTProtocol::onDisconnected()
 {
     stop();
+}
+
+void CDTProtocol::onTimeout()
+{
+    this->m_cycleCounter += 100;
+    ProtocolBase::onTimeout();
 }
 
 double CDTProtocol::bcdToValue(int bcdValue)

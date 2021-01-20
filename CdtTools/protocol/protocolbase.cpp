@@ -2,7 +2,7 @@
 #include <QTime>
 #include <QDateTime>
 #include <QThread>
-
+#include <QTimer>
 ProtocolBase::ProtocolBase()
 {
 
@@ -219,4 +219,27 @@ QString ProtocolBase::decorateMsg(eMsgType type, const QString &desc, const QStr
 
     //strBuilder = ;
     return fontColor.arg(strBuilder);
+}
+
+void ProtocolBase::start()
+{
+    if (!m_timer) {
+        m_timer = new QTimer;
+        QObject::connect(m_timer, &QTimer::timeout, this, &ProtocolBase::onTimeout);
+    }
+    m_timer->start(100);
+}
+
+void ProtocolBase::stop()
+{
+    if (m_timer && m_timer->isActive()) {
+        m_timer->stop();
+        delete m_timer;
+        m_timer = nullptr;
+    }
+}
+
+void ProtocolBase::onTimeout()
+{
+    this->run();
 }

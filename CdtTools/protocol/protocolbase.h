@@ -48,8 +48,8 @@ signals:
     void notifyYK(int ptId);
 
 public slots:
-    virtual void start(){}
-    virtual void stop(){}
+    virtual void start();
+    virtual void stop();
     virtual void startYK(int ptId, bool offon){
         Q_UNUSED(ptId)
         Q_UNUSED(offon)
@@ -57,10 +57,13 @@ public slots:
     virtual void reverseYx(int ptId){
         Q_UNUSED(ptId)
     }
+protected slots:
+    virtual void onTimeout();
 
 protected:
     QSharedPointer<NetworkBase> m_network;
     QSharedPointer<SettingData> m_settingData;
+    QTimer *m_timer{nullptr};
 };
 
 #endif // PROTOCOLBASE_H

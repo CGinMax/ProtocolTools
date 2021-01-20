@@ -24,7 +24,7 @@ void CDTExUt::ykResponse(CDTFrame &frame)
     if (ykAddr > m_settingData->m_ptCfg->m_globalDiList->size())
         return ;
 
-    if (funCode == m_settingData->m_ptCfg->m_ykAckType) {
+    if (funCode == m_settingData->m_ptCfg->m_ykAckCode) {
         // 遥控应答
         if (success) {
             auto di = m_settingData->m_ptCfg->findDiById(ykAddr);
@@ -44,7 +44,7 @@ void CDTExUt::ykResponse(CDTFrame &frame)
         }
         m_isRunYK = false;
     }
-    else if (funCode == m_settingData->m_ptCfg->m_ykReqType) {
+    else if (funCode == m_settingData->m_ptCfg->m_ykReqCode) {
 
     }
 

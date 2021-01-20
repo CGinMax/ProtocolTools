@@ -68,12 +68,12 @@ public:
 
 signals:
 public slots:
-
-    void start() override;
-    void stop() override;
     void startYK(int ptId, bool offon) override;
     void reverseYx(int ptId) override;
     void onDisconnected();
+
+protected slots:
+    void onTimeout() override;
 
 protected:
     double bcdToValue(int bcdValue);
@@ -86,7 +86,6 @@ protected:
     QQueue<CDTFrame> m_frameQueue;
     bool m_isRunYK;
     uint m_cycleCounter;
-    QTimer *m_timer{nullptr};
 };
 
 #endif // CDTPROTOCOL_H

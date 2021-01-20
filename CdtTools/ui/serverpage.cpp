@@ -86,7 +86,6 @@ void ServerPage::onNewConnection()
 void ServerPage::onTabCloseRequested(int index)
 {
     auto widget = qobject_cast<CDTWorkWidget*>(m_tabClients->widget(index));
-    qDebug() << widget;
     if (widget->isConnection()) {
         auto ret = QMessageBox::warning(widget, QStringLiteral("提示"), QStringLiteral("通讯正在进行，是否断开？"), QMessageBox::Ok, QMessageBox::Cancel);
 
@@ -97,5 +96,5 @@ void ServerPage::onTabCloseRequested(int index)
     }
 
     delete widget;
-    m_tabClients->removeTab(index);
+    widget = nullptr;
 }

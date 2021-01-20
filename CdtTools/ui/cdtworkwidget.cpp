@@ -99,13 +99,13 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
         default:
             break;
         }
-        connect(this->m_protocol, &ProtocolBase::ykExecuteFinish, [=](const QString& msg){
-            qDebug("cdt work widget yk finished");
-            ui->textBrowser->append(msg);
-            ui->btnExecute->setEnabled(true);
-        });
+//        connect(this->m_protocol, &ProtocolBase::ykExecuteFinish, [this](const QString& msg){
+//            qDebug("cdt work widget yk finished");
+//            ui->textBrowser->append(msg);
+//            ui->btnExecute->setEnabled(true);
+//        });
         connect(this->m_protocol, &ProtocolBase::sendProtocolMsg, this, &CDTWorkWidget::recvMessage);
-        connect(this, &CDTWorkWidget::stop, this->m_protocol, &ProtocolBase::stop);
+        connect(this, &CDTWorkWidget::stop, this->m_protocol, &ProtocolBase::stop, Qt::BlockingQueuedConnection);
         connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::startYK);
         connect(this, &CDTWorkWidget::reverseYx, this->m_protocol, &ProtocolBase::reverseYx);
         connect(this->m_protocol, &ProtocolBase::notifyYK, this, &CDTWorkWidget::onNotifyYK);
@@ -116,8 +116,8 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
 CDTWorkWidget::~CDTWorkWidget()
 {
     if (m_protocol) {
-//        delete m_protocol;
-        m_protocol->deleteLater();
+        delete m_protocol;
+//        m_protocol->deleteLater();
         m_protocol = nullptr;
     }
     m_viewTimer.stop();

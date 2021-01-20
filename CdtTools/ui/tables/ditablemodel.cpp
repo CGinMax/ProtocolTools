@@ -64,7 +64,7 @@ bool DiTableModel::setData(const QModelIndex &index, const QVariant &value, int 
         if (index.column() == 2) {
 
             bool offon = value.toString() == QStringLiteral("合") ? true : false;
-            m_diDatas->takeAt(index.row())->setValue(offon);
+            m_diDatas->at(index.row())->setValue(offon);
             dataChanged(index, index);
             return true;
         }

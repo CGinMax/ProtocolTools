@@ -43,12 +43,13 @@ void CDTInteracte::ykResponse(CDTFrame &frame)
         if (success){
             auto di = m_settingData->m_ptCfg->findDiById(ykAddr);
             QString msg;
-            if (!di) {
+            if (di) {
                 di->setValue(status);
-                msg = QStringLiteral("变位成功");
+//                msg = QStringLiteral("变位成功");
+                msg = "success";
             }
             else {
-                msg = QStringLiteral("点错误");
+                msg = "id error";
             }
             emit ykExecuteFinish(msg);
         }

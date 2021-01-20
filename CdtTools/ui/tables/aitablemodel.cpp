@@ -66,7 +66,7 @@ bool AiTableModel::setData(const QModelIndex &index, const QVariant &value, int 
             if (!value.canConvert<double>()) {
                 return false;
             }
-            m_aiDatas->takeAt(index.row())->setValue(value.toInt());
+            m_aiDatas->at(index.row())->setValue(value.toInt());
             dataChanged(index, index);
             return true;
         }
@@ -127,6 +127,6 @@ void AiTableModel::resetDatas(int num)
 void AiTableModel::randomNumber()
 {
     for (int i = 0; i < m_aiDatas->size(); i++) {
-        m_aiDatas->takeAt(i)->setValue(QRandomGenerator::global()->bounded(0, 255));
+        m_aiDatas->at(i)->setValue(QRandomGenerator::global()->bounded(0, 255));
     }
 }
