@@ -54,8 +54,9 @@ public slots:
         Q_UNUSED(ptId)
         Q_UNUSED(offon)
     }
-    virtual void reverseYx(int ptId){
+    virtual void reverseYx(int ptId, bool allow){
         Q_UNUSED(ptId)
+        Q_UNUSED(allow)
     }
 protected slots:
     virtual void onTimeout();

@@ -2,12 +2,15 @@
 #include "ui_cdtsettingdlg.h"
 #include "../common/util.h"
 
+QVector<PtCfg*> CDTSettingDlg::s_defaultCfgs;
+
 CDTSettingDlg::CDTSettingDlg(const QSharedPointer<PtCfg> &ptcfg, QWidget *parent)
     : QDialog (parent)
     , m_ptCfg(ptcfg)
     , ui(new Ui::CDTSettingDlg)
 {
     ui->setupUi(this);
+    initDefaultCfgs();
     initWidgetData(*ptcfg.data());
 }
 
@@ -50,6 +53,49 @@ void CDTSettingDlg::initWidgetData(const PtCfg &setting)
     ui->edVYxTime->setValue(setting.m_vyxTime);
 }
 
+void CDTSettingDlg::initDefaultCfgs()
+{
+    if (!CDTSettingDlg::s_defaultCfgs.isEmpty()) {
+        return;
+    }
+    CDTSettingDlg::s_defaultCfgs.resize(5);
+
+    PtCfg* standard = new PtCfg;
+    PtCfg* interace = new PtCfg;
+    interace->m_protocol = eProtocol::CDTGcInterace;
+    interace->m_ycFrameType = 0x64;
+    interace->m_ykReqType = 0xA8;
+    interace->m_ykAckType = 0xA8;
+    interace->m_ykReqCode = 0xE0;
+    interace->m_ykAckCode = 0xE1;
+    interace->m_ykExeCode = 0xE2;
+    PtCfg* cycle = new PtCfg;
+    cycle->m_protocol = eProtocol::CDTGcCycle;
+    cycle->m_ycFrameType = 0x64;
+    cycle->m_ykReqType = 0xF1;
+    cycle->m_ykAckType = 0xF1;
+    cycle->m_ykReqCode = 0x00;
+    cycle->m_ykAckCode = 0x00;
+    PtCfg* ut = new PtCfg;
+    ut->m_protocol = eProtocol::CDTUt;
+    ut->m_vyxFrameType = 0xA8;
+    ut->m_ykReqType = 0x57;
+    ut->m_ykAckType = 0xD9;
+    ut->m_ykReqCode = 0xE9;
+    ut->m_ykAckCode = 0xEA;
+    PtCfg* nr = new PtCfg;
+    nr->m_protocol = eProtocol::CDTNr;
+    nr->m_ykReqType = 0xB9;
+    nr->m_ykAckType = 0xB9;
+    nr->m_ykReqCode = 0x00;
+    nr->m_ykAckCode = 0x00;
+    CDTSettingDlg::s_defaultCfgs[0] = standard;
+    CDTSettingDlg::s_defaultCfgs[1] = interace;
+    CDTSettingDlg::s_defaultCfgs[2] = cycle;
+    CDTSettingDlg::s_defaultCfgs[3] = ut;
+    CDTSettingDlg::s_defaultCfgs[4] = nr;
+}
+
 
 void CDTSettingDlg::on_btnReset_clicked()
 {
@@ -61,17 +107,17 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_protocol = eProtocol(ui->cbbProtocol->currentIndex());
     m_ptCfg->m_yxFrameType  = Util::hexString2Num(ui->edYxType->text());
     m_ptCfg->m_yxFuncode    = Util::hexString2Num(ui->edYxFuncode->text());
-    m_ptCfg->m_yxNum        = Util::hexString2Num(ui->edYxNum->text());
+    m_ptCfg->m_yxNum        = ui->edYxNum->text().toInt();
     m_ptCfg->m_yxStartIo    = Util::hexString2Num(ui->edYxStartIo->text());
 
     m_ptCfg->m_ycFrameType  = Util::hexString2Num(ui->edYcType->text());
     m_ptCfg->m_ycFuncode    = Util::hexString2Num(ui->edYcFuncode->text());
-    m_ptCfg->m_ycNum        = Util::hexString2Num(ui->edYcNum->text());
+    m_ptCfg->m_ycNum        = ui->edYcNum->text().toInt();
     m_ptCfg->m_ycStartIo    = Util::hexString2Num(ui->edYcStartIo->text());
 
     m_ptCfg->m_vyxFrameType = Util::hexString2Num(ui->edVYxType->text());
     m_ptCfg->m_vyxFuncode   = Util::hexString2Num(ui->edVYxFuncode->text());
-    m_ptCfg->m_vyxNum       = Util::hexString2Num(ui->edVYxNum->text());
+    m_ptCfg->m_vyxNum       = ui->edVYxNum->text().toInt();
     m_ptCfg->m_vyxStartIo   = Util::hexString2Num(ui->edVYxStartIo->text());
 
     m_ptCfg->m_ykReqType    = Util::hexString2Num(ui->edYkReqType->text());
@@ -108,3 +154,8 @@ void CDTSettingDlg::on_btnCancel_clicked()
     reject();
 }
 
+
+void CDTSettingDlg::on_cbbProtocol_currentIndexChanged(int index)
+{
+    initWidgetData(*CDTSettingDlg::s_defaultCfgs[index]);
+}

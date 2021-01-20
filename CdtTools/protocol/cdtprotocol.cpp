@@ -175,9 +175,6 @@ void CDTProtocol::send(const CDTFrame &frame)
 
     if (bytes.size() > 0) {
         emit write(bytes);
-//        if (m_network->write(bytes)) {
-//            return ;
-//        }
     }
 }
 
@@ -344,8 +341,7 @@ void CDTProtocol::ykResponse(CDTFrame &frame)
         if (allowIndex == -1) {
             return;
         }
-        //TODO: 解锁：对应地址的di进行变位
-        qDebug("change di");
+
         m_isRunYK = true;
         emit notifyYK(allowIndex);
     }
@@ -416,7 +412,7 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)
     int index = 0;
     for (const auto& di: *m_settingData->m_ptCfg->m_globalDiList) {
         if (index % 8 == 0 && index != 0) {
-            combineByteList.append(val);
+             combineByteList.append(val);
             val = 0;
             index = 0;
         }
@@ -426,7 +422,7 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)
         }
         index++;
     }
-    if ((index - 1) % 8 != 0) {
+    if (index % 8 != 0) {
         combineByteList.append(val);
     }
     int offset = combineByteList.count() % 4;
@@ -441,7 +437,7 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)
     for (int j = 0; j < combineByteList.count() / 4; j++)
     {
         InfoFieldEntity entity;
-        entity.fillData(funCode, combineByteList.at(j * 4), combineByteList.at(j * 4 + 1), combineByteList.at(j * 4 + 2), combineByteList.at(j * 4 + 2));
+        entity.fillData(funCode, combineByteList.at(j * 4), combineByteList.at(j * 4 + 1), combineByteList.at(j * 4 + 2), combineByteList.at(j * 4 + 3));
         frame.infoFields.append(entity);
         funCode++;
     }
@@ -498,13 +494,16 @@ void CDTProtocol::startYK(int ptId, bool offon)
     Q_UNUSED(offon);
 }
 
-void CDTProtocol::reverseYx(int ptId)
+void CDTProtocol::reverseYx(int ptId, bool allow)
 {
-    auto di = m_settingData->m_ptCfg->m_globalDiList->at(ptId);
-    di->setValue(!di->value());
-    sendAllDi();
+    if (allow) {
+        auto di = m_settingData->m_ptCfg->m_globalDiList->at(ptId);
+        di->setValue(!di->value());
+        sendAllDi();
+        qDebug("遥控变位完成");
+    }
     m_isRunYK = false;
-    qDebug("遥控变位完成");
+
 }
 
 void CDTProtocol::onDisconnected()

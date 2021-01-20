@@ -31,7 +31,7 @@ protected:
 signals:
     void stop();
     void startYK(int ptId, bool offon);
-    void reverseYx(int ptId);
+    void reverseYx(int ptId, bool allow);
 
 public slots:
     void recvMessage(const QString& msg);

@@ -69,7 +69,7 @@ public:
 signals:
 public slots:
     void startYK(int ptId, bool offon) override;
-    void reverseYx(int ptId) override;
+    void reverseYx(int ptId, bool allow) override;
     void onDisconnected();
 
 protected slots:

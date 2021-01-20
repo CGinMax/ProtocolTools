@@ -166,9 +166,8 @@ void CDTWorkWidget::onNotifyYK(int ptId)
     auto globalPos = mapToGlobal(QPoint(x(), y()));
     dialog.move(globalPos.x() + width() / 2 - dialog.width() / 2, globalPos.y() + height() / 2 - dialog.height() / 2);
     int ret = dialog.exec();
-    if (ret == QDialog::Accepted) {
-        emit reverseYx(ptId);
-    }
+
+    emit reverseYx(ptId, ret == QDialog::Accepted);
 }
 
 void CDTWorkWidget::on_btnExecute_clicked()

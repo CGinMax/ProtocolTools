@@ -19,7 +19,8 @@ public:
 
     void initWidgetData(const PtCfg& setting);
 
-
+    static QVector<PtCfg*> s_defaultCfgs;
+    void initDefaultCfgs();
 
 private slots:
     void on_btnReset_clicked();
@@ -28,6 +29,7 @@ private slots:
 
     void on_btnCancel_clicked();
 
+    void on_cbbProtocol_currentIndexChanged(int index);
 
 private:
     QSharedPointer<PtCfg> m_ptCfg;
