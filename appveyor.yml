@@ -1,7 +1,12 @@
-version: 1.0{build}
-
-branches:
-    - main
+version: build{build}
 
 environment:
+    matrix:
+    - name: Ubuntu
+      platform: x64
+      qt: 5.12.10
+      releaseName: CdtTool_qt5_12_10_gcc
 
+build_script:
+    - qmake
+    - make

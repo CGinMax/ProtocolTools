@@ -202,6 +202,9 @@ void CDTProtocol::sendAllAi()
     int aiNum = m_settingData->m_ptCfg->m_globalAiList->size();
     for (int i = 0; i < aiNum; i++) {
         auto aiValue = m_settingData->m_ptCfg->m_globalAiList->at(i)->value();
+        if (aiValue > 0x07FF) {
+            aiValue = 0x4000;// 溢出
+        }
         combineList.append(static_cast<uint8_t>(aiValue >> 8));
         combineList.append(static_cast<uint8_t>(aiValue));
     }
@@ -217,34 +220,6 @@ void CDTProtocol::sendAllAi()
         frame.infoFields.append(entity);
         curCode++;
     }
-    //            bool sign = ptValue < 0 ? true : false;
-
-    //            bool overflow = false;
-    //            uint16_t transValue = ptValue;
-    //            // 溢出
-    //            if (ptValue > 0x03FF || ptValue < -0x03FF) {
-    //                overflow = true;
-    //            }
-    //            // 负数
-    //            if (sign)
-    //            {
-    //                // 取反加1
-    //                transValue = -ptValue;
-    //                transValue = ~transValue;
-    //                transValue++;
-    //            }
-
-    //            // 拼接发送数据的字节
-    //            uint16_t byteValue = valid ? 0 : 1;
-    //            // 溢出位
-    //            byteValue = (byteValue << 1) | overflow;
-    //            // 符号位
-    //            byteValue = (byteValue << 4) | sign;
-    //            // 拼接数据位
-    //            byteValue = (byteValue << 10) | (transValue & 0x03FF);
-    //            // 低位字节在后，高位字节在前
-    //            ptBinaryArr[j * 2 + 1] = (uint8_t)byteValue;
-    //            ptBinaryArr[j * 2] = (uint8_t)(byteValue >> 8);
 
     frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ycFrameType, frame.infoFields.size(), 0, 0);
     showMessageBuffer(eMsgType::eMsgSend, "发送全遥测", frame.toAllByteArray());

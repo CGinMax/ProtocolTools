@@ -127,6 +127,6 @@ void AiTableModel::resetDatas(int num)
 void AiTableModel::randomNumber()
 {
     for (int i = 0; i < m_aiDatas->size(); i++) {
-        m_aiDatas->at(i)->setValue(QRandomGenerator::global()->bounded(0, 255));
+        m_aiDatas->at(i)->setValue(QRandomGenerator::global()->bounded(0, 0x7FF));
     }
 }
