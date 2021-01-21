@@ -8,5 +8,7 @@ environment:
       releaseName: CdtTool_qt5_12_10_gcc
 
 build_script:
+    - export QtPath=$HOME/Qt/5.12.10/gcc_64
+    - export PATH=$QtPath/bin:$PATH
     - qmake
     - make
