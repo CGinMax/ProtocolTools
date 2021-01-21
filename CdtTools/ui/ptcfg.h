@@ -23,6 +23,9 @@ public:
 
     AiData* findAiById(int id);
 
+    DiData* findVDiById(int id);
+
+
     eProtocol m_protocol{eProtocol::CDTStandard};
     uint8_t m_controlType{0x71};
     uint8_t m_yxFrameType{0xF4};
@@ -54,13 +57,16 @@ public:
     int m_ycTime{1000};
     int m_vyxTime{1000};
 
+    bool m_isRandom{false};
+
     QList<DiData*>* m_globalDiList{nullptr};
     QList<AiData*>* m_globalAiList{nullptr};
-
+    QList<DiData*>* m_globalVDiList{nullptr};
 
 private:
     QMap<int, DiData*> m_diMap;
     QMap<int, AiData*> m_aiMap;
+    QMap<int, DiData*> m_vdiMap;
 };
 
 struct SettingData{

@@ -28,6 +28,7 @@ public:
 signals:
 
 public slots:
+    void onUpdateData();
     void onNewConnection();
     void onTabCloseRequested(int index);
 

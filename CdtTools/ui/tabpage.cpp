@@ -45,6 +45,8 @@ void TabPage::initWidget()
 
     ui->stackedWidget->addWidget(m_serverPage.data());
     ui->stackedWidget->addWidget(m_clientPage.data());
+    connect(this, &TabPage::updateData, m_serverPage.data(), &ServerPage::onUpdateData);
+    connect(this, &TabPage::updateData, m_clientPage.data(), &ClientPage::onUpdateData);
 }
 
 void TabPage::resetSettingData()
@@ -115,4 +117,5 @@ void TabPage::on_btnSetting_clicked()
 {
     CDTSettingDlg dlg(m_settingData->m_ptCfg, this);
     dlg.exec();
+    emit updateData();
 }

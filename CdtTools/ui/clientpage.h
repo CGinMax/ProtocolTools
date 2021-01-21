@@ -21,9 +21,11 @@ public:
 signals:
 
 public slots:
+    void onUpdateData();
 private:
     QSharedPointer<NetworkBase> m_tcpClient;
     QSharedPointer<SettingData> m_settingData;
     QScopedPointer<CDTWorkWidget> m_centerWidget;
+    QVBoxLayout* m_layout;
 };
 #endif // CLIENTPAGE_H

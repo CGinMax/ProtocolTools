@@ -233,6 +233,13 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="4" colspan="2">
+       <widget class="QCheckBox" name="cbRandom">
+        <property name="text">
+         <string>生成随机数</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -457,6 +464,38 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>cbbProtocol</tabstop>
+  <tabstop>edControlType</tabstop>
+  <tabstop>btnReset</tabstop>
+  <tabstop>edYxType</tabstop>
+  <tabstop>edYxFuncode</tabstop>
+  <tabstop>edYxNum</tabstop>
+  <tabstop>edYxStartIo</tabstop>
+  <tabstop>edYxTime</tabstop>
+  <tabstop>edYcType</tabstop>
+  <tabstop>edYcFuncode</tabstop>
+  <tabstop>edYcNum</tabstop>
+  <tabstop>edYcStartIo</tabstop>
+  <tabstop>edYcTime</tabstop>
+  <tabstop>cbRandom</tabstop>
+  <tabstop>edVYxType</tabstop>
+  <tabstop>edVYxFuncode</tabstop>
+  <tabstop>edVYxNum</tabstop>
+  <tabstop>edVYxStartIo</tabstop>
+  <tabstop>edVYxTime</tabstop>
+  <tabstop>edYkReqType</tabstop>
+  <tabstop>edYkAckType</tabstop>
+  <tabstop>edYkReqCode</tabstop>
+  <tabstop>edYkAckCode</tabstop>
+  <tabstop>edYkExeCode</tabstop>
+  <tabstop>edYkClose</tabstop>
+  <tabstop>edYkOpen</tabstop>
+  <tabstop>edYkUnlock</tabstop>
+  <tabstop>edYkLock</tabstop>
+  <tabstop>btnOk</tabstop>
+  <tabstop>btnCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

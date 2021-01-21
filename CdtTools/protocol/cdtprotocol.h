@@ -19,9 +19,6 @@ public:
 
     void run() override;
 
-    // 处理命令
-    void processCommand();
-
     // 解析接收数据接口
     void parseRecvData();
     // 解析数据，封装成帧
@@ -42,6 +39,8 @@ public:
     void ycResponse(QList<InfoFieldEntity> &infoFieldList);
 
     virtual void ykResponse(CDTFrame& frame);
+
+    void vyxResponse(QList<InfoFieldEntity> &infoFieldList);
 
     void ykSelect(uint8_t operCode, uint8_t ptNo);
 

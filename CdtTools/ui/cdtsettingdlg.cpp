@@ -25,18 +25,19 @@ void CDTSettingDlg::initWidgetData(const PtCfg &setting)
     ui->edControlType->setText(Util::num2Hex(setting.m_controlType));
     ui->edYxType->setText(Util::num2Hex(setting.m_yxFrameType));
     ui->edYxFuncode->setText(Util::num2Hex(setting.m_yxFuncode));
-    ui->edYxNum->setText(Util::num2Hex(setting.m_yxNum));
-    ui->edYxStartIo->setText(Util::num2Hex(setting.m_yxStartIo));
+    ui->edYxNum->setText(QString::number(setting.m_yxNum));
+    ui->edYxStartIo->setText(QString::number(setting.m_yxStartIo));
 
     ui->edYcType->setText(Util::num2Hex(setting.m_ycFrameType));
     ui->edYcFuncode->setText(Util::num2Hex(setting.m_ycFuncode));
-    ui->edYcNum->setText(Util::num2Hex(setting.m_ycNum));
-    ui->edYcStartIo->setText(Util::num2Hex(setting.m_ycStartIo));
+    ui->edYcNum->setText(QString::number(setting.m_ycNum));
+    ui->edYcStartIo->setText(QString::number(setting.m_ycStartIo));
+    ui->cbRandom->setChecked(setting.m_isRandom);
 
     ui->edVYxType->setText(Util::num2Hex(setting.m_vyxFrameType));
     ui->edVYxFuncode->setText(Util::num2Hex(setting.m_vyxFuncode));
-    ui->edVYxNum->setText(Util::num2Hex(setting.m_vyxNum));
-    ui->edVYxStartIo->setText(Util::num2Hex(setting.m_vyxStartIo));
+    ui->edVYxNum->setText(QString::number(setting.m_vyxNum));
+    ui->edVYxStartIo->setText(QString::number(setting.m_vyxStartIo));
 
     ui->edYkReqType->setText(Util::num2Hex(setting.m_ykReqType));
     ui->edYkAckType->setText(Util::num2Hex(setting.m_ykAckType));
@@ -114,6 +115,7 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_ycFuncode    = Util::hexString2Num(ui->edYcFuncode->text());
     m_ptCfg->m_ycNum        = ui->edYcNum->text().toInt();
     m_ptCfg->m_ycStartIo    = Util::hexString2Num(ui->edYcStartIo->text());
+    m_ptCfg->m_isRandom     = ui->cbRandom->isChecked();
 
     m_ptCfg->m_vyxFrameType = Util::hexString2Num(ui->edVYxType->text());
     m_ptCfg->m_vyxFuncode   = Util::hexString2Num(ui->edVYxFuncode->text());
@@ -144,6 +146,11 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_globalAiList = new QList<AiData*>;
     for (int i = 0; i < m_ptCfg->m_ycNum; i++) {
         m_ptCfg->m_globalAiList->append(new AiData(m_ptCfg->m_ycStartIo + i, QString("Pt%1").arg(m_ptCfg->m_ycStartIo + i), 0));
+    }
+
+    m_ptCfg->m_globalVDiList = new QList<DiData*>;
+    for (int i = 0; i < m_ptCfg->m_vyxNum; i++) {
+        m_ptCfg->m_globalVDiList->append(new DiData(m_ptCfg->m_vyxStartIo + i, QString("Pt%1").arg(m_ptCfg->m_vyxStartIo + i), 0));
     }
     m_ptCfg->initMap();
     accept();

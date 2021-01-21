@@ -47,21 +47,19 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     auto aiDelegate = new DigitLimiteDelegate();
     ui->viewAi->setItemDelegateForColumn(2, aiDelegate);
 
-    m_vyxModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalDiList, ui->viewVYx);
-    ui->viewVYx->setModel(m_vyxModel);
-    ui->viewVYx->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->viewVYx->verticalHeader()->setVisible(false);
-    ui->viewVYx->setEditTriggers(QAbstractItemView::DoubleClicked);
-    ui->viewVYx->setSelectionBehavior(QAbstractItemView::SelectItems);
-    auto vyxDelegate = new ComboBoxDelegate(ui->viewVYx);
+    m_vyxModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalVDiList, ui->viewVDi);
+    ui->viewVDi->setModel(m_vyxModel);
+    ui->viewVDi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->viewVDi->verticalHeader()->setVisible(false);
+    ui->viewVDi->setEditTriggers(QAbstractItemView::DoubleClicked);
+    ui->viewVDi->setSelectionBehavior(QAbstractItemView::SelectItems);
+    auto vyxDelegate = new ComboBoxDelegate(ui->viewVDi);
     vyxDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
     ui->viewDi->setItemDelegateForColumn(2, vyxDelegate);
 
-    m_cbRandom = new QCheckBox(tr("Generate random number"), this);
-    auto aiLayout = qobject_cast<QVBoxLayout*>(ui->tabAi->layout());
-    aiLayout->insertWidget(0, this->m_cbRandom);
-    connect(&m_viewTimer, &QTimer::timeout, [this]{
-        if (this->m_cbRandom->isChecked())
+    bool isRandom = settingData->m_ptCfg->m_isRandom;
+    connect(&m_viewTimer, &QTimer::timeout, [this, isRandom]{
+        if (isRandom)
             m_aiModel->randomNumber();
         ui->viewAi->viewport()->update();
         ui->viewDi->viewport()->update();

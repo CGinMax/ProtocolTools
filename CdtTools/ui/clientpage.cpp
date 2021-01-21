@@ -8,9 +8,9 @@ ClientPage::ClientPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent
     , m_settingData(ptCfg)
     , m_centerWidget(new CDTWorkWidget(m_tcpClient, ptCfg, this))
 {
-    auto layout = new QVBoxLayout(this);
-    layout->addWidget(m_centerWidget.data());
-    layout->setContentsMargins(0, 0, 0, 0);
+    m_layout = new QVBoxLayout(this);
+    m_layout->addWidget(m_centerWidget.data());
+    m_layout->setContentsMargins(0, 0, 0, 0);
 }
 
 ClientPage::~ClientPage()
@@ -34,5 +34,11 @@ void ClientPage::stop()
 {
 
     m_centerWidget->stopCommunication();
+}
+
+void ClientPage::onUpdateData()
+{
+    m_centerWidget.reset(new CDTWorkWidget(m_tcpClient, m_settingData, this));
+    m_layout->addWidget(m_centerWidget.data());
 }
 

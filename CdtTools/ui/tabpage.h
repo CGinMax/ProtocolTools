@@ -24,6 +24,8 @@ public:
 
     void setConfigureWidgetEnabled(bool enabled);
 
+signals:
+    void updateData();
 private slots:
     void on_cbbNetworkType_currentIndexChanged(int index);
 

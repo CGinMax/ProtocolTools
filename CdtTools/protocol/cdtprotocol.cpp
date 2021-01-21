@@ -34,8 +34,6 @@ void CDTProtocol::run()
     if (!initConnection()) {
         return;
     }
-    // 处理命令
-    processCommand();
 
     auto bytes = m_network->readAll();
 
@@ -52,11 +50,6 @@ void CDTProtocol::run()
         sendAllDi();
         m_cycleCounter = 0;
     }
-}
-
-void CDTProtocol::processCommand()
-{
-
 }
 
 void CDTProtocol::parseRecvData()
@@ -157,14 +150,20 @@ void CDTProtocol::processFrame()
                 showMessageBuffer(eMsgType::eMsgRecv, "接收到遥信帧，正在处理...", frame.toAllByteArray());
                 yxResponse(frame.infoFields);
             } else if (m_settingData->m_stationType == eStationType::Minitor) {
+                showMessageBuffer(eMsgType::eMsgRecv, "接收到虚遥信，正在处理...", frame.toAllByteArray());
                 // 监控接收虚遥信
+                vyxResponse(frame.infoFields);
             }
         }
         else if (frame.frameControl.type == ykType) {
             ykResponse(frame);
 
         }
-
+        else if (frame.frameControl.type == m_settingData->m_ptCfg->m_vyxFrameType) {
+            showMessageBuffer(eMsgType::eMsgRecv, "接收到虚遥信，正在处理...", frame.toAllByteArray());
+            // 监控接收虚遥信
+            vyxResponse(frame.infoFields);
+        }
     }
 
 }
@@ -288,9 +287,15 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
             yxValue = (combineNum >> i) & 0x01; // 从最低位开始获取每一位
 
             nSeq = curPointStartAddr + i + startOffset;  // 点号
-            // 0号开始
+
             if(nSeq < (startOffset + diSize)) {
-                m_settingData->m_ptCfg->m_globalDiList->at(nSeq)->setValue(yxValue > 0);
+                auto di = m_settingData->m_ptCfg->findVDiById(nSeq);
+                if (di) {
+                    di->setValue(yxValue > 0);
+                }
+                else {
+                    qDebug("no found di %d", nSeq);
+                }
             }
         }
     }
@@ -349,6 +354,43 @@ void CDTProtocol::ykResponse(CDTFrame &frame)
         emit notifyYK(allowIndex);
     }
 
+}
+
+void CDTProtocol::vyxResponse(QList<InfoFieldEntity> &infoFieldList)
+{
+    int startOffset = m_settingData->m_ptCfg->m_globalVDiList->first()->io();
+    int diSize = m_settingData->m_ptCfg->m_globalVDiList->size();
+    for (InfoFieldEntity &entity : infoFieldList) {
+        // 当前信息字的遥信点起始地址,funCode：F0-FF
+        int curPointStartAddr = (entity.funCode & 0x0F) * 32;
+        int nSeq = 0; // 遥信点号
+        uint8_t yxValue = 0;// 遥信值1bit
+
+        // 将四个无符号char放到四个字节的无符号int中
+        uint combineNum = 0;
+        for (int i = 0; i < 4; ++i)
+        {
+            combineNum |= entity.dataArray[i] << (i * 8);
+        }
+
+        // 从int中读取每一位
+        for (int i = 0; i < 32; ++i)
+        {
+            yxValue = (combineNum >> i) & 0x01; // 从最低位开始获取每一位
+
+            nSeq = curPointStartAddr + i + startOffset;  // 点号
+
+            if(nSeq < (startOffset + diSize)) {
+                auto vdi = m_settingData->m_ptCfg->findVDiById(nSeq);
+                if (vdi) {
+                    vdi->setValue(yxValue > 0);
+                }
+                else {
+                    qDebug("no found vdi %d", nSeq);
+                }
+            }
+        }
+    }
 }
 
 void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)

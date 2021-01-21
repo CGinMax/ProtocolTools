@@ -70,6 +70,14 @@ void ServerPage::stop()
 
 }
 
+void ServerPage::onUpdateData()
+{
+    for (int i = 0; i < m_tabClients->count(); i++) {
+        onTabCloseRequested(i);
+    }
+    m_tabClients->clear();
+}
+
 void ServerPage::onNewConnection()
 {
 
