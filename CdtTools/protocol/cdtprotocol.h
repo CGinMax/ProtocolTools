@@ -84,7 +84,8 @@ protected:
     QByteArray m_recvBuffer;
     QQueue<CDTFrame> m_frameQueue;
     bool m_isRunYK;
-    uint m_cycleCounter;
+    uint m_yxCounter;
+    uint m_ycCounter;
 };
 
 #endif // CDTPROTOCOL_H

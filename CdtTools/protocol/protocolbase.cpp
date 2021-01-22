@@ -137,7 +137,7 @@ void ProtocolBase::sendHumanizeMsg(ProtocolBase::eMsgType type, const QString &m
 {
     auto hexString = bytes2String(buffer, len);
     auto packString = decorateMsg(type, msg, hexString, len);
-    emit sendProtocolMsg(packString);
+    emit sendProtocolContent(packString);
 }
 
 void ProtocolBase::sendHumanizeMsg(ProtocolBase::eMsgType type, const QString &msg, const QByteArray &buffer)
@@ -145,7 +145,7 @@ void ProtocolBase::sendHumanizeMsg(ProtocolBase::eMsgType type, const QString &m
     auto hexString = bytes2String(buffer);
     auto packString = decorateMsg(type, msg, hexString, buffer.length());
 
-    emit sendProtocolMsg(packString);
+    emit sendProtocolContent(packString);
 }
 
 QString ProtocolBase::bytes2String(const char *buffer, int length)

@@ -27,6 +27,7 @@ void CDTExUt::ykResponse(CDTFrame &frame)
     if (funCode == m_settingData->m_ptCfg->m_ykAckCode) {
         // 遥控应答
         if (success) {
+            emit sendYKMsg(QStringLiteral("接收到请求应答，允许点%1遥控变位操作").arg(ykAddr));
             auto di = m_settingData->m_ptCfg->findDiById(ykAddr);
             QString msg;
             if (di) {
@@ -34,62 +35,27 @@ void CDTExUt::ykResponse(CDTFrame &frame)
                 msg = QStringLiteral("变位成功");
             }
             else {
-                msg = QStringLiteral("点号不存在");
+                msg = QStringLiteral("变位失败，遥信点Id=%1错误").arg(ykAddr);
             }
-            emit ykExecuteFinish(msg);
+            emit sendYKMsg(msg);
         }
         else {
-            // emit failed msg;
-            showMessage(eMsgRecv, QStringLiteral("遥控解闭锁应答失败"));
+            emit sendYKMsg(QStringLiteral("接收到请求应答，禁止点%1遥控变位操作").arg(ykAddr));
         }
         m_isRunYK = false;
     }
     else if (funCode == m_settingData->m_ptCfg->m_ykReqCode) {
-
-    }
-
-}
-
-void CDTExUt::processFrame()
-{
-    while (!m_frameQueue.isEmpty()) {
-        CDTFrame frame = m_frameQueue.dequeue();
-
-        switch (frame.frameControl.type)
-        {
-        // 0x61，遥测
-        case eCDTFrameType::RmtMeasurement:
-            showMessageBuffer(eMsgType::eMsgRecv, "接收到遥测帧，正在处理...", frame.toAllByteArray());
-            yxResponse(frame.infoFields);
-            break;
-
-            // 0xF4,遥信
-        case eCDTFrameType::RmtInformation:
-            if (m_settingData->m_stationType == eStationType::WF) {
-                showMessageBuffer(eMsgType::eMsgRecv, "接收到遥信帧，正在处理...", frame.toAllByteArray());
-                yxResponse(frame.infoFields);
-            } else if (m_settingData->m_stationType == eStationType::Minitor) {
-                // 监控接收虚遥信
-
-            }
-            break;
-
-        case 0xD9:
-            ykResponse(frame);
-            break;
-
-        default :
-            break;
-        }
+        // TODO
     }
 
 }
 
 void CDTExUt::ykSelect(uint8_t ctrlCode, uint8_t ptId)
 {
-    auto frame = interactYKFrame(eCDTFrameControlType::StandardType, m_settingData->m_ptCfg->m_ykReqType, 0xE9, ctrlCode, ptId);
+    auto frame = interactYKFrame(eCDTFrameControlType::ExternType, m_settingData->m_ptCfg->m_ykReqType, 0xE9, ctrlCode, ptId);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控命令"), frame.toAllByteArray());
     send(frame);
+    emit sendYKMsg(QStringLiteral("发送点%1的请求解锁指令").arg(ptId));
 }
 
 void CDTExUt::startYK(int ptId, bool offon)

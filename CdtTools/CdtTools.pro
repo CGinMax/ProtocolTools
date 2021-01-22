@@ -52,7 +52,6 @@ SOURCES += \
     ui/tables/aidata.cpp \
     ui/tables/delegates/digitlimitedelegate.cpp \
     ui/ptcfg.cpp \
-    protocol/frame.cpp \
     ui/floatbuttongroup.cpp \
     protocol/cdtexut.cpp \
     protocol/cdtexnr.cpp
@@ -85,7 +84,6 @@ HEADERS += \
     ui/tables/aidata.h \
     ui/tables/delegates/digitlimitedelegate.h \
     ui/ptcfg.h \
-    protocol/frame.h \
     ui/floatbuttongroup.h \
     protocol/cdtexut.h \
     protocol/cdtexnr.h
@@ -102,3 +100,12 @@ CONFIG(debug, debug|release){
 else {
     DESTDIR = $$PWD/../bin/release
 }
+
+
+QMAKE_RPATHDIR += ./
+QMAKE_RPATHDIR += $${DESTDIR}
+QMAKE_RPATHDIR += ./../lib
+QMAKE_RPATHDIR += $${DESTDIR}/../lib
+
+TRANSLATIONS += $$PWD/CdtTools_en.ts
+TRANSLATIONS += $$PWD/CdtTools_zh.ts

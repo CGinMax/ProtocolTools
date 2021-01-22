@@ -43,7 +43,8 @@ public:
 
 signals:
     void write(const QByteArray& data);
-    void sendProtocolMsg(const QString& msg);
+    void sendProtocolContent(const QString& msg);
+    void sendYKMsg(const QString& msg);
     void ykExecuteFinish(const QString& msg);
     void notifyYK(int ptId);
 

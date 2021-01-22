@@ -11,7 +11,6 @@ public:
     ~CDTExUt() override;
 
     void ykResponse(CDTFrame &frame) override;
-    void processFrame() override;
 
     void ykSelect(uint8_t ctrlCode, uint8_t ptId);
 

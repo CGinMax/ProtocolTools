@@ -19,8 +19,6 @@ void CDTInteracte::ykResponse(CDTFrame &frame)
     if (ykAddr > m_settingData->m_ptCfg->m_globalDiList->size())
         return ;
 
-    // 遥控执行
-    showMessageBuffer(eMsgType::eMsgRecv, "接收到遥控帧，正在处理...", frame.toAllByteArray());
     if (funCode == m_settingData->m_ptCfg->m_ykReqCode) {
         if (!m_isRunYK) {// 接收到遥控选择
             // 直接返回校核
@@ -35,8 +33,6 @@ void CDTInteracte::ykResponse(CDTFrame &frame)
     }
     else if (funCode == m_settingData->m_ptCfg->m_ykAckCode) {
         ykExecute(ctrlCode, static_cast<uint8_t>(ykAddr));
-        qDebug("send execute");
-        // emit execute?
     }
     else if (funCode == m_settingData->m_ptCfg->m_ykExeCode) {
         bool success = firstInfoData.dataArray[1] == m_settingData->m_ptCfg->m_ykUnlock;
@@ -45,17 +41,15 @@ void CDTInteracte::ykResponse(CDTFrame &frame)
             QString msg;
             if (di) {
                 di->setValue(status);
-//                msg = QStringLiteral("变位成功");
-                msg = "success";
+                msg = QStringLiteral("变位成功");
             }
             else {
-                msg = "id error";
+                msg = QStringLiteral("变位失败，遥信点Id=%1错误").arg(ykAddr);
             }
-            emit ykExecuteFinish(msg);
+            emit sendYKMsg(msg);
         }
         else {
-            // emit failed msg;
-            showMessage(eMsgRecv, QStringLiteral("遥控解闭锁应答失败"));
+            emit sendYKMsg(QStringLiteral("禁止点%1遥控变位操作").arg(ykAddr));
         }
         m_isRunYK = false;
 
@@ -67,19 +61,24 @@ void CDTInteracte::ykSelect(uint8_t ctrlCode, uint8_t ptId)
 {
     CDTFrame frame = interactYKFrame(m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, ctrlCode, 0xFF, ptId);
     send(frame);
-    showMessageBuffer(eMsgType::eMsgSend, "send", frame.toAllByteArray());
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控选择指令").arg(ptId).arg(ctrlCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
 }
 
 void CDTInteracte::ykSelectBack(uint8_t ctrlCode, uint8_t ptId)
 {
     CDTFrame frame = interactYKFrame(m_settingData->m_ptCfg->m_ykAckType, m_settingData->m_ptCfg->m_ykAckCode, ctrlCode, 0xFF, ptId);
     send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择回传"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控选择回传指令").arg(ptId).arg(ctrlCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
 }
 
 void CDTInteracte::ykExecute(uint8_t ctrlCode, uint8_t ptId)
 {
     CDTFrame frame = interactYKFrame(m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, ctrlCode, 0xFF, ptId);
     send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控执行"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控执行指令").arg(ptId).arg(ctrlCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
 }
 
 void CDTInteracte::ykExecuteBack(uint8_t ctrlCode, uint8_t ptId, bool success)
@@ -88,6 +87,8 @@ void CDTInteracte::ykExecuteBack(uint8_t ctrlCode, uint8_t ptId, bool success)
     uint8_t valid = success ? m_settingData->m_ptCfg->m_ykUnlock : m_settingData->m_ptCfg->m_ykLock;
     CDTFrame frame = interactYKFrame(m_settingData->m_ptCfg->m_ykAckType, m_settingData->m_ptCfg->m_ykExeCode, ctrlCode, valid, ptId);
     send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控执行"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的%2遥控变位指令").arg(ptId).arg(success ? QStringLiteral("允许"):QStringLiteral("禁止")));
 }
 
 CDTFrame CDTInteracte::interactYKFrame(uint8_t frameType, uint8_t funCode, uint8_t operCode, uint8_t vaild, int ptId)

@@ -12,6 +12,7 @@
 #include "../common/threadpool.h"
 #include "./dialog/ykdialog.h"
 #include <QDebug>
+#include <QMenu>
 #include <QThread>
 
 CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData, QWidget *parent)
@@ -66,6 +67,11 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     });
     m_viewTimer.start(2000);
 
+    ui->textYkInfo->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->textYkInfo, &QPlainTextEdit::customContextMenuRequested, this, &CDTWorkWidget::onPlainTextContextMenuRequested);
+    ui->textBrowser->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->textBrowser, &QTextBrowser::customContextMenuRequested, this, &CDTWorkWidget::onTextBrowserContextMenuRequested);
+
     auto btn = new QPushButton(tr("clear"), this);
     connect(btn, &QPushButton::clicked, [this](){
         this->ui->textBrowser->clear();
@@ -109,12 +115,8 @@ void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settin
         default:
             break;
         }
-//        connect(this->m_protocol, &ProtocolBase::ykExecuteFinish, [this](const QString& msg){
-//            qDebug("cdt work widget yk finished");
-//            ui->textBrowser->append(msg);
-//            ui->btnExecute->setEnabled(true);
-//        });
-        connect(this->m_protocol, &ProtocolBase::sendProtocolMsg, this, &CDTWorkWidget::recvMessage);
+        connect(this->m_protocol, &ProtocolBase::sendProtocolContent, this, &CDTWorkWidget::recvProtocolContent);
+        connect(this->m_protocol, &ProtocolBase::sendYKMsg, this, &CDTWorkWidget::recvYKMsg);
         connect(this, &CDTWorkWidget::stop, this->m_protocol, &ProtocolBase::stop, Qt::BlockingQueuedConnection);
         connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::startYK);
         connect(this, &CDTWorkWidget::reverseYx, this->m_protocol, &ProtocolBase::reverseYx);
@@ -154,9 +156,14 @@ void CDTWorkWidget::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
-void CDTWorkWidget::recvMessage(const QString &msg)
+void CDTWorkWidget::recvProtocolContent(const QString &msg)
 {
     ui->textBrowser->append(msg);
+}
+
+void CDTWorkWidget::recvYKMsg(const QString &msg)
+{
+    ui->textYkInfo->appendPlainText(msg);
 }
 
 void CDTWorkWidget::onNotifyYK(int ptId)
@@ -173,5 +180,25 @@ void CDTWorkWidget::onNotifyYK(int ptId)
 void CDTWorkWidget::on_btnExecute_clicked()
 {
     emit startYK(ui->edPtId->value(), ui->cbbYKOper->currentIndex() > 0);
-    qDebug("start yk");
+    qInfo("开始遥控");
+}
+
+void CDTWorkWidget::onPlainTextContextMenuRequested(const QPoint &pos)
+{
+    Q_UNUSED(pos);
+    QMenu menu;
+    menu.addAction(tr("清空"), this, [this]{
+        this->ui->textYkInfo->clear();
+    });
+    menu.exec(QCursor::pos());
+}
+
+void CDTWorkWidget::onTextBrowserContextMenuRequested(const QPoint &pos)
+{
+    Q_UNUSED(pos);
+    QMenu menu;
+    menu.addAction(tr("清空"), this, [this]{
+        this->ui->textBrowser->clear();
+    });
+    menu.exec(QCursor::pos());
 }

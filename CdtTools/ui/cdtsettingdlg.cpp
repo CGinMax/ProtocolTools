@@ -77,6 +77,7 @@ void CDTSettingDlg::initDefaultCfgs()
     cycle->m_ykAckType = 0xF1;
     cycle->m_ykReqCode = 0x00;
     cycle->m_ykAckCode = 0x00;
+    cycle->m_ykExeCode = 0;
     auto ut = new PtCfg;
     ut->m_protocol = eProtocol::CDTUt;
     ut->m_vyxFrameType = 0xA8;
@@ -84,12 +85,14 @@ void CDTSettingDlg::initDefaultCfgs()
     ut->m_ykAckType = 0xD9;
     ut->m_ykReqCode = 0xE9;
     ut->m_ykAckCode = 0xEA;
+    ut->m_ykExeCode = 0;
     auto nr = new PtCfg;
     nr->m_protocol = eProtocol::CDTNr;
     nr->m_ykReqType = 0xB9;
     nr->m_ykAckType = 0xB9;
     nr->m_ykReqCode = 0x00;
     nr->m_ykAckCode = 0x00;
+    nr->m_ykExeCode = 0x00;
     CDTSettingDlg::s_defaultCfgs[0] = standard;
     CDTSettingDlg::s_defaultCfgs[1] = interace;
     CDTSettingDlg::s_defaultCfgs[2] = cycle;

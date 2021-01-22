@@ -19,7 +19,6 @@ YKDialog::YKDialog(const QString &text, const QString &title, QWidget *parent)
     btnLayout->addSpacing(20);
     mainLayout->addLayout(btnLayout);
 
-    setLayout(mainLayout);
     connect(&m_btnYes, &QPushButton::clicked, this, &QDialog::accept);
     connect(&m_btnNo, &QPushButton::clicked, this, &QDialog::reject);
 

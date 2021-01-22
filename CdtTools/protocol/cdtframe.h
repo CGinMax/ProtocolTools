@@ -1,8 +1,6 @@
 #ifndef CDTFRAME_H
 #define CDTFRAME_H
 
-
-#include "frame.h"
 #include <QList>
 
 // "字"的长度：6个字节
@@ -39,31 +37,16 @@ enum eCDTFrameType{
 
     RmtControlType = 0x57, // 遥控
     RmtControlTypeCycle = 0xF1, // 循环式遥控
-
-    // 下行
-//    RmtControlExecuteType = 0xC2,// 遥控执行
-//    RmtControlCancelType = 0xB3, // 遥控撤销
-
-    UpDownSelectType = 0xF4,     // 升降选择
-    UpDownExecuteType = 0x85,    // 升降执行
-    UpDownCancelType = 26,       // 升降撤销
 };
 
 enum eCDTFunCode{
     RmtMeasurementCode = 0x7F,      // 遥测
     RmtInformationCode = 0xF0,      // 遥信
-    ChildTimingCallBack = 0x84,     // 子站时间返送
-    ResetCmdCode = 0x8B,            // 复位命令
-    BroadcastCmdCode = 0x8C,        // 广播命令
     ACCStartCode = 0xA0,            // 电度量起始功能码
     RmtControlSelectCode = 0xE0,    // 遥控选择功能码
     RmtControlBackCode = 0xE1,     // 遥控返校
     RmtControlExecuteCode = 0xE2,   // 遥控执行
     RmtControlCancelCode = 0xE3,    // 遥控撤销
-    UpDownSelectCode = 0xE4,        // 升降选择
-    UpDownBackCode = 0xE5,         // 升降返校
-    UpDownExecuteCode = 0xE6,       // 升降执行
-    UpDownCancelCode = 0xE7,        // 升降撤销
 };
 
 enum eControlLockCode{
@@ -80,13 +63,6 @@ enum eCDTExFrameType {
     RspRmtCtrlLockType = 0xD9,  // 遥控闭锁应答
     ChildTimingType = 0x7A,     // 子站校时
     OperTicketType = 0xB9,      // 遥控开票
-};
-
-enum eCDTExFunCode {
-    //TicketCode = 0x00,
-    VirtualRmtInfoCode = 0x1F,   // 虚遥信
-    ReqRmtCtrlLockCode = 0xE9,   // 遥控闭锁请求
-    RspRmtCtrlLockCode = 0xEA,   // 遥控闭锁应答
 };
 
 // 信息字数据结构

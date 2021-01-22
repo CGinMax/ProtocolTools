@@ -8,7 +8,8 @@ CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, const QShar
     : ProtocolBase(network, settingData)
 {
     m_isRunYK = false;
-    m_cycleCounter = 0;
+    m_yxCounter = 0;
+    m_ycCounter = 0;
     connect(m_network.data(), &NetworkBase::disconnected, this, &CDTProtocol::onDisconnected, Qt::BlockingQueuedConnection);
 }
 
@@ -45,10 +46,13 @@ void CDTProtocol::run()
     // 处理帧
     processFrame();
 
-    if (!m_isRunYK && m_cycleCounter > 2000 && m_settingData->m_stationType == eStationType::Minitor) {
-        sendAllAi();
+    if (!m_isRunYK && m_yxCounter > m_settingData->m_ptCfg->m_yxTime && m_settingData->m_stationType == eStationType::Minitor) {
         sendAllDi();
-        m_cycleCounter = 0;
+        m_yxCounter = 0;
+    }
+    if (!m_isRunYK && m_ycCounter > m_settingData->m_ptCfg->m_ycTime && m_settingData->m_stationType == eStationType::Minitor) {
+        sendAllAi();
+        m_ycCounter = 0;
     }
 }
 
@@ -142,7 +146,6 @@ void CDTProtocol::processFrame()
 
         if (frame.frameControl.type == m_settingData->m_ptCfg->m_ycFrameType) {
             showMessageBuffer(eMsgType::eMsgRecv, "接收到遥测帧，正在处理...", frame.toAllByteArray());
-//            yxResponse(frame.infoFields);
             ycResponse(frame.infoFields);
         }
         else if (frame.frameControl.type == m_settingData->m_ptCfg->m_yxFrameType) {
@@ -156,6 +159,7 @@ void CDTProtocol::processFrame()
             }
         }
         else if (frame.frameControl.type == ykType) {
+            showMessageBuffer(eMsgType::eMsgRecv, "接收到遥控帧，正在处理...", frame.toAllByteArray());
             ykResponse(frame);
 
         }
@@ -269,7 +273,7 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
                     di->setValue(yxValue > 0);
                 }
                 else {
-                    qDebug("no found di %d", nSeq);
+                    qInfo("未找到遥信点，点号=%d", nSeq);
                 }
             }
         }
@@ -279,6 +283,7 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
 
 void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
 {
+    int offset = m_settingData->m_ptCfg->m_globalAiList->first()->io();
     for (InfoFieldEntity &entity : infoFieldList)
     {
         int nSeq = 0;
@@ -291,9 +296,15 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
             valueBytes[1] = entity.dataArray[i];
             memcpy(&ycAccept, valueBytes, 2);
             // 点号
-            nSeq = entity.funCode + (i / 2) + 1;
-            if (nSeq < m_settingData->m_ptCfg->m_globalAiList->size()) {
-                m_settingData->m_ptCfg->m_globalAiList->at(nSeq)->setValue(ycAccept);
+            nSeq = entity.funCode + (i / 2) + offset;
+            if (nSeq < offset + m_settingData->m_ptCfg->m_globalAiList->size()) {
+                auto ai = m_settingData->m_ptCfg->findDiById(nSeq);
+                if (ai) {
+                    ai->setValue(ycAccept);
+                }
+                else {
+                    qInfo("未找到遥测点，点号=%d", nSeq);
+                }
             }
 
         }
@@ -327,6 +338,7 @@ void CDTProtocol::ykResponse(CDTFrame &frame)
 
         m_isRunYK = true;
         emit notifyYK(allowIndex);
+        emit sendYKMsg(QStringLiteral("接收到点%1遥控变位请求").arg(allowIndex));
     }
 
 }
@@ -361,7 +373,7 @@ void CDTProtocol::vyxResponse(QList<InfoFieldEntity> &infoFieldList)
                     vdi->setValue(yxValue > 0);
                 }
                 else {
-                    qDebug("no found vdi %d", nSeq);
+                    qInfo("未找到虚遥信点，点号=%d", nSeq);
                 }
             }
         }
@@ -372,6 +384,7 @@ void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控选择指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
 }
 
@@ -379,6 +392,7 @@ void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlBackCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择应答"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控选择回传指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
 }
 
@@ -386,6 +400,7 @@ void CDTProtocol::yKExecute(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlExecuteCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控执行"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控执行指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
 }
 
@@ -393,6 +408,7 @@ void CDTProtocol::yKCancel(uint8_t operCode, uint8_t ptNo)
 {
     auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlCancelCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控取消"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控取消指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
 }
 
@@ -415,6 +431,7 @@ void CDTProtocol::yKNotAllow(int ptId)
 {
     CDTFrame frame = createCycleYKFrame(false, ptId);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控闭锁命令"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的遥控闭锁指令").arg(ptId));
     send(frame);
 }
 
@@ -422,6 +439,7 @@ void CDTProtocol::yKAllNotAllow()
 {
     CDTFrame frame = createCycleYKFrame(true);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控全闭锁命令"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送遥控全闭锁指令"));
     send(frame);
 }
 
@@ -516,11 +534,18 @@ void CDTProtocol::startYK(int ptId, bool offon)
 
 void CDTProtocol::reverseYx(int ptId, bool allow)
 {
+
     if (allow) {
-        auto di = m_settingData->m_ptCfg->m_globalDiList->at(ptId);
+        auto di = m_settingData->m_ptCfg->findDiById(ptId);
+        auto changeMsg = di->value() ? QStringLiteral("合->分") : QStringLiteral("分->合");
         di->setValue(!di->value());
         sendAllDi();
-        qDebug("遥控变位完成");
+
+        qInfo("点%d遥控变位完成", ptId);
+        emit sendYKMsg(QStringLiteral("允许点%1发生遥控变位，%2").arg(ptId).arg(changeMsg));
+    }
+    else {
+        emit sendYKMsg(QStringLiteral("禁止点%1发生遥控变位").arg(ptId));
     }
     m_isRunYK = false;
 
@@ -533,7 +558,8 @@ void CDTProtocol::onDisconnected()
 
 void CDTProtocol::onTimeout()
 {
-    this->m_cycleCounter += 100;
+    this->m_yxCounter += 100;
+    this->m_ycCounter += 100;
     ProtocolBase::onTimeout();
 }
 

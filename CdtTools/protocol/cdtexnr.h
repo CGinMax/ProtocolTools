@@ -9,7 +9,7 @@ class CDTExNr : public CDTProtocol
 public:
     explicit CDTExNr(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTExNr() override;
-
+    void ykResponse(CDTFrame &frame) override;
 signals:
 
 public slots:

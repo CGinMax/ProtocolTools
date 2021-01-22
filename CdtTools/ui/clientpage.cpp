@@ -25,7 +25,7 @@ bool ClientPage::start()
         return true;
     }
     else {
-        qInfo("setting data empty");
+        qInfo("错误，设置数据为空");
         return false;
     }
 }

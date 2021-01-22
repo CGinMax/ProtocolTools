@@ -36,9 +36,13 @@ signals:
     void reverseYx(int ptId, bool allow);
 
 public slots:
-    void recvMessage(const QString& msg);
+    void recvProtocolContent(const QString& msg);
+    void recvYKMsg(const QString& msg);
     void onNotifyYK(int ptId);
+private slots:
     void on_btnExecute_clicked();
+    void onPlainTextContextMenuRequested(const QPoint &pos);
+    void onTextBrowserContextMenuRequested(const QPoint &pos);
 
 private:
     DiTableModel* m_diModel;
