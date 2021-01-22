@@ -2,6 +2,8 @@
 #include <QVBoxLayout>
 #include <QTextBrowser>
 #include <QMessageBox>
+#include <QTabBar>
+#include <QMenu>
 #include "../protocol/cdtprotocol.h"
 #include "../protocol/cdtinteracte.h"
 #include <QDebug>
@@ -17,6 +19,13 @@ ServerPage::ServerPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent
     layout->addWidget(m_tabClients.data());
     layout->setContentsMargins(0, 0, 0, 0);
     m_tabClients->setTabsClosable(true);
+    auto tabbar = m_tabClients->tabBar();
+    tabbar->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(tabbar, &QTabBar::customContextMenuRequested, [this](const QPoint& pos){
+        QMenu menu;
+        menu.addAction(tr("关闭已断开页面"), this, &ServerPage::onCloseDisconnected);
+        menu.exec(QCursor::pos());
+    });
 
     connect(m_tabClients.data(), &QTabWidget::tabCloseRequested, this, &ServerPage::onTabCloseRequested);
     connect(m_tcpServer.data(), &QTcpServer::newConnection, this, &ServerPage::onNewConnection);
@@ -85,10 +94,23 @@ void ServerPage::onNewConnection()
 
     auto centerWidget = new CDTWorkWidget(server, m_settingData);
     centerWidget->startCommunication(m_settingData);
-    m_tabClients->insertTab(0, centerWidget, server->toString());
-    m_tabClients->setCurrentIndex(0);
-    m_tabClients->addTab(centerWidget, server->toString());
+    connect(centerWidget, &CDTWorkWidget::disconnected, this, &ServerPage::onDisconnected);
 
+
+    m_tabClients->insertTab(0, centerWidget, QIcon(":/icon/resources/signal-connect.png"), server->toString());
+    m_tabClients->setCurrentIndex(0);
+
+}
+
+void ServerPage::onDisconnected()
+{
+    auto widget = qobject_cast<CDTWorkWidget*>(sender());
+    for (int i = 0; i < m_tabClients->count(); i++) {
+        if (m_tabClients->widget(i) == widget) {
+            m_tabClients->setTabIcon(i, QIcon(":/icon/resources/signal-close.png"));
+            break;
+        }
+    }
 }
 
 void ServerPage::onTabCloseRequested(int index)
@@ -105,4 +127,21 @@ void ServerPage::onTabCloseRequested(int index)
 
     delete widget;
     widget = nullptr;
+}
+
+void ServerPage::onCloseDisconnected()
+{
+    QList<int> delIndexs;
+    for (int i = 0; i < m_tabClients->count(); i++) {
+        auto widget = qobject_cast<CDTWorkWidget*>(m_tabClients->widget(i));
+        if (!widget->isConnection()) {
+            delete widget;
+            widget = nullptr;
+            delIndexs.append(i);
+        }
+    }
+    for (auto&& index : delIndexs) {
+        m_tabClients->removeTab(index);
+    }
+    m_tabClients->setCurrentIndex(-1);
 }

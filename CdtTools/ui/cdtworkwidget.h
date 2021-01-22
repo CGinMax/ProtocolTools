@@ -34,6 +34,7 @@ signals:
     void stop();
     void startYK(int ptId, bool offon);
     void reverseYx(int ptId, bool allow);
+    void disconnected();
 
 public slots:
     void recvProtocolContent(const QString& msg);

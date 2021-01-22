@@ -112,18 +112,18 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_yxFrameType  = Util::hexString2Num(ui->edYxType->text());
     m_ptCfg->m_yxFuncode    = Util::hexString2Num(ui->edYxFuncode->text());
     m_ptCfg->m_yxNum        = ui->edYxNum->text().toInt();
-    m_ptCfg->m_yxStartIo    = Util::hexString2Num(ui->edYxStartIo->text());
+    m_ptCfg->m_yxStartIo    = ui->edYxStartIo->text().toInt();
 
     m_ptCfg->m_ycFrameType  = Util::hexString2Num(ui->edYcType->text());
     m_ptCfg->m_ycFuncode    = Util::hexString2Num(ui->edYcFuncode->text());
     m_ptCfg->m_ycNum        = ui->edYcNum->text().toInt();
-    m_ptCfg->m_ycStartIo    = Util::hexString2Num(ui->edYcStartIo->text());
+    m_ptCfg->m_ycStartIo    = ui->edYcStartIo->text().toInt();
     m_ptCfg->m_isRandom     = ui->cbRandom->isChecked();
 
     m_ptCfg->m_vyxFrameType = Util::hexString2Num(ui->edVYxType->text());
     m_ptCfg->m_vyxFuncode   = Util::hexString2Num(ui->edVYxFuncode->text());
     m_ptCfg->m_vyxNum       = ui->edVYxNum->text().toInt();
-    m_ptCfg->m_vyxStartIo   = Util::hexString2Num(ui->edVYxStartIo->text());
+    m_ptCfg->m_vyxStartIo   = ui->edVYxStartIo->text().toInt();
 
     m_ptCfg->m_ykReqType    = Util::hexString2Num(ui->edYkReqType->text());
     m_ptCfg->m_ykAckType    = Util::hexString2Num(ui->edYkAckType->text());

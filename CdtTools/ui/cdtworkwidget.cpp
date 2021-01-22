@@ -67,6 +67,8 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     });
     m_viewTimer.start(2000);
 
+    ui->edPtId->setMinimum(settingData->m_ptCfg->m_globalDiList->first()->io());
+
     ui->textYkInfo->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->textYkInfo, &QPlainTextEdit::customContextMenuRequested, this, &CDTWorkWidget::onPlainTextContextMenuRequested);
     ui->textBrowser->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -121,6 +123,7 @@ void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settin
         connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::startYK);
         connect(this, &CDTWorkWidget::reverseYx, this->m_protocol, &ProtocolBase::reverseYx);
         connect(this->m_protocol, &ProtocolBase::notifyYK, this, &CDTWorkWidget::onNotifyYK);
+        connect(this->m_network.data(), &NetworkBase::disconnected, this, &CDTWorkWidget::disconnected);
         this->m_protocol->start();
     });
 }

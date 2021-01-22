@@ -30,7 +30,9 @@ signals:
 public slots:
     void onUpdateData();
     void onNewConnection();
+    void onDisconnected();
     void onTabCloseRequested(int index);
+    void onCloseDisconnected();
 
 private:
     QScopedPointer<QTcpServer> m_tcpServer;

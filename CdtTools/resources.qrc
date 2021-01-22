@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>resources/signal-close.png</file>
+        <file>resources/signal-connect.png</file>
+    </qresource>
+</RCC>

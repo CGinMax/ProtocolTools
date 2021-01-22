@@ -109,3 +109,6 @@ QMAKE_RPATHDIR += $${DESTDIR}/../lib
 
 TRANSLATIONS += $$PWD/CdtTools_en.ts
 TRANSLATIONS += $$PWD/CdtTools_zh.ts
+
+RESOURCES += \
+    resources.qrc
