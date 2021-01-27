@@ -367,7 +367,7 @@ void CDTProtocol::vyxResponse(QList<InfoFieldEntity> &infoFieldList)
 
 void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = YKFrame(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, operCode, ptNo);
+    auto frame = CDTFrame::createYKFrame(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控选择指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
@@ -375,7 +375,7 @@ void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
 
 void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = YKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlBackCode, operCode, ptNo);
+    auto frame = CDTFrame::createYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlBackCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择应答"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控选择回传指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
@@ -383,7 +383,7 @@ void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 
 void CDTProtocol::yKExecute(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = YKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlExecuteCode, operCode, ptNo);
+    auto frame = CDTFrame::createYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlExecuteCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控执行"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控执行指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
@@ -391,25 +391,10 @@ void CDTProtocol::yKExecute(uint8_t operCode, uint8_t ptNo)
 
 void CDTProtocol::yKCancel(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = YKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlCancelCode, operCode, ptNo);
+    auto frame = CDTFrame::createYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlCancelCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控取消"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控取消指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
-}
-
-
-CDTFrame CDTProtocol::YKFrame(uint8_t ctrlCode, uint8_t type, uint8_t funCode, uint8_t operCode, uint8_t ptId)
-{
-    CDTFrame frame;
-    // 循环填三个信息字
-    for (int i = 0; i < 3; ++i)
-    {
-        InfoFieldEntity entity;
-        entity.fillData(funCode, operCode, ptId, operCode, ptId);
-        frame.infoFields.append(entity);
-    }
-    frame.frameControl.fillData(ctrlCode, type, frame.infoFields.count(), 0, 0);
-    return frame;
 }
 
 CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)

@@ -49,6 +49,20 @@ QByteArray CDTFrame::toAllByteArray() const
     return rawArray;
 }
 
+CDTFrame CDTFrame::createYKFrame(uint8_t ctrlCode, uint8_t type, uint8_t funCode, uint8_t operCode, uint8_t ptId)
+{
+    CDTFrame frame;
+    // 循环填三个信息字
+    for (int i = 0; i < 3; ++i)
+    {
+        InfoFieldEntity entity;
+        entity.fillData(funCode, operCode, ptId, operCode, ptId);
+        frame.infoFields.append(entity);
+    }
+    frame.frameControl.fillData(ctrlCode, type, frame.infoFields.count(), 0, 0);
+    return frame;
+}
+
 ControlEntity::ControlEntity()
 {}
 

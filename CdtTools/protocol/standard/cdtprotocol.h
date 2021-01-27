@@ -53,10 +53,6 @@ public:
 
     void yKCancel(uint8_t operCode, uint8_t ptNo);
 
-    // 交互式遥控帧
-    CDTFrame YKFrame(uint8_t ctrlCode, uint8_t type, uint8_t funCode, uint8_t operCode, uint8_t ptId);
-
-
     CDTFrame buildYXFrame(uint8_t startFuncode);
 
 
