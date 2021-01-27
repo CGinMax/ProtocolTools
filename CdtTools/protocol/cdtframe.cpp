@@ -49,6 +49,67 @@ QByteArray CDTFrame::toAllByteArray() const
     return rawArray;
 }
 
+eCDTParseResult CDTFrame::parseBytesToFrame(QByteArray &data, int &index, QString &errorMsg)
+{
+    // 1、解析头
+    // 查找是否有帧头
+    index = data.indexOf(reinterpret_cast<char *>(CDTFrame::header));
+    if (index == -1)
+    {
+        // 未找到帧头
+        if (data.size() >= FIELD_LENGTH)
+        {
+            errorMsg = QString("接受数据帧头部错误,为找到帧头, 接收到的数据帧长度为%1").arg(data.size());
+            data.clear();
+        }
+        return eCDTParseResult::HeaderError;
+    }
+
+    index += FIELD_LENGTH;
+
+    // 2、控制字
+    // 控制字断帧
+    if (data.size() - index < FIELD_LENGTH)
+    {
+        return eCDTParseResult::PartOfFrame;
+    }
+
+    // 控制字完整则校验、接收
+    frameControl.fillData(data.at(index), data.at(index + 1), data.at(index + 2),
+                                data.at(index + 3), data.at(index + 4));
+    index += FIELD_LENGTH;
+    if (frameControl.crcCode != static_cast<uint8_t>(data.at(index - 1)))
+    {
+        index += frameControl.dataNum * FIELD_LENGTH;
+        data.remove(0, index);
+        errorMsg = QString("控制字校验错误, 接收到的校验码为%1，实际校验码为%2").arg(data.at(index - 1)).arg(frameControl.crcCode);
+        return eCDTParseResult::ControlCrcError;
+    }
+
+    // 3、解析信息字
+    if (data.size() - index < frameControl.dataNum * FIELD_LENGTH)
+    {
+        return eCDTParseResult::PartOfFrame;
+    }
+
+    for (uint8_t i = 0; i < frameControl.dataNum; ++i)
+    {
+        InfoFieldEntity entity(static_cast<uint8_t>(data.at(index)), reinterpret_cast<uint8_t*>(data.data() + index + 1));
+
+        index += FIELD_LENGTH;
+        if (entity.crcCode != static_cast<uint8_t>(data.at(index - 1)))
+        {
+            index += (frameControl.dataNum - i - 1) * FIELD_LENGTH;
+            errorMsg = QString("信息字校验错误, 接收到的校验码为%1，实际校验码为%2").arg(data.at(index - 1)).arg(entity.crcCode);
+            data.remove(0, index);
+            return eCDTParseResult::InfoCrcError;
+        }
+        infoFields.append(entity);
+    }
+
+    return eCDTParseResult::CompleteFrame;
+}
+
 CDTFrame CDTFrame::createYKFrame(uint8_t ctrlCode, uint8_t type, uint8_t funCode, uint8_t operCode, uint8_t ptId)
 {
     CDTFrame frame;

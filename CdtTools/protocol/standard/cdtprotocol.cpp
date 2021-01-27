@@ -57,70 +57,16 @@ eCDTParseResult CDTProtocol::parseToFrame()
 {
     CDTFrame frame;
     int index = 0;
-
-    // 1、解析头
-    // 查找是否有帧头
-    index = m_recvBuffer.indexOf(reinterpret_cast<char *>(CDTFrame::header));
-    if (index == -1)
-    {
-        // 未找到帧头
-        if (m_recvBuffer.size() >= FIELD_LENGTH)
-        {
-            //LogInfo(QString("接受数据帧头部错误,为找到帧头"), QString("接收到的数据帧长度为%1").arg(m_recvBuffer.size()));
-            m_recvBuffer.clear();
-        }
-        return eCDTParseResult::HeaderError;
-    }
-
-    index += FIELD_LENGTH;
-
-    // 2、控制字
-    // 控制字断帧
-    if (m_recvBuffer.size() - index < FIELD_LENGTH)
-    {
-        return eCDTParseResult::PartOfFrame;
-    }
-
-    // 控制字完整则校验、接收
-    frame.frameControl.fillData(m_recvBuffer.at(index), m_recvBuffer.at(index + 1), m_recvBuffer.at(index + 2),
-                                m_recvBuffer.at(index + 3), m_recvBuffer.at(index + 4));
-    index += FIELD_LENGTH;
-    if (frame.frameControl.crcCode != static_cast<uint8_t>(m_recvBuffer.at(index - 1)))
-    {
-        index += frame.frameControl.dataNum * FIELD_LENGTH;
+    QString error;
+    eCDTParseResult result = frame.parseBytesToFrame(m_recvBuffer, index, error);
+    if (result == eCDTParseResult::CompleteFrame) {
         m_recvBuffer.remove(0, index);
-        //LogInfo(QString("控制字校验错误"));
-        return eCDTParseResult::ControlCrcError;
+        m_frameQueue.enqueue(frame);
     }
-
-
-    // 3、解析信息字
-    if (m_recvBuffer.size() - index < frame.frameControl.dataNum * FIELD_LENGTH)
-    {
-        return eCDTParseResult::PartOfFrame;
+    else if (!error.isEmpty()) {
+        qInfo("%s", qPrintable(error));
     }
-
-    InfoFieldEntity entity;
-    for (int i = 0; i < (int)frame.frameControl.dataNum; ++i)
-    {
-        entity.fillData(m_recvBuffer.at(index), m_recvBuffer.at(index + 1), m_recvBuffer.at(index + 2),
-                        m_recvBuffer.at(index + 3), m_recvBuffer.at(index + 4));
-
-        index += FIELD_LENGTH;
-        if (entity.crcCode != static_cast<uint8_t>(m_recvBuffer.at(index - 1)))
-        {
-            index += (frame.frameControl.dataNum - i - 1) * FIELD_LENGTH;
-           // LogInfo(QString("信息字校验错误"), QString("接收到的校验码为%1，实际校验码为%2").arg(m_recvBuffer.at(index - 1)).arg(entity.crcCode));
-            m_recvBuffer.remove(0, index);
-            return eCDTParseResult::InfoCrcError;
-        }
-        frame.infoFields.append(entity);
-    }
-
-    m_recvBuffer.remove(0, index);
-    m_frameQueue.enqueue(frame);
-
-    return eCDTParseResult::CompleteFrame;
+    return result;
 }
 
 void CDTProtocol::processFrame()

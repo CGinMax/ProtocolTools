@@ -16,7 +16,7 @@ class CDTProtocol : public ProtocolBase
     Q_OBJECT
 public:
     CDTProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
-    virtual ~CDTProtocol();
+    ~CDTProtocol() override;
 
     virtual void init();
 

@@ -107,7 +107,7 @@ public:
 
     QByteArray toByteArray();
     QByteArray toAllByteArray() const;
-
+    eCDTParseResult parseBytesToFrame(QByteArray& data, int &index, QString& errorMsg);
     static CDTFrame createYKFrame(uint8_t ctrlCode, uint8_t type, uint8_t funCode, uint8_t operCode, uint8_t ptId);
 };
 
