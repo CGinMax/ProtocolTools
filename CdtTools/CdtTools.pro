@@ -29,21 +29,23 @@ SOURCES += \
         mainwindow.cpp \
     network/networkbase.cpp \
     network/tcpserver.cpp \
-    ui/dialog/ykdialog.cpp \
-    ui/tabpage.cpp \
     network/tcpclient.cpp \
     common/threadpool.cpp \
     common/workerthread.cpp \
-    protocol/cdtinteracte.cpp \
-    protocol/cdtframe.cpp \
+    common/util.cpp \
     protocol/checkhelper.cpp \
-    protocol/cdtprotocol.cpp \
+    protocol/cdtframe.cpp \
     protocol/protocolbase.cpp \
-    protocol/cdtcycle.cpp \
+    protocol/standard/cdtprotocol.cpp \
+    protocol/interacte/cdtinteracte.cpp \
+    protocol/cycle/cdtcycle.cpp \
+    protocol/ut/cdtexut.cpp \
+    protocol/nr/cdtexnr.cpp \
+    ui/dialog/ykdialog.cpp \
+    ui/tabpage.cpp \
     ui/clientpage.cpp \
     ui/serverpage.cpp \
     ui/cdtsettingdlg.cpp \
-    common/util.cpp \
     ui/tables/ditablemodel.cpp \
     ui/tables/didata.cpp \
     ui/cdtworkwidget.cpp \
@@ -53,29 +55,40 @@ SOURCES += \
     ui/tables/delegates/digitlimitedelegate.cpp \
     ui/ptcfg.cpp \
     ui/floatbuttongroup.cpp \
-    protocol/cdtexut.cpp \
-    protocol/cdtexnr.cpp
+    protocol/strategybase.cpp \
+    protocol/standard/cdtwfstrategy.cpp \
+    protocol/standard/cdtmintorstrategy.cpp \
+    protocol/cycle/cyclewfstrategy.cpp \
+    protocol/cycle/cyclemintorstrategy.cpp \
+    protocol/interacte/interwfstrategy.cpp \
+    protocol/interacte/intermintorstrategy.cpp \
+    protocol/ut/utwfstrategy.cpp \
+    protocol/ut/utmintorstrategy.cpp \
+    protocol/nr/nrwfstrategy.cpp \
+    protocol/nr/nrmintorstrategy.cpp
 
 HEADERS += \
         mainwindow.h \
-    network/networkbase.h \
     enums.h \
+    network/networkbase.h \
     network/tcpserver.h \
-    ui/dialog/ykdialog.h \
-    ui/tabpage.h \
     network/tcpclient.h \
     common/threadpool.h \
     common/workerthread.h \
-    protocol/cdtinteracte.h \
-    protocol/cdtframe.h \
+    common/util.h \
     protocol/checkhelper.h \
-    protocol/cdtprotocol.h \
+    protocol/cdtframe.h \
+    protocol/standard/cdtprotocol.h \
     protocol/protocolbase.h \
-    protocol/cdtcycle.h \
+    protocol/interacte/cdtinteracte.h \
+    protocol/cycle/cdtcycle.h \
+    protocol/ut/cdtexut.h \
+    protocol/nr/cdtexnr.h \
+    ui/dialog/ykdialog.h \
+    ui/tabpage.h \
     ui/clientpage.h \
     ui/serverpage.h \
     ui/cdtsettingdlg.h \
-    common/util.h \
     ui/tables/ditablemodel.h \
     ui/tables/didata.h \
     ui/cdtworkwidget.h \
@@ -85,8 +98,17 @@ HEADERS += \
     ui/tables/delegates/digitlimitedelegate.h \
     ui/ptcfg.h \
     ui/floatbuttongroup.h \
-    protocol/cdtexut.h \
-    protocol/cdtexnr.h
+    protocol/strategybase.h \
+    protocol/standard/cdtwfstrategy.h \
+    protocol/standard/cdtmintorstrategy.h \
+    protocol/cycle/cyclewfstrategy.h \
+    protocol/cycle/cyclemintorstrategy.h \
+    protocol/interacte/interwfstrategy.h \
+    protocol/interacte/intermintorstrategy.h \
+    protocol/ut/utwfstrategy.h \
+    protocol/ut/utmintorstrategy.h \
+    protocol/nr/nrwfstrategy.h \
+    protocol/nr/nrmintorstrategy.h
 
 FORMS += \
         mainwindow.ui \

@@ -22,6 +22,7 @@ public:
 signals:
     void connected();
     void disconnected();
+    void readyRead();
     void recvData(const QByteArray& data);
     void showMessage(const QString& msg);
 

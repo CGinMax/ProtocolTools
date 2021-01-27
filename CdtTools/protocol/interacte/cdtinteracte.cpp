@@ -1,4 +1,6 @@
 #include "cdtinteracte.h"
+#include "interwfstrategy.h"
+#include "intermintorstrategy.h"
 
 CDTInteracte::CDTInteracte(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
     : CDTProtocol (network, settingData)
@@ -6,55 +8,13 @@ CDTInteracte::CDTInteracte(const QSharedPointer<NetworkBase> &network, const QSh
 
 }
 
-void CDTInteracte::ykResponse(CDTFrame &frame)
+void CDTInteracte::init()
 {
-    InfoFieldEntity firstInfoData = frame.infoFields.front();
-    uint8_t funCode = firstInfoData.funCode;
-    uint8_t ctrlCode = firstInfoData.dataArray[0];
-    // true合,false开
-    bool status = ctrlCode == m_settingData->m_ptCfg->m_ykClose;
-    int ykAddr = firstInfoData.dataArray[2];
-    ykAddr |= firstInfoData.dataArray[3] << 8;
-
-    if (ykAddr > m_settingData->m_ptCfg->m_globalDiList->size())
-        return ;
-
-    if (funCode == m_settingData->m_ptCfg->m_ykReqCode) {
-        if (!m_isRunYK) {// 接收到遥控选择
-            // 直接返回校核
-            ykSelectBack(ctrlCode, static_cast<uint8_t>(ykAddr));
-            // 进入遥控执行状态
-            m_isRunYK = true;
-        }
-        else {// 接收到遥控执行
-            // 退出遥控执行状态
-            m_isRunYK = false;
-        }
+    if (m_settingData->m_stationType == eStationType::WF) {
+        m_strategy = new InterWFStrategy(this, this);
+    } else {
+        m_strategy = new InterMintorStrategy(this, this);
     }
-    else if (funCode == m_settingData->m_ptCfg->m_ykAckCode) {
-        ykExecute(ctrlCode, static_cast<uint8_t>(ykAddr));
-    }
-    else if (funCode == m_settingData->m_ptCfg->m_ykExeCode) {
-        bool success = firstInfoData.dataArray[1] == m_settingData->m_ptCfg->m_ykUnlock;
-        if (success){
-            auto di = m_settingData->m_ptCfg->findDiById(ykAddr);
-            QString msg;
-            if (di) {
-                di->setValue(status);
-                msg = QStringLiteral("变位成功");
-            }
-            else {
-                msg = QStringLiteral("变位失败，遥信点Id=%1错误").arg(ykAddr);
-            }
-            emit sendYKMsg(msg);
-        }
-        else {
-            emit sendYKMsg(QStringLiteral("禁止点%1遥控变位操作").arg(ykAddr));
-        }
-        m_isRunYK = false;
-
-    }
-
 }
 
 void CDTInteracte::ykSelect(uint8_t ctrlCode, uint8_t ptId)

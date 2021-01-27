@@ -4,8 +4,6 @@
 #include <QMessageBox>
 #include <QTabBar>
 #include <QMenu>
-#include "../protocol/cdtprotocol.h"
-#include "../protocol/cdtinteracte.h"
 #include <QDebug>
 
 ServerPage::ServerPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent)

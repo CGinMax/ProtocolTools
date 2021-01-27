@@ -1,7 +1,7 @@
 #ifndef CDTEXUT_H
 #define CDTEXUT_H
 
-#include "cdtprotocol.h"
+#include "../standard/cdtprotocol.h"
 
 class CDTExUt : public CDTProtocol
 {
@@ -10,7 +10,7 @@ public:
     explicit CDTExUt(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTExUt() override;
 
-    void ykResponse(CDTFrame &frame) override;
+    void init() override;
 
     void ykSelect(uint8_t ctrlCode, uint8_t ptId);
 

@@ -7,8 +7,6 @@
 #include "enums.h"
 #include "cdtsettingdlg.h"
 #include "../common/threadpool.h"
-#include "../protocol/cdtprotocol.h"
-#include "../protocol/cdtcycle.h"
 
 TabPage::TabPage(QWidget *parent)
     : QWidget(parent)

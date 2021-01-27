@@ -2,58 +2,43 @@
 #include <QtMath>
 #include <QThread>
 #include <QMutexLocker>
-#include "../network/tcpserver.h"
+#include "cdtmintorstrategy.h"
+#include "cdtwfstrategy.h"
 
 CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
     : ProtocolBase(network, settingData)
+    , m_isRunYK(false)
+    , m_yxCounter(0)
+    , m_ycCounter(0)
+    , m_strategy(nullptr)
 {
-    m_isRunYK = false;
-    m_yxCounter = 0;
-    m_ycCounter = 0;
+
     connect(m_network.data(), &NetworkBase::disconnected, this, &CDTProtocol::onDisconnected, Qt::BlockingQueuedConnection);
+    connect(m_network.data(), &NetworkBase::readyRead, this, &CDTProtocol::onReadyRead);
+
+    init();
 }
 
 CDTProtocol::~CDTProtocol()
 {
+    if (m_strategy != nullptr) {
+        delete m_strategy;
+        m_strategy = nullptr;
+    }
+}
 
+void CDTProtocol::init()
+{
+    if (m_settingData->m_stationType == eStationType::WF) {
+        m_strategy = new CDTWFStrategy(this, this);
+    } else {
+        m_strategy = new CDTMintorStrategy(this, this);
+    }
 }
 
 void CDTProtocol::run()
 {
-
-    /**
-     * 检查是否链接
-     * 处理命令
-     * 读取bytes里面的数据
-     * 解析
-     * 循环发送
-     */
-    if (!m_network->isActived()) {
-        QThread::msleep(2000);// 2s
-    }
-
-    if (!initConnection()) {
-        return;
-    }
-
-    auto bytes = m_network->readAll();
-
-    if (!bytes.isEmpty()) {
-        m_recvBuffer.append(bytes);
-        //处理数据
-        parseRecvData();
-    }
-    // 处理帧
-    processFrame();
-
-    if (!m_isRunYK && m_yxCounter > m_settingData->m_ptCfg->m_yxTime && m_settingData->m_stationType == eStationType::Minitor) {
-        sendAllDi();
-        m_yxCounter = 0;
-    }
-    if (!m_isRunYK && m_ycCounter > m_settingData->m_ptCfg->m_ycTime && m_settingData->m_stationType == eStationType::Minitor) {
-        sendAllAi();
-        m_ycCounter = 0;
-    }
+    m_strategy->uploadTiming();
 }
 
 void CDTProtocol::parseRecvData()
@@ -160,7 +145,7 @@ void CDTProtocol::processFrame()
         }
         else if (frame.frameControl.type == ykType) {
             showMessageBuffer(eMsgType::eMsgRecv, "接收到遥控帧，正在处理...", frame.toAllByteArray());
-            ykResponse(frame);
+            m_strategy->ykResponse(frame);
 
         }
         else if (frame.frameControl.type == m_settingData->m_ptCfg->m_vyxFrameType) {
@@ -313,33 +298,33 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
 
 void CDTProtocol::ykResponse(CDTFrame &frame)
 {
-    if (!m_isRunYK) {
-        // 解析报文，找解锁
-        int allowIndex = -1;
-        for (int idx = 0; idx < frame.infoFields.count(); idx++) {
-            // 组合成一个四字节整数
-            uint32_t combineNum = 0;
-            for (int i = 0; i < 4; i++) {
-                uint32_t convNum = frame.infoFields.at(idx).dataArray[i];
-                combineNum |= convNum << i * 8;
-            }
-            // 提取里面是否有1的bit，有且只有一个
-            auto positiveIdx = findPositive(combineNum);
-            if (positiveIdx > -1) {
-                allowIndex = idx * 32 + positiveIdx;
-                break;
-            }
-        }
+//    if (!m_isRunYK) {
+//        // 解析报文，找解锁
+//        int allowIndex = -1;
+//        for (int idx = 0; idx < frame.infoFields.count(); idx++) {
+//            // 组合成一个四字节整数
+//            uint32_t combineNum = 0;
+//            for (int i = 0; i < 4; i++) {
+//                uint32_t convNum = frame.infoFields.at(idx).dataArray[i];
+//                combineNum |= convNum << i * 8;
+//            }
+//            // 提取里面是否有1的bit，有且只有一个
+//            auto positiveIdx = findPositive(combineNum);
+//            if (positiveIdx > -1) {
+//                allowIndex = idx * 32 + positiveIdx;
+//                break;
+//            }
+//        }
 
-        // 闭锁或全闭锁
-        if (allowIndex == -1) {
-            return;
-        }
+//        // 闭锁或全闭锁
+//        if (allowIndex == -1) {
+//            return;
+//        }
 
-        m_isRunYK = true;
-        emit notifyYK(allowIndex);
-        emit sendYKMsg(QStringLiteral("接收到点%1遥控变位请求").arg(allowIndex));
-    }
+//        m_isRunYK = true;
+//        emit notifyYK(allowIndex);
+//        emit sendYKMsg(QStringLiteral("接收到点%1遥控变位请求").arg(allowIndex));
+//    }
 
 }
 
@@ -382,7 +367,7 @@ void CDTProtocol::vyxResponse(QList<InfoFieldEntity> &infoFieldList)
 
 void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = interactYKFrame(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, operCode, ptNo);
+    auto frame = YKFrame(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控选择指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
@@ -390,7 +375,7 @@ void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
 
 void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlBackCode, operCode, ptNo);
+    auto frame = YKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlBackCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择应答"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控选择回传指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
@@ -398,7 +383,7 @@ void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 
 void CDTProtocol::yKExecute(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlExecuteCode, operCode, ptNo);
+    auto frame = YKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlExecuteCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控执行"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控执行指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
@@ -406,14 +391,14 @@ void CDTProtocol::yKExecute(uint8_t operCode, uint8_t ptNo)
 
 void CDTProtocol::yKCancel(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = interactYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlCancelCode, operCode, ptNo);
+    auto frame = YKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlCancelCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控取消"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控取消指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
 }
 
 
-CDTFrame CDTProtocol::interactYKFrame(uint8_t ctrlCode, uint8_t type, uint8_t funCode, uint8_t operCode, uint8_t ptId)
+CDTFrame CDTProtocol::YKFrame(uint8_t ctrlCode, uint8_t type, uint8_t funCode, uint8_t operCode, uint8_t ptId)
 {
     CDTFrame frame;
     // 循环填三个信息字
@@ -425,22 +410,6 @@ CDTFrame CDTProtocol::interactYKFrame(uint8_t ctrlCode, uint8_t type, uint8_t fu
     }
     frame.frameControl.fillData(ctrlCode, type, frame.infoFields.count(), 0, 0);
     return frame;
-}
-
-void CDTProtocol::yKNotAllow(int ptId)
-{
-    CDTFrame frame = createCycleYKFrame(false, ptId);
-    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控闭锁命令"), frame.toAllByteArray());
-    emit sendYKMsg(QStringLiteral("发送点%1的遥控闭锁指令").arg(ptId));
-    send(frame);
-}
-
-void CDTProtocol::yKAllNotAllow()
-{
-    CDTFrame frame = createCycleYKFrame(true);
-    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控全闭锁命令"), frame.toAllByteArray());
-    emit sendYKMsg(QStringLiteral("发送遥控全闭锁指令"));
-    send(frame);
 }
 
 CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)
@@ -482,48 +451,20 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)
     return frame;
 }
 
-CDTFrame CDTProtocol::createCycleYKFrame(bool isAllPoint, int ptId)
+void CDTProtocol::uploadDi()
 {
-    CDTFrame cmdFrame;
-
-    uint8_t infoFieldCount = 0;
-    if (isAllPoint) {
-        int doCount = 0;
-        // TODO:获取Di数量
-        //    for (const auto& dev : RtuObj->ListDev) {
-        //        doCount += dev->ListDo.size();
-        //    }
-        infoFieldCount = qRound(static_cast<double>(doCount) / 32.0);
+    if (m_yxCounter > m_settingData->m_ptCfg->m_yxTime) {
+        sendAllDi();
+        m_yxCounter = 0;
     }
-    else {
-        infoFieldCount = qRound(static_cast<double>(ptId) / 32.0);
-    }
-
-    // 0xF0-0xFF, 16
-    uint8_t funCode = infoFieldCount < 16 ? 0xF0 : 0x80;
-    // 设置控制字值
-    cmdFrame.frameControl.fillData(eCDTFrameControlType::StandardType, 0xF1, infoFieldCount, 0, 0);
-    // 填充空数据
-    for (uint8_t i = 0; i < infoFieldCount; i++) {
-        uint8_t datas[4] = {0, 0, 0, 0};
-
-        InfoFieldEntity entity(funCode, datas);
-        funCode++;
-        cmdFrame.infoFields.append(entity);
-    }
-    return  cmdFrame;
 }
 
-int CDTProtocol::findPositive(uint32_t num)
+void CDTProtocol::uploadAi()
 {
-    if (num > 0) {
-        for (int i = 0; i < 32; i++) {
-            if ((num >> i) & 0x01) {
-                return i;
-            }
-        }
+    if (m_ycCounter > m_settingData->m_ptCfg->m_ycTime) {
+        sendAllAi();
+        m_ycCounter = 0;
     }
-    return -1;
 }
 
 void CDTProtocol::startYK(int ptId, bool offon)
@@ -549,6 +490,19 @@ void CDTProtocol::reverseYx(int ptId, bool allow)
     }
     m_isRunYK = false;
 
+}
+
+void CDTProtocol::onReadyRead()
+{
+    auto bytes = m_network->readAll();
+
+    if (!bytes.isEmpty()) {
+        m_recvBuffer.append(bytes);
+        //处理数据
+        parseRecvData();
+    }
+    // 处理帧
+    processFrame();
 }
 
 void CDTProtocol::onDisconnected()

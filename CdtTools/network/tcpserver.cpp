@@ -15,6 +15,7 @@ TcpServer::TcpServer(QTcpSocket *socket, QObject *parent)
 {
     setParent(parent);
     connect(m_socket, &QTcpSocket::disconnected, this, &TcpServer::disconnected);
+    connect(m_socket, &QTcpSocket::readyRead, this, &TcpServer::readyRead);
 }
 
 TcpServer::~TcpServer()
@@ -88,28 +89,3 @@ QString TcpServer::ip() const
 {
     return m_ip;
 }
-
-//void TcpServer::onNewConnection()
-//{
-//    auto socket = m_server->nextPendingConnection();
-//    connect(socket, &QTcpSocket::readyRead, this,&TcpServer::onReadyRead);
-//    connect(socket, &QTcpSocket::disconnected, this, &TcpServer::onDisconnected);
-//    m_sockets.append(socket);
-//    emit connected();
-//}
-
-//void TcpServer::onReadyRead()
-//{
-//    auto socket = qobject_cast<QTcpSocket*>(sender());
-////    auto readData = socket->readAll();
-
-////    emit recvData(readData);
-//}
-
-//void TcpServer::onDisconnected()
-//{
-//    auto socket = qobject_cast<QTcpSocket*>(sender());
-//    m_sockets.removeAt(m_sockets.indexOf(socket));
-//    // fix me
-//    socket->deleteLater();
-//}

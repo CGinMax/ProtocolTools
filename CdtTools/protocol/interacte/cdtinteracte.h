@@ -1,7 +1,7 @@
 #ifndef CDTINTERACTE_H
 #define CDTINTERACTE_H
 
-#include "cdtprotocol.h"
+#include "../standard/cdtprotocol.h"
 
 class CDTInteracte : public CDTProtocol
 {
@@ -9,7 +9,8 @@ class CDTInteracte : public CDTProtocol
 public:
     CDTInteracte(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
 
-    void ykResponse(CDTFrame& frame) override;
+    void init() override;
+
     // 遥控选择命令
     void ykSelect(uint8_t ctrlCode, uint8_t ptId);
     void ykSelectBack(uint8_t ctrlCode, uint8_t ptId);

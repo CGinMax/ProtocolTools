@@ -5,10 +5,11 @@
 #include <QSharedPointer>
 #include <QMutex>
 #include <QTimer>
-#include "cdtframe.h"
-#include "protocolbase.h"
-#include "../network/networkbase.h"
-#include "../enums.h"
+#include "../cdtframe.h"
+#include "../protocolbase.h"
+#include "../../network/networkbase.h"
+#include "../../enums.h"
+#include "../strategybase.h"
 
 class CDTProtocol : public ProtocolBase
 {
@@ -16,6 +17,8 @@ class CDTProtocol : public ProtocolBase
 public:
     CDTProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     virtual ~CDTProtocol();
+
+    virtual void init();
 
     void run() override;
 
@@ -51,24 +54,34 @@ public:
     void yKCancel(uint8_t operCode, uint8_t ptNo);
 
     // 交互式遥控帧
-    CDTFrame interactYKFrame(uint8_t ctrlCode, uint8_t type, uint8_t funCode, uint8_t operCode, uint8_t ptId);
+    CDTFrame YKFrame(uint8_t ctrlCode, uint8_t type, uint8_t funCode, uint8_t operCode, uint8_t ptId);
 
-    void yKNotAllow(int ptId);
-
-    void yKAllNotAllow();
 
     CDTFrame buildYXFrame(uint8_t startFuncode);
 
-    // 非全部点遥控帧，则要传入点号
-    CDTFrame createCycleYKFrame(bool isAllPoint, int ptId = -1);
 
-    int findPositive(uint32_t num);
+    inline bool isRunYK() const {
+        return m_isRunYK;
+    }
 
+    inline void setRunYK(bool running) {
+        m_isRunYK = running;
+    }
+
+    inline PtCfg* getPtCfg() {
+        return m_settingData->m_ptCfg.data();
+    }
+
+
+    void uploadDi();
+
+    void uploadAi();
 
 signals:
 public slots:
     void startYK(int ptId, bool offon) override;
     void reverseYx(int ptId, bool allow) override;
+    void onReadyRead();
     void onDisconnected();
 
 protected slots:
@@ -86,6 +99,8 @@ protected:
     bool m_isRunYK;
     uint m_yxCounter;
     uint m_ycCounter;
+
+    StrategyBase* m_strategy;
 };
 
 #endif // CDTPROTOCOL_H

@@ -1,7 +1,7 @@
 #ifndef CDTEXNR_H
 #define CDTEXNR_H
 
-#include "cdtprotocol.h"
+#include "../standard/cdtprotocol.h"
 
 class CDTExNr : public CDTProtocol
 {
@@ -9,7 +9,8 @@ class CDTExNr : public CDTProtocol
 public:
     explicit CDTExNr(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTExNr() override;
-    void ykResponse(CDTFrame &frame) override;
+
+    void init() override;
 signals:
 
 public slots:
