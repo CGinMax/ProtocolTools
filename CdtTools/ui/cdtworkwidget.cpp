@@ -56,7 +56,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->viewVDi->setSelectionBehavior(QAbstractItemView::SelectItems);
     auto vyxDelegate = new ComboBoxDelegate(ui->viewVDi);
     vyxDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
-    ui->viewDi->setItemDelegateForColumn(2, vyxDelegate);
+    ui->viewVDi->setItemDelegateForColumn(2, vyxDelegate);
 
     bool isRandom = settingData->m_ptCfg->m_isRandom;
     connect(&m_viewTimer, &QTimer::timeout, [this, isRandom]{
@@ -124,6 +124,7 @@ void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settin
         connect(this, &CDTWorkWidget::reverseYx, this->m_protocol, &ProtocolBase::onReverseYx);
         connect(this->m_protocol, &ProtocolBase::notifyYK, this, &CDTWorkWidget::onNotifyYK);
         connect(this->m_network.data(), &NetworkBase::disconnected, this, &CDTWorkWidget::disconnected);
+        this->m_protocol->initStrategy();
         this->m_protocol->start();
     });
 }

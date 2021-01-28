@@ -13,11 +13,6 @@ UtWFStrategy::~UtWFStrategy()
 
 }
 
-void UtWFStrategy::uploadTiming()
-{
-
-}
-
 void UtWFStrategy::ykResponse(CDTFrame &frame)
 {
     InfoFieldEntity firstInfoData = frame.infoFields.front();
@@ -36,4 +31,10 @@ void UtWFStrategy::ykResponse(CDTFrame &frame)
         m_cdt->setRunYK(true);
         emit m_cdt->notifyYK(ykAddr);
     }
+}
+
+void UtWFStrategy::sendYK(int ptId, bool offon)
+{
+    Q_UNUSED(ptId)
+    Q_UNUSED(offon)
 }

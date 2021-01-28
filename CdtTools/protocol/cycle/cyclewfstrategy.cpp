@@ -2,7 +2,8 @@
 #include "cdtcycle.h"
 
 CycleWFStrategy::CycleWFStrategy(CDTCycle *cdt, QObject *parent)
-    : m_cdt(cdt)
+    : CDTWFStrategy (cdt, parent)
+    , m_cdt(cdt)
     , m_listenPtId(0)
     , m_oldStatus(false)
 {
@@ -20,6 +21,7 @@ void CycleWFStrategy::uploadTiming()
     if (!m_cdt->isRunYK()) {
         m_cdt->uploadLock();
     }
+    CDTWFStrategy::uploadTiming();
 }
 
 void CycleWFStrategy::ykResponse(CDTFrame &frame)

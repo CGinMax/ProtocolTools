@@ -13,11 +13,6 @@ UtMintorStrategy::~UtMintorStrategy()
 
 }
 
-void UtMintorStrategy::uploadTiming()
-{
-
-}
-
 void UtMintorStrategy::ykResponse(CDTFrame &frame)
 {
     InfoFieldEntity firstInfoData = frame.infoFields.front();

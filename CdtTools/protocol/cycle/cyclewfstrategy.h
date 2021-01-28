@@ -1,11 +1,11 @@
 #ifndef CYCLEWFSTRATEGY_H
 #define CYCLEWFSTRATEGY_H
 
-#include "../strategybase.h"
+#include "../standard/cdtwfstrategy.h"
 #include <QTimer>
 class CDTCycle;
 
-class CycleWFStrategy : public StrategyBase
+class CycleWFStrategy : public CDTWFStrategy
 {
     Q_OBJECT
 public:
@@ -17,6 +17,7 @@ public:
 signals:
 
 public slots:
+    // add 闭锁
     void sendYK(int ptId, bool offon) override;
     void onListenTimeout();
 

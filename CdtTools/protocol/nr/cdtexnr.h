@@ -10,7 +10,7 @@ public:
     explicit CDTExNr(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTExNr() override;
 
-    void init() override;
+    void initStrategy() override;
 
     void ykAllLock(int ptNo);
 

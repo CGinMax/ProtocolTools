@@ -10,7 +10,7 @@ public:
     explicit CDTExUt(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTExUt() override;
 
-    void init() override;
+    void initStrategy() override;
 
     void ykSelect(uint8_t ctrlCode, uint8_t ptId);
     void ykSelectBack(uint8_t ctrlCode, uint8_t ptId);

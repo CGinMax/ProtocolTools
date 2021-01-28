@@ -15,13 +15,14 @@ CDTCycle::~CDTCycle()
 
 }
 
-void CDTCycle::init()
+void CDTCycle::initStrategy()
 {
     if (m_settingData->m_stationType == eStationType::WF) {
         m_strategy = new CycleWFStrategy(this, this);
     } else {
         m_strategy = new CycleMintorStrategy(this, this);
     }
+    connect(this, &ProtocolBase::sendYk, m_strategy, &StrategyBase::sendYK);
 }
 
 void CDTCycle::ykUnlock(int ptId)

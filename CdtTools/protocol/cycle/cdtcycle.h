@@ -10,7 +10,7 @@ public:
     CDTCycle(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTCycle() override;
 
-    void init() override;
+    void initStrategy() override;
 
     void ykUnlock(int ptId);
 

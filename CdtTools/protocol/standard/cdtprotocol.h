@@ -9,7 +9,6 @@
 #include "../protocolbase.h"
 #include "../../network/networkbase.h"
 #include "../../enums.h"
-#include "../strategybase.h"
 
 class CDTProtocol : public ProtocolBase
 {
@@ -18,7 +17,7 @@ public:
     CDTProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTProtocol() override;
 
-    virtual void init();
+     void initStrategy() override;
 
     void run() override;
 
@@ -51,7 +50,7 @@ public:
 
     void yKCancel(uint8_t operCode, uint8_t ptNo);
 
-    CDTFrame buildYXFrame(uint8_t startFuncode);
+    CDTFrame buildYXFrame(uint8_t startFuncode, QList<DiData*>& ptList);
 
 
     inline bool isRunYK() const {
@@ -74,7 +73,7 @@ public:
 signals:
 public slots:
     void onReverseYx(int ptId, bool allow) override;
-    void onReadyRead();
+    void onReadyRead() override;
     void onDisconnected();
 
 protected slots:
@@ -92,8 +91,6 @@ protected:
     bool m_isRunYK;
     uint m_yxCounter;
     uint m_ycCounter;
-
-    StrategyBase* m_strategy;
 };
 
 #endif // CDTPROTOCOL_H

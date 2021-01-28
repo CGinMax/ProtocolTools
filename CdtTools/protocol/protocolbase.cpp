@@ -11,14 +11,18 @@ ProtocolBase::ProtocolBase()
 ProtocolBase::ProtocolBase(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
     : m_network(network)
     , m_settingData(settingData)
+    , m_strategy(nullptr)
 {
-
     connect(this, &ProtocolBase::write, network.data(), &NetworkBase::writeData);
+    connect(m_network.data(), &NetworkBase::readyRead, this, &ProtocolBase::onReadyRead);
 }
 
 ProtocolBase::~ProtocolBase()
 {
-
+    if (m_strategy != nullptr) {
+        delete m_strategy;
+        m_strategy = nullptr;
+    }
 }
 
 bool ProtocolBase::initConnection()
@@ -237,6 +241,7 @@ void ProtocolBase::stop()
         delete m_timer;
         m_timer = nullptr;
     }
+    disconnect(m_network.data(), &NetworkBase::readyRead, this, &ProtocolBase::onReadyRead);
 }
 
 void ProtocolBase::onTimeout()

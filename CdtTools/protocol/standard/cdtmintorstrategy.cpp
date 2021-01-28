@@ -16,7 +16,7 @@ void CDTMintorStrategy::uploadTiming()
 {
     if (!m_cdt->isRunYK()) {
         m_cdt->uploadDi();
-        m_cdt->uploadDi();
+        m_cdt->uploadAi();
     }
 }
 

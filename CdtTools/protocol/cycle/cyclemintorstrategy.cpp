@@ -2,7 +2,8 @@
 #include "cdtcycle.h"
 
 CycleMintorStrategy::CycleMintorStrategy(CDTCycle* cdt, QObject *parent)
-    : m_cdt(cdt)
+    : CDTMintorStrategy (cdt, parent)
+    , m_cdt(cdt)
 {
     setParent(parent);
 }
@@ -10,14 +11,6 @@ CycleMintorStrategy::CycleMintorStrategy(CDTCycle* cdt, QObject *parent)
 CycleMintorStrategy::~CycleMintorStrategy()
 {
 
-}
-
-void CycleMintorStrategy::uploadTiming()
-{
-    if (!m_cdt->isRunYK()) {
-        m_cdt->uploadDi();
-        m_cdt->uploadDi();
-    }
 }
 
 void CycleMintorStrategy::ykResponse(CDTFrame &frame)
@@ -42,11 +35,12 @@ void CycleMintorStrategy::ykResponse(CDTFrame &frame)
 
         // 闭锁或全闭锁
         if (allowIndex == -1) {
+            emit m_cdt->sendYKMsg(QStringLiteral("接收到遥控闭锁指令").arg(allowIndex));
             return;
         }
 
         m_cdt->setRunYK(true);
-        emit m_cdt->notifyYK(allowIndex);
+        emit m_cdt->notifyYK(allowIndex + m_cdt->getPtCfg()->m_globalDiList->first()->io());
         emit m_cdt->sendYKMsg(QStringLiteral("接收到点%1遥控变位请求").arg(allowIndex));
     }
 }
@@ -65,5 +59,6 @@ int CycleMintorStrategy::findPositive(uint32_t num)
 
 void CycleMintorStrategy::sendYK(int ptId, bool offon)
 {
-
+    Q_UNUSED(ptId)
+    Q_UNUSED(offon)
 }

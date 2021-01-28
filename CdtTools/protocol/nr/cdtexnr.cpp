@@ -13,13 +13,14 @@ CDTExNr::~CDTExNr()
 
 }
 
-void CDTExNr::init()
+void CDTExNr::initStrategy()
 {
     if (m_settingData->m_stationType == eStationType::WF) {
         m_strategy = new NrWFStrategy(this, this);
     } else {
         m_strategy = new NrMintorStrategy(this, this);
     }
+    connect(this, &ProtocolBase::sendYk, m_strategy, &StrategyBase::sendYK);
 }
 
 void CDTExNr::ykAllLock(int ptNo)

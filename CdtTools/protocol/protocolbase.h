@@ -5,6 +5,7 @@
 #include <QSharedPointer>
 #include "../network/networkbase.h"
 #include "../ui/ptcfg.h"
+#include "strategybase.h"
 
 class ProtocolBase : public QObject
 {
@@ -23,6 +24,8 @@ public:
     ProtocolBase();
     ProtocolBase(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     virtual ~ProtocolBase();
+
+    virtual void initStrategy() = 0;
 
     virtual void run() {}
 
@@ -57,12 +60,15 @@ public slots:
         Q_UNUSED(ptId)
         Q_UNUSED(allow)
     }
+    virtual void onReadyRead() {}
 protected slots:
     virtual void onTimeout();
 
 protected:
     QSharedPointer<NetworkBase> m_network;
     QSharedPointer<SettingData> m_settingData;
+
+    StrategyBase* m_strategy;
     QTimer *m_timer{nullptr};
 };
 

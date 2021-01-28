@@ -27,6 +27,7 @@ void InterWFStrategy::ykResponse(CDTFrame &frame)
         return ;
     }
 
+    // add 返回上级确认
     if (funCode == m_cdt->getPtCfg()->m_ykReqCode) {
         if (!m_cdt->isRunYK()) {// 接收到遥控选择
             // 直接返回校核

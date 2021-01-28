@@ -10,31 +10,25 @@ CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, const QShar
     , m_isRunYK(false)
     , m_yxCounter(0)
     , m_ycCounter(0)
-    , m_strategy(nullptr)
 {
 
     connect(m_network.data(), &NetworkBase::disconnected, this, &CDTProtocol::onDisconnected, Qt::BlockingQueuedConnection);
-    connect(m_network.data(), &NetworkBase::readyRead, this, &CDTProtocol::onReadyRead);
 
-    init();
-    connect(this, &ProtocolBase::sendYk, m_strategy, &StrategyBase::sendYK);
 }
 
 CDTProtocol::~CDTProtocol()
 {
-    if (m_strategy != nullptr) {
-        delete m_strategy;
-        m_strategy = nullptr;
-    }
+
 }
 
-void CDTProtocol::init()
+void CDTProtocol::initStrategy()
 {
     if (m_settingData->m_stationType == eStationType::WF) {
         m_strategy = new CDTWFStrategy(this, this);
     } else {
         m_strategy = new CDTMintorStrategy(this, this);
     }
+    connect(this, &ProtocolBase::sendYk, m_strategy, &StrategyBase::sendYK);
 }
 
 void CDTProtocol::run()
@@ -119,7 +113,7 @@ void CDTProtocol::sendAllDi()
     if (m_settingData->m_ptCfg->m_globalDiList->isEmpty()) {
         return ;
     }
-    auto frame = buildYXFrame(m_settingData->m_ptCfg->m_yxFuncode);
+    auto frame = buildYXFrame(m_settingData->m_ptCfg->m_yxFuncode, *m_settingData->m_ptCfg->m_globalDiList);
     // 标准虚遥信
     frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_yxFrameType, frame.infoFields.size(), 0, 0);
     showMessageBuffer(eMsgType::eMsgSend, "发送全遥信", frame.toAllByteArray());
@@ -168,7 +162,7 @@ void CDTProtocol::sendVirtualYX()
     if (m_settingData->m_ptCfg->m_globalDiList->isEmpty()) {
         return ;
     }
-    auto frame = buildYXFrame(m_settingData->m_ptCfg->m_vyxFuncode);
+    auto frame = buildYXFrame(m_settingData->m_ptCfg->m_vyxFuncode, *m_settingData->m_ptCfg->m_globalVDiList);
     // 标准虚遥信
     frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_vyxFrameType, frame.infoFields.size(), 0, 0);
     showMessageBuffer(eMsgType::eMsgSend, "发送虚遥信", frame.toAllByteArray());
@@ -200,7 +194,7 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
             nSeq = curPointStartAddr + i + startOffset;  // 点号
 
             if(nSeq < (startOffset + diSize)) {
-                auto di = m_settingData->m_ptCfg->findVDiById(nSeq);
+                auto di = m_settingData->m_ptCfg->findDiById(nSeq);
                 if (di) {
                     di->setValue(yxValue > 0);
                 }
@@ -230,7 +224,7 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
             // 点号
             nSeq = entity.funCode + (i / 2) + offset;
             if (nSeq < offset + m_settingData->m_ptCfg->m_globalAiList->size()) {
-                auto ai = m_settingData->m_ptCfg->findDiById(nSeq);
+                auto ai = m_settingData->m_ptCfg->findAiById(nSeq);
                 if (ai) {
                     ai->setValue(ycAccept);
                 }
@@ -313,12 +307,12 @@ void CDTProtocol::yKCancel(uint8_t operCode, uint8_t ptNo)
     send(frame);
 }
 
-CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode)
+CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode, QList<DiData *> &ptList)
 {
     QList<uchar> combineByteList;
     uchar val = 0;
     int index = 0;
-    for (const auto& di: *m_settingData->m_ptCfg->m_globalDiList) {
+    for (const auto& di: ptList) {
         if (index % 8 == 0 && index != 0) {
              combineByteList.append(val);
             val = 0;

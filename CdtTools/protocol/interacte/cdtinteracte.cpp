@@ -8,13 +8,14 @@ CDTInteracte::CDTInteracte(const QSharedPointer<NetworkBase> &network, const QSh
 
 }
 
-void CDTInteracte::init()
+void CDTInteracte::initStrategy()
 {
     if (m_settingData->m_stationType == eStationType::WF) {
         m_strategy = new InterWFStrategy(this, this);
     } else {
         m_strategy = new InterMintorStrategy(this, this);
     }
+    connect(this, &ProtocolBase::sendYk, m_strategy, &StrategyBase::sendYK);
 }
 
 void CDTInteracte::ykSelect(uint8_t ctrlCode, uint8_t ptId)

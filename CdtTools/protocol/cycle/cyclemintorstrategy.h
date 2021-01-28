@@ -1,17 +1,15 @@
 #ifndef CYCLEMINTORSTRATEGY_H
 #define CYCLEMINTORSTRATEGY_H
 
-#include "../strategybase.h"
+#include "../standard/cdtmintorstrategy.h"
 
 class CDTCycle;
-class CycleMintorStrategy : public StrategyBase
+class CycleMintorStrategy : public CDTMintorStrategy
 {
     Q_OBJECT
 public:
     explicit CycleMintorStrategy(CDTCycle* cdt, QObject *parent = nullptr);
     ~CycleMintorStrategy() override;
-
-    void uploadTiming() override;
 
     void ykResponse(CDTFrame& frame) override;
 

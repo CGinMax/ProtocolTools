@@ -9,7 +9,7 @@ class CDTInteracte : public CDTProtocol
 public:
     CDTInteracte(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
 
-    void init() override;
+    void initStrategy() override;
 
     // 遥控选择命令
     void ykSelect(uint8_t ctrlCode, uint8_t ptId);

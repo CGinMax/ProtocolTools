@@ -11,12 +11,12 @@ public:
     explicit UtWFStrategy(CDTExUt* cdt, QObject *parent = nullptr);
     ~UtWFStrategy() override;
 
-    void uploadTiming() override;
     void ykResponse(CDTFrame &frame) override;
 
 signals:
 
 public slots:
+    void sendYK(int ptId, bool offon) override;
 private:
     CDTExUt* m_cdt;
 

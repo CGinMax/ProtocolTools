@@ -12,7 +12,6 @@ public:
     explicit UtMintorStrategy(CDTExUt* cdt, QObject *parent = nullptr);
     ~UtMintorStrategy() override;
 
-    void uploadTiming() override;
     void ykResponse(CDTFrame &frame) override;
 signals:
 
