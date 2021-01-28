@@ -10,7 +10,8 @@
 #include "../protocol/nr/cdtexnr.h"
 #include "../protocol/ut/cdtexut.h"
 #include "../common/threadpool.h"
-#include "./dialog/ykdialog.h"
+#include "dialog/ykdialog.h"
+#include "../../qt-material-widgets/qtmaterialscrollbar.h"
 #include <QDebug>
 #include <QMenu>
 #include <QThread>
@@ -28,6 +29,15 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->horSplitter->setCollapsible(1, false);
     ui->vecSplitter->setCollapsible(0, false);
     ui->vecSplitter->setCollapsible(1, false);
+
+    auto infoVScroll = new QtMaterialScrollBar(ui->textYkInfo);
+    auto infoHScroll = new QtMaterialScrollBar(ui->textYkInfo);
+    ui->textYkInfo->setVerticalScrollBar(infoVScroll);
+    ui->textYkInfo->setHorizontalScrollBar(infoHScroll);
+    auto browserVScroll = new QtMaterialScrollBar(ui->textBrowser);
+    auto browserHScroll = new QtMaterialScrollBar(ui->textBrowser);
+    ui->textBrowser->setVerticalScrollBar(browserVScroll);
+    ui->textBrowser->setHorizontalScrollBar(browserHScroll);
 
     m_diModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalDiList, ui->viewDi);
     ui->viewDi->setModel(m_diModel);
@@ -173,11 +183,12 @@ void CDTWorkWidget::recvYKMsg(const QString &msg)
 void CDTWorkWidget::onNotifyYK(int ptId)
 {
     QString info = QStringLiteral("是否对点%1进行变位").arg(ptId);
-    YKDialog dialog(info, "Dialog");
+    YKDialog dialog(info, this);
+
     auto globalPos = mapToGlobal(QPoint(x(), y()));
     dialog.move(globalPos.x() + width() / 2 - dialog.width() / 2, globalPos.y() + height() / 2 - dialog.height() / 2);
-    int ret = dialog.exec();
 
+    int ret = dialog.exec();
     emit reverseYx(ptId, ret == QDialog::Accepted);
 }
 
