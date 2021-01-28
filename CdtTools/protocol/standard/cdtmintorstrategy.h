@@ -16,7 +16,9 @@ public:
 
     void ykResponse(CDTFrame& frame) override;
 
-    int findPositive(uint32_t num);
+public slots:
+    void sendYK(int ptId, bool offon) override;
+
 private:
     CDTProtocol* m_cdt;
 };

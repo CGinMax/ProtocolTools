@@ -120,8 +120,8 @@ void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settin
         connect(this->m_protocol, &ProtocolBase::sendProtocolContent, this, &CDTWorkWidget::recvProtocolContent);
         connect(this->m_protocol, &ProtocolBase::sendYKMsg, this, &CDTWorkWidget::recvYKMsg);
         connect(this, &CDTWorkWidget::stop, this->m_protocol, &ProtocolBase::stop, Qt::BlockingQueuedConnection);
-        connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::startYK);
-        connect(this, &CDTWorkWidget::reverseYx, this->m_protocol, &ProtocolBase::reverseYx);
+        connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::sendYk);
+        connect(this, &CDTWorkWidget::reverseYx, this->m_protocol, &ProtocolBase::onReverseYx);
         connect(this->m_protocol, &ProtocolBase::notifyYK, this, &CDTWorkWidget::onNotifyYK);
         connect(this->m_network.data(), &NetworkBase::disconnected, this, &CDTWorkWidget::disconnected);
         this->m_protocol->start();
@@ -183,7 +183,7 @@ void CDTWorkWidget::onNotifyYK(int ptId)
 void CDTWorkWidget::on_btnExecute_clicked()
 {
     emit startYK(ui->edPtId->value(), ui->cbbYKOper->currentIndex() > 0);
-    qInfo("开始遥控");
+
 }
 
 void CDTWorkWidget::onPlainTextContextMenuRequested(const QPoint &pos)

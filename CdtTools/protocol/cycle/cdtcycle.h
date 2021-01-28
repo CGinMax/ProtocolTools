@@ -12,16 +12,17 @@ public:
 
     void init() override;
 
-    void run() override;
+    void ykUnlock(int ptId);
 
-    void yKNotAllow(int ptId);
+    void yKLock(int ptId);
 
-    void yKAllNotAllow();
+    void yKAllLock();
 
     // 非全部点遥控帧，则要传入点号
     CDTFrame createCycleYKFrame(bool isAllPoint, int ptId = -1);
-    void uploadUnlock();
+    void uploadLock();
 
+public slots:
 protected slots:
     void onTimeout() override;
 

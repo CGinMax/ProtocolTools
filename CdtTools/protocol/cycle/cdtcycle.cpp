@@ -24,15 +24,22 @@ void CDTCycle::init()
     }
 }
 
-void CDTCycle::run()
+void CDTCycle::ykUnlock(int ptId)
 {
-    if (m_settingData->m_stationType == eStationType::WF) {
-        uploadUnlock();
-    }
-    CDTProtocol::run();
+    CDTFrame frame = createCycleYKFrame(false, ptId);
+    int offset = m_settingData->m_ptCfg->m_globalDiList->first()->io();
+    int actualIdx = ptId - offset;
+    int infoIdx = actualIdx / 8;
+    int infoOffset = actualIdx % 8;
+    uint8_t postiveNum = 1 << infoOffset;
+    frame.infoFields[infoIdx / 4].dataArray[infoIdx % 4] |= postiveNum;
+
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控单点解锁命令"), frame.toAllByteArray());
+    emit sendYKMsg(QStringLiteral("发送点%1的遥控单点解锁指令").arg(ptId));
+    send(frame);
 }
 
-void CDTCycle::yKNotAllow(int ptId)
+void CDTCycle::yKLock(int ptId)
 {
     CDTFrame frame = createCycleYKFrame(false, ptId);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控闭锁命令"), frame.toAllByteArray());
@@ -40,7 +47,7 @@ void CDTCycle::yKNotAllow(int ptId)
     send(frame);
 }
 
-void CDTCycle::yKAllNotAllow()
+void CDTCycle::yKAllLock()
 {
     CDTFrame frame = createCycleYKFrame(true);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控全闭锁命令"), frame.toAllByteArray());
@@ -51,18 +58,15 @@ void CDTCycle::yKAllNotAllow()
 CDTFrame CDTCycle::createCycleYKFrame(bool isAllPoint, int ptId)
 {
     CDTFrame cmdFrame;
+    int offset = m_settingData->m_ptCfg->m_globalDiList->first()->io();
 
     uint8_t infoFieldCount = 0;
     if (isAllPoint) {
-        int doCount = 0;
-        // TODO:获取Di数量
-        //    for (const auto& dev : RtuObj->ListDev) {
-        //        doCount += dev->ListDo.size();
-        //    }
+        int doCount = m_settingData->m_ptCfg->m_globalDiList->size();
         infoFieldCount = qRound(static_cast<double>(doCount) / 32.0);
     }
     else {
-        infoFieldCount = qRound(static_cast<double>(ptId) / 32.0);
+        infoFieldCount = qRound(static_cast<double>(ptId - offset) / 32.0);
     }
 
     // 0xF0-0xFF, 16
@@ -85,10 +89,11 @@ void CDTCycle::onTimeout()
     m_cycleTimer += 100;
     CDTProtocol::onTimeout();
 }
-void CDTCycle::uploadUnlock()
+void CDTCycle::uploadLock()
 {
     if (m_cycleTimer > m_cycleTime) {
-        yKAllNotAllow();
+        yKAllLock();
         m_cycleTimer = 0;
     }
 }
+

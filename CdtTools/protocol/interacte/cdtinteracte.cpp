@@ -63,15 +63,4 @@ CDTFrame CDTInteracte::interactYKFrame(uint8_t frameType, uint8_t funCode, uint8
     return frame;
 }
 
-void CDTInteracte::startYK(int ptId, bool offon)
-{
-    if (ptId > m_settingData->m_ptCfg->m_globalDiList->size())
-        return ;
-
-    uint8_t code = offon ? m_settingData->m_ptCfg->m_ykClose : m_settingData->m_ptCfg->m_ykOpen;
-
-    ykSelect(code, static_cast<uint8_t>(ptId));
-    m_isRunYK = true;
-}
-
 

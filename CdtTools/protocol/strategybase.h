@@ -18,6 +18,7 @@ public:
 signals:
 
 public slots:
+    virtual void sendYK(int ptId, bool offon) = 0;
 };
 
 #endif // STRATEGYBASE_H

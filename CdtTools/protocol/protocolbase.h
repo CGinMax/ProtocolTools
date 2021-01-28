@@ -47,15 +47,13 @@ signals:
     void sendYKMsg(const QString& msg);
     void ykExecuteFinish(const QString& msg);
     void notifyYK(int ptId);
+    void sendYk(int ptId, bool offon);
 
 public slots:
     virtual void start();
     virtual void stop();
-    virtual void startYK(int ptId, bool offon){
-        Q_UNUSED(ptId)
-        Q_UNUSED(offon)
-    }
-    virtual void reverseYx(int ptId, bool allow){
+
+    virtual void onReverseYx(int ptId, bool allow){
         Q_UNUSED(ptId)
         Q_UNUSED(allow)
     }

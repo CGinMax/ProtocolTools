@@ -17,7 +17,7 @@ public:
 signals:
 
 public slots:
-
+    void sendYK(int ptId, bool offon) override;
 private:
     CDTProtocol* m_cdt;
 };

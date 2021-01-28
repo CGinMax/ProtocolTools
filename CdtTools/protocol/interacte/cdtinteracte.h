@@ -22,7 +22,6 @@ public:
     CDTFrame interactYKFrame(uint8_t frameType, uint8_t funCode, uint8_t operCode, uint8_t vaild, int ptId);
 
 public slots:
-    void startYK(int ptId, bool offon) override;
 
 };
 

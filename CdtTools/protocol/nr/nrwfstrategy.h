@@ -11,11 +11,11 @@ public:
     explicit NrWFStrategy(CDTExNr* cdt, QObject *parent = nullptr);
     ~NrWFStrategy() override;
 
-    void uploadTiming() override;
     void ykResponse(CDTFrame &frame) override;
 signals:
 
 public slots:
+    void sendYK(int ptId, bool offon) override;
 
 private:
     CDTExNr* m_cdt;

@@ -52,3 +52,14 @@ void UtMintorStrategy::ykResponse(CDTFrame &frame)
         m_cdt->setRunYK(false);
     }
 }
+
+void UtMintorStrategy::sendYK(int ptId, bool offon)
+{
+    if (ptId > m_cdt->getPtCfg()->m_globalDiList->last()->io())
+        return ;
+
+    eControlLockCode code = offon ? eControlLockCode::CloseValidLock : eControlLockCode::OpenValidLock;
+
+    m_cdt->ykSelect(code, static_cast<uint8_t>(ptId));
+    m_cdt->setRunYK(true);
+}

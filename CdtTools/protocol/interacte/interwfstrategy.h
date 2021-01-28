@@ -12,12 +12,12 @@ public:
     explicit InterWFStrategy(CDTInteracte* cdt, QObject *parent = nullptr);
     ~InterWFStrategy() override;
 
-    void uploadTiming() override;
     void ykResponse(CDTFrame &frame) override;
 
 signals:
 
 public slots:
+    void sendYK(int ptId, bool offon) override;
 
 private:
     CDTInteracte* m_cdt;

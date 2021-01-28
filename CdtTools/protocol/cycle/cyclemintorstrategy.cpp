@@ -62,3 +62,8 @@ int CycleMintorStrategy::findPositive(uint32_t num)
     }
     return -1;
 }
+
+void CycleMintorStrategy::sendYK(int ptId, bool offon)
+{
+
+}

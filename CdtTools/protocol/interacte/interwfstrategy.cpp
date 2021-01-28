@@ -13,23 +13,19 @@ InterWFStrategy::~InterWFStrategy()
 
 }
 
-void InterWFStrategy::uploadTiming()
-{
-
-}
-
 void InterWFStrategy::ykResponse(CDTFrame &frame)
 {
     InfoFieldEntity firstInfoData = frame.infoFields.front();
     uint8_t funCode = firstInfoData.funCode;
     uint8_t ctrlCode = firstInfoData.dataArray[0];
     // true合,false开
-    bool status = ctrlCode == m_cdt->getPtCfg()->m_ykClose;
     int ykAddr = firstInfoData.dataArray[2];
     ykAddr |= firstInfoData.dataArray[3] << 8;
 
-    if (ykAddr > m_cdt->getPtCfg()->m_globalDiList->size())
+    if (ykAddr > m_cdt->getPtCfg()->m_globalDiList->size()) {
+        qInfo("未找到对应点号");
         return ;
+    }
 
     if (funCode == m_cdt->getPtCfg()->m_ykReqCode) {
         if (!m_cdt->isRunYK()) {// 接收到遥控选择
@@ -45,4 +41,10 @@ void InterWFStrategy::ykResponse(CDTFrame &frame)
         }
     }
 
+}
+
+void InterWFStrategy::sendYK(int ptId, bool offon)
+{
+    Q_UNUSED(ptId)
+    Q_UNUSED(offon)
 }

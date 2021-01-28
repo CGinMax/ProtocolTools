@@ -11,7 +11,6 @@ public:
     explicit NrMintorStrategy(CDTExNr* cdt, QObject *parent = nullptr);
     ~NrMintorStrategy() override;
 
-    void uploadTiming() override;
     void ykResponse(CDTFrame &frame) override;
 signals:
 

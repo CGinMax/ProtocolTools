@@ -24,19 +24,30 @@ void CDTExUt::init()
 
 void CDTExUt::ykSelect(uint8_t ctrlCode, uint8_t ptId)
 {
-    auto frame = CDTFrame::createYKFrame(eCDTFrameControlType::ExternType, m_settingData->m_ptCfg->m_ykReqType, 0xE9, ctrlCode, ptId);
-    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控命令"), frame.toAllByteArray());
+    auto frame = CDTFrame::createYKFrame(eCDTFrameControlType::ExternType, m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, ctrlCode, ptId);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控请求解锁命令"), frame.toAllByteArray());
     send(frame);
     emit sendYKMsg(QStringLiteral("发送点%1的请求解锁指令").arg(ptId));
 }
 
-void CDTExUt::startYK(int ptId, bool offon)
+void CDTExUt::ykSelectBack(uint8_t ctrlCode, uint8_t ptId)
 {
-    if (ptId > m_settingData->m_ptCfg->m_globalDiList->size())
-        return ;
+    auto frame = CDTFrame::createYKFrame(eCDTFrameControlType::ExternType, m_settingData->m_ptCfg->m_ykAckType, m_settingData->m_ptCfg->m_ykAckCode, ctrlCode, ptId);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控解锁应答命令"), frame.toAllByteArray());
+    send(frame);
+    emit sendYKMsg(QStringLiteral("发送点%1的解锁应答指令").arg(ptId));
+}
 
-    eControlLockCode code = offon ? eControlLockCode::CloseValidLock : eControlLockCode::OpenValidLock;
+void CDTExUt::onReverseYx(int ptId, bool allow)
+{
+    auto di = m_settingData->m_ptCfg->findDiById(ptId);
+    auto changeMsg = di->value() ? QStringLiteral("合->分") : QStringLiteral("分->合");
 
-    ykSelect(code, static_cast<uint8_t>(ptId));
-    m_isRunYK = true;
+    QString msg = allow ? QStringLiteral("允许点%1发生遥控%2操作") : QStringLiteral("禁止点%1发生遥控%2操作");
+    eControlLockCode code = allow ? (di->value() ? eControlLockCode::OpenValidLock : eControlLockCode::CloseValidLock) : eControlLockCode::ControlError;
+
+    ykSelectBack(code, ptId);
+    emit sendYKMsg(msg.arg(ptId).arg(changeMsg));
+
+    m_isRunYK = false;
 }

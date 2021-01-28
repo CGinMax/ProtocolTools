@@ -17,6 +17,7 @@ CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, const QShar
     connect(m_network.data(), &NetworkBase::readyRead, this, &CDTProtocol::onReadyRead);
 
     init();
+    connect(this, &ProtocolBase::sendYk, m_strategy, &StrategyBase::sendYK);
 }
 
 CDTProtocol::~CDTProtocol()
@@ -242,38 +243,6 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
     }
 }
 
-void CDTProtocol::ykResponse(CDTFrame &frame)
-{
-//    if (!m_isRunYK) {
-//        // 解析报文，找解锁
-//        int allowIndex = -1;
-//        for (int idx = 0; idx < frame.infoFields.count(); idx++) {
-//            // 组合成一个四字节整数
-//            uint32_t combineNum = 0;
-//            for (int i = 0; i < 4; i++) {
-//                uint32_t convNum = frame.infoFields.at(idx).dataArray[i];
-//                combineNum |= convNum << i * 8;
-//            }
-//            // 提取里面是否有1的bit，有且只有一个
-//            auto positiveIdx = findPositive(combineNum);
-//            if (positiveIdx > -1) {
-//                allowIndex = idx * 32 + positiveIdx;
-//                break;
-//            }
-//        }
-
-//        // 闭锁或全闭锁
-//        if (allowIndex == -1) {
-//            return;
-//        }
-
-//        m_isRunYK = true;
-//        emit notifyYK(allowIndex);
-//        emit sendYKMsg(QStringLiteral("接收到点%1遥控变位请求").arg(allowIndex));
-//    }
-
-}
-
 void CDTProtocol::vyxResponse(QList<InfoFieldEntity> &infoFieldList)
 {
     int startOffset = m_settingData->m_ptCfg->m_globalVDiList->first()->io();
@@ -321,7 +290,7 @@ void CDTProtocol::ykSelect(uint8_t operCode, uint8_t ptNo)
 
 void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = CDTFrame::createYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlBackCode, operCode, ptNo);
+    auto frame = CDTFrame::createYKFrame(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ykAckType, m_settingData->m_ptCfg->m_ykAckCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控选择应答"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控选择回传指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
@@ -329,7 +298,8 @@ void CDTProtocol::ykSelectBack(uint8_t operCode, uint8_t ptNo)
 
 void CDTProtocol::yKExecute(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = CDTFrame::createYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlExecuteCode, operCode, ptNo);
+    // TODO fix 0xC2
+    auto frame = CDTFrame::createYKFrame(m_settingData->m_ptCfg->m_controlType, 0xC2, m_settingData->m_ptCfg->m_ykExeCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控执行"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控执行指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
@@ -337,7 +307,7 @@ void CDTProtocol::yKExecute(uint8_t operCode, uint8_t ptNo)
 
 void CDTProtocol::yKCancel(uint8_t operCode, uint8_t ptNo)
 {
-    auto frame = CDTFrame::createYKFrame(eCDTFrameControlType::StandardType,eCDTFrameType::RmtControlType, eCDTFunCode::RmtControlCancelCode, operCode, ptNo);
+    auto frame = CDTFrame::createYKFrame(m_settingData->m_ptCfg->m_controlType, 0xB3, eCDTFunCode::RmtControlCancelCode, operCode, ptNo);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控取消"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控取消指令").arg(ptNo).arg(operCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
     send(frame);
@@ -398,15 +368,8 @@ void CDTProtocol::uploadAi()
     }
 }
 
-void CDTProtocol::startYK(int ptId, bool offon)
+void CDTProtocol::onReverseYx(int ptId, bool allow)
 {
-    Q_UNUSED(ptId);
-    Q_UNUSED(offon);
-}
-
-void CDTProtocol::reverseYx(int ptId, bool allow)
-{
-
     if (allow) {
         auto di = m_settingData->m_ptCfg->findDiById(ptId);
         auto changeMsg = di->value() ? QStringLiteral("合->分") : QStringLiteral("分->合");

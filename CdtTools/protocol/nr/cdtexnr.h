@@ -11,6 +11,15 @@ public:
     ~CDTExNr() override;
 
     void init() override;
+
+    void ykAllLock(int ptNo);
+
+    void ykExecute(int ptNo);
+
+    void ykAllUnlock(int ptNo);
+
+
+    CDTFrame YKFrame(uint8_t funcode, int ptNo);
 signals:
 
 public slots:

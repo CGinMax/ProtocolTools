@@ -22,43 +22,29 @@ void CDTMintorStrategy::uploadTiming()
 
 void CDTMintorStrategy::ykResponse(CDTFrame &frame)
 {
-    if (!m_cdt->isRunYK()) {
-        // 解析报文，找解锁
-        int allowIndex = -1;
-        for (int idx = 0; idx < frame.infoFields.count(); idx++) {
-            // 组合成一个四字节整数
-            uint32_t combineNum = 0;
-            for (int i = 0; i < 4; i++) {
-                uint32_t convNum = frame.infoFields.at(idx).dataArray[i];
-                combineNum |= convNum << i * 8;
-            }
-            // 提取里面是否有1的bit，有且只有一个
-            auto positiveIdx = findPositive(combineNum);
-            if (positiveIdx > -1) {
-                allowIndex = idx * 32 + positiveIdx;
-                break;
-            }
-        }
+    InfoFieldEntity firstInfoData = frame.infoFields.front();
+    uint8_t funCode = firstInfoData.funCode;
+    uint8_t ctrlCode = firstInfoData.dataArray[0];
 
-        // 闭锁或全闭锁
-        if (allowIndex == -1) {
-            return;
-        }
+    bool status = ctrlCode == m_cdt->getPtCfg()->m_ykClose;
+    int ykAddr = firstInfoData.dataArray[2];
 
+    if (ykAddr > m_cdt->getPtCfg()->m_globalDiList->size()) {
+        qInfo("未找到对应点号");
+        return ;
+    }
+
+    if (funCode == m_cdt->getPtCfg()->m_ykReqCode) {
         m_cdt->setRunYK(true);
-        emit m_cdt->notifyYK(allowIndex);
-        emit m_cdt->sendYKMsg(QStringLiteral("接收到点%1遥控变位请求").arg(allowIndex));
+        m_cdt->ykSelectBack(ctrlCode, ykAddr);
+    } else if (funCode == m_cdt->getPtCfg()->m_ykExeCode) {
+        emit m_cdt->notifyYK(ykAddr);
+        emit m_cdt->sendYKMsg(QStringLiteral("接收到点%1遥控%2执行请求").arg(ykAddr).arg(status ? QStringLiteral("分->合") : QStringLiteral("合->分")));
     }
 }
 
-int CDTMintorStrategy::findPositive(uint32_t num)
+void CDTMintorStrategy::sendYK(int ptId, bool offon)
 {
-    if (num > 0) {
-        for (int i = 0; i < 32; i++) {
-            if ((num >> i) & 0x01) {
-                return i;
-            }
-        }
-    }
-    return -1;
+    Q_UNUSED(ptId);
+    Q_UNUSED(offon);
 }

@@ -13,12 +13,11 @@ public:
     void init() override;
 
     void ykSelect(uint8_t ctrlCode, uint8_t ptId);
-
+    void ykSelectBack(uint8_t ctrlCode, uint8_t ptId);
 signals:
 
 public slots:
-    void startYK(int ptId, bool offon) override;
-
+    void onReverseYx(int ptId, bool allow) override;
 };
 
 #endif // CDTEXUT_H

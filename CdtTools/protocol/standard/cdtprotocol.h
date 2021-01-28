@@ -41,8 +41,6 @@ public:
     // 遥测
     void ycResponse(QList<InfoFieldEntity> &infoFieldList);
 
-    virtual void ykResponse(CDTFrame& frame);
-
     void vyxResponse(QList<InfoFieldEntity> &infoFieldList);
 
     void ykSelect(uint8_t operCode, uint8_t ptNo);
@@ -75,8 +73,7 @@ public:
 
 signals:
 public slots:
-    void startYK(int ptId, bool offon) override;
-    void reverseYx(int ptId, bool allow) override;
+    void onReverseYx(int ptId, bool allow) override;
     void onReadyRead();
     void onDisconnected();
 

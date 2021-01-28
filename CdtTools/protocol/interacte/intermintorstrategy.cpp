@@ -49,3 +49,15 @@ void InterMintorStrategy::ykResponse(CDTFrame &frame)
         m_cdt->setRunYK(false);
     }
 }
+
+void InterMintorStrategy::sendYK(int ptId, bool offon)
+{
+    if (ptId > m_cdt->getPtCfg()->m_globalDiList->last()->io()) {
+        return ;
+    }
+
+    uint8_t code = offon ? m_cdt->getPtCfg()->m_ykClose : m_cdt->getPtCfg()->m_ykOpen;
+
+    m_cdt->ykSelect(code, static_cast<uint8_t>(ptId));
+    m_cdt->setRunYK(true);
+}

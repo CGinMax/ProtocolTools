@@ -13,11 +13,6 @@ NrMintorStrategy::~NrMintorStrategy()
 
 }
 
-void NrMintorStrategy::uploadTiming()
-{
-
-}
-
 void NrMintorStrategy::ykResponse(CDTFrame &frame)
 {
     InfoFieldEntity firstInfoData = frame.infoFields.front();
