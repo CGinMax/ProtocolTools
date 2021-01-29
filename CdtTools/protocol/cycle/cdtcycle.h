@@ -14,9 +14,9 @@ public:
 
     void ykUnlock(int ptId);
 
-    void yKLock(int ptId);
+    void ykLock(int ptId);
 
-    void yKAllLock();
+    void ykAllLock();
 
     // 非全部点遥控帧，则要传入点号
     CDTFrame createCycleYKFrame(bool isAllPoint, int ptId = -1);

@@ -65,8 +65,7 @@ SOURCES += \
     protocol/ut/utwfstrategy.cpp \
     protocol/ut/utmintorstrategy.cpp \
     protocol/nr/nrwfstrategy.cpp \
-    protocol/nr/nrmintorstrategy.cpp \
-    ui/dialog/cyclesenddialog.cpp
+    protocol/nr/nrmintorstrategy.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -109,8 +108,7 @@ HEADERS += \
     protocol/ut/utwfstrategy.h \
     protocol/ut/utmintorstrategy.h \
     protocol/nr/nrwfstrategy.h \
-    protocol/nr/nrmintorstrategy.h \
-    ui/dialog/cyclesenddialog.h
+    protocol/nr/nrmintorstrategy.h
 
 FORMS += \
         mainwindow.ui \

@@ -1,6 +1,7 @@
 #include "cdtcycle.h"
 #include "cyclewfstrategy.h"
 #include "cyclemintorstrategy.h"
+#include <QtMath>
 
 CDTCycle::CDTCycle(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData)
     : CDTProtocol (network, settingData)
@@ -34,13 +35,13 @@ void CDTCycle::ykUnlock(int ptId)
     int infoOffset = actualIdx % 8;
     uint8_t postiveNum = 1 << infoOffset;
     frame.infoFields[infoIdx / 4].dataArray[infoIdx % 4] |= postiveNum;
-
+    frame.infoFields[infoIdx / 4].calcCrc();
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控单点解锁命令"), frame.toAllByteArray());
     emit sendYKMsg(QStringLiteral("发送点%1的遥控单点解锁指令").arg(ptId));
     send(frame);
 }
 
-void CDTCycle::yKLock(int ptId)
+void CDTCycle::ykLock(int ptId)
 {
     CDTFrame frame = createCycleYKFrame(false, ptId);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控闭锁命令"), frame.toAllByteArray());
@@ -48,7 +49,7 @@ void CDTCycle::yKLock(int ptId)
     send(frame);
 }
 
-void CDTCycle::yKAllLock()
+void CDTCycle::ykAllLock()
 {
     CDTFrame frame = createCycleYKFrame(true);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控全闭锁命令"), frame.toAllByteArray());
@@ -64,10 +65,10 @@ CDTFrame CDTCycle::createCycleYKFrame(bool isAllPoint, int ptId)
     uint8_t infoFieldCount = 0;
     if (isAllPoint) {
         int doCount = m_settingData->m_ptCfg->m_globalDiList->size();
-        infoFieldCount = qRound(static_cast<double>(doCount) / 32.0);
+        infoFieldCount = qCeil(static_cast<double>(doCount) / 32.0);
     }
     else {
-        infoFieldCount = qRound(static_cast<double>(ptId - offset) / 32.0);
+        infoFieldCount = qCeil(static_cast<double>(ptId - offset + 1) / 32.0);
     }
 
     // 0xF0-0xFF, 16
@@ -93,7 +94,7 @@ void CDTCycle::onTimeout()
 void CDTCycle::uploadLock()
 {
     if (m_cycleTimer > m_cycleTime) {
-        yKAllLock();
+        ykAllLock();
         m_cycleTimer = 0;
     }
 }

@@ -54,7 +54,7 @@ void CycleWFStrategy::onListenTimeout()
         return ;
     }
     emit m_cdt->sendYKMsg(QStringLiteral("已接收到点%1的遥信变位指令").arg(m_listenPtId));
-    m_cdt->yKLock(m_listenPtId);
+    m_cdt->ykLock(m_listenPtId);
     m_timer.stop();
     m_cdt->setRunYK(false);
 }

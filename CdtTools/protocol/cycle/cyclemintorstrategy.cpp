@@ -35,7 +35,7 @@ void CycleMintorStrategy::ykResponse(CDTFrame &frame)
 
         // 闭锁或全闭锁
         if (allowIndex == -1) {
-            emit m_cdt->sendYKMsg(QStringLiteral("接收到遥控闭锁指令").arg(allowIndex));
+            emit m_cdt->sendYKMsg(QStringLiteral("接收到遥控闭锁指令"));
             return;
         }
 

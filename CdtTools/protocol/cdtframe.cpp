@@ -138,6 +138,17 @@ void ControlEntity::fillData(uint8_t control, uint8_t type, uint8_t dataNum, uin
     this->crcCode = CheckHelper::CheckCRC8(reinterpret_cast<uchar*>(this->toBytes().data()), 0, 5);
 }
 
+void ControlEntity::calcCrc()
+{
+    uchar buf[5] = {0};
+    buf[0] = control;
+    buf[1] = type;
+    buf[2] = dataNum;
+    buf[3] = sourceAddr;
+    buf[4] = destAddr;
+    crcCode = CheckHelper::CheckCRC8(buf, 0, sizeof(buf) / sizeof(uchar));
+}
+
 QByteArray ControlEntity::toBytes()
 {
     QByteArray bytes(5, '\0');
@@ -171,6 +182,11 @@ void InfoFieldEntity::fillData(uint8_t funCode, uint8_t d0, uint8_t d1, uint8_t 
     this->dataArray[2] = d2;
     this->dataArray[3] = d3;
     this->crcCode = CheckHelper::CheckCRC8(reinterpret_cast<uchar*>(this->toBytes().data()), 0, 5);
+}
+
+void InfoFieldEntity::calcCrc()
+{
+    crcCode = CheckHelper::CheckCRC8(reinterpret_cast<uchar*>(this->toBytes().data()), 0, 5);
 }
 
 QByteArray InfoFieldEntity::toBytes()

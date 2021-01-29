@@ -10,11 +10,12 @@ YKDialog::YKDialog(const QString &text, QWidget *parent)
     , m_dialog(new QtMaterialDialog)
 {
     setModal(false);
-    resize(300, 200);
+    setWindowFlag(Qt::FramelessWindowHint);
+    resize(parent->width(), parent->height());
     m_dialog->setParent(this);
     auto infoLabel = new QLabel(text, this);
-    auto btnYes = new QtMaterialFlatButton(tr("是"), Material::Default, this);
-    auto btnNo = new QtMaterialFlatButton(tr("否"), Material::Default, this);
+    auto btnYes = new QtMaterialFlatButton(tr("是"), Material::Primary, this);
+    auto btnNo = new QtMaterialFlatButton(tr("否"), Material::Primary, this);
     btnYes->setHaloVisible(false);
     btnYes->setBackgroundMode(Qt::OpaqueMode);
     btnYes->setOverlayStyle(Material::TintedOverlay);
@@ -24,9 +25,10 @@ YKDialog::YKDialog(const QString &text, QWidget *parent)
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(infoLabel);
-    auto widget = new QWidget(m_dialog);
-    mainLayout->addWidget(widget);
-    widget->setMinimumHeight(200);
+//    auto widget = new QWidget(m_dialog);
+//    mainLayout->addWidget(widget);
+//    widget->setMinimumSize(300, 200);
+
     auto btnLayout = new QHBoxLayout();
     btnLayout->addSpacing(20);
     btnLayout->addWidget(btnYes);
@@ -44,15 +46,12 @@ YKDialog::YKDialog(const QString &text, QWidget *parent)
 
 void YKDialog::onBtnYesClicked()
 {
-//    emit close(QDialog::Accepted);
-//    m_dialog->hideDialog();
+
     accept();
 }
 
 void YKDialog::onBtnNoClicked()
 {
-//    emit close(QDialog::Rejected);
-//    m_dialog->hideDialog();
     reject();
 }
 

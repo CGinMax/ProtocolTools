@@ -75,6 +75,7 @@ struct InfoFieldEntity
     uint8_t crcCode;     // CRC码
 
     void fillData(uint8_t funCode, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
+    void calcCrc();
     QByteArray toBytes();
 };
 
@@ -90,7 +91,7 @@ struct ControlEntity
     uint8_t crcCode;   // CRC码
 
     void fillData(uint8_t control, uint8_t type, uint8_t dataNum, uint8_t sourceAddr, uint8_t destAddr);
-
+    void calcCrc();
     QByteArray toBytes();
 };
 
