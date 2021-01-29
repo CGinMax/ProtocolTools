@@ -20,6 +20,7 @@ void NrMintorStrategy::ykResponse(CDTFrame &frame)
     ykAddr = (ykAddr << 8) | firstInfoData.dataArray[0];
 
     if (ykAddr == 0xFFFF) {
+        m_cdt->setRunYK(true);
         emit m_cdt->sendYKMsg(QStringLiteral("接收到遥控全闭锁指令，进入遥控状态"));
         return;
     }
@@ -35,8 +36,7 @@ void NrMintorStrategy::ykResponse(CDTFrame &frame)
         return ;
     }
 
-    if (!m_cdt->isRunYK()) {
-        m_cdt->setRunYK(true);
+    if (m_cdt->isRunYK()) {
         emit m_cdt->notifyYK(ykAddr);
         emit m_cdt->sendYKMsg(QStringLiteral("接收到遥控单点闭锁指令"));
     }

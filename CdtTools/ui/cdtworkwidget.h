@@ -32,6 +32,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 signals:
     void stop();
+    void lockOrUnlock(bool locked);
     void startYK(int ptId, bool offon);
     void reverseYx(int ptId, bool allow);
     void disconnected();

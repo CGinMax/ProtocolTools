@@ -43,6 +43,11 @@ void CDTMintorStrategy::ykResponse(CDTFrame &frame)
     }
 }
 
+void CDTMintorStrategy::onLockOrUnlock(bool locked)
+{
+    Q_UNUSED(locked)
+}
+
 void CDTMintorStrategy::sendYK(int ptId, bool offon)
 {
     Q_UNUSED(ptId);

@@ -17,6 +17,7 @@ public:
 signals:
 
 public slots:
+    void onLockOrUnlock(bool locked) override;
     void sendYK(int ptId, bool offon) override;
 private:
     CDTProtocol* m_cdt;

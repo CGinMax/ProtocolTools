@@ -92,7 +92,12 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     m_floatBtnGroup->move(ui->textBrowser->x() + width() - 18 - m_floatBtnGroup->width(), ui->textBrowser->y() + 9);
     m_floatBtnGroup->raise();
 
-
+    connect(ui->btnLock, &QPushButton::clicked, [=]{
+        emit this->lockOrUnlock(true);
+    });
+    connect(ui->btnUnlock, &QPushButton::clicked, [=]{
+        emit this->lockOrUnlock(false);
+    });
 }
 
 CDTWorkWidget::~CDTWorkWidget()
@@ -130,6 +135,7 @@ void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settin
         connect(this->m_protocol, &ProtocolBase::sendProtocolContent, this, &CDTWorkWidget::recvProtocolContent);
         connect(this->m_protocol, &ProtocolBase::sendYKMsg, this, &CDTWorkWidget::recvYKMsg);
         connect(this, &CDTWorkWidget::stop, this->m_protocol, &ProtocolBase::stop, Qt::BlockingQueuedConnection);
+        connect(this, &CDTWorkWidget::lockOrUnlock, this->m_protocol, &ProtocolBase::lockOrUnlock);
         connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::sendYk);
         connect(this, &CDTWorkWidget::reverseYx, this->m_protocol, &ProtocolBase::onReverseYx);
         connect(this->m_protocol, &ProtocolBase::notifyYK, this, &CDTWorkWidget::onNotifyYK);

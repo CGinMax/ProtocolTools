@@ -2,6 +2,7 @@
 #define NRWFSTRATEGY_H
 
 #include "../standard/cdtwfstrategy.h"
+#include <QTimer>
 
 class CDTExNr;
 class NrWFStrategy : public CDTWFStrategy
@@ -15,11 +16,14 @@ public:
 signals:
 
 public slots:
+    void onLockOrUnlock(bool locked) override;
     void sendYK(int ptId, bool offon) override;
-
+    void onListenTimeout();
 private:
     CDTExNr* m_cdt;
-
+    QTimer m_timer;
+    int m_listenPtId;
+    bool m_oldStatus;
 };
 
 #endif // NRWFSTRATEGY_H

@@ -25,9 +25,6 @@ YKDialog::YKDialog(const QString &text, QWidget *parent)
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(infoLabel);
-//    auto widget = new QWidget(m_dialog);
-//    mainLayout->addWidget(widget);
-//    widget->setMinimumSize(300, 200);
 
     auto btnLayout = new QHBoxLayout();
     btnLayout->addSpacing(20);

@@ -44,6 +44,11 @@ void CDTWFStrategy::ykResponse(CDTFrame &frame)
     }
 }
 
+void CDTWFStrategy::onLockOrUnlock(bool locked)
+{
+    Q_UNUSED(locked)
+}
+
 void CDTWFStrategy::sendYK(int ptId, bool offon)
 {
     if (ptId > m_cdt->getPtCfg()->m_globalDiList->last()->io()) {

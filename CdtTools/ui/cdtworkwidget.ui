@@ -124,6 +124,20 @@
          <number>0</number>
         </property>
         <item>
+         <widget class="QPushButton" name="btnLock">
+          <property name="text">
+           <string>闭锁</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnUnlock">
+          <property name="text">
+           <string>解锁</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QSpinBox" name="edPtId"/>

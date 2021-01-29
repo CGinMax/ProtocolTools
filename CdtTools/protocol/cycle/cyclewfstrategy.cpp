@@ -7,7 +7,6 @@ CycleWFStrategy::CycleWFStrategy(CDTCycle *cdt, QObject *parent)
     , m_listenPtId(0)
     , m_oldStatus(false)
 {
-    setParent(parent);
     connect(&m_timer, &QTimer::timeout, this, &CycleWFStrategy::onListenTimeout);
 }
 

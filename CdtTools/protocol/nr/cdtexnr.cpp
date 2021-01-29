@@ -20,6 +20,7 @@ void CDTExNr::initStrategy()
     } else {
         m_strategy = new NrMintorStrategy(this, this);
     }
+    connect(this, &ProtocolBase::lockOrUnlock, m_strategy, &StrategyBase::onLockOrUnlock);
     connect(this, &ProtocolBase::sendYk, m_strategy, &StrategyBase::sendYK);
 }
 

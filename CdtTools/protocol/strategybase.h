@@ -18,6 +18,7 @@ public:
 signals:
 
 public slots:
+    virtual void onLockOrUnlock(bool locked) = 0;
     virtual void sendYK(int ptId, bool offon) = 0;
 };
 

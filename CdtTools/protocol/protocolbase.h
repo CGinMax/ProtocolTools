@@ -48,13 +48,16 @@ signals:
     void write(const QByteArray& data);
     void sendProtocolContent(const QString& msg);
     void sendYKMsg(const QString& msg);
-    void ykExecuteFinish(const QString& msg);
     void notifyYK(int ptId);
+
+    void lockOrUnlock(bool locked);
     void sendYk(int ptId, bool offon);
 
 public slots:
     virtual void start();
     virtual void stop();
+
+    // lock true为闭锁，false为解锁
 
     virtual void onReverseYx(int ptId, bool allow){
         Q_UNUSED(ptId)
