@@ -52,7 +52,8 @@ public:
     void updateEditorGeometry(QWidget *editor,
                               const QStyleOptionViewItem &option,
                               const QModelIndex &index) const override;
-
+public slots:
+    void onCurrentTextChange(const QString& s);
 private:
     QStringList itemList;//选项列表
 };

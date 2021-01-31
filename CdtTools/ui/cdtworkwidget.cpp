@@ -48,6 +48,9 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     auto diDelegate = new ComboBoxDelegate(ui->viewDi);
     diDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
     ui->viewDi->setItemDelegateForColumn(2, diDelegate);
+    for (int i = 0; i < m_diModel->rowCount(QModelIndex()); i++) {
+        ui->viewDi->openPersistentEditor(m_diModel->index(i, 2));
+    }
 
     m_aiModel = new AiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalAiList, ui->viewAi);
     ui->viewAi->setModel(m_aiModel);
@@ -57,9 +60,12 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->viewAi->setSelectionBehavior(QAbstractItemView::SelectItems);
     auto aiDelegate = new DigitLimiteDelegate();
     ui->viewAi->setItemDelegateForColumn(2, aiDelegate);
+    for (int i = 0; i < m_aiModel->rowCount(QModelIndex()); i++) {
+        ui->viewAi->openPersistentEditor(m_aiModel->index(i, 2));
+    }
 
-    m_vyxModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalVDiList, ui->viewVDi);
-    ui->viewVDi->setModel(m_vyxModel);
+    m_vdiModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalVDiList, ui->viewVDi);
+    ui->viewVDi->setModel(m_vdiModel);
     ui->viewVDi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewVDi->verticalHeader()->setVisible(false);
     ui->viewVDi->setEditTriggers(QAbstractItemView::DoubleClicked);
@@ -67,6 +73,9 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     auto vyxDelegate = new ComboBoxDelegate(ui->viewVDi);
     vyxDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
     ui->viewVDi->setItemDelegateForColumn(2, vyxDelegate);
+    for (int i = 0; i < m_vdiModel->rowCount(QModelIndex()); i++) {
+        ui->viewVDi->openPersistentEditor(m_vdiModel->index(i, 2));
+    }
 
     bool isRandom = settingData->m_ptCfg->m_isRandom;
     connect(&m_viewTimer, &QTimer::timeout, [this, isRandom]{
@@ -74,8 +83,10 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
             m_aiModel->randomNumber();
         ui->viewAi->viewport()->update();
         ui->viewDi->viewport()->update();
+        emit m_diModel->dataChanged(m_diModel->index(0, 2), m_diModel->index(m_diModel->rowCount(QModelIndex()), 2));
+        emit m_aiModel->dataChanged(m_aiModel->index(0, 2), m_aiModel->index(m_aiModel->rowCount(QModelIndex()), 2));
+        emit m_vdiModel->dataChanged(m_vdiModel->index(0, 2), m_vdiModel->index(m_vdiModel->rowCount(QModelIndex()), 2));
     });
-    m_viewTimer.start(2000);
 
     ui->edPtId->setMinimum(settingData->m_ptCfg->m_globalDiList->first()->io());
 
@@ -143,6 +154,8 @@ void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settin
         this->m_protocol->initStrategy();
         this->m_protocol->start();
     });
+
+    m_viewTimer.start(2000);
 }
 
 void CDTWorkWidget::resetAiRandom(bool start)
@@ -159,6 +172,8 @@ void CDTWorkWidget::stopCommunication()
 {
     emit stop();
     m_network->close();
+
+    m_viewTimer.stop();
 }
 
 bool CDTWorkWidget::isConnection()

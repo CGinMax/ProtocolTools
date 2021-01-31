@@ -62,6 +62,9 @@ public:
     void updateEditorGeometry(QWidget *editor,
                               const QStyleOptionViewItem &option,
                               const QModelIndex &index) const override;
+
+public slots:
+    void onTextChanged(const QString& s);
 };
 
 #endif // DIGITLIMITEDELEGATE_H

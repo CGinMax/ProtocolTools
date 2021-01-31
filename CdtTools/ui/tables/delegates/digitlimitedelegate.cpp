@@ -15,6 +15,7 @@ QWidget* DigitLimiteDelegate::createEditor(QWidget *parent, const QStyleOptionVi
     QLineEdit* editor=new QLineEdit(parent);
     QRegExp regExp("[0-9]{0,10}");
     editor->setValidator(new QRegExpValidator(regExp,parent));
+    connect(editor, &QLineEdit::textChanged, this, &DigitLimiteDelegate::onTextChanged);
     return editor;
 }
 
@@ -36,4 +37,10 @@ void DigitLimiteDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpti
 {
     Q_UNUSED(index);
     editor->setGeometry(option.rect);
+}
+
+void DigitLimiteDelegate::onTextChanged(const QString &s)
+{
+    Q_UNUSED(s)
+    emit commitData(qobject_cast<QLineEdit*>(sender()));
 }

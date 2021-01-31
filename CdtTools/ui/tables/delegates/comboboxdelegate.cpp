@@ -18,6 +18,7 @@ QWidget* ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
     editor->addItems(itemList);
     editor->installEventFilter(const_cast<ComboBoxDelegate*>(this));
     editor->setCurrentIndex(0);
+    connect(editor, &QComboBox::currentTextChanged, this, &ComboBoxDelegate::onCurrentTextChange);
     return editor;
 }
 
@@ -27,7 +28,6 @@ void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
     QComboBox *comboBox=static_cast<QComboBox*>(editor);
     int curIndex=comboBox->findText(text);
     comboBox->setCurrentIndex(curIndex);
-
 }
 
 void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
@@ -42,4 +42,10 @@ void ComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionV
     Q_UNUSED(editor);
     Q_UNUSED(index);
     editor->setGeometry(option.rect);
+}
+
+void ComboBoxDelegate::onCurrentTextChange(const QString &s)
+{
+    Q_UNUSED(s)
+    emit commitData(qobject_cast<QComboBox*>(sender()));
 }

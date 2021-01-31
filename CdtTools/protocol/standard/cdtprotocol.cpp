@@ -217,10 +217,14 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
 
         for (int i = 0; i < 4; i += 2)
         {
-            uint8_t valueBytes[2]{0};
-            valueBytes[0] = entity.dataArray[i + 1];
-            valueBytes[1] = entity.dataArray[i];
-            memcpy(&ycAccept, valueBytes, 2);
+            // 将两个字节合并到16位的整数中
+            uint16_t combineNum = entity.dataArray[i];
+            combineNum = (combineNum << 8) | entity.dataArray[i + 1];
+            ycAccept = combineNum;
+            // 0~10为有效数据
+            if (combineNum > 0x07FF) {
+                ycAccept = 0x4000;//溢出
+            }
             // 点号
             nSeq = entity.funCode + (i / 2) + offset;
             if (nSeq < offset + m_settingData->m_ptCfg->m_globalAiList->size()) {
@@ -232,6 +236,7 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
                     qInfo("未找到遥测点，点号=%d", nSeq);
                 }
             }
+
 
         }
     }
