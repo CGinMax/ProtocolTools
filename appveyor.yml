@@ -5,7 +5,7 @@ environment:
     - name: Ubuntu
       platform: x64
       qt: 5.12.10
-      releaseName: CdtTool_qt5_12_10_gcc
+      releaseName: CdtTool_qt5_12_10_gcc_x64
 
 build_script:
     - export QtPath=$HOME/Qt/5.12.10/gcc_64
