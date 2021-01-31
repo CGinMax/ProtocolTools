@@ -42,6 +42,17 @@ SOURCES += \
     protocol/ut/cdtexut.cpp \
     protocol/nr/cdtexnr.cpp \
     ui/dialog/ykdialog.cpp \
+    protocol/strategybase.cpp \
+    protocol/standard/cdtwfstrategy.cpp \
+    protocol/standard/cdtmintorstrategy.cpp \
+    protocol/cycle/cyclewfstrategy.cpp \
+    protocol/cycle/cyclemintorstrategy.cpp \
+    protocol/interacte/interwfstrategy.cpp \
+    protocol/interacte/intermintorstrategy.cpp \
+    protocol/ut/utwfstrategy.cpp \
+    protocol/ut/utmintorstrategy.cpp \
+    protocol/nr/nrwfstrategy.cpp \
+    protocol/nr/nrmintorstrategy.cpp \
     ui/tabpage.cpp \
     ui/clientpage.cpp \
     ui/serverpage.cpp \
@@ -54,18 +65,7 @@ SOURCES += \
     ui/tables/aidata.cpp \
     ui/tables/delegates/digitlimitedelegate.cpp \
     ui/ptcfg.cpp \
-    ui/floatbuttongroup.cpp \
-    protocol/strategybase.cpp \
-    protocol/standard/cdtwfstrategy.cpp \
-    protocol/standard/cdtmintorstrategy.cpp \
-    protocol/cycle/cyclewfstrategy.cpp \
-    protocol/cycle/cyclemintorstrategy.cpp \
-    protocol/interacte/interwfstrategy.cpp \
-    protocol/interacte/intermintorstrategy.cpp \
-    protocol/ut/utwfstrategy.cpp \
-    protocol/ut/utmintorstrategy.cpp \
-    protocol/nr/nrwfstrategy.cpp \
-    protocol/nr/nrmintorstrategy.cpp
+    ui/floatbuttongroup.cpp
 
 HEADERS += \
         mainwindow.h \
