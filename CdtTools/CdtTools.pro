@@ -41,7 +41,6 @@ SOURCES += \
     protocol/ut/cdtexut.cpp \
     protocol/nr/cdtexnr.cpp \
     ui/dialog/ykdialog.cpp \
-    ui/tabpage.cpp \
     ui/clientpage.cpp \
     ui/serverpage.cpp \
     ui/cdtsettingdlg.cpp \
