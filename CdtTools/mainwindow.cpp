@@ -41,9 +41,3 @@ void MainWindow::onAddNewPage()
     m_mainTabs->addTab(tabPage, QString("Page%1").arg(pageNum++));
 }
 
-void MainWindow::on_tabWidget_tabCloseRequested(int index)
-{
-//    auto widget = ui->tabWidget->widget(index);
-//    delete widget;
-//    widget = nullptr;
-}

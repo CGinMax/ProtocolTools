@@ -18,8 +18,6 @@ public:
     ~MainWindow() override;
 public slots:
     void onAddNewPage();
-private slots:
-    void on_tabWidget_tabCloseRequested(int index);
 
 private:
     Ui::MainWindow *ui;
