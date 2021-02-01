@@ -6,7 +6,7 @@
 #include "tables/delegates/digitlimitedelegate.h"
 #include "../protocol/standard/cdtprotocol.h"
 #include "../protocol/interacte/cdtinteracte.h"
-#include "../protocol/cycle/cdtcycle.h"
+#include "../protocol/cycle/cdtstandard.h"
 #include "../protocol/nr/cdtexnr.h"
 #include "../protocol/ut/cdtexut.h"
 #include "../common/threadpool.h"
@@ -124,14 +124,11 @@ void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settin
 {
     ThreadPool::instance()->run([&settingData, this](){
         switch (settingData->m_ptCfg->m_protocol) {
-        case eProtocol::CDTStandard:
-            this->m_protocol = new CDTProtocol(this->m_network, settingData);
+        case eProtocol::CDTStandardary:
+            this->m_protocol = new CDTStandard(this->m_network, settingData);
             break;
         case eProtocol::CDTGcInterace:
             this->m_protocol = new CDTInteracte(this->m_network, settingData);
-            break;
-        case eProtocol::CDTGcCycle:
-            this->m_protocol = new CDTCycle(this->m_network, settingData);
             break;
         case eProtocol::CDTUt:
             this->m_protocol = new CDTExUt(this->m_network, settingData);

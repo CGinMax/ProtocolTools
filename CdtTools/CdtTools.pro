@@ -38,7 +38,6 @@ SOURCES += \
     protocol/protocolbase.cpp \
     protocol/standard/cdtprotocol.cpp \
     protocol/interacte/cdtinteracte.cpp \
-    protocol/cycle/cdtcycle.cpp \
     protocol/ut/cdtexut.cpp \
     protocol/nr/cdtexnr.cpp \
     ui/dialog/ykdialog.cpp \
@@ -58,14 +57,15 @@ SOURCES += \
     protocol/strategybase.cpp \
     protocol/standard/cdtwfstrategy.cpp \
     protocol/standard/cdtmintorstrategy.cpp \
-    protocol/cycle/cyclewfstrategy.cpp \
-    protocol/cycle/cyclemintorstrategy.cpp \
     protocol/interacte/interwfstrategy.cpp \
     protocol/interacte/intermintorstrategy.cpp \
     protocol/ut/utwfstrategy.cpp \
     protocol/ut/utmintorstrategy.cpp \
     protocol/nr/nrwfstrategy.cpp \
-    protocol/nr/nrmintorstrategy.cpp
+    protocol/nr/nrmintorstrategy.cpp \
+    protocol/cycle/cdtstandard.cpp \
+    protocol/cycle/standardmintorstrategy.cpp \
+    protocol/cycle/standardwfstrategy.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -81,7 +81,6 @@ HEADERS += \
     protocol/standard/cdtprotocol.h \
     protocol/protocolbase.h \
     protocol/interacte/cdtinteracte.h \
-    protocol/cycle/cdtcycle.h \
     protocol/ut/cdtexut.h \
     protocol/nr/cdtexnr.h \
     ui/dialog/ykdialog.h \
@@ -101,14 +100,15 @@ HEADERS += \
     protocol/strategybase.h \
     protocol/standard/cdtwfstrategy.h \
     protocol/standard/cdtmintorstrategy.h \
-    protocol/cycle/cyclewfstrategy.h \
-    protocol/cycle/cyclemintorstrategy.h \
     protocol/interacte/interwfstrategy.h \
     protocol/interacte/intermintorstrategy.h \
     protocol/ut/utwfstrategy.h \
     protocol/ut/utmintorstrategy.h \
     protocol/nr/nrwfstrategy.h \
-    protocol/nr/nrmintorstrategy.h
+    protocol/nr/nrmintorstrategy.h \
+    protocol/cycle/cdtstandard.h \
+    protocol/cycle/standardmintorstrategy.h \
+    protocol/cycle/standardwfstrategy.h
 
 FORMS += \
         mainwindow.ui \

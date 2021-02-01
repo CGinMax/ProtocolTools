@@ -1,21 +1,21 @@
-#include "cyclewfstrategy.h"
-#include "cdtcycle.h"
+#include "standardwfstrategy.h"
+#include "cdtstandard.h"
 
-CycleWFStrategy::CycleWFStrategy(CDTCycle *cdt, QObject *parent)
+StandardWFStrategy::StandardWFStrategy(CDTStandard *cdt, QObject *parent)
     : CDTWFStrategy (cdt, parent)
     , m_cdt(cdt)
     , m_listenPtId(0)
     , m_oldStatus(false)
 {
-    connect(&m_timer, &QTimer::timeout, this, &CycleWFStrategy::onListenTimeout);
+    connect(&m_timer, &QTimer::timeout, this, &StandardWFStrategy::onListenTimeout);
 }
 
-CycleWFStrategy::~CycleWFStrategy()
+StandardWFStrategy::~StandardWFStrategy()
 {
 
 }
 
-void CycleWFStrategy::uploadTiming()
+void StandardWFStrategy::uploadTiming()
 {
     if (!m_cdt->isRunYK()) {
         m_cdt->uploadLock();
@@ -23,12 +23,12 @@ void CycleWFStrategy::uploadTiming()
     CDTWFStrategy::uploadTiming();
 }
 
-void CycleWFStrategy::ykResponse(CDTFrame &frame)
+void StandardWFStrategy::ykResponse(CDTFrame &frame)
 {
     Q_UNUSED(frame)
 }
 
-void CycleWFStrategy::sendYK(int ptId, bool offon)
+void StandardWFStrategy::sendYK(int ptId, bool offon)
 {
     Q_UNUSED(offon)
 
@@ -46,7 +46,7 @@ void CycleWFStrategy::sendYK(int ptId, bool offon)
 
 }
 
-void CycleWFStrategy::onListenTimeout()
+void StandardWFStrategy::onListenTimeout()
 {
     auto di = m_cdt->getPtCfg()->findDiById(m_listenPtId);
     if (di->value() == m_oldStatus) {

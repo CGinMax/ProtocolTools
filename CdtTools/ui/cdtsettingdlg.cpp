@@ -59,7 +59,7 @@ void CDTSettingDlg::initDefaultCfgs()
     if (!CDTSettingDlg::s_defaultCfgs.isEmpty()) {
         return;
     }
-    CDTSettingDlg::s_defaultCfgs.resize(5);
+    CDTSettingDlg::s_defaultCfgs.resize(4);
 
     auto standard = new PtCfg;
     auto interace = new PtCfg;
@@ -70,14 +70,7 @@ void CDTSettingDlg::initDefaultCfgs()
     interace->m_ykReqCode = 0xE0;
     interace->m_ykAckCode = 0xE1;
     interace->m_ykExeCode = 0xE2;
-    auto cycle = new PtCfg;
-    cycle->m_protocol = eProtocol::CDTGcCycle;
-    cycle->m_ycFrameType = 0x64;
-    cycle->m_ykReqType = 0xF1;
-    cycle->m_ykAckType = 0xF1;
-    cycle->m_ykReqCode = 0x00;
-    cycle->m_ykAckCode = 0x00;
-    cycle->m_ykExeCode = 0;
+
     auto ut = new PtCfg;
     ut->m_protocol = eProtocol::CDTUt;
     ut->m_vyxFrameType = 0xA8;
@@ -95,9 +88,8 @@ void CDTSettingDlg::initDefaultCfgs()
     nr->m_ykExeCode = 0x00;
     CDTSettingDlg::s_defaultCfgs[0] = standard;
     CDTSettingDlg::s_defaultCfgs[1] = interace;
-    CDTSettingDlg::s_defaultCfgs[2] = cycle;
-    CDTSettingDlg::s_defaultCfgs[3] = ut;
-    CDTSettingDlg::s_defaultCfgs[4] = nr;
+    CDTSettingDlg::s_defaultCfgs[2] = ut;
+    CDTSettingDlg::s_defaultCfgs[3] = nr;
 }
 
 

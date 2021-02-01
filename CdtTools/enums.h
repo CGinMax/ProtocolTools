@@ -14,9 +14,8 @@ enum eStationType{
 };
 
 enum eProtocol {
-    CDTStandard = 0,// 标准
-    CDTGcInterace,  // 共创交互式
-    CDTGcCycle,     // 共创循环式
+    CDTStandardary = 0,// 标准
+    CDTGcInterace,  // 交互式共创
     CDTUt,  // 优特
     CDTNr,  // 南瑞
 };

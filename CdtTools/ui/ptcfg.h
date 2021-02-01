@@ -26,7 +26,7 @@ public:
     DiData* findVDiById(int id);
 
 
-    eProtocol m_protocol{eProtocol::CDTStandard};
+    eProtocol m_protocol{eProtocol::CDTStandardary};
     uint8_t m_controlType{0x71};
     uint8_t m_yxFrameType{0xF4};
     uint8_t m_yxFuncode{0xF0};
@@ -43,11 +43,11 @@ public:
     int m_vyxNum{1};
     uint8_t m_vyxStartIo{0};
 
-    uint8_t m_ykReqType{0x61};
-    uint8_t m_ykAckType{0xC2};
-    uint8_t m_ykReqCode{0xE0};
-    uint8_t m_ykAckCode{0xE1};
-    uint8_t m_ykExeCode{0xE2};
+    uint8_t m_ykReqType{0xF1};
+    uint8_t m_ykAckType{0xF1};
+    uint8_t m_ykReqCode{0xF0};
+    uint8_t m_ykAckCode{0xF0};
+    uint8_t m_ykExeCode{0x00};
     uint8_t m_ykClose{0xCC};
     uint8_t m_ykOpen{0x33};
     uint8_t m_ykUnlock{0xAA};

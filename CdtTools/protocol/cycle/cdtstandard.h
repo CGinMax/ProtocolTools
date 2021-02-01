@@ -1,14 +1,14 @@
-#ifndef CDTCYCLE_H
-#define CDTCYCLE_H
+#ifndef CDTSTANDARD_H
+#define CDTSTANDARD_H
 
 #include "../standard/cdtprotocol.h"
 
-class CDTCycle : public CDTProtocol
+class CDTStandard : public CDTProtocol
 {
     Q_OBJECT
 public:
-    CDTCycle(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
-    ~CDTCycle() override;
+    CDTStandard(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
+    ~CDTStandard() override;
 
     void initStrategy() override;
 

@@ -1,16 +1,16 @@
-#ifndef CYCLEWFSTRATEGY_H
-#define CYCLEWFSTRATEGY_H
+#ifndef STANDARDWFSTRATEGY_H
+#define STANDARDWFSTRATEGY_H
 
 #include "../standard/cdtwfstrategy.h"
 #include <QTimer>
-class CDTCycle;
+class CDTStandard;
 
-class CycleWFStrategy : public CDTWFStrategy
+class StandardWFStrategy : public CDTWFStrategy
 {
     Q_OBJECT
 public:
-    explicit CycleWFStrategy(CDTCycle* cdt, QObject *parent = nullptr);
-    ~CycleWFStrategy() override;
+    explicit StandardWFStrategy(CDTStandard* cdt, QObject *parent = nullptr);
+    ~StandardWFStrategy() override;
     void uploadTiming() override;
 
     void ykResponse(CDTFrame& frame) override;
@@ -22,7 +22,7 @@ public slots:
     void onListenTimeout();
 
 private:
-    CDTCycle* m_cdt;
+    CDTStandard* m_cdt;
     int m_listenPtId;
     bool m_oldStatus;
     QTimer m_timer;

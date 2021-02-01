@@ -37,11 +37,6 @@
        </item>
        <item>
         <property name="text">
-         <string>共创循环式CDT</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>优特CDT</string>
         </property>
        </item>

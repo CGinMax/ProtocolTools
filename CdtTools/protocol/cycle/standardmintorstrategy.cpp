@@ -1,19 +1,19 @@
-#include "cyclemintorstrategy.h"
-#include "cdtcycle.h"
+#include "standardmintorstrategy.h"
+#include "cdtstandard.h"
 
-CycleMintorStrategy::CycleMintorStrategy(CDTCycle* cdt, QObject *parent)
+StandardMintorStrategy::StandardMintorStrategy(CDTStandard* cdt, QObject *parent)
     : CDTMintorStrategy (cdt, parent)
     , m_cdt(cdt)
 {
     setParent(parent);
 }
 
-CycleMintorStrategy::~CycleMintorStrategy()
+StandardMintorStrategy::~StandardMintorStrategy()
 {
 
 }
 
-void CycleMintorStrategy::ykResponse(CDTFrame &frame)
+void StandardMintorStrategy::ykResponse(CDTFrame &frame)
 {
     if (!m_cdt->isRunYK()) {
         // 解析报文，找解锁
@@ -45,7 +45,7 @@ void CycleMintorStrategy::ykResponse(CDTFrame &frame)
     }
 }
 
-int CycleMintorStrategy::findPositive(uint32_t num)
+int StandardMintorStrategy::findPositive(uint32_t num)
 {
     if (num > 0) {
         for (int i = 0; i < 32; i++) {
@@ -57,7 +57,7 @@ int CycleMintorStrategy::findPositive(uint32_t num)
     return -1;
 }
 
-void CycleMintorStrategy::sendYK(int ptId, bool offon)
+void StandardMintorStrategy::sendYK(int ptId, bool offon)
 {
     Q_UNUSED(ptId)
     Q_UNUSED(offon)

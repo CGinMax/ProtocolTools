@@ -1,9 +1,9 @@
-#include "cdtcycle.h"
-#include "cyclewfstrategy.h"
-#include "cyclemintorstrategy.h"
+#include "cdtstandard.h"
+#include "standardwfstrategy.h"
+#include "standardmintorstrategy.h"
 #include <QtMath>
 
-CDTCycle::CDTCycle(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData)
+CDTStandard::CDTStandard(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData)
     : CDTProtocol (network, settingData)
     , m_cycleTime(2000)// 2s
     , m_cycleTimer(0)
@@ -11,22 +11,22 @@ CDTCycle::CDTCycle(const QSharedPointer<NetworkBase>& network, const QSharedPoin
 
 }
 
-CDTCycle::~CDTCycle()
+CDTStandard::~CDTStandard()
 {
 
 }
 
-void CDTCycle::initStrategy()
+void CDTStandard::initStrategy()
 {
     if (m_settingData->m_stationType == eStationType::WF) {
-        m_strategy = new CycleWFStrategy(this, this);
+        m_strategy = new StandardWFStrategy(this, this);
     } else {
-        m_strategy = new CycleMintorStrategy(this, this);
+        m_strategy = new StandardMintorStrategy(this, this);
     }
     connect(this, &ProtocolBase::sendYk, m_strategy, &StrategyBase::sendYK);
 }
 
-void CDTCycle::ykUnlock(int ptId)
+void CDTStandard::ykUnlock(int ptId)
 {
     CDTFrame frame = createCycleYKFrame(false, ptId);
     int offset = m_settingData->m_ptCfg->m_globalDiList->first()->io();
@@ -41,7 +41,7 @@ void CDTCycle::ykUnlock(int ptId)
     send(frame);
 }
 
-void CDTCycle::ykLock(int ptId)
+void CDTStandard::ykLock(int ptId)
 {
     CDTFrame frame = createCycleYKFrame(false, ptId);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控闭锁命令"), frame.toAllByteArray());
@@ -49,7 +49,7 @@ void CDTCycle::ykLock(int ptId)
     send(frame);
 }
 
-void CDTCycle::ykAllLock()
+void CDTStandard::ykAllLock()
 {
     CDTFrame frame = createCycleYKFrame(true);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控全闭锁命令"), frame.toAllByteArray());
@@ -57,7 +57,7 @@ void CDTCycle::ykAllLock()
     send(frame);
 }
 
-CDTFrame CDTCycle::createCycleYKFrame(bool isAllPoint, int ptId)
+CDTFrame CDTStandard::createCycleYKFrame(bool isAllPoint, int ptId)
 {
     CDTFrame cmdFrame;
     int offset = m_settingData->m_ptCfg->m_globalDiList->first()->io();
@@ -86,12 +86,12 @@ CDTFrame CDTCycle::createCycleYKFrame(bool isAllPoint, int ptId)
     return  cmdFrame;
 }
 
-void CDTCycle::onTimeout()
+void CDTStandard::onTimeout()
 {
     m_cycleTimer += 100;
     CDTProtocol::onTimeout();
 }
-void CDTCycle::uploadLock()
+void CDTStandard::uploadLock()
 {
     if (m_cycleTimer > m_cycleTime) {
         ykAllLock();
