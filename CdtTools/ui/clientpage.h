@@ -9,6 +9,8 @@
 #include "../network/tcpclient.h"
 #include "cdtworkwidget.h"
 
+class QVBoxLayout;
+
 class ClientPage : public QWidget
 {
     Q_OBJECT

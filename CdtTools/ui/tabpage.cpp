@@ -4,7 +4,7 @@
 #include <QIntValidator>
 #include <QButtonGroup>
 #include <QMessageBox>
-#include "enums.h"
+#include "../enums.h"
 #include "cdtsettingdlg.h"
 #include "../common/threadpool.h"
 

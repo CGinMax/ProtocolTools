@@ -41,6 +41,7 @@ SOURCES += \
     protocol/ut/cdtexut.cpp \
     protocol/nr/cdtexnr.cpp \
     ui/dialog/ykdialog.cpp \
+    ui/tabpage.cpp \
     ui/clientpage.cpp \
     ui/serverpage.cpp \
     ui/cdtsettingdlg.cpp \
@@ -52,7 +53,6 @@ SOURCES += \
     ui/tables/aidata.cpp \
     ui/tables/delegates/digitlimitedelegate.cpp \
     ui/ptcfg.cpp \
-    ui/floatbuttongroup.cpp \
     protocol/strategybase.cpp \
     protocol/standard/cdtwfstrategy.cpp \
     protocol/standard/cdtmintorstrategy.cpp \
@@ -64,7 +64,10 @@ SOURCES += \
     protocol/nr/nrmintorstrategy.cpp \
     protocol/cycle/cdtstandard.cpp \
     protocol/cycle/standardmintorstrategy.cpp \
-    protocol/cycle/standardwfstrategy.cpp
+    protocol/cycle/standardwfstrategy.cpp \
+    ui/tabs/maintabwidget.cpp \
+    ui/tabs/fakeclosebutton.cpp \
+    ui/tabs/realclosebutton.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -95,7 +98,6 @@ HEADERS += \
     ui/tables/aidata.h \
     ui/tables/delegates/digitlimitedelegate.h \
     ui/ptcfg.h \
-    ui/floatbuttongroup.h \
     protocol/strategybase.h \
     protocol/standard/cdtwfstrategy.h \
     protocol/standard/cdtmintorstrategy.h \
@@ -107,7 +109,10 @@ HEADERS += \
     protocol/nr/nrmintorstrategy.h \
     protocol/cycle/cdtstandard.h \
     protocol/cycle/standardmintorstrategy.h \
-    protocol/cycle/standardwfstrategy.h
+    protocol/cycle/standardwfstrategy.h \
+    ui/tabs/maintabwidget.h \
+    ui/tabs/fakeclosebutton.h \
+    ui/tabs/realclosebutton.h
 
 FORMS += \
         mainwindow.ui \

@@ -20,7 +20,6 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     : QWidget(parent)
     , m_protocol(nullptr)
     , m_network(network)
-    , m_floatBtnGroup(new FloatButtonGroup(this))
     , ui(new Ui::CDTWorkWidget)
 {
     ui->setupUi(this);
@@ -99,9 +98,6 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     connect(btn, &QPushButton::clicked, [this](){
         this->ui->textBrowser->clear();
     });
-    m_floatBtnGroup->addButton(btn);
-    m_floatBtnGroup->move(ui->textBrowser->x() + width() - 18 - m_floatBtnGroup->width(), ui->textBrowser->y() + 9);
-    m_floatBtnGroup->raise();
 
     connect(ui->btnLock, &QPushButton::clicked, [=]{
         emit this->lockOrUnlock(true);
@@ -176,16 +172,6 @@ void CDTWorkWidget::stopCommunication()
 bool CDTWorkWidget::isConnection()
 {
     return m_protocol->isConnection();
-}
-
-void CDTWorkWidget::resizeEvent(QResizeEvent *event)
-{
-    if ((width() + 36) <= m_floatBtnGroup->width() || height() <= m_floatBtnGroup->height()) {
-        return ;
-    }
-
-    m_floatBtnGroup->move(ui->textBrowser->x() + width() - 18 - m_floatBtnGroup->width(), ui->textBrowser->y() + 9);
-    QWidget::resizeEvent(event);
 }
 
 void CDTWorkWidget::recvProtocolContent(const QString &msg)

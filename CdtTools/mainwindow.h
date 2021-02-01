@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "ui/tabpage.h"
+#include "ui/tabs/maintabwidget.h"
 #include <QPushButton>
 
 namespace Ui {
@@ -17,13 +17,13 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 public slots:
-    void onAddTabPage();
+    void onAddNewPage();
 private slots:
     void on_tabWidget_tabCloseRequested(int index);
 
 private:
     Ui::MainWindow *ui;
-    TabPage* m_page;
+    MainTabWidget* m_mainTabs;
     QPushButton* m_addTabBtn;
 };
 

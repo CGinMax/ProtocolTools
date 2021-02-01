@@ -4,6 +4,7 @@
 #include <QTabBar>
 #include <QApplication>
 #include <QDebug>
+#include "ui/tabpage.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,12 +14,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuBar->hide();
     ui->mainToolBar->hide();
 
-    m_addTabBtn = new QPushButton("+", this);
-    connect(m_addTabBtn, &QPushButton::clicked, this, &MainWindow::onAddTabPage);
-    ui->tabWidget->setTabsClosable(true);
-    auto tabPage = new TabPage(ui->tabWidget);
-    ui->tabWidget->addTab(tabPage, "Page1");
-    ui->tabWidget->setCornerWidget(m_addTabBtn, Qt::TopLeftCorner);
+    m_mainTabs = new MainTabWidget(this);
+    m_mainTabs->addTab(new TabPage(), "Page1");
+    centralWidget()->layout()->addWidget(m_mainTabs);
+    connect(m_mainTabs, &MainTabWidget::addNewPage, this, &MainWindow::onAddNewPage);
+
+//    m_addTabBtn = new QPushButton("+", this);
+//    connect(m_addTabBtn, &QPushButton::clicked, this, &MainWindow::onAddTabPage);
+//    ui->tabWidget->setTabsClosable(true);
+//    auto tabPage = new TabPage(ui->tabWidget);
+//    ui->tabWidget->addTab(tabPage, "Page1");
 
     auto screenSize = qApp->primaryScreen()->availableSize();
     setGeometry((screenSize.width() - width()) / 2, (screenSize.height() - height()) / 2, width(), height());
@@ -29,16 +34,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::onAddTabPage()
+void MainWindow::onAddNewPage()
 {
     static int pageNum = 2;
-    auto tabPage = new TabPage(ui->tabWidget);
-    ui->tabWidget->addTab(tabPage, QString("Page%1").arg(pageNum++));
+    auto tabPage = new TabPage(m_mainTabs);
+    m_mainTabs->addTab(tabPage, QString("Page%1").arg(pageNum++));
 }
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-    auto widget = ui->tabWidget->widget(index);
-    delete widget;
-    widget = nullptr;
+//    auto widget = ui->tabWidget->widget(index);
+//    delete widget;
+//    widget = nullptr;
 }
