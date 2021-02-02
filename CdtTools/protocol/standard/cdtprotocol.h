@@ -3,7 +3,6 @@
 
 #include <QQueue>
 #include <QSharedPointer>
-#include <QMutex>
 #include <QTimer>
 #include "../cdtframe.h"
 #include "../protocolbase.h"
@@ -84,8 +83,6 @@ protected:
 
     uint32_t valueToBCD(double value);
 
-
-    QMutex m_mtx;
     QByteArray m_recvBuffer;
     QQueue<CDTFrame> m_frameQueue;
     bool m_isRunYK;

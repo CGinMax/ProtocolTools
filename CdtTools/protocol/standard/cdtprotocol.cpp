@@ -1,7 +1,5 @@
 #include "cdtprotocol.h"
 #include <QtMath>
-#include <QThread>
-#include <QMutexLocker>
 #include "cdtmintorstrategy.h"
 #include "cdtwfstrategy.h"
 
@@ -38,7 +36,6 @@ void CDTProtocol::run()
 
 void CDTProtocol::parseRecvData()
 {
-    QMutexLocker locker(&m_mtx);
     // buffer中有数据开始解析
     while (m_recvBuffer.size() > 0)
     {

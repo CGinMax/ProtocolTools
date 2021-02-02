@@ -18,7 +18,13 @@ add_subdirectory(network)
 add_subdirectory(protocol)
 add_subdirectory(ui)
 
-add_executable(${EXE_NAME} main.cpp)
+add_executable(${EXE_NAME} 
+    main.cpp
+    enums.h
+    mainwindow.h
+    mainwindow.cpp
+    mainwindow.ui
+)
 
 qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
