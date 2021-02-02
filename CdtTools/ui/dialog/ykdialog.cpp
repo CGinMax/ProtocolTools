@@ -14,8 +14,8 @@ YKDialog::YKDialog(const QString &text, QWidget *parent)
     resize(parent->width(), parent->height());
     m_dialog->setParent(this);
     auto infoLabel = new QLabel(text, this);
-    auto btnYes = new QtMaterialFlatButton(tr("是"), Material::Primary, this);
-    auto btnNo = new QtMaterialFlatButton(tr("否"), Material::Primary, this);
+    auto btnYes = new QtMaterialFlatButton(tr("Yes"), Material::Primary, this);
+    auto btnNo = new QtMaterialFlatButton(tr("No"), Material::Primary, this);
     btnYes->setHaloVisible(false);
     btnYes->setBackgroundMode(Qt::OpaqueMode);
     btnYes->setOverlayStyle(Material::TintedOverlay);

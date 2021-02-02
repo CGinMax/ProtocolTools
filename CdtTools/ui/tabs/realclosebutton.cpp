@@ -11,7 +11,7 @@ RealCloseButton::RealCloseButton(QWidget *parent)
     setCursor(Qt::ArrowCursor);
 #endif
 #ifndef QT_NO_TOOLTIP
-    setToolTip(tr("关闭标签页"));
+    setToolTip(tr("Close Tab"));
 #endif
     resize(sizeHint());
 }

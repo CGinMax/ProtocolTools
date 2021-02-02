@@ -87,9 +87,9 @@ void MainTabWidget::showContextMenu(int tabIndex)
 {
     QMenu menu;
     m_contenxtIndex = tabIndex;
-    connect(menu.addAction(tr("分离")), &QAction::triggered, this, &MainTabWidget::onDivideTab);
+    connect(menu.addAction(tr("Split")), &QAction::triggered, this, &MainTabWidget::onDivideTab);
 
-    connect(menu.addAction(tr("关闭")), &QAction::triggered, this, [this, tabIndex]{
+    connect(menu.addAction(tr("Close")), &QAction::triggered, this, [this, tabIndex]{
         emit this->tabCloseRequested(tabIndex);
     });
     menu.exec(QCursor::pos());

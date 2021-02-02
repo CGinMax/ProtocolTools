@@ -21,7 +21,7 @@ ServerPage::ServerPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent
     tabbar->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(tabbar, &QTabBar::customContextMenuRequested, [this](const QPoint& pos){
         QMenu menu;
-        menu.addAction(tr("关闭已断开页面"), this, &ServerPage::onCloseDisconnected);
+        menu.addAction(tr("Close disconnected tab"), this, &ServerPage::onCloseDisconnected);
         menu.exec(QCursor::pos());
     });
 

@@ -94,11 +94,6 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->textBrowser->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->textBrowser, &QTextBrowser::customContextMenuRequested, this, &CDTWorkWidget::onTextBrowserContextMenuRequested);
 
-    auto btn = new QPushButton(tr("clear"), this);
-    connect(btn, &QPushButton::clicked, [this](){
-        this->ui->textBrowser->clear();
-    });
-
     connect(ui->btnLock, &QPushButton::clicked, [=]{
         emit this->lockOrUnlock(true);
     });
@@ -206,7 +201,7 @@ void CDTWorkWidget::onPlainTextContextMenuRequested(const QPoint &pos)
 {
     Q_UNUSED(pos);
     QMenu menu;
-    menu.addAction(tr("清空"), this, [this]{
+    menu.addAction(tr("Clear"), this, [this]{
         this->ui->textYkInfo->clear();
     });
     menu.exec(QCursor::pos());
@@ -216,7 +211,7 @@ void CDTWorkWidget::onTextBrowserContextMenuRequested(const QPoint &pos)
 {
     Q_UNUSED(pos);
     QMenu menu;
-    menu.addAction(tr("清空"), this, [this]{
+    menu.addAction(tr("Clear"), this, [this]{
         this->ui->textBrowser->clear();
     });
     menu.exec(QCursor::pos());
