@@ -9,6 +9,7 @@
 #include "../protocol/cycle/cdtstandard.h"
 #include "../protocol/nr/cdtexnr.h"
 #include "../protocol/ut/cdtexut.h"
+#include "../protocol/nrudp/nrudpprotocol.h"
 #include "../common/threadpool.h"
 #include "dialog/ykdialog.h"
 #include "../../qt-material-widgets/qtmaterialscrollbar.h"
@@ -127,7 +128,9 @@ void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settin
         case eProtocol::CDTNr:
             this->m_protocol = new CDTExNr(this->m_network, settingData);
             break;
-
+        case eProtocol::NRUdp:
+            this->m_protocol = new NrUdpProtocol(this->m_network, settingData);
+            break;
         default:
             break;
         }

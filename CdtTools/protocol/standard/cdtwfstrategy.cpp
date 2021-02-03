@@ -44,6 +44,11 @@ void CDTWFStrategy::ykResponse(CDTFrame &frame)
     }
 }
 
+void CDTWFStrategy::ykResponse(QByteArray &infoData)
+{
+    Q_UNUSED(infoData)
+}
+
 void CDTWFStrategy::onLockOrUnlock(bool locked)
 {
     Q_UNUSED(locked)

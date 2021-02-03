@@ -18,6 +18,7 @@ enum eProtocol {
     CDTGcInterace,  // 交互式共创
     CDTUt,  // 优特
     CDTNr,  // 南瑞
+    NRUdp,  // 南瑞udp
 };
 
 #endif // ENUMS_H

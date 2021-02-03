@@ -65,6 +65,7 @@ public slots:
         Q_UNUSED(allow)
     }
     virtual void onReadyRead() {}
+    virtual void onDisconnected() {}
 protected slots:
     virtual void onTimeout();
 

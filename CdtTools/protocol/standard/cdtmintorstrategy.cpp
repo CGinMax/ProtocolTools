@@ -43,6 +43,11 @@ void CDTMintorStrategy::ykResponse(CDTFrame &frame)
     }
 }
 
+void CDTMintorStrategy::ykResponse(QByteArray &infoData)
+{
+    Q_UNUSED(infoData)
+}
+
 void CDTMintorStrategy::onLockOrUnlock(bool locked)
 {
     Q_UNUSED(locked)

@@ -15,6 +15,8 @@ public:
 
     virtual void ykResponse(CDTFrame& frame) = 0;
 
+    virtual void ykResponse(QByteArray& infoData) = 0;
+
 signals:
 
 public slots:

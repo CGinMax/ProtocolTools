@@ -21,7 +21,7 @@ ServerPage::ServerPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent
     m_tabClients->setTabsClosable(true);
     auto tabbar = m_tabClients->tabBar();
     tabbar->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(tabbar, &QTabBar::customContextMenuRequested, [this](const QPoint& pos){
+    connect(tabbar, &QTabBar::customContextMenuRequested, this, [this](const QPoint& /*pos*/){
         QMenu menu;
         menu.addAction(tr("Close disconnected tab"), this, &ServerPage::onCloseDisconnected);
         menu.exec(QCursor::pos());

@@ -13,6 +13,7 @@ public:
 
     void uploadTiming() override;
     void ykResponse(CDTFrame& frame) override;
+    void ykResponse(QByteArray& infoData) override;
 
 signals:
 

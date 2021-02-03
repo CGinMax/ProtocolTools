@@ -30,7 +30,7 @@ void NrWFStrategy::onLockOrUnlock(bool locked)
     }
 }
 
-void NrWFStrategy::sendYK(int ptId, bool offon)
+void NrWFStrategy::sendYK(int ptId, bool /*offon*/)
 {
     if (ptId > m_cdt->getPtCfg()->m_globalDiList->last()->io()) {
         return ;

@@ -45,6 +45,11 @@
          <string>南瑞CDT</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>南瑞UDP</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>

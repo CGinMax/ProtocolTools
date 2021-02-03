@@ -31,6 +31,10 @@ SOURCES += \
     ../CdtTools/protocol/checkhelper.cpp \
     ../CdtTools/protocol/protocolbase.cpp \
     ../CdtTools/protocol/strategybase.cpp \
+    ../CdtTools/protocol/nrudp/nrudpframe.cpp \
+    ../CdtTools/protocol/nrudp/nrudpprotocol.cpp \
+    ../CdtTools/protocol/nrudp/nrudpmintorstrategy.cpp \
+    ../CdtTools/protocol/nrudp/nrudpwfstrategy.cpp \
     ../CdtTools/ui/dialog/ykdialog.cpp \
     ../CdtTools/ui/tables/delegates/comboboxdelegate.cpp \
     ../CdtTools/ui/tables/delegates/digitlimitedelegate.cpp \
@@ -75,6 +79,10 @@ HEADERS += \
     ../CdtTools/protocol/checkhelper.h \
     ../CdtTools/protocol/protocolbase.h \
     ../CdtTools/protocol/strategybase.h \
+    ../CdtTools/protocol/nrudp/nrudpframe.h \
+    ../CdtTools/protocol/nrudp/nrudpprotocol.h \
+    ../CdtTools/protocol/nrudp/nrudpmintorstrategy.h \
+    ../CdtTools/protocol/nrudp/nrudpwfstrategy.h \
     ../CdtTools/ui/dialog/ykdialog.h \
     ../CdtTools/ui/tables/delegates/comboboxdelegate.h \
     ../CdtTools/ui/tables/delegates/digitlimitedelegate.h \

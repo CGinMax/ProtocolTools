@@ -69,26 +69,26 @@ void CDTProtocol::processFrame()
         uint8_t ykType = m_settingData->m_stationType == eStationType::WF ? m_settingData->m_ptCfg->m_ykReqType : m_settingData->m_ptCfg->m_ykAckType;
 
         if (frame.frameControl.type == m_settingData->m_ptCfg->m_ycFrameType) {
-            showMessageBuffer(eMsgType::eMsgRecv, "接收到遥测帧，正在处理...", frame.toAllByteArray());
+            showMessageBuffer(eMsgType::eMsgRecv, QStringLiteral("接收到遥测帧，正在处理..."), frame.toAllByteArray());
             ycResponse(frame.infoFields);
         }
         else if (frame.frameControl.type == m_settingData->m_ptCfg->m_yxFrameType) {
             if (m_settingData->m_stationType == eStationType::WF) {
-                showMessageBuffer(eMsgType::eMsgRecv, "接收到遥信帧，正在处理...", frame.toAllByteArray());
+                showMessageBuffer(eMsgType::eMsgRecv, QStringLiteral("接收到遥信帧，正在处理..."), frame.toAllByteArray());
                 yxResponse(frame.infoFields);
             } else if (m_settingData->m_stationType == eStationType::Minitor) {
-                showMessageBuffer(eMsgType::eMsgRecv, "接收到虚遥信，正在处理...", frame.toAllByteArray());
+                showMessageBuffer(eMsgType::eMsgRecv, QStringLiteral("接收到虚遥信，正在处理..."), frame.toAllByteArray());
                 // 监控接收虚遥信
                 vyxResponse(frame.infoFields);
             }
         }
         else if (frame.frameControl.type == ykType) {
-            showMessageBuffer(eMsgType::eMsgRecv, "接收到遥控帧，正在处理...", frame.toAllByteArray());
+            showMessageBuffer(eMsgType::eMsgRecv, QStringLiteral("接收到遥控帧，正在处理..."), frame.toAllByteArray());
             m_strategy->ykResponse(frame);
 
         }
         else if (frame.frameControl.type == m_settingData->m_ptCfg->m_vyxFrameType) {
-            showMessageBuffer(eMsgType::eMsgRecv, "接收到虚遥信，正在处理...", frame.toAllByteArray());
+            showMessageBuffer(eMsgType::eMsgRecv, QStringLiteral("接收到虚遥信，正在处理..."), frame.toAllByteArray());
             // 监控接收虚遥信
             vyxResponse(frame.infoFields);
         }
@@ -170,7 +170,7 @@ void CDTProtocol::sendVirtualYX()
 void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
 {
     int startOffset = m_settingData->m_ptCfg->m_globalDiList->first()->io();
-    int diSize = m_settingData->m_ptCfg->m_globalDiList->size();
+//    int diSize = m_settingData->m_ptCfg->m_globalDiList->size();
     for (InfoFieldEntity &entity : infoFieldList) {
         // 当前信息字的遥信点起始地址,funCode：F0-FF
         int curPointStartAddr = (entity.funCode & 0x0F) * 32;
@@ -191,14 +191,15 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
 
             nSeq = curPointStartAddr + i + startOffset;  // 点号
 
-            if(nSeq < (startOffset + diSize)) {
-                auto di = m_settingData->m_ptCfg->findDiById(nSeq);
-                if (di) {
-                    di->setValue(yxValue > 0);
-                }
-                else {
-                    qInfo("未找到遥信点，点号=%d", nSeq);
-                }
+//            if(nSeq < (startOffset + diSize)) {
+
+//            }
+            auto di = m_settingData->m_ptCfg->findDiById(nSeq);
+            if (di) {
+                di->setValue(yxValue > 0);
+            }
+            else {
+                qInfo("未找到遥信点，点号=%d", nSeq);
             }
         }
     }
@@ -225,16 +226,16 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
             }
             // 点号
             nSeq = entity.funCode + (i / 2) + offset;
-            if (nSeq < offset + m_settingData->m_ptCfg->m_globalAiList->size()) {
-                auto ai = m_settingData->m_ptCfg->findAiById(nSeq);
-                if (ai) {
-                    ai->setValue(ycAccept);
-                }
-                else {
-                    qInfo("未找到遥测点，点号=%d", nSeq);
-                }
-            }
+//            if (nSeq < offset + m_settingData->m_ptCfg->m_globalAiList->size()) {
 
+//            }
+            auto ai = m_settingData->m_ptCfg->findAiById(nSeq);
+            if (ai) {
+                ai->setValue(ycAccept);
+            }
+            else {
+                qInfo("未找到遥测点，点号=%d", nSeq);
+            }
 
         }
     }
@@ -312,7 +313,7 @@ void CDTProtocol::yKCancel(uint8_t operCode, uint8_t ptNo)
 
 CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode, QList<DiData *> &ptList)
 {
-    QList<uchar> combineByteList;
+    QList<uint8_t> combineByteList;
     uchar val = 0;
     int index = 0;
     for (const auto& di: ptList) {

@@ -67,7 +67,11 @@ SOURCES += \
     protocol/cycle/standardwfstrategy.cpp \
     ui/tabs/maintabwidget.cpp \
     ui/tabs/fakeclosebutton.cpp \
-    ui/tabs/realclosebutton.cpp
+    ui/tabs/realclosebutton.cpp \
+    protocol/nrudp/nrudpframe.cpp \
+    protocol/nrudp/nrudpprotocol.cpp \
+    protocol/nrudp/nrudpmintorstrategy.cpp \
+    protocol/nrudp/nrudpwfstrategy.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -112,7 +116,11 @@ HEADERS += \
     protocol/cycle/standardwfstrategy.h \
     ui/tabs/maintabwidget.h \
     ui/tabs/fakeclosebutton.h \
-    ui/tabs/realclosebutton.h
+    ui/tabs/realclosebutton.h \
+    protocol/nrudp/nrudpframe.h \
+    protocol/nrudp/nrudpprotocol.h \
+    protocol/nrudp/nrudpmintorstrategy.h \
+    protocol/nrudp/nrudpwfstrategy.h
 
 FORMS += \
         mainwindow.ui \

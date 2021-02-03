@@ -15,7 +15,7 @@ public:
     CDTProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTProtocol() override;
 
-     void initStrategy() override;
+    void initStrategy() override;
 
     void run() override;
 
@@ -72,7 +72,7 @@ signals:
 public slots:
     void onReverseYx(int ptId, bool allow) override;
     void onReadyRead() override;
-    void onDisconnected();
+    void onDisconnected() override;
 
 protected slots:
     void onTimeout() override;

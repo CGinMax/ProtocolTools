@@ -16,6 +16,8 @@ public:
 
     void ykResponse(CDTFrame& frame) override;
 
+    void ykResponse(QByteArray& infoData) override;
+
 public slots:
     void onLockOrUnlock(bool locked) override;
     void sendYK(int ptId, bool offon) override;

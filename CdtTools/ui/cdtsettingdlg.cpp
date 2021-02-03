@@ -59,7 +59,7 @@ void CDTSettingDlg::initDefaultCfgs()
     if (!CDTSettingDlg::s_defaultCfgs.isEmpty()) {
         return;
     }
-    CDTSettingDlg::s_defaultCfgs.resize(4);
+    CDTSettingDlg::s_defaultCfgs.resize(5);
 
     auto standard = new PtCfg;
     auto interace = new PtCfg;
@@ -86,10 +86,14 @@ void CDTSettingDlg::initDefaultCfgs()
     nr->m_ykReqCode = 0x00;
     nr->m_ykAckCode = 0x00;
     nr->m_ykExeCode = 0x00;
+    auto nrudp = new PtCfg;
+    nrudp->m_protocol = eProtocol::NRUdp;
+
     CDTSettingDlg::s_defaultCfgs[0] = standard;
     CDTSettingDlg::s_defaultCfgs[1] = interace;
     CDTSettingDlg::s_defaultCfgs[2] = ut;
     CDTSettingDlg::s_defaultCfgs[3] = nr;
+    CDTSettingDlg::s_defaultCfgs[4] = nrudp;
 }
 
 
@@ -100,7 +104,7 @@ void CDTSettingDlg::on_btnReset_clicked()
 
 void CDTSettingDlg::on_btnOk_clicked()
 {
-    m_ptCfg->m_protocol = eProtocol(ui->cbbProtocol->currentIndex());
+    m_ptCfg->m_protocol     = eProtocol(ui->cbbProtocol->currentIndex());
     m_ptCfg->m_yxFrameType  = Util::hexString2Num(ui->edYxType->text());
     m_ptCfg->m_yxFuncode    = Util::hexString2Num(ui->edYxFuncode->text());
     m_ptCfg->m_yxNum        = ui->edYxNum->text().toInt();
