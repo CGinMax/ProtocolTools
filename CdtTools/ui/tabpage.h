@@ -2,9 +2,6 @@
 #define TABPAGE_H
 
 #include <QWidget>
-#include "../network/tcpserver.h"
-#include "../network/tcpclient.h"
-#include "../protocol/protocolbase.h"
 #include "serverpage.h"
 #include "clientpage.h"
 namespace Ui {

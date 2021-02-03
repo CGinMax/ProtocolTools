@@ -3,10 +3,18 @@ project(qt-material-widgets CXX)
 
 find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets)
 
-# set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../bin/lib)
+# 编译类型选项
+if (CMAKE_BUILD_TYPE STREQUAL Debug)
+    set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake-bin/debug)
+else()
+    set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake-bin/release)
+endif()
+
+set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
+set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 aux_source_directory(. MATERIAL_WIDGETS_SRC)
-add_library(qt-material-widgets
+add_library(${PROJECT_NAME}
 STATIC 
     $<TARGET_OBJECTS:lib>
     $<TARGET_OBJECTS:layouts>
@@ -17,8 +25,8 @@ STATIC
 add_subdirectory(layouts)
 add_subdirectory(lib)
 
-target_include_directories(qt-material-widgets PUBLIC .)
-target_include_directories(qt-material-widgets PUBLIC ./layouts)
-target_include_directories(qt-material-widgets PUBLIC ./lib)
+target_include_directories(${PROJECT_NAME} PUBLIC .)
+target_include_directories(${PROJECT_NAME} PUBLIC ./layouts)
+target_include_directories(${PROJECT_NAME} PUBLIC ./lib)
 
-target_link_libraries(qt-material-widgets PUBLIC Qt5::Core Qt5::Gui Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} PUBLIC Qt5::Core Qt5::Gui Qt5::Widgets)

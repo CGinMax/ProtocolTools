@@ -3,7 +3,6 @@
 
 #include <QQueue>
 #include <QSharedPointer>
-#include <QTimer>
 #include "../cdtframe.h"
 #include "../protocolbase.h"
 #include "../../network/networkbase.h"

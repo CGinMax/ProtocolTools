@@ -22,7 +22,7 @@ add_subdirectory(ut)
 
 target_include_directories(protocol PUBLIC ../network)
 target_include_directories(protocol PUBLIC ../ui)
-target_link_libraries(protocol PUBLIC Qt::Core)
+target_link_libraries(protocol PUBLIC Qt5::Core)
 target_link_libraries(protocol
 PRIVATE
     standard

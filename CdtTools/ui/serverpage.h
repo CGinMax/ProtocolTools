@@ -4,11 +4,7 @@
 #include <QWidget>
 #include <QTcpServer>
 #include <QTabWidget>
-#include "../enums.h"
-#include "../common/threadpool.h"
-#include "../protocol/protocolbase.h"
 #include "../network/networkbase.h"
-#include "../network/tcpserver.h"
 #include "cdtworkwidget.h"
 
 class ServerPage : public QWidget

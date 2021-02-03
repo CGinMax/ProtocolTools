@@ -2,6 +2,7 @@
 #include <QTabBar>
 #include <QStyle>
 #include <QMenu>
+#include <QMouseEvent>
 #include "fakeclosebutton.h"
 #include "../tabpage.h"
 #include <QDebug>

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSharedPointer>
+#include <QTimer>
 #include "../network/networkbase.h"
 #include "../ui/ptcfg.h"
 #include "strategybase.h"

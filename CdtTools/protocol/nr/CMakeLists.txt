@@ -4,7 +4,7 @@ add_library(nr STATIC ${NR_SRC_DIR})
 target_include_directories(nr PUBLIC ..)
 target_include_directories(nr PUBLIC ../standard)
 
-target_link_libraries(nr PUBLIC Qt::Core)
+target_link_libraries(nr PUBLIC Qt5::Core)
 
 # target_sources(nr
 # PRIVATE

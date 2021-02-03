@@ -1,5 +1,6 @@
 #include "cdtprotocol.h"
 #include <QtMath>
+#include <QVector>
 #include "cdtmintorstrategy.h"
 #include "cdtwfstrategy.h"
 
@@ -350,7 +351,7 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode, QList<DiData *> &ptList
 
 void CDTProtocol::uploadDi()
 {
-    if (m_yxCounter > m_settingData->m_ptCfg->m_yxTime) {
+    if (m_yxCounter > static_cast<uint>(m_settingData->m_ptCfg->m_yxTime)) {
         sendAllDi();
         m_yxCounter = 0;
     }
@@ -358,7 +359,7 @@ void CDTProtocol::uploadDi()
 
 void CDTProtocol::uploadAi()
 {
-    if (m_ycCounter > m_settingData->m_ptCfg->m_ycTime) {
+    if (m_ycCounter > static_cast<uint>(m_settingData->m_ptCfg->m_ycTime)) {
         sendAllAi();
         m_ycCounter = 0;
     }

@@ -8,4 +8,4 @@ set(COMMON_SRC
 )
 
 add_library(common STATIC ${COMMON_SRC})
-target_link_libraries(common PUBLIC Qt::Core Qt::Concurrent)
+target_link_libraries(common PUBLIC Qt5::Core Qt5::Concurrent)

@@ -4,7 +4,8 @@ project(CdtTools-Solution LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_subdirectory(qt-material-widgets)
 add_subdirectory(CdtTools)
 
-enable_testing()
-add_subdirectory(test)
+# enable_testing()
+# add_subdirectory(test)

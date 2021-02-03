@@ -18,4 +18,4 @@ PUBLIC
 target_include_directories(interacte PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(interacte PUBLIC ..)
 target_include_directories(interacte PUBLIC ../standard)
-target_link_libraries(interacte PUBLIC Qt::Core)
+target_link_libraries(interacte PUBLIC Qt5::Core)

@@ -4,7 +4,7 @@ add_library(cycle ${CYCLE_SRC_DIR})
 target_include_directories(cycle PUBLIC ..)
 target_include_directories(cycle PUBLIC ../standard)
 
-target_link_directories(cycle PUBLIC Qt::Core)
+target_link_libraries(cycle PUBLIC Qt5::Core)
 # target_sources(cycle 
 # PRIVATE
 #     cdtstandard.cpp

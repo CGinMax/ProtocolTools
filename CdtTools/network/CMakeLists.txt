@@ -8,4 +8,4 @@ set(NETWORK_SRC
 )
 
 add_library(network STATIC ${NETWORK_SRC})
-target_link_libraries(network PUBLIC Qt::Core Qt::Network)
+target_link_libraries(network PUBLIC Qt5::Core Qt5::Network)
