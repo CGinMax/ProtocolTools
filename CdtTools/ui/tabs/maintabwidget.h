@@ -12,15 +12,13 @@ public:
     int addTab(QWidget* widget, const QString& label);
     int addTab(QWidget* widget, const QIcon& icon, const QString& label);
 
-protected:
-    void mousePressEvent(QMouseEvent *event) override;
 signals:
     void addNewPage();
 
 public slots:
     void onTabCloseRequested(int index);
     void onTabBarClicked(int index);
-
+    void onTabAtIndexClicked(int index);
     void onDivideTab();
 
 private:

@@ -4,16 +4,20 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include "fakeclosebutton.h"
+#include "maintabbar.h"
 #include "../tabpage.h"
-#include <QDebug>
 
 MainTabWidget::MainTabWidget(QWidget *parent)
     : QTabWidget(parent)
     , m_lastTabIndex(-1)
 {
+    auto bar = new MainTabBar(this);
+    setTabBar(bar);
+
     setTabsClosable(true);
     tabBar()->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
 
+    connect(bar, &MainTabBar::tabAtIndexClicked, this, &MainTabWidget::onTabAtIndexClicked);
     connect(this, &QTabWidget::tabCloseRequested, this, &MainTabWidget::onTabCloseRequested);
     connect(this, &QTabWidget::tabBarClicked, this, &MainTabWidget::onTabBarClicked);
     m_lastTabIndex = addTab(new QWidget, "+");
@@ -42,19 +46,6 @@ int MainTabWidget::addTab(QWidget *widget, const QIcon &icon, const QString &lab
     return tabIndex;
 }
 
-void MainTabWidget::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::RightButton) {
-        const auto tabIndex = tabBar()->tabAt(event->pos());
-        if (tabIndex < m_lastTabIndex) {
-            showContextMenu(tabIndex);
-            return;
-        }
-    }
-
-    QTabWidget::mousePressEvent(event);
-}
-
 void MainTabWidget::onTabCloseRequested(int index)
 {
     auto widget = this->widget(index);
@@ -71,11 +62,18 @@ void MainTabWidget::onTabBarClicked(int index)
     }
 }
 
+void MainTabWidget::onTabAtIndexClicked(int index)
+{
+    if (index < m_lastTabIndex) {
+        showContextMenu(index);
+        return;
+    }
+}
+
 void MainTabWidget::onDivideTab()
 {
     auto widget = this->widget(m_contenxtIndex);
     const auto tabName = tabText(m_contenxtIndex);
-    qDebug() << tabName;
     removeTab(m_contenxtIndex);
     widget->setParent(nullptr);
     widget->setWindowTitle(tabName);

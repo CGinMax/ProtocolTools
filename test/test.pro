@@ -43,6 +43,7 @@ SOURCES += \
     ../CdtTools/ui/tables/didata.cpp \
     ../CdtTools/ui/tables/ditablemodel.cpp \
     ../CdtTools/ui/tabs/fakeclosebutton.cpp \
+    ../CdtTools/ui/tabs/maintabbar.cpp \
     ../CdtTools/ui/tabs/maintabwidget.cpp \
     ../CdtTools/ui/tabs/realclosebutton.cpp \
     ../CdtTools/ui/cdtsettingdlg.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
     ../CdtTools/ui/tables/didata.h \
     ../CdtTools/ui/tables/ditablemodel.h \
     ../CdtTools/ui/tabs/fakeclosebutton.h \
+    ../CdtTools/ui/tabs/maintabbar.h \
     ../CdtTools/ui/tabs/maintabwidget.h \
     ../CdtTools/ui/tabs/realclosebutton.h \
     ../CdtTools/ui/cdtsettingdlg.h \

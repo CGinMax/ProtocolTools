@@ -71,7 +71,8 @@ SOURCES += \
     protocol/nrudp/nrudpframe.cpp \
     protocol/nrudp/nrudpprotocol.cpp \
     protocol/nrudp/nrudpmintorstrategy.cpp \
-    protocol/nrudp/nrudpwfstrategy.cpp
+    protocol/nrudp/nrudpwfstrategy.cpp \
+    ui/tabs/maintabbar.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -120,7 +121,8 @@ HEADERS += \
     protocol/nrudp/nrudpframe.h \
     protocol/nrudp/nrudpprotocol.h \
     protocol/nrudp/nrudpmintorstrategy.h \
-    protocol/nrudp/nrudpwfstrategy.h
+    protocol/nrudp/nrudpwfstrategy.h \
+    ui/tabs/maintabbar.h
 
 FORMS += \
         mainwindow.ui \
