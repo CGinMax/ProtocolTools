@@ -37,8 +37,8 @@ NrUdpFrame::eNrParseResult NrUdpFrame::parseBytesToFrame(QByteArray &data, int &
         errorMsg = QString("报文长度不够, 接收到的数据帧长度为%2").arg(data.size());
         return eNrParseResult::PartOfFrame;
     }
-    length = static_cast<uint16_t>(data.at(index++));
-    length = static_cast<uint16_t>(length ) | (static_cast<uint16_t>(data.at(index++)) << 8);
+    length = static_cast<uint16_t>(data.at(index++) & 0xFF);
+    length |= static_cast<uint16_t>(data.at(index++) & 0xFF) << 8;
 
     // 实际接收长度不等于报文内置长度
     if (data.size() - index < length)
@@ -52,14 +52,14 @@ NrUdpFrame::eNrParseResult NrUdpFrame::parseBytesToFrame(QByteArray &data, int &
     scheduling = static_cast<uint8_t>(data.at(index++));
     cmdCode    = static_cast<uint8_t>(data.at(index));
     index += 3;
-    int validLength = data.at(index++);
-    validLength = validLength | (static_cast<uint16_t>(data.at(index++)) << 8);
+    int validLength = data.at(index++) & 0xFF;
+    validLength = validLength | (static_cast<uint16_t>(data.at(index++) & 0xFF) << 8);
     infoData = data.mid(index, validLength);
     index += validLength;
 
     setDataBuf();
 
-    if (crcCode != data.at(index))
+    if (crcCode != static_cast<uint8_t>(data.at(index)))
     {
         errorMsg = QString("校验码错误, 接收到的校验码为:%1, 实际校验码为:%2").arg(data.at(index)).arg(crcCode);
         return eNrParseResult::CRCError;

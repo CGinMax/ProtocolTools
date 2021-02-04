@@ -22,10 +22,10 @@ void NrUdpWFStrategy::ykResponse(CDTFrame &frame)
 
 void NrUdpWFStrategy::ykResponse(QByteArray &infoData)
 {
-    if (infoData.at(11) == 0x02) {
-        int ykAddr = infoData.at(16);
-        ykAddr = ykAddr << 8 | infoData.at(15);
-        bool status = infoData.at(17) == 1;
+    if ((infoData.at(11) & 0xFF) == 0x02) {
+        int ykAddr = infoData.at(16) & 0xFF;
+        ykAddr |= static_cast<int>(infoData.at(17) & 0xFF) << 8;
+        bool status = (infoData.at(18) & 0xFF) == 1;
         if (ykAddr > m_nrudp->getPtCfg()->m_globalDiList->size()
                 && ykAddr < m_nrudp->getPtCfg()->m_globalDiList->size())
             return ;

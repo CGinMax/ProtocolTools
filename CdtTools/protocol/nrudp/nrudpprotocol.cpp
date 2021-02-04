@@ -84,7 +84,7 @@ void NrUdpProtocol::processFrame()
         case NrUdp::AllowYk:
         case NrUdp::ForbidYk:
             showMessageBuffer(eMsgType::eMsgRecv, QStringLiteral("接收到遥控帧，正在处理..."), frame.allFrameBytes);
-            m_strategy->ykResponse(frame.infoData);
+            m_strategy->ykResponse(frame.allFrameBytes);
             break;
 
         case NrUdp::DeviceStatus:
@@ -128,13 +128,13 @@ void NrUdpProtocol::yxResponse(QByteArray &infoData)
 
 void NrUdpProtocol::ycResponse(QByteArray &infoData)
 {
-    int nSeq = infoData.at(1);
-    nSeq = (nSeq << 8) | infoData.at(0);
+    int nSeq = infoData.at(0) & 0xFF;
+    nSeq |= static_cast<int>(infoData.at(1) & 0xFF) << 8;
     for (int i = 2; i < infoData.size(); i += 4) {
-        int ycValue = infoData.at(i + 3);
-        ycValue = ycValue << 8 | infoData.at(i + 2);
-        ycValue = ycValue << 8 | infoData.at(i + 1);
-        ycValue = ycValue << 8 | infoData.at(i);
+        int ycValue = infoData.at(i) & 0xFF;
+        ycValue |= static_cast<int>(infoData.at(i + 1) & 0xFF) << 8;
+        ycValue |= static_cast<int>(infoData.at(i + 2) & 0xFF) << 16;
+        ycValue |= static_cast<int>(infoData.at(i + 3) & 0xFF) << 24;
 
         auto ai = m_settingData->m_ptCfg->findAiById(nSeq);
         if (ai) {
