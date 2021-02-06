@@ -22,7 +22,6 @@ public slots:
 private:
     Ui::MainWindow *ui;
     MainTabWidget* m_mainTabs;
-    QPushButton* m_addTabBtn;
 };
 
 #endif // MAINWINDOW_H

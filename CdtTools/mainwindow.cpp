@@ -19,12 +19,6 @@ MainWindow::MainWindow(QWidget *parent) :
     centralWidget()->layout()->addWidget(m_mainTabs);
     connect(m_mainTabs, &MainTabWidget::addNewPage, this, &MainWindow::onAddNewPage);
 
-//    m_addTabBtn = new QPushButton("+", this);
-//    connect(m_addTabBtn, &QPushButton::clicked, this, &MainWindow::onAddTabPage);
-//    ui->tabWidget->setTabsClosable(true);
-//    auto tabPage = new TabPage(ui->tabWidget);
-//    ui->tabWidget->addTab(tabPage, "Page1");
-
     auto screenSize = qApp->primaryScreen()->availableSize();
     setGeometry((screenSize.width() - width()) / 2, (screenSize.height() - height()) / 2, width(), height());
 }
