@@ -69,6 +69,11 @@
          <string>Tcp Client</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Udp</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>

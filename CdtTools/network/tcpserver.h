@@ -39,8 +39,6 @@ public slots:
 //    void onDisconnected();
 
 private:
-    QString m_ip;
-    ushort m_port;
     QTcpSocket* m_socket;
 //    QScopedPointer<QTcpServer> m_server;
 //    QList<QTcpSocket*> m_sockets;

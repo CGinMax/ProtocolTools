@@ -72,7 +72,9 @@ SOURCES += \
     protocol/nrudp/nrudpprotocol.cpp \
     protocol/nrudp/nrudpmintorstrategy.cpp \
     protocol/nrudp/nrudpwfstrategy.cpp \
-    ui/tabs/maintabbar.cpp
+    ui/tabs/maintabbar.cpp \
+    network/udpsocket.cpp \
+    ui/udppage.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -122,7 +124,9 @@ HEADERS += \
     protocol/nrudp/nrudpprotocol.h \
     protocol/nrudp/nrudpmintorstrategy.h \
     protocol/nrudp/nrudpwfstrategy.h \
-    ui/tabs/maintabbar.h
+    ui/tabs/maintabbar.h \
+    network/udpsocket.h \
+    ui/udppage.h
 
 FORMS += \
         mainwindow.ui \

@@ -12,6 +12,7 @@ SOURCES += \
     ../CdtTools/network/networkbase.cpp \
     ../CdtTools/network/tcpclient.cpp \
     ../CdtTools/network/tcpserver.cpp \
+    ../CdtTools/network/udpsocket.cpp \
     ../CdtTools/protocol/cycle/cdtstandard.cpp \
     ../CdtTools/protocol/cycle/standardmintorstrategy.cpp \
     ../CdtTools/protocol/cycle/standardwfstrategy.cpp \
@@ -51,7 +52,8 @@ SOURCES += \
     ../CdtTools/ui/clientpage.cpp \
     ../CdtTools/ui/ptcfg.cpp \
     ../CdtTools/ui/serverpage.cpp \
-    ../CdtTools/ui/tabpage.cpp
+    ../CdtTools/ui/tabpage.cpp\
+    ../CdtTools/ui/udppage.cpp
 
 
 HEADERS += \
@@ -61,6 +63,7 @@ HEADERS += \
     ../CdtTools/network/networkbase.h \
     ../CdtTools/network/tcpclient.h \
     ../CdtTools/network/tcpserver.h \
+    ../CdtTools/network/udpsocket.h \
     ../CdtTools/protocol/cycle/cdtstandard.h \
     ../CdtTools/protocol/cycle/standardmintorstrategy.h \
     ../CdtTools/protocol/cycle/standardwfstrategy.h \
@@ -101,6 +104,7 @@ HEADERS += \
     ../CdtTools/ui/ptcfg.h \
     ../CdtTools/ui/serverpage.h \
     ../CdtTools/ui/tabpage.h \
+    ../CdtTools/ui/udppage.h \
     ../CdtTools/enums.h
 
 

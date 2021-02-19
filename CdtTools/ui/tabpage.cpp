@@ -13,6 +13,7 @@ TabPage::TabPage(QWidget *parent)
     , m_settingData(new SettingData)
     , m_serverPage(new ServerPage(m_settingData, this))
     , m_clientPage(new ClientPage(m_settingData,this))
+    , m_udpPage(new UdpPage(m_settingData, this))
     , ui(new Ui::TabPage)
 
 {
@@ -43,6 +44,7 @@ void TabPage::initWidget()
 
     ui->stackedWidget->addWidget(m_serverPage.data());
     ui->stackedWidget->addWidget(m_clientPage.data());
+    ui->stackedWidget->addWidget(m_udpPage.data());
     connect(this, &TabPage::updateData, m_serverPage.data(), &ServerPage::onUpdateData);
     connect(this, &TabPage::updateData, m_clientPage.data(), &ClientPage::onUpdateData);
 }
@@ -82,6 +84,7 @@ void TabPage::on_btnStart_clicked()
         success = m_clientPage->start();
         break;
     case eNetworkType::eUdp:
+        success = m_udpPage->start();
         break;
     case eNetworkType::eSerialPort:
         break;
@@ -104,6 +107,7 @@ void TabPage::on_btnStop_clicked()
         m_clientPage->stop();
         break;
     case eNetworkType::eUdp:
+        m_udpPage->stop();
         break;
     case eNetworkType::eSerialPort:
         break;

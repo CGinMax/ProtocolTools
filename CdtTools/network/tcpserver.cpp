@@ -3,9 +3,7 @@
 #include <QThread>
 
 TcpServer::TcpServer(const QString &ip, ushort port, QObject *parent)
-    : m_ip(ip)
-    , m_port(port)
-    , m_socket(nullptr)
+    : m_socket(nullptr)
 {
     setParent(parent);
 }
@@ -48,7 +46,6 @@ bool TcpServer::write(const char *data, int size)
 
 bool TcpServer::write(const QByteArray &data)
 {
-    qDebug() << "socket" << QThread::currentThread();
     return m_socket->write(data) > 0;
 }
 
@@ -75,17 +72,7 @@ QString TcpServer::toString()
     return QLatin1String("Unnamed");
 }
 
-ushort TcpServer::port() const
-{
-    return m_port;
-}
-
 void TcpServer::writeData(const QByteArray &data)
 {
     m_socket->write(data);
-}
-
-QString TcpServer::ip() const
-{
-    return m_ip;
 }

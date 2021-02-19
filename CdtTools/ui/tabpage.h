@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "serverpage.h"
 #include "clientpage.h"
+#include "udppage.h"
 namespace Ui {
 class TabPage;
 }
@@ -36,6 +37,7 @@ private:
     QSharedPointer<SettingData> m_settingData;
     QScopedPointer<ServerPage> m_serverPage;
     QScopedPointer<ClientPage> m_clientPage;
+    QScopedPointer<UdpPage> m_udpPage;
     Ui::TabPage *ui;
 };
 
