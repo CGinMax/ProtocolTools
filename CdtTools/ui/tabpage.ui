@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>642</width>
-    <height>326</height>
+    <width>927</width>
+    <height>355</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -42,6 +42,26 @@
      </item>
      <item>
       <widget class="QLineEdit" name="editPort"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>remote ip</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="editRemoteIp"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>remote port</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="editReomtePort"/>
      </item>
      <item>
       <widget class="QComboBox" name="cbbStationType">

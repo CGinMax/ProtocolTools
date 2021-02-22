@@ -9,7 +9,7 @@ NrUdpProtocol::NrUdpProtocol(const QSharedPointer<NetworkBase>& network, const Q
     , m_isRunYK(false)
 {
     connect(m_network.data(), &NetworkBase::disconnected, this, &NrUdpProtocol::onDisconnected, Qt::BlockingQueuedConnection);
-
+    connect(m_network.data(), &NetworkBase::recvData, this, &NrUdpProtocol::onRecvBytes);
 }
 
 NrUdpProtocol::~NrUdpProtocol()
@@ -303,6 +303,17 @@ void NrUdpProtocol::onReadyRead()
 {
     auto bytes = m_network->readAll();
 
+    if (!bytes.isEmpty()) {
+        m_recvBuffer.append(bytes);
+        //处理数据
+        parseRecvData();
+    }
+    // 处理帧
+    processFrame();
+}
+
+void NrUdpProtocol::onRecvBytes(const QByteArray &bytes)
+{
     if (!bytes.isEmpty()) {
         m_recvBuffer.append(bytes);
         //处理数据

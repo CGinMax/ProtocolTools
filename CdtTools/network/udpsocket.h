@@ -23,16 +23,20 @@ public:
     bool isActived() override;
     QString toString() override;
 
+    void setRemoteParam(const QString& ip, int port);
 
 public slots:
     void writeData(const QByteArray &data) override;
 signals:
 
 public slots:
+    void onReadyRead();
 
 private:
-    QHostAddress m_address;
-    quint16 m_port;
+    QHostAddress m_localAddress;
+    quint16 m_localPort;
+    QHostAddress m_remoteAddress;
+    quint16 m_remotePort;
     QScopedPointer<QUdpSocket> m_socket;
 };
 

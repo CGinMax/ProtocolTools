@@ -62,6 +62,7 @@ signals:
 public slots:
     void onReverseYx(int ptId, bool allow) override;
     void onReadyRead() override;
+    void onRecvBytes(const QByteArray& bytes);
     void onDisconnected() override;
 protected slots:
     void onTimeout() override;

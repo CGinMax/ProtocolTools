@@ -36,6 +36,10 @@ void TabPage::initWidget()
     ui->editPort->setText("2404");
     ui->editIp->setValidator(regValid);
     ui->editPort->setValidator(intValid);
+    ui->editRemoteIp->setText("127.0.0.1");
+    ui->editReomtePort->setText("9001");
+    ui->editRemoteIp->setValidator(regValid);
+    ui->editReomtePort->setValidator(intValid);
 
     auto btnGroup = new QButtonGroup(this);
     btnGroup->addButton(ui->btnStart);
@@ -47,12 +51,15 @@ void TabPage::initWidget()
     ui->stackedWidget->addWidget(m_udpPage.data());
     connect(this, &TabPage::updateData, m_serverPage.data(), &ServerPage::onUpdateData);
     connect(this, &TabPage::updateData, m_clientPage.data(), &ClientPage::onUpdateData);
+    connect(this, &TabPage::updateData, m_udpPage.data(), &UdpPage::onUpdateData);
 }
 
 void TabPage::resetSettingData()
 {
     m_settingData->m_ip = ui->editIp->text();
     m_settingData->m_port = ui->editPort->text().toInt();
+    m_settingData->m_remoteIp = ui->editRemoteIp->text();
+    m_settingData->m_remotePort = ui->editReomtePort->text().toInt();
     m_settingData->m_networkType = eNetworkType(ui->cbbNetworkType->currentIndex());
     m_settingData->m_stationType = eStationType(ui->cbbStationType->currentIndex());
 

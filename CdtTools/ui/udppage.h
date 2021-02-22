@@ -19,11 +19,12 @@ public:
     ~UdpPage() override;
 
     bool start();
-    bool start(const QString& ip, int port);
+    bool start(const QString& localIp, int localPort, const QString& remoteIp, int remotePort);
     void stop();
 signals:
 
 public slots:
+    void onUpdateData();
 
 private:
     QSharedPointer<NetworkBase> m_udp;

@@ -78,6 +78,8 @@ struct SettingData{
 
     QString m_ip{QLatin1Literal("0.0.0.0")};
     int m_port{2404};
+    QString m_remoteIp{QLatin1String("0.0.0.0")};
+    int m_remotePort{2406};
     eNetworkType m_networkType{eNetworkType::eTcpServer};
     eStationType m_stationType{eStationType::Minitor};
     QSharedPointer<PtCfg> m_ptCfg;

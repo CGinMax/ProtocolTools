@@ -2,10 +2,15 @@
 #include <QNetworkDatagram>
 UdpSocket::UdpSocket(QObject *parent)
     : m_socket(new QUdpSocket(this))
+    , m_localPort(0)
+    , m_localAddress("0.0.0.0")
+    , m_remotePort(7990)
+    , m_remoteAddress("127.0.0.1")
 {
     setParent(parent);
     connect(m_socket.data(), &QUdpSocket::disconnected, this, &UdpSocket::disconnected);
-    connect(m_socket.data(), &QUdpSocket::readyRead, this, &NetworkBase::readyRead);
+//    connect(m_socket.data(), &QUdpSocket::readyRead, this, &NetworkBase::readyRead);
+    connect(m_socket.data(), &QUdpSocket::readyRead, this, &UdpSocket::onReadyRead);
 }
 
 void UdpSocket::open()
@@ -17,6 +22,8 @@ void UdpSocket::open()
 
 void UdpSocket::open(const QString &ip, ushort port)
 {
+    m_localAddress = QHostAddress(ip);
+    m_localPort = port;
     m_socket->bind(QHostAddress(ip), port, QUdpSocket::ShareAddress);
 }
 
@@ -28,12 +35,12 @@ void UdpSocket::close()
 
 bool UdpSocket::write(const char *data, int size)
 {
-    return m_socket->writeDatagram(data, size, m_address, m_port) > 0;
+    return m_socket->writeDatagram(data, size, m_remoteAddress, m_remotePort) > 0;
 }
 
 bool UdpSocket::write(const QByteArray &data)
 {
-    return m_socket->writeDatagram(data, m_address, m_port) > 0;
+    return m_socket->writeDatagram(data, m_remoteAddress, m_remotePort) > 0;
 }
 
 int UdpSocket::read(char *data, int size)
@@ -43,10 +50,16 @@ int UdpSocket::read(char *data, int size)
 
 QByteArray UdpSocket::readAll()
 {
-    auto datagram = m_socket->receiveDatagram();
-    m_address = datagram.senderAddress();
-    m_port = datagram.senderPort();
-    return datagram.data();
+    char *datagram = new char[4096];
+    memset(datagram, 0, strlen(datagram));
+    auto readLen = m_socket->readDatagram(datagram, 4096, &m_localAddress, &m_localPort);
+    QByteArray ba(datagram, static_cast<int>(readLen));
+    delete[] datagram;
+    return ba;
+//    auto datagram = m_socket->receiveDatagram();
+//    m_address = datagram.senderAddress();
+//    m_port = datagram.senderPort();
+//    return datagram.data();
 }
 
 bool UdpSocket::isActived()
@@ -62,7 +75,19 @@ QString UdpSocket::toString()
     return QLatin1String("Unnamed");
 }
 
+void UdpSocket::setRemoteParam(const QString &ip, int port)
+{
+    m_remoteAddress = QHostAddress(ip);
+    m_remotePort = port;
+}
+
 void UdpSocket::writeData(const QByteArray &data)
 {
     this->write(data);
+}
+
+void UdpSocket::onReadyRead()
+{
+    QByteArray readBytes = readAll();
+    emit recvData(readBytes);
 }
