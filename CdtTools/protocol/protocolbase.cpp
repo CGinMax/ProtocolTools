@@ -1,4 +1,5 @@
 #include "protocolbase.h"
+#include "../common/util.h"
 #include <QTime>
 #include <QDateTime>
 #include <QThread>
@@ -139,40 +140,17 @@ void ProtocolBase::showMessageBuffer(ProtocolBase::eMsgType type, const QString 
 
 void ProtocolBase::sendHumanizeMsg(ProtocolBase::eMsgType type, const QString &msg, const char *buffer, int len)
 {
-    auto hexString = bytes2String(buffer, len);
+    auto hexString = Util::bytes2String(buffer, len);
     auto packString = decorateMsg(type, msg, hexString, len);
     emit sendProtocolContent(packString);
 }
 
 void ProtocolBase::sendHumanizeMsg(ProtocolBase::eMsgType type, const QString &msg, const QByteArray &buffer)
 {
-    auto hexString = bytes2String(buffer);
+    auto hexString = Util::bytes2String(buffer);
     auto packString = decorateMsg(type, msg, hexString, buffer.length());
 
     emit sendProtocolContent(packString);
-}
-
-QString ProtocolBase::bytes2String(const char *buffer, int length)
-{
-    QString bufstr;
-    if (length > 0 && buffer != nullptr)
-    {
-        QString bufstr;
-        const uchar *ubuff = (const uchar *)buffer;
-        for(int i=0;i<length;i++)
-        {
-            bufstr.append(QString::number((ubuff[i] >> 4), 16));
-            bufstr.append(QString::number(ubuff[i] & 0xF, 16) + " ");
-        }
-        bufstr = bufstr.trimmed().toUpper();
-    }
-    return bufstr;
-}
-
-QString ProtocolBase::bytes2String(const QByteArray &buffer)
-{
-    QString bufstr(buffer.toHex(' ').toUpper());
-    return bufstr;
 }
 
 QString ProtocolBase::decorateMsg(eMsgType type, const QString &desc, const QString &bufrString, int buflen)

@@ -106,65 +106,42 @@ void CDTProtocol::send(const CDTFrame &frame)
     }
 }
 
+void CDTProtocol::send(const QByteArray &sendBytes)
+{
+    if (sendBytes.size() > 0) {
+        emit write(sendBytes);
+    }
+}
+
 void CDTProtocol::sendAllDi()
 {
-    if (m_settingData->m_ptCfg->m_globalDiList->isEmpty()) {
+    auto frameBytes = CDTProtocol::buildYXProtocol(m_settingData);
+    if (frameBytes.isEmpty()) {
         return ;
     }
-    auto frame = buildYXFrame(m_settingData->m_ptCfg->m_yxFuncode, *m_settingData->m_ptCfg->m_globalDiList);
-    // 标准虚遥信
-    frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_yxFrameType, frame.infoFields.size(), 0, 0);
-    showMessageBuffer(eMsgType::eMsgSend, "发送全遥信", frame.toAllByteArray());
-    send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, "发送全遥信", frameBytes);
+    send(frameBytes);
 }
 
 void CDTProtocol::sendAllAi()
 {
-    if (m_settingData->m_ptCfg->m_globalAiList->isEmpty()) {
-        return;
+    auto frameBytes = CDTProtocol::buildYCProtocol(m_settingData);
+    if (frameBytes.isEmpty()) {
+        return ;
     }
-    CDTFrame frame;
-
-    uint8_t curCode = m_settingData->m_ptCfg->m_ycFuncode;
-    QVector<uint8_t> combineList;
-    int aiNum = m_settingData->m_ptCfg->m_globalAiList->size();
-    for (int i = 0; i < aiNum; i++) {
-        auto aiValue = m_settingData->m_ptCfg->m_globalAiList->at(i)->value();
-        if (aiValue > 0x07FF) {
-            aiValue = 0x4000;// 溢出
-        }
-        combineList.append(static_cast<uint8_t>(aiValue >> 8));
-        combineList.append(static_cast<uint8_t>(aiValue));
-    }
-    int offset = combineList.size() % 4;
-    if (offset != 0) {
-        for (int i = 0; i < offset; i++) {
-            combineList.append(0);
-        }
-    }
-    for (int i = 0; i < combineList.size() / 4; i++) {
-        InfoFieldEntity entity;
-        entity.fillData(curCode, combineList[i * 4], combineList[i * 4 + 1], combineList[i * 4 + 2], combineList[i * 4 + 3]);
-        frame.infoFields.append(entity);
-        curCode++;
-    }
-
-    frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_ycFrameType, frame.infoFields.size(), 0, 0);
-    showMessageBuffer(eMsgType::eMsgSend, "发送全遥测", frame.toAllByteArray());
-    send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, "发送全遥测", frameBytes);
+    send(frameBytes);
 
 }
 
 void CDTProtocol::sendVirtualYX()
 {
-    if (m_settingData->m_ptCfg->m_globalDiList->isEmpty()) {
+    auto frameBytes = CDTProtocol::buildVYXProtocol(m_settingData);
+    if (frameBytes.isEmpty()) {
         return ;
     }
-    auto frame = buildYXFrame(m_settingData->m_ptCfg->m_vyxFuncode, *m_settingData->m_ptCfg->m_globalVDiList);
-    // 标准虚遥信
-    frame.frameControl.fillData(m_settingData->m_ptCfg->m_controlType, m_settingData->m_ptCfg->m_vyxFrameType, frame.infoFields.size(), 0, 0);
-    showMessageBuffer(eMsgType::eMsgSend, "发送虚遥信", frame.toAllByteArray());
-    send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, "发送虚遥信", frameBytes);
+    send(frameBytes);
 }
 
 void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
@@ -348,6 +325,69 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode, QList<DiData *> &ptList
         funCode++;
     }
     return frame;
+}
+
+CDTFrame CDTProtocol::buildYCFrame(uint8_t startFuncode, QList<AiData *> &ptList)
+{
+    CDTFrame frame;
+
+    uint8_t curCode = startFuncode;
+    QVector<uint8_t> combineList;
+    int aiNum = ptList.size();
+    for (int i = 0; i < aiNum; i++) {
+        auto aiValue = ptList.at(i)->value();
+        if (aiValue > 0x07FF) {
+            aiValue = 0x4000;// 溢出
+        }
+        combineList.append(static_cast<uint8_t>(aiValue >> 8));
+        combineList.append(static_cast<uint8_t>(aiValue));
+    }
+    int offset = combineList.size() % 4;
+    if (offset != 0) {
+        for (int i = 0; i < offset; i++) {
+            combineList.append(0);
+        }
+    }
+    for (int i = 0; i < combineList.size() / 4; i++) {
+        InfoFieldEntity entity;
+        entity.fillData(curCode, combineList[i * 4], combineList[i * 4 + 1], combineList[i * 4 + 2], combineList[i * 4 + 3]);
+        frame.infoFields.append(entity);
+        curCode++;
+    }
+
+    return frame;
+}
+
+QByteArray CDTProtocol::buildYXProtocol(const QSharedPointer<SettingData> &settingData)
+{
+    if (settingData->m_ptCfg->m_globalDiList->isEmpty()) {
+        return QByteArray();
+    }
+    auto frame = CDTProtocol::buildYXFrame(settingData->m_ptCfg->m_yxFuncode, *settingData->m_ptCfg->m_globalDiList);
+
+    frame.frameControl.fillData(settingData->m_ptCfg->m_controlType, settingData->m_ptCfg->m_yxFrameType, frame.infoFields.size(), 0, 0);
+
+    return frame.toAllByteArray();
+}
+
+QByteArray CDTProtocol::buildYCProtocol(const QSharedPointer<SettingData> &settingData)
+{
+    if (settingData->m_ptCfg->m_globalAiList->isEmpty()) {
+        return QByteArray();
+    }
+    CDTFrame frame = CDTProtocol::buildYCFrame(settingData->m_ptCfg->m_ycFuncode, *settingData->m_ptCfg->m_globalAiList);
+    frame.frameControl.fillData(settingData->m_ptCfg->m_controlType, settingData->m_ptCfg->m_ycFrameType, frame.infoFields.size(), 0, 0);
+    return frame.toAllByteArray();
+}
+
+QByteArray CDTProtocol::buildVYXProtocol(const QSharedPointer<SettingData> &settingData)
+{
+    if (settingData->m_ptCfg->m_globalVDiList->isEmpty()) {
+        return QByteArray();
+    }
+    auto frame = CDTProtocol::buildYXFrame(settingData->m_ptCfg->m_yxFuncode, *settingData->m_ptCfg->m_globalVDiList);
+    frame.frameControl.fillData(settingData->m_ptCfg->m_controlType, settingData->m_ptCfg->m_vyxFrameType, frame.infoFields.size(), 0, 0);
+    return frame.toAllByteArray();
 }
 
 void CDTProtocol::uploadDi()

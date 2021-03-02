@@ -24,6 +24,7 @@
 
 class  DigitLimiteDelegate : public QItemDelegate
 {
+    Q_OBJECT
 public:
     DigitLimiteDelegate(QObject* parent=nullptr);
 
@@ -63,6 +64,8 @@ public:
                               const QStyleOptionViewItem &option,
                               const QModelIndex &index) const override;
 
+signals:
+    void delegateValueChanged();
 public slots:
     void onTextChanged(const QString& s);
 };

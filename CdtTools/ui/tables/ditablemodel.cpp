@@ -122,3 +122,11 @@ void DiTableModel::resetDatas(int num)
     endResetModel();
 
 }
+
+void DiTableModel::onNotifyAllChanged(bool offon)
+{
+    for (auto& di : *m_diDatas) {
+        di->setValue(offon);
+    }
+    dataChanged(index(0, columnCount(QModelIndex()) - 1), index(rowCount(QModelIndex()) - 1, columnCount(QModelIndex()) - 1));
+}

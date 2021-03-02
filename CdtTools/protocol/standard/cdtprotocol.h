@@ -28,6 +28,8 @@ public:
 
     void send(const CDTFrame& frame);
 
+    void send(const QByteArray& sendBytes);
+
     void sendAllDi();
     void sendAllAi();
     void sendVirtualYX();
@@ -48,8 +50,15 @@ public:
 
     void yKCancel(uint8_t operCode, uint8_t ptNo);
 
-    CDTFrame buildYXFrame(uint8_t startFuncode, QList<DiData*>& ptList);
+    static CDTFrame buildYXFrame(uint8_t startFuncode, QList<DiData*>& ptList);
 
+    static CDTFrame buildYCFrame(uint8_t startFuncode, QList<AiData*>& ptList);
+
+    static QByteArray buildYXProtocol(const QSharedPointer<SettingData>& settingData);
+
+    static QByteArray buildYCProtocol(const QSharedPointer<SettingData>& settingData);
+
+    static QByteArray buildVYXProtocol(const QSharedPointer<SettingData>& settingData);
 
     inline bool isRunYK() const {
         return m_isRunYK;
@@ -67,6 +76,8 @@ public:
     void uploadDi();
 
     void uploadAi();
+
+
 
 signals:
 public slots:

@@ -6,110 +6,111 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>656</width>
-    <height>396</height>
+    <width>694</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <widget class="QSplitter" name="vecSplitter">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QSplitter" name="horSplitter">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+     <widget class="QTabWidget" name="tabPoint">
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <widget class="QTabWidget" name="tabPoint">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="tabDi">
-        <attribute name="title">
-         <string>Di</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
+      <widget class="QWidget" name="tabDi">
+       <attribute name="title">
+        <string>Di</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSplitter" name="hsplitterDi">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
           <widget class="QTableView" name="viewDi"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tabAi">
-        <attribute name="title">
-         <string>Ai</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QTableView" name="viewAi"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tabVDi">
-        <attribute name="title">
-         <string>Virtual Di</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QTableView" name="viewVDi"/>
-         </item>
-        </layout>
-       </widget>
+          <widget class="QPlainTextEdit" name="editDiProtocol"/>
+         </widget>
+        </item>
+       </layout>
       </widget>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string>YK</string>
-       </property>
+      <widget class="QWidget" name="tabAi">
+       <attribute name="title">
+        <string>Ai</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSplitter" name="hsplitterAi">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QTableView" name="viewAi"/>
+          <widget class="QPlainTextEdit" name="editAiProtocol"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabVDi">
+       <attribute name="title">
+        <string>Virtual Di</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSplitter" name="hsplitterVDi">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QTableView" name="viewVDi"/>
+          <widget class="QPlainTextEdit" name="editVDiProtocol"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabYk">
+       <attribute name="title">
+        <string>Yk</string>
+       </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <property name="leftMargin">
          <number>0</number>
@@ -124,55 +125,68 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QSplitter" name="splitter">
+         <widget class="QSplitter" name="hsplitterYk">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QPushButton" name="btnLock">
-           <property name="text">
-            <string>Lock</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="btnUnlock">
-           <property name="text">
-            <string>UnLock</string>
-           </property>
-          </widget>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QSpinBox" name="edPtId"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="cbbYKOper">
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout">
             <item>
-             <property name="text">
-              <string>Off</string>
-             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QPushButton" name="btnLock">
+                <property name="text">
+                 <string>Lock</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnUnlock">
+                <property name="text">
+                 <string>UnLock</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <property name="text">
-              <string>On</string>
-             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QSpinBox" name="edPtId"/>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cbbYKOper">
+                <item>
+                 <property name="text">
+                  <string>Off</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>On</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnExecute">
+                <property name="text">
+                 <string>Execute</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btnExecute">
-            <property name="text">
-             <string>Execute</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QPlainTextEdit" name="textYkInfo">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
+            <item>
+             <widget class="QPlainTextEdit" name="textYkInfo">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QPlainTextEdit" name="editYkProtocol"/>
          </widget>
         </item>
        </layout>

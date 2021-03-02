@@ -43,4 +43,5 @@ void DigitLimiteDelegate::onTextChanged(const QString &s)
 {
     Q_UNUSED(s)
     emit commitData(qobject_cast<QLineEdit*>(sender()));
+    emit delegateValueChanged();
 }

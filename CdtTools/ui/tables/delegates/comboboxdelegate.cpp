@@ -48,4 +48,5 @@ void ComboBoxDelegate::onCurrentTextChange(const QString &s)
 {
     Q_UNUSED(s)
     emit commitData(qobject_cast<QComboBox*>(sender()));
+    emit delegateValueChanged();
 }

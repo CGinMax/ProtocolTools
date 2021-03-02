@@ -6,6 +6,7 @@
 
 class  ComboBoxDelegate : public QItemDelegate
 {
+    Q_OBJECT
 public:
     ComboBoxDelegate(QObject* parent=nullptr);
 
@@ -52,6 +53,9 @@ public:
     void updateEditorGeometry(QWidget *editor,
                               const QStyleOptionViewItem &option,
                               const QModelIndex &index) const override;
+
+signals:
+    void delegateValueChanged();
 public slots:
     void onCurrentTextChange(const QString& s);
 private:

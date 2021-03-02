@@ -74,7 +74,8 @@ SOURCES += \
     protocol/nrudp/nrudpwfstrategy.cpp \
     ui/tabs/maintabbar.cpp \
     network/udpsocket.cpp \
-    ui/udppage.cpp
+    ui/udppage.cpp \
+    ui/tables/diheaderview.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -126,7 +127,8 @@ HEADERS += \
     protocol/nrudp/nrudpwfstrategy.h \
     ui/tabs/maintabbar.h \
     network/udpsocket.h \
-    ui/udppage.h
+    ui/udppage.h \
+    ui/tables/diheaderview.h
 
 FORMS += \
         mainwindow.ui \

@@ -26,6 +26,8 @@ public:
 
     void send(const NrUdpFrame& frame);
 
+    void send(const QByteArray& sendBytes);
+
     void yxResponse(QByteArray& infoData);
 
     void ycResponse(QByteArray& infoData);
@@ -44,7 +46,15 @@ public:
 
     void uploadVDi();
 
-    NrUdpFrame buildYXFrame(uint8_t cmdCode, QList<DiData *> &ptList);
+    static NrUdpFrame buildYXFrame(uint8_t cmdCode, QList<DiData *> &ptList);
+
+    static NrUdpFrame buildYCFrame(uint8_t cmdCode, QList<AiData *> &ptList);
+
+    static QByteArray buildYXProtocol(const QSharedPointer<SettingData>& settingData);
+
+    static QByteArray buildYCProtocol(const QSharedPointer<SettingData>& settingData);
+
+    static QByteArray buildVYXProtocol(const QSharedPointer<SettingData>& settingData);
 
     inline PtCfg* getPtCfg() {
         return m_settingData->m_ptCfg.data();

@@ -4,6 +4,7 @@
 #include "tables/aitablemodel.h"
 #include "tables/delegates/comboboxdelegate.h"
 #include "tables/delegates/digitlimitedelegate.h"
+#include "tables/diheaderview.h"
 #include "../protocol/standard/cdtprotocol.h"
 #include "../protocol/interacte/cdtinteracte.h"
 #include "../protocol/cycle/cdtstandard.h"
@@ -11,8 +12,9 @@
 #include "../protocol/ut/cdtexut.h"
 #include "../protocol/nrudp/nrudpprotocol.h"
 #include "../common/threadpool.h"
-#include "dialog/ykdialog.h"
+#include "../common/util.h"
 #include "../../qt-material-widgets/qtmaterialscrollbar.h"
+#include "dialog/ykdialog.h"
 #include <QDebug>
 #include <QMenu>
 #include <QThread>
@@ -25,8 +27,8 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
 {
     ui->setupUi(this);
 
-    ui->horSplitter->setCollapsible(0, false);
-    ui->horSplitter->setCollapsible(1, false);
+//    ui->horSplitter->setCollapsible(0, false);
+//    ui->horSplitter->setCollapsible(1, false);
     ui->vecSplitter->setCollapsible(0, false);
     ui->vecSplitter->setCollapsible(1, false);
 
@@ -40,6 +42,11 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->textBrowser->setHorizontalScrollBar(browserHScroll);
 
     m_diModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalDiList, ui->viewDi);
+    auto diHorHeader = new DiHeaderView(Qt::Horizontal, ui->viewDi);
+    diHorHeader->setMinimumHeight(30);
+    connect(diHorHeader, &DiHeaderView::notifyAllChanged, m_diModel, &DiTableModel::onNotifyAllChanged);
+
+    ui->viewDi->setHorizontalHeader(diHorHeader);
     ui->viewDi->setModel(m_diModel);
     ui->viewDi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewDi->verticalHeader()->setVisible(false);
@@ -51,10 +58,23 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     for (int i = 0; i < m_diModel->rowCount(QModelIndex()); i++) {
         ui->viewDi->openPersistentEditor(m_diModel->index(i, 2));
     }
+    connect(diDelegate, &ComboBoxDelegate::delegateValueChanged, [=](){
+        QString protocolString;
+        if (settingData->m_ptCfg->m_protocol == eProtocol::NRUdp) {
+            protocolString = Util::bytes2String(NrUdpProtocol::buildYXProtocol(settingData));
+        }
+        else {
+            protocolString = Util::bytes2String(CDTProtocol::buildYXProtocol(settingData), 6);
+        }
+        ui->editDiProtocol->clear();
+        ui->editDiProtocol->appendPlainText(protocolString);
+    });
+    emit diDelegate->delegateValueChanged();
 
     m_aiModel = new AiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalAiList, ui->viewAi);
     ui->viewAi->setModel(m_aiModel);
     ui->viewAi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->viewAi->horizontalHeader()->setMinimumHeight(30);
     ui->viewAi->verticalHeader()->setVisible(false);
     ui->viewAi->setEditTriggers(QAbstractItemView::DoubleClicked);
     ui->viewAi->setSelectionBehavior(QAbstractItemView::SelectItems);
@@ -63,8 +83,24 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     for (int i = 0; i < m_aiModel->rowCount(QModelIndex()); i++) {
         ui->viewAi->openPersistentEditor(m_aiModel->index(i, 2));
     }
+    connect(aiDelegate, &DigitLimiteDelegate::delegateValueChanged, [=](){
+        QString protocolString;
+        if (settingData->m_ptCfg->m_protocol == eProtocol::NRUdp) {
+            protocolString = Util::bytes2String(NrUdpProtocol::buildYCProtocol(settingData));
+        }
+        else {
+            protocolString = Util::bytes2String(CDTProtocol::buildYCProtocol(settingData), 6);
+        }
+        ui->editAiProtocol->clear();
+        ui->editAiProtocol->appendPlainText(protocolString);
+    });
+    emit aiDelegate->delegateValueChanged();
 
     m_vdiModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalVDiList, ui->viewVDi);
+    auto vdiHorHeader = new DiHeaderView(Qt::Horizontal, ui->viewVDi);
+    vdiHorHeader->setMinimumHeight(30);
+    connect(vdiHorHeader, &DiHeaderView::notifyAllChanged, m_vdiModel, &DiTableModel::onNotifyAllChanged);
+    ui->viewVDi->setHorizontalHeader(vdiHorHeader);
     ui->viewVDi->setModel(m_vdiModel);
     ui->viewVDi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewVDi->verticalHeader()->setVisible(false);
@@ -76,6 +112,18 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     for (int i = 0; i < m_vdiModel->rowCount(QModelIndex()); i++) {
         ui->viewVDi->openPersistentEditor(m_vdiModel->index(i, 2));
     }
+    connect(vyxDelegate, &ComboBoxDelegate::delegateValueChanged, [=](){
+        QString protocolString;
+        if (settingData->m_ptCfg->m_protocol == eProtocol::NRUdp) {
+            protocolString = Util::bytes2String(NrUdpProtocol::buildVYXProtocol(settingData));
+        }
+        else {
+            protocolString = Util::bytes2String(CDTProtocol::buildVYXProtocol(settingData), 6);
+        }
+        ui->editVDiProtocol->clear();
+        ui->editVDiProtocol->appendPlainText(protocolString);
+    });
+    emit vyxDelegate->delegateValueChanged();
 
     bool isRandom = settingData->m_ptCfg->m_isRandom;
     connect(&m_viewTimer, &QTimer::timeout, [this, isRandom]{

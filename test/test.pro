@@ -39,6 +39,7 @@ SOURCES += \
     ../CdtTools/ui/dialog/ykdialog.cpp \
     ../CdtTools/ui/tables/delegates/comboboxdelegate.cpp \
     ../CdtTools/ui/tables/delegates/digitlimitedelegate.cpp \
+    ../CdtTools/ui/tables/diheaderview.cpp \
     ../CdtTools/ui/tables/aidata.cpp \
     ../CdtTools/ui/tables/aitablemodel.cpp \
     ../CdtTools/ui/tables/didata.cpp \
@@ -94,6 +95,7 @@ HEADERS += \
     ../CdtTools/ui/tables/aitablemodel.h \
     ../CdtTools/ui/tables/didata.h \
     ../CdtTools/ui/tables/ditablemodel.h \
+    ../CdtTools/ui/tables/diheaderview.h \
     ../CdtTools/ui/tabs/fakeclosebutton.h \
     ../CdtTools/ui/tabs/maintabbar.h \
     ../CdtTools/ui/tabs/maintabwidget.h \

@@ -95,9 +95,15 @@ void NrUdpProtocol::processFrame()
 
 void NrUdpProtocol::send(const NrUdpFrame &frame)
 {
-
     if (frame.allFrameBytes.size() > 0) {
         emit write(frame.allFrameBytes);
+    }
+}
+
+void NrUdpProtocol::send(const QByteArray &sendBytes)
+{
+    if (sendBytes.size() > 0) {
+        emit write(sendBytes);
     }
 }
 
@@ -189,41 +195,32 @@ void NrUdpProtocol::vyxResponse(QByteArray &infoData)
 
 void NrUdpProtocol::sendAllDi()
 {
-    if (m_settingData->m_ptCfg->m_globalDiList->isEmpty()) {
-        return ;
+    auto frameBytes = NrUdpProtocol::buildYXProtocol(m_settingData);
+    if (frameBytes.isEmpty()) {
+        return;
     }
-    auto frame = buildYXFrame(0x01, *m_settingData->m_ptCfg->m_globalDiList);
-    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送全遥信"), frame.allFrameBytes);
-    send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送全遥信"), frameBytes);
+    send(frameBytes);
 }
 
 void NrUdpProtocol::sendAllAi()
 {
-    NrUdpFrame frame;
-    frame.cmdCode = 0x05;
-    int startIo = m_settingData->m_ptCfg->m_globalAiList->first()->io();
-    frame.infoData.append(static_cast<uint8_t>(startIo) & 0xFF);
-    frame.infoData.append(static_cast<uint8_t>(startIo >> 8) & 0xFF);
-    for (auto& ai : *m_settingData->m_ptCfg->m_globalAiList) {
-        int ycValue = ai->value();
-        for (int i = 0; i < 4; i++) {
-            frame.infoData.append(static_cast<uint8_t>(ycValue >> (i * 8)) & 0xFF);
-        }
+    auto frameBytes = NrUdpProtocol::buildYCProtocol(m_settingData);
+    if (frameBytes.isEmpty()) {
+        return;
     }
-    frame.length = 9 + frame.infoData.size();
-    frame.setDataBuf();
-    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送全遥测"), frame.allFrameBytes);
-    send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送全遥测"), frameBytes);
+    send(frameBytes);
 }
 
 void NrUdpProtocol::sendVDi()
 {
-    if (m_settingData->m_ptCfg->m_globalDiList->isEmpty()) {
+    auto frameBytes = NrUdpProtocol::buildVYXProtocol(m_settingData);
+    if (frameBytes.isEmpty()) {
         return ;
     }
-    auto frame = buildYXFrame(0x05, *m_settingData->m_ptCfg->m_globalVDiList);
-    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送全遥信"), frame.allFrameBytes);
-    send(frame);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送全遥信"), frameBytes);
+    send(frameBytes);
 }
 
 void NrUdpProtocol::uploadDiAi()
@@ -277,8 +274,65 @@ NrUdpFrame NrUdpProtocol::buildYXFrame(uint8_t cmdCode, QList<DiData *> &ptList)
 //    }
 
     frame.length = static_cast<uint16_t>(9 + frame.infoData.size());
-    frame.setDataBuf();
     return frame;
+}
+
+NrUdpFrame NrUdpProtocol::buildYCFrame(uint8_t cmdCode, QList<AiData *> &ptList)
+{
+    NrUdpFrame frame;
+    frame.cmdCode = cmdCode;
+    int startIo = ptList.first()->io();
+    frame.infoData.append(static_cast<uint8_t>(startIo) & 0xFF);
+    frame.infoData.append(static_cast<uint8_t>(startIo >> 8) & 0xFF);
+    for (auto& ai : ptList) {
+        float ycValue = static_cast<float>(ai->value());
+        // float 转字节数组
+        char ycBytes[4] = {0};
+        memcpy(ycBytes, &ycValue, 4);
+        frame.infoData.append(ycBytes[0]);
+        frame.infoData.append(ycBytes[1]);
+        frame.infoData.append(ycBytes[2]);
+        frame.infoData.append(ycBytes[3]);
+
+//        int ycValue = ai->value();
+//        for (int i = 0; i < 4; i++) {
+//            frame.infoData.append(static_cast<uint8_t>(ycValue >> (i * 8)) & 0xFF);
+//        }
+    }
+    frame.length = 9 + frame.infoData.size();
+    return frame;
+}
+
+QByteArray NrUdpProtocol::buildYXProtocol(const QSharedPointer<SettingData> &settingData)
+{
+    if (settingData->m_ptCfg->m_globalDiList->isEmpty()) {
+        return QByteArray();
+    }
+    auto frame = NrUdpProtocol::buildYXFrame(0x01, *settingData->m_ptCfg->m_globalDiList);
+    frame.setDataBuf();
+    return frame.allFrameBytes;
+}
+
+QByteArray NrUdpProtocol::buildYCProtocol(const QSharedPointer<SettingData> &settingData)
+{
+    if (settingData->m_ptCfg->m_globalAiList->isEmpty()) {
+        return QByteArray();
+    }
+
+    auto frame = NrUdpProtocol::buildYCFrame(0x05, *settingData->m_ptCfg->m_globalAiList);
+    frame.setDataBuf();
+    return frame.allFrameBytes;
+}
+
+QByteArray NrUdpProtocol::buildVYXProtocol(const QSharedPointer<SettingData> &settingData)
+{
+    if (settingData->m_ptCfg->m_globalVDiList->isEmpty()) {
+        return QByteArray();
+    }
+
+    auto frame = NrUdpProtocol::buildYXFrame(0x05, *settingData->m_ptCfg->m_globalVDiList);
+    frame.setDataBuf();
+    return frame.allFrameBytes;
 }
 
 

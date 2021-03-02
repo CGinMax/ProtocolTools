@@ -28,6 +28,7 @@ public:
 signals:
 
 public slots:
+    void onNotifyAllChanged(bool offon);
 
 private:
     QStringList m_headers;
