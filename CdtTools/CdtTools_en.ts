@@ -194,53 +194,54 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="44"/>
+        <location filename="ui/cdtworkwidget.ui" line="28"/>
         <source>Di</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="66"/>
+        <location filename="ui/cdtworkwidget.ui" line="56"/>
         <source>Ai</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="88"/>
+        <location filename="ui/cdtworkwidget.ui" line="84"/>
         <source>Virtual Di</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="111"/>
+        <location filename="ui/cdtworkwidget.ui" line="112"/>
         <source>YK</source>
+        <oldsource>Yk</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="133"/>
+        <location filename="ui/cdtworkwidget.ui" line="139"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="138"/>
+        <location filename="ui/cdtworkwidget.ui" line="146"/>
         <source>UnLock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="152"/>
+        <location filename="ui/cdtworkwidget.ui" line="161"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="157"/>
+        <location filename="ui/cdtworkwidget.ui" line="166"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="165"/>
+        <location filename="ui/cdtworkwidget.ui" line="174"/>
         <source>Execute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.cpp" line="207"/>
-        <location filename="ui/cdtworkwidget.cpp" line="217"/>
+        <location filename="ui/cdtworkwidget.cpp" line="255"/>
+        <location filename="ui/cdtworkwidget.cpp" line="265"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
