@@ -5,7 +5,9 @@
 
 NrUdpProtocol::NrUdpProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData)
     : ProtocolBase(network, settingData)
-    , m_sendCounter(0)
+    , m_yxSendCounter(0)
+    , m_ycSendCounter(0)
+    , m_vyxSendCounter(0)
     , m_isRunYK(false)
 {
     connect(m_network.data(), &NetworkBase::disconnected, this, &NrUdpProtocol::onDisconnected, Qt::BlockingQueuedConnection);
@@ -223,20 +225,28 @@ void NrUdpProtocol::sendVDi()
     send(frameBytes);
 }
 
-void NrUdpProtocol::uploadDiAi()
+void NrUdpProtocol::uploadDi()
 {
-    if (m_sendCounter > 10000) {
+    if (m_yxSendCounter > m_settingData->m_ptCfg->m_yxTime) {
         sendAllDi();
+        m_yxSendCounter = 0;
+    }
+}
+
+void NrUdpProtocol::uploadAi()
+{
+    if (m_ycSendCounter > m_settingData->m_ptCfg->m_ycTime) {
+
         sendAllAi();
-        m_sendCounter = 0;
+        m_ycSendCounter = 0;
     }
 }
 
 void NrUdpProtocol::uploadVDi()
 {
-    if (m_sendCounter > 10000) {
+    if (m_vyxSendCounter > m_settingData->m_ptCfg->m_vyxTime) {
         sendVDi();
-        m_sendCounter = 0;
+        m_vyxSendCounter = 0;
     }
 }
 
@@ -384,6 +394,8 @@ void NrUdpProtocol::onDisconnected()
 
 void NrUdpProtocol::onTimeout()
 {
-    m_sendCounter += 100;
+    m_yxSendCounter += 100;
+    m_yxSendCounter += 100;
+    m_vyxSendCounter += 100;
     ProtocolBase::onTimeout();
 }

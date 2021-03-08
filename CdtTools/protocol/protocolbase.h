@@ -8,7 +8,7 @@
 #include "../ui/ptcfg.h"
 #include "strategybase.h"
 
-class ProtocolBase : public QObject
+class  ProtocolBase : public QObject
 {
     Q_OBJECT
 public:

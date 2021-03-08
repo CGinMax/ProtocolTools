@@ -12,7 +12,8 @@ NrUdpMintorStrategy::NrUdpMintorStrategy(NrUdpProtocol *nrudp)
 void NrUdpMintorStrategy::uploadTiming()
 {
     if (!m_nrudp->getRunYK()) {
-        m_nrudp->uploadDiAi();
+        m_nrudp->uploadDi();
+        m_nrudp->uploadAi();
     }
 }
 

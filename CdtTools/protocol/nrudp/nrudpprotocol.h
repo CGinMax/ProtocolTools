@@ -42,7 +42,9 @@ public:
 
     void sendVDi();
 
-    void uploadDiAi();
+    void uploadDi();
+
+    void uploadAi();
 
     void uploadVDi();
 
@@ -80,7 +82,9 @@ protected slots:
 private:
     QByteArray m_recvBuffer;
     QQueue<NrUdpFrame> m_frameQueue;
-    uint m_sendCounter;
+    uint m_yxSendCounter;
+    uint m_ycSendCounter;
+    uint m_vyxSendCounter;
     bool m_isRunYK;
 };
 
