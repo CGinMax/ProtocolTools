@@ -6,7 +6,7 @@
 #include <QTimer>
 #include <QCheckBox>
 #include "../protocol/protocolbase.h"
-#include "ptcfg.h"
+#include "../common/ptcfg.h"
 
 QT_FORWARD_DECLARE_CLASS(DiTableModel);
 QT_FORWARD_DECLARE_CLASS(AiTableModel);

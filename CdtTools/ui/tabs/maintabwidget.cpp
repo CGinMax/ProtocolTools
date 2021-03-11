@@ -3,9 +3,11 @@
 #include <QStyle>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QMessageBox>
 #include "fakeclosebutton.h"
 #include "maintabbar.h"
 #include "../tabpage.h"
+#include "../dialog/nameddialog.h"
 
 MainTabWidget::MainTabWidget(QWidget *parent)
     : QTabWidget(parent)
@@ -46,8 +48,22 @@ int MainTabWidget::addTab(QWidget *widget, const QIcon &icon, const QString &lab
     return tabIndex;
 }
 
+void MainTabWidget::backToBeforeIndex(bool isBack)
+{
+    if (isBack) {
+        setCurrentIndex(m_opendIndex);
+    }
+    else {
+        m_opendIndex = currentIndex();
+    }
+}
+
 void MainTabWidget::onTabCloseRequested(int index)
 {
+    if (QMessageBox::information(this, tr("Close Tab"), QString("Close tab %1?").arg(tabText(index))
+                                 , QMessageBox::Ok, QMessageBox::Cancel) != QMessageBox::Ok) {
+        return;
+    }
     auto widget = this->widget(index);
     removeTab(index);
     delete widget;
@@ -59,7 +75,10 @@ void MainTabWidget::onTabBarClicked(int index)
 {
     if (index == m_lastTabIndex) {
         emit addNewPage();
+        return;
     }
+
+    m_opendIndex = index;
 }
 
 void MainTabWidget::onTabAtIndexClicked(int index)
@@ -86,6 +105,13 @@ void MainTabWidget::showContextMenu(int tabIndex)
 {
     QMenu menu;
     m_contenxtIndex = tabIndex;
+    connect(menu.addAction(tr("Change Name")), &QAction::triggered, this, [this, tabIndex]{
+        NamedDialog dlg(this->tabText(tabIndex));
+        if (dlg.exec() == QDialog::Accepted) {
+            this->setTabText(tabIndex, dlg.getNameString());
+        }
+
+    });
     connect(menu.addAction(tr("Split")), &QAction::triggered, this, &MainTabWidget::onDivideTab);
 
     connect(menu.addAction(tr("Close")), &QAction::triggered, this, [this, tabIndex]{

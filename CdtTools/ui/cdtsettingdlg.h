@@ -2,7 +2,7 @@
 #define CDTSETTINGDLG_H
 
 #include <QDialog>
-#include "ptcfg.h"
+#include "../common/ptcfg.h"
 
 
 namespace Ui {

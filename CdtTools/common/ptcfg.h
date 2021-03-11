@@ -6,8 +6,8 @@
 #include <QPointer>
 #include <QList>
 #include <QMap>
-#include "tables/aidata.h"
-#include "tables/didata.h"
+#include "../ui/tables/aidata.h"
+#include "../ui/tables/didata.h"
 
 class PtCfg
 {

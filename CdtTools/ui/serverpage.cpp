@@ -115,6 +115,12 @@ void ServerPage::onDisconnected()
 
 void ServerPage::onTabCloseRequested(int index)
 {
+    if (QMessageBox::information(this, tr("Close Tab")
+                                 , QString("Close tab %1?").arg(m_tabClients->tabText(index))
+                                 , QMessageBox::Ok
+                                 , QMessageBox::Cancel) != QMessageBox::Ok) {
+        return ;
+    }
     auto widget = qobject_cast<CDTWorkWidget*>(m_tabClients->widget(index));
     if (widget->isConnection()) {
         auto ret = QMessageBox::warning(widget, QStringLiteral("提示"), QStringLiteral("通讯正在进行，是否断开？"), QMessageBox::Ok, QMessageBox::Cancel);

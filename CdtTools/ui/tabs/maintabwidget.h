@@ -12,6 +12,7 @@ public:
     int addTab(QWidget* widget, const QString& label);
     int addTab(QWidget* widget, const QIcon& icon, const QString& label);
 
+    void backToBeforeIndex(bool isBack = false);
 signals:
     void addNewPage();
 
@@ -25,6 +26,7 @@ private:
     void showContextMenu(int tabIndex);
 
 private:
+    int m_opendIndex;
     int m_lastTabIndex;
     int m_contenxtIndex;
 };

@@ -33,6 +33,7 @@ SOURCES += \
     common/threadpool.cpp \
     common/workerthread.cpp \
     common/util.cpp \
+    common/ptcfg.cpp \
     protocol/checkhelper.cpp \
     protocol/cdtframe.cpp \
     protocol/protocolbase.cpp \
@@ -52,7 +53,6 @@ SOURCES += \
     ui/tables/aitablemodel.cpp \
     ui/tables/aidata.cpp \
     ui/tables/delegates/digitlimitedelegate.cpp \
-    ui/ptcfg.cpp \
     protocol/strategybase.cpp \
     protocol/standard/cdtwfstrategy.cpp \
     protocol/standard/cdtmintorstrategy.cpp \
@@ -75,7 +75,9 @@ SOURCES += \
     ui/tabs/maintabbar.cpp \
     network/udpsocket.cpp \
     ui/udppage.cpp \
-    ui/tables/diheaderview.cpp
+    ui/tables/diheaderview.cpp \
+    ui/dialog/nameddialog.cpp \
+    common/saveconfig.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -86,6 +88,7 @@ HEADERS += \
     common/threadpool.h \
     common/workerthread.h \
     common/util.h \
+    common/ptcfg.h \
     protocol/checkhelper.h \
     protocol/cdtframe.h \
     protocol/standard/cdtprotocol.h \
@@ -105,7 +108,6 @@ HEADERS += \
     ui/tables/aitablemodel.h \
     ui/tables/aidata.h \
     ui/tables/delegates/digitlimitedelegate.h \
-    ui/ptcfg.h \
     protocol/strategybase.h \
     protocol/standard/cdtwfstrategy.h \
     protocol/standard/cdtmintorstrategy.h \
@@ -128,7 +130,9 @@ HEADERS += \
     ui/tabs/maintabbar.h \
     network/udpsocket.h \
     ui/udppage.h \
-    ui/tables/diheaderview.h
+    ui/tables/diheaderview.h \
+    ui/dialog/nameddialog.h \
+    common/saveconfig.h
 
 FORMS += \
         mainwindow.ui \
