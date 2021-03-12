@@ -84,3 +84,52 @@ DiData *PtCfg::findVDiById(int id)
     }
     return iter.value();
 }
+
+QMap<int, DiData *> PtCfg::getDiMap()
+{
+    return m_diMap;
+}
+
+QMap<int, AiData *> PtCfg::getAiMap()
+{
+    return m_aiMap;
+}
+
+QMap<int, DiData *> PtCfg::getVDiMap()
+{
+    return m_vdiMap;
+}
+
+void PtCfg::save(QDataStream &dataStream)
+{
+    dataStream << int(m_protocol) << m_controlType << m_yxFrameType << m_yxFuncode << m_yxNum << m_yxStartIo << m_yxTime
+               << m_ycFrameType << m_ycFuncode << m_ycNum << m_ycStartIo << m_ycTime << m_isRandom
+               << m_vyxFrameType << m_vyxFuncode << m_vyxNum << m_vyxStartIo << m_vyxTime
+               << m_ykReqType << m_ykAckType << m_ykReqCode << m_ykAckCode << m_ykExeCode << m_ykClose << m_ykOpen << m_ykUnlock << m_ykLock;
+}
+
+void PtCfg::load(QDataStream &dataStream)
+{
+    int protocolType = 0;
+    dataStream >> protocolType >> m_controlType >> m_yxFrameType >> m_yxFuncode >> m_yxNum >> m_yxStartIo >> m_yxTime
+               >> m_ycFrameType >> m_ycFuncode >> m_ycNum >> m_ycStartIo >> m_ycTime >> m_isRandom
+               >> m_vyxFrameType >> m_vyxFuncode >> m_vyxNum >> m_vyxStartIo >> m_vyxTime
+               >> m_ykReqType >> m_ykAckType >> m_ykReqCode >> m_ykAckCode >> m_ykExeCode >> m_ykClose >> m_ykOpen >> m_ykUnlock >> m_ykLock;
+    m_protocol = eProtocol(protocolType);
+}
+
+void SettingData::save(QDataStream &dataStream)
+{
+    dataStream << m_ip << m_port << m_remoteIp << m_remotePort << m_networkType << m_stationType;
+    m_ptCfg->save(dataStream);
+}
+
+void SettingData::load(QDataStream &dataStream)
+{
+    int networkType = 0;
+    int stationType = 0;
+    dataStream >> m_ip >> m_port >> m_remoteIp >> m_remotePort >> networkType >> stationType;
+    m_networkType = eNetworkType(networkType);
+    m_stationType = eStationType(stationType);
+    m_ptCfg->load(dataStream);
+}

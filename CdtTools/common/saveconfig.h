@@ -3,15 +3,17 @@
 
 #include <QObject>
 #include "ptcfg.h"
+
+class TabPage;
 class SaveConfig : public QObject
 {
     Q_OBJECT
 public:
     explicit SaveConfig(QObject *parent = nullptr);
 
-    static bool save(SettingData* saveData, const QString& saveFilePath);
+    static bool saveTabConfig(SettingData* saveData, const QString& tabName, const QString& saveFilePath);
 
-    static bool import(const QString& importPath);
+    static QMultiMap<QString, SettingData*> import(const QString& importPath);
 
 signals:
 

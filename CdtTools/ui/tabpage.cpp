@@ -8,18 +8,33 @@
 #include "cdtsettingdlg.h"
 #include "../common/threadpool.h"
 
-TabPage::TabPage(QWidget *parent)
+TabPage::TabPage(const QString& name, QWidget *parent)
     : QWidget(parent)
     , m_settingData(new SettingData)
     , m_serverPage(new ServerPage(m_settingData, this))
     , m_clientPage(new ClientPage(m_settingData,this))
     , m_udpPage(new UdpPage(m_settingData, this))
+    , m_pageName(name)
     , ui(new Ui::TabPage)
 
 {
     ui->setupUi(this);
     initWidget();
 
+}
+
+TabPage::TabPage(QSharedPointer<SettingData> settingData, const QString& name, QWidget *parent)
+    : QWidget(parent)
+    , m_settingData(settingData)
+    , m_serverPage(new ServerPage(settingData, this))
+    , m_clientPage(new ClientPage(settingData,this))
+    , m_udpPage(new UdpPage(settingData, this))
+    , m_pageName(name)
+    , ui(new Ui::TabPage)
+{
+
+    ui->setupUi(this);
+    initWidget();
 }
 
 TabPage::~TabPage()
@@ -32,14 +47,16 @@ void TabPage::initWidget()
     auto* intValid = new QIntValidator(0, 65535);
     QRegularExpression regExp(QLatin1String("^((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})(.((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})){3}$"));
     auto* regValid = new QRegularExpressionValidator(regExp);
-    ui->editIp->setText("127.0.0.1");
-    ui->editPort->setText("2404");
+    ui->editIp->setText(m_settingData->m_ip);
+    ui->editPort->setText(QString::number(m_settingData->m_port));
     ui->editIp->setValidator(regValid);
     ui->editPort->setValidator(intValid);
-    ui->editRemoteIp->setText("127.0.0.1");
-    ui->editReomtePort->setText("9001");
+    ui->editRemoteIp->setText(m_settingData->m_remoteIp);
+    ui->editReomtePort->setText(QString::number(m_settingData->m_remotePort));
     ui->editRemoteIp->setValidator(regValid);
     ui->editReomtePort->setValidator(intValid);
+    ui->cbbNetworkType->setCurrentIndex(m_settingData->m_networkType);
+    ui->cbbStationType->setCurrentIndex(m_settingData->m_stationType);
 
     auto btnGroup = new QButtonGroup(this);
     btnGroup->addButton(ui->btnStart);
@@ -70,6 +87,16 @@ void TabPage::setConfigureWidgetEnabled(bool enabled)
     ui->btnSetting->setEnabled(enabled);
     ui->btnStart->setEnabled(enabled);
     ui->btnStop->setEnabled(!enabled);
+}
+
+SettingData *TabPage::getSettingData() const
+{
+    return m_settingData.data();
+}
+
+QString TabPage::getPageName() const
+{
+    return m_pageName;
 }
 
 void TabPage::on_cbbNetworkType_currentIndexChanged(int index)

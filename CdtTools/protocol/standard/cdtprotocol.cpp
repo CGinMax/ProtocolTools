@@ -168,16 +168,13 @@ void CDTProtocol::yxResponse(QList<InfoFieldEntity> &infoFieldList)
 
             nSeq = curPointStartAddr + i + startOffset;  // 点号
 
-//            if(nSeq < (startOffset + diSize)) {
-
-//            }
             auto di = m_settingData->m_ptCfg->findDiById(nSeq);
             if (di) {
                 di->setValue(yxValue > 0);
             }
-            else {
-                qInfo("未找到遥信点，点号=%d", nSeq);
-            }
+//            else {
+//                qInfo("未找到遥信点，点号=%d", nSeq);
+//            }
         }
     }
 
@@ -210,11 +207,12 @@ void CDTProtocol::ycResponse(QList<InfoFieldEntity> &infoFieldList)
             if (ai) {
                 ai->setValue(ycAccept);
             }
-            else {
-                qInfo("未找到遥测点，点号=%d", nSeq);
-            }
+//            else {
+//                qInfo("未找到遥测点，点号=%d", nSeq);
+//            }
 
         }
+        offset++;
     }
 }
 
@@ -288,22 +286,27 @@ void CDTProtocol::yKCancel(uint8_t operCode, uint8_t ptNo)
     send(frame);
 }
 
-CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode, QList<DiData *> &ptList)
+CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode, const QMap<int, DiData *> &ptMap)
 {
     QList<uint8_t> combineByteList;
     uchar val = 0;
     int index = 0;
-    for (const auto& di: ptList) {
-        if (index % 8 == 0 && index != 0) {
-             combineByteList.append(val);
-            val = 0;
-            index = 0;
+    int lastIndex = ptMap.last()->io();
+    for (int i = 0; i <= lastIndex; i++) {
+
+        bool diVal = false;
+        if (ptMap.contains(i)) {
+            diVal = ptMap.value(i)->value();
         }
-        bool diVal = di->value();
         if (diVal) {
             val |= (1 << index % 8);
         }
         index++;
+        if (index % 8 == 0 && index != 0) {
+            combineByteList.append(val);
+            val = 0;
+            index = 0;
+        }
     }
     if (index % 8 != 0) {
         combineByteList.append(val);
@@ -327,15 +330,15 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode, QList<DiData *> &ptList
     return frame;
 }
 
-CDTFrame CDTProtocol::buildYCFrame(uint8_t startFuncode, QList<AiData *> &ptList)
+CDTFrame CDTProtocol::buildYCFrame(uint8_t startFuncode, const QMap<int, AiData *> &ptMap)
 {
     CDTFrame frame;
 
     uint8_t curCode = startFuncode;
     QVector<uint8_t> combineList;
-    int aiNum = ptList.size();
+    int aiNum = ptMap.last()->io();
     for (int i = 0; i < aiNum; i++) {
-        auto aiValue = ptList.at(i)->value();
+        auto aiValue = ptMap.value(i)->value();
         if (aiValue > 0x07FF) {
             aiValue = 0x4000;// 溢出
         }
@@ -363,7 +366,7 @@ QByteArray CDTProtocol::buildYXProtocol(const QSharedPointer<SettingData> &setti
     if (settingData->m_ptCfg->m_globalDiList->isEmpty()) {
         return QByteArray();
     }
-    auto frame = CDTProtocol::buildYXFrame(settingData->m_ptCfg->m_yxFuncode, *settingData->m_ptCfg->m_globalDiList);
+    auto frame = CDTProtocol::buildYXFrame(settingData->m_ptCfg->m_yxFuncode, settingData->m_ptCfg->getDiMap()/**settingData->m_ptCfg->m_globalDiList*/);
 
     frame.frameControl.fillData(settingData->m_ptCfg->m_controlType, settingData->m_ptCfg->m_yxFrameType, frame.infoFields.size(), 0, 0);
 
@@ -375,7 +378,7 @@ QByteArray CDTProtocol::buildYCProtocol(const QSharedPointer<SettingData> &setti
     if (settingData->m_ptCfg->m_globalAiList->isEmpty()) {
         return QByteArray();
     }
-    CDTFrame frame = CDTProtocol::buildYCFrame(settingData->m_ptCfg->m_ycFuncode, *settingData->m_ptCfg->m_globalAiList);
+    CDTFrame frame = CDTProtocol::buildYCFrame(settingData->m_ptCfg->m_ycFuncode, settingData->m_ptCfg->getAiMap());
     frame.frameControl.fillData(settingData->m_ptCfg->m_controlType, settingData->m_ptCfg->m_ycFrameType, frame.infoFields.size(), 0, 0);
     return frame.toAllByteArray();
 }
@@ -385,7 +388,7 @@ QByteArray CDTProtocol::buildVYXProtocol(const QSharedPointer<SettingData> &sett
     if (settingData->m_ptCfg->m_globalVDiList->isEmpty()) {
         return QByteArray();
     }
-    auto frame = CDTProtocol::buildYXFrame(settingData->m_ptCfg->m_yxFuncode, *settingData->m_ptCfg->m_globalVDiList);
+    auto frame = CDTProtocol::buildYXFrame(settingData->m_ptCfg->m_yxFuncode, settingData->m_ptCfg->getVDiMap()/**settingData->m_ptCfg->m_globalVDiList*/);
     frame.frameControl.fillData(settingData->m_ptCfg->m_controlType, settingData->m_ptCfg->m_vyxFrameType, frame.infoFields.size(), 0, 0);
     return frame.toAllByteArray();
 }

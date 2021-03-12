@@ -14,13 +14,18 @@ class TabPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit TabPage(QWidget *parent = nullptr);
+    explicit TabPage(const QString& name = tr("Default Page"), QWidget *parent = nullptr);
+    explicit TabPage(QSharedPointer<SettingData> settingData, const QString& name = tr("Default Page"), QWidget *parent = nullptr);
     ~TabPage() override;
     void initWidget();
 
     void resetSettingData();
 
     void setConfigureWidgetEnabled(bool enabled);
+
+    SettingData* getSettingData() const;
+
+    QString getPageName() const;
 
 signals:
     void updateData();
@@ -38,6 +43,7 @@ private:
     QScopedPointer<ServerPage> m_serverPage;
     QScopedPointer<ClientPage> m_clientPage;
     QScopedPointer<UdpPage> m_udpPage;
+    QString m_pageName;
     Ui::TabPage *ui;
 };
 

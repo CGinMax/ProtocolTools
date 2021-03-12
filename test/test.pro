@@ -9,6 +9,7 @@ SOURCES += \
     ../CdtTools/common/threadpool.cpp \
     ../CdtTools/common/util.cpp \
     ../CdtTools/common/workerthread.cpp \
+    ../CdtTools/common/ptcfg.cpp \
     ../CdtTools/network/networkbase.cpp \
     ../CdtTools/network/tcpclient.cpp \
     ../CdtTools/network/tcpserver.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
     ../CdtTools/protocol/nrudp/nrudpmintorstrategy.cpp \
     ../CdtTools/protocol/nrudp/nrudpwfstrategy.cpp \
     ../CdtTools/ui/dialog/ykdialog.cpp \
+    ../CdtTools/ui/dialog/nameddialog.cpp \
     ../CdtTools/ui/tables/delegates/comboboxdelegate.cpp \
     ../CdtTools/ui/tables/delegates/digitlimitedelegate.cpp \
     ../CdtTools/ui/tables/diheaderview.cpp \
@@ -51,7 +53,6 @@ SOURCES += \
     ../CdtTools/ui/cdtsettingdlg.cpp \
     ../CdtTools/ui/cdtworkwidget.cpp \
     ../CdtTools/ui/clientpage.cpp \
-    ../CdtTools/ui/ptcfg.cpp \
     ../CdtTools/ui/serverpage.cpp \
     ../CdtTools/ui/tabpage.cpp\
     ../CdtTools/ui/udppage.cpp
@@ -61,6 +62,7 @@ HEADERS += \
     ../CdtTools/common/threadpool.h \
     ../CdtTools/common/util.h \
     ../CdtTools/common/workerthread.h \
+    ../CdtTools/common/ptcfg.h \
     ../CdtTools/network/networkbase.h \
     ../CdtTools/network/tcpclient.h \
     ../CdtTools/network/tcpserver.h \
@@ -89,6 +91,7 @@ HEADERS += \
     ../CdtTools/protocol/nrudp/nrudpmintorstrategy.h \
     ../CdtTools/protocol/nrudp/nrudpwfstrategy.h \
     ../CdtTools/ui/dialog/ykdialog.h \
+    ../CdtTools/ui/dialog/nameddialog.h \
     ../CdtTools/ui/tables/delegates/comboboxdelegate.h \
     ../CdtTools/ui/tables/delegates/digitlimitedelegate.h \
     ../CdtTools/ui/tables/aidata.h \
@@ -103,7 +106,6 @@ HEADERS += \
     ../CdtTools/ui/cdtsettingdlg.h \
     ../CdtTools/ui/cdtworkwidget.h \
     ../CdtTools/ui/clientpage.h \
-    ../CdtTools/ui/ptcfg.h \
     ../CdtTools/ui/serverpage.h \
     ../CdtTools/ui/tabpage.h \
     ../CdtTools/ui/udppage.h \

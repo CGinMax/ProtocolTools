@@ -26,6 +26,15 @@ public:
 
     DiData* findVDiById(int id);
 
+    QMap<int, DiData*> getDiMap();
+
+    QMap<int, AiData*> getAiMap();
+
+    QMap<int, DiData*> getVDiMap();
+
+    void save(QDataStream& dataStream);
+
+    void load(QDataStream& dataStream);
 
     eProtocol m_protocol{eProtocol::CDTStandardary};
     uint8_t m_controlType{0x71};
@@ -76,10 +85,13 @@ struct SettingData{
         : m_ptCfg(new PtCfg)
     {}
 
-    QString m_ip{QLatin1Literal("0.0.0.0")};
+    void save(QDataStream& dataStream);
+
+    void load(QDataStream& dataStream);
+    QString m_ip{QLatin1Literal("127.0.0.1")};
     int m_port{2404};
-    QString m_remoteIp{QLatin1String("0.0.0.0")};
-    int m_remotePort{2406};
+    QString m_remoteIp{QLatin1String("127.0.0.1")};
+    int m_remotePort{8080};
     eNetworkType m_networkType{eNetworkType::eTcpServer};
     eStationType m_stationType{eStationType::Minitor};
     QSharedPointer<PtCfg> m_ptCfg;

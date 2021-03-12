@@ -50,9 +50,9 @@ public:
 
     void yKCancel(uint8_t operCode, uint8_t ptNo);
 
-    static CDTFrame buildYXFrame(uint8_t startFuncode, QList<DiData*>& ptList);
+    static CDTFrame buildYXFrame(uint8_t startFuncode, const QMap<int, DiData*>& ptMap);
 
-    static CDTFrame buildYCFrame(uint8_t startFuncode, QList<AiData*>& ptList);
+    static CDTFrame buildYCFrame(uint8_t startFuncode, const QMap<int, AiData*>& ptMap);
 
     static QByteArray buildYXProtocol(const QSharedPointer<SettingData>& settingData);
 

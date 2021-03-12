@@ -83,17 +83,17 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     for (int i = 0; i < m_aiModel->rowCount(QModelIndex()); i++) {
         ui->viewAi->openPersistentEditor(m_aiModel->index(i, 2));
     }
-    connect(aiDelegate, &DigitLimiteDelegate::delegateValueChanged, [=](){
-        QString protocolString;
-        if (settingData->m_ptCfg->m_protocol == eProtocol::NRUdp) {
-            protocolString = Util::bytes2String(NrUdpProtocol::buildYCProtocol(settingData));
-        }
-        else {
-            protocolString = Util::bytes2String(CDTProtocol::buildYCProtocol(settingData), 6);
-        }
-        ui->editAiProtocol->clear();
-        ui->editAiProtocol->appendPlainText(protocolString);
-    });
+//    connect(aiDelegate, &DigitLimiteDelegate::delegateValueChanged, [=](){
+//        QString protocolString;
+//        if (settingData->m_ptCfg->m_protocol == eProtocol::NRUdp) {
+//            protocolString = Util::bytes2String(NrUdpProtocol::buildYCProtocol(settingData));
+//        }
+//        else {
+//            protocolString = Util::bytes2String(CDTProtocol::buildYCProtocol(settingData), 6);
+//        }
+//        ui->editAiProtocol->clear();
+//        ui->editAiProtocol->appendPlainText(protocolString);
+//    });
     emit aiDelegate->delegateValueChanged();
 
     m_vdiModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalVDiList, ui->viewVDi);
