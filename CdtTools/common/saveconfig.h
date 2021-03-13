@@ -11,7 +11,7 @@ class SaveConfig : public QObject
 public:
     explicit SaveConfig(QObject *parent = nullptr);
 
-    static bool saveTabConfig(SettingData* saveData, const QString& tabName, const QString& saveFilePath);
+    static bool saveTabConfig(QMultiMap<QString, SettingData*> settingMap, const QString& saveFilePath);
 
     static QMultiMap<QString, SettingData*> import(const QString& importPath);
 

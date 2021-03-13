@@ -72,7 +72,8 @@ void MainWindow::onImportFinish(QMultiMap<QString, SettingData *> &settingMap)
 
 void MainWindow::on_actionImport_triggered()
 {
-    auto openFileName = QFileDialog::getOpenFileName(this, tr("Open"), QStandardPaths::displayName(QStandardPaths::ApplicationsLocation));
+    auto openFileName = QFileDialog::getOpenFileName(nullptr, tr("Open")
+                        , QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation).first(), QLatin1String("All Files (*.*)"));
     if (openFileName.isNull()){
         return ;
     }
@@ -89,23 +90,24 @@ void MainWindow::on_actionImport_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    auto saveFileName = QFileDialog::getSaveFileName(this, tr("Save"), QStandardPaths::displayName(QStandardPaths::DocumentsLocation));
+    auto saveFileName = QFileDialog::getSaveFileName(nullptr, tr("Save")
+                        , QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first()+"/cdt.bk", QLatin1String("All Files (*.*)"));
     if (saveFileName.isNull()) {
         return ;
     }
     ThreadPool::instance()->run([=]{
         int tabCount = m_mainTabs->count();
         bool success = false;
+        QMultiMap<QString, SettingData*> settingMap;
         for (int i = 0; i < tabCount - 1; i++) {
             auto tab = qobject_cast<TabPage*>(m_mainTabs->widget(i));
             tab->resetSettingData();
-            try {
-                success = SaveConfig::saveTabConfig(tab->getSettingData(), tab->getPageName(), saveFileName);
-//                QMessageBox::information(this, tr("Information"), tr("Save %1 Success!").arg(saveFileName), QMessageBox::Ok);
-            } catch (std::exception& e) {
-                qDebug(e.what());
-//                QMessageBox::information(this, tr("Information"), tr("Save %1 Failed!").arg(saveFileName), QMessageBox::Ok);
-            }
+            settingMap.insert(tab->getPageName(), tab->getSettingData());
+        }
+        try {
+            success = SaveConfig::saveTabConfig(settingMap, saveFileName);
+        } catch (std::exception& e) {
+            qDebug(e.what());
         }
         emit this->saveFinish(success, success ? tr("Save %1 Success!").arg(saveFileName) : tr("Save %1 Failed!").arg(saveFileName));
     });

@@ -41,17 +41,17 @@ public:
     uint8_t m_yxFrameType{0xF4};
     uint8_t m_yxFuncode{0xF0};
     int m_yxNum{1};
-    uint8_t m_yxStartIo{0};
+    int m_yxStartIo{0};
 
     uint8_t m_ycFrameType{0x61};
     uint8_t m_ycFuncode{0x00};
     int m_ycNum{1};
-    uint8_t m_ycStartIo{0};
+    int m_ycStartIo{0};
 
     uint8_t m_vyxFrameType{0xF4};
     uint8_t m_vyxFuncode{0xF0};
     int m_vyxNum{1};
-    uint8_t m_vyxStartIo{0};
+    int m_vyxStartIo{0};
 
     uint8_t m_ykReqType{0xF1};
     uint8_t m_ykAckType{0xF1};
