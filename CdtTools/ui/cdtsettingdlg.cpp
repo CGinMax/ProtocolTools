@@ -135,23 +135,7 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_ycTime       = ui->edYcTime->value();
     m_ptCfg->m_vyxTime      = ui->edVYxTime->value();
 
-    m_ptCfg->clearPoints();
-
-    m_ptCfg->m_globalDiList = new QList<DiData*>;
-    for (int i = 0; i < m_ptCfg->m_yxNum; i++) {
-        m_ptCfg->m_globalDiList->append(new DiData(m_ptCfg->m_yxStartIo + i, QString("Pt%1").arg(m_ptCfg->m_yxStartIo + i), false));
-    }
-
-    m_ptCfg->m_globalAiList = new QList<AiData*>;
-    for (int i = 0; i < m_ptCfg->m_ycNum; i++) {
-        m_ptCfg->m_globalAiList->append(new AiData(m_ptCfg->m_ycStartIo + i, QString("Pt%1").arg(m_ptCfg->m_ycStartIo + i), 0));
-    }
-
-    m_ptCfg->m_globalVDiList = new QList<DiData*>;
-    for (int i = 0; i < m_ptCfg->m_vyxNum; i++) {
-        m_ptCfg->m_globalVDiList->append(new DiData(m_ptCfg->m_vyxStartIo + i, QString("Pt%1").arg(m_ptCfg->m_vyxStartIo + i), 0));
-    }
-    m_ptCfg->initMap();
+    m_ptCfg->resetPoints();
     accept();
 }
 

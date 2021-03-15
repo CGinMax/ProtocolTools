@@ -5,9 +5,13 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    auto translator = new QTranslator();
-    translator->load("./translations/CdtTools_zh.qm");
-    a.installTranslator(translator);
+    auto customTrans = new QTranslator();
+    customTrans->load(QLatin1String(":/translations/CdtTools_zh.qm"));
+    a.installTranslator(customTrans);
+
+    auto systemTrans = new QTranslator();
+    systemTrans->load(QLatin1String(":/translations/qt_zh_CN.qm"));
+    a.installTranslator(systemTrans);
 
     MainWindow w;
     w.show();

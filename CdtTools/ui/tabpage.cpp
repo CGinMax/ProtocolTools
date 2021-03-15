@@ -32,9 +32,9 @@ TabPage::TabPage(QSharedPointer<SettingData> settingData, const QString& name, Q
     , m_pageName(name)
     , ui(new Ui::TabPage)
 {
-
     ui->setupUi(this);
     initWidget();
+    emit updateData();
 }
 
 TabPage::~TabPage()

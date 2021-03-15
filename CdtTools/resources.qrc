@@ -3,4 +3,9 @@
         <file>resources/signal-close.png</file>
         <file>resources/signal-connect.png</file>
     </qresource>
+    <qresource prefix="/">
+        <file>translations/CdtTools_en.qm</file>
+        <file>translations/CdtTools_zh.qm</file>
+        <file>translations/qt_zh_CN.qm</file>
+    </qresource>
 </RCC>

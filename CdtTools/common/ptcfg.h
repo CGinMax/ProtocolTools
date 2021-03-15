@@ -15,10 +15,11 @@ public:
     PtCfg();
     ~PtCfg();
 
-
     void initMap();
 
     void clearPoints();
+
+    void resetPoints();
 
     DiData* findDiById(int id);
 

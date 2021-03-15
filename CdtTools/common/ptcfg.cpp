@@ -8,7 +8,6 @@ PtCfg::PtCfg()
     m_globalDiList->append(new DiData());
     m_globalAiList->append(new AiData());
     m_globalVDiList->append(new DiData());
-    qDebug("init Map");
     initMap();
 }
 PtCfg::~PtCfg() {
@@ -57,6 +56,27 @@ void PtCfg::clearPoints()
     m_diMap.clear();
     m_aiMap.clear();
     m_vdiMap.clear();
+}
+
+void PtCfg::resetPoints()
+{
+    clearPoints();
+
+    m_globalDiList = new QList<DiData*>;
+    for (int i = 0; i < m_yxNum; i++) {
+        m_globalDiList->append(new DiData(m_yxStartIo + i, QString("Pt%1").arg(m_yxStartIo + i), false));
+    }
+
+    m_globalAiList = new QList<AiData*>;
+    for (int i = 0; i < m_ycNum; i++) {
+        m_globalAiList->append(new AiData(m_ycStartIo + i, QString("Pt%1").arg(m_ycStartIo + i), 0));
+    }
+
+    m_globalVDiList = new QList<DiData*>;
+    for (int i = 0; i < m_vyxNum; i++) {
+        m_globalVDiList->append(new DiData(m_vyxStartIo + i, QString("Pt%1").arg(m_vyxStartIo + i), 0));
+    }
+    initMap();
 }
 
 DiData *PtCfg::findDiById(int id)
