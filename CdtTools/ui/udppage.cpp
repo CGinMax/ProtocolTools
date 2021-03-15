@@ -45,4 +45,5 @@ void UdpPage::onUpdateData()
 {
     m_centerWidget.reset(new CDTWorkWidget(m_udp, m_settingData, this));
     m_layout->addWidget(m_centerWidget.data());
+    m_layout->setContentsMargins(0, 0, 0, 0);
 }

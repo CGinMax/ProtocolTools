@@ -257,12 +257,28 @@
 <context>
     <name>MainTabWidget</name>
     <message>
-        <location filename="ui/tabs/maintabwidget.cpp" line="89"/>
+        <location filename="ui/tabs/maintabwidget.cpp" line="67"/>
+        <source>Close Tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/tabs/maintabwidget.cpp" line="112"/>
+        <source>Change Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/tabs/maintabwidget.cpp" line="119"/>
+        <location filename="ui/tabs/maintabwidget.cpp" line="120"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/tabs/maintabwidget.cpp" line="138"/>
         <source>Split</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/tabs/maintabwidget.cpp" line="91"/>
+        <location filename="ui/tabs/maintabwidget.cpp" line="140"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -272,6 +288,60 @@
     <message>
         <location filename="mainwindow.ui" line="14"/>
         <source>CDT Test Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="43"/>
+        <source>Menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="61"/>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="66"/>
+        <location filename="mainwindow.cpp" line="93"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="25"/>
+        <source>Default Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="61"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="75"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="112"/>
+        <source>Save %1 Success!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="112"/>
+        <source>Save %1 Failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NamedDialog</name>
+    <message>
+        <location filename="ui/dialog/nameddialog.cpp" line="13"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/dialog/nameddialog.cpp" line="14"/>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -286,7 +356,7 @@
 <context>
     <name>ServerPage</name>
     <message>
-        <location filename="ui/serverpage.cpp" line="26"/>
+        <location filename="ui/serverpage.cpp" line="38"/>
         <source>Close disconnected tab</source>
         <translation type="unfinished"></translation>
     </message>
@@ -354,13 +424,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/tabpage.cpp" line="100"/>
+        <location filename="ui/tabpage.cpp" line="133"/>
         <source>错误</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/tabpage.cpp" line="100"/>
+        <location filename="ui/tabpage.cpp" line="133"/>
         <source>打开通讯端口失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/tabpage.h" line="17"/>
+        <location filename="ui/tabpage.h" line="18"/>
+        <source>Default Page</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

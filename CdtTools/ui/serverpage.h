@@ -16,6 +16,8 @@ public:
     explicit ServerPage(const QSharedPointer<SettingData>& settingData, QWidget *parent = nullptr);
     ~ServerPage() override;
 
+    void initTabWidget();
+
     bool start();
     bool start(const QString& ip, int port);
 

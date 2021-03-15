@@ -66,6 +66,7 @@ void TabPage::initWidget()
     ui->stackedWidget->addWidget(m_serverPage.data());
     ui->stackedWidget->addWidget(m_clientPage.data());
     ui->stackedWidget->addWidget(m_udpPage.data());
+    ui->stackedWidget->setCurrentIndex(m_settingData->m_networkType);
     connect(this, &TabPage::updateData, m_serverPage.data(), &ServerPage::onUpdateData);
     connect(this, &TabPage::updateData, m_clientPage.data(), &ClientPage::onUpdateData);
     connect(this, &TabPage::updateData, m_udpPage.data(), &UdpPage::onUpdateData);

@@ -260,12 +260,28 @@
 <context>
     <name>MainTabWidget</name>
     <message>
-        <location filename="ui/tabs/maintabwidget.cpp" line="89"/>
+        <location filename="ui/tabs/maintabwidget.cpp" line="67"/>
+        <source>Close Tab</source>
+        <translation>关闭标签页</translation>
+    </message>
+    <message>
+        <location filename="ui/tabs/maintabwidget.cpp" line="112"/>
+        <source>Change Name</source>
+        <translation>更改名称</translation>
+    </message>
+    <message>
+        <location filename="ui/tabs/maintabwidget.cpp" line="119"/>
+        <location filename="ui/tabs/maintabwidget.cpp" line="120"/>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <location filename="ui/tabs/maintabwidget.cpp" line="138"/>
         <source>Split</source>
         <translation>分离成窗口</translation>
     </message>
     <message>
-        <location filename="ui/tabs/maintabwidget.cpp" line="91"/>
+        <location filename="ui/tabs/maintabwidget.cpp" line="140"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -276,6 +292,60 @@
         <location filename="mainwindow.ui" line="14"/>
         <source>CDT Test Tool</source>
         <translation>CDT测试工具</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="43"/>
+        <source>Menu</source>
+        <translation>菜单</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="61"/>
+        <source>Import</source>
+        <translation>导入</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="66"/>
+        <location filename="mainwindow.cpp" line="93"/>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="25"/>
+        <source>Default Page</source>
+        <translation>默认页</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="61"/>
+        <source>Information</source>
+        <translation>提示信息</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="75"/>
+        <source>Open</source>
+        <translation>打开</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="112"/>
+        <source>Save %1 Success!</source>
+        <translation>保存 %1 成功！</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="112"/>
+        <source>Save %1 Failed!</source>
+        <translation>保存 %1 失败！</translation>
+    </message>
+</context>
+<context>
+    <name>NamedDialog</name>
+    <message>
+        <location filename="ui/dialog/nameddialog.cpp" line="13"/>
+        <source>Ok</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="ui/dialog/nameddialog.cpp" line="14"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -289,7 +359,7 @@
 <context>
     <name>ServerPage</name>
     <message>
-        <location filename="ui/serverpage.cpp" line="26"/>
+        <location filename="ui/serverpage.cpp" line="38"/>
         <source>Close disconnected tab</source>
         <translation>关闭已断开标签</translation>
     </message>
@@ -357,14 +427,20 @@
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="ui/tabpage.cpp" line="100"/>
+        <location filename="ui/tabpage.cpp" line="133"/>
         <source>错误</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="ui/tabpage.cpp" line="100"/>
+        <location filename="ui/tabpage.cpp" line="133"/>
         <source>打开通讯端口失败</source>
         <translation>打开通讯端口失败</translation>
+    </message>
+    <message>
+        <location filename="ui/tabpage.h" line="17"/>
+        <location filename="ui/tabpage.h" line="18"/>
+        <source>Default Page</source>
+        <translation>默认页</translation>
     </message>
 </context>
 <context>

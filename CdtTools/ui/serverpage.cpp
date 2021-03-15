@@ -13,9 +13,21 @@ ServerPage::ServerPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent
     , m_tcpServer(new QTcpServer(this))
     , m_tabClients(new QTabWidget(this))
     , m_settingData(ptCfg)
+    , m_layout(new QVBoxLayout(this))
 {
 
-    m_layout = new QVBoxLayout(this);
+    initTabWidget();
+
+    connect(m_tcpServer.data(), &QTcpServer::newConnection, this, &ServerPage::onNewConnection);
+}
+
+ServerPage::~ServerPage()
+{
+    stop();
+}
+
+void ServerPage::initTabWidget()
+{
     m_layout->addWidget(m_tabClients.data());
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_tabClients->setTabsClosable(true);
@@ -26,14 +38,7 @@ ServerPage::ServerPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent
         menu.addAction(tr("Close disconnected tab"), this, &ServerPage::onCloseDisconnected);
         menu.exec(QCursor::pos());
     });
-
     connect(m_tabClients.data(), &QTabWidget::tabCloseRequested, this, &ServerPage::onTabCloseRequested);
-    connect(m_tcpServer.data(), &QTcpServer::newConnection, this, &ServerPage::onNewConnection);
-}
-
-ServerPage::~ServerPage()
-{
-    stop();
 }
 
 bool ServerPage::start()
@@ -86,8 +91,7 @@ void ServerPage::onUpdateData()
     }
     m_tabClients->clear();
     m_tabClients.reset(new QTabWidget(this));
-    m_layout->addWidget(m_tabClients.data());
-//    m_centerWidget.reset(new CDTWorkWidget(m_tcpServer, m_settingData, this));
+    initTabWidget();
 }
 
 void ServerPage::onNewConnection()
