@@ -42,6 +42,7 @@ QVariant AiTableModel::data(const QModelIndex &index, int role) const
     }
 
     if (role == Qt::DisplayRole) {
+
         switch (index.column()) {
         case 0://序号
             return m_aiDatas->at(index.row())->io();
@@ -110,17 +111,10 @@ void AiTableModel::appendRow(const QModelIndex &parent)
     endInsertRows();
 }
 
-void AiTableModel::resetDatas(int num)
+void AiTableModel::resetDatas(QList<AiData *> *aiDatas)
 {
     beginResetModel();
-    for (auto& ai : *m_aiDatas) {
-        delete ai;
-        ai = nullptr;
-    }
-    m_aiDatas->clear();
-    for (int i = 0; i < num; i++) {
-        m_aiDatas->append(new AiData(i, QString("Pt%1").arg(i), num + 1));
-    }
+    m_aiDatas = aiDatas;
     endResetModel();
 }
 

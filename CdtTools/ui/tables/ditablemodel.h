@@ -23,7 +23,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
     void insertRow(DiData* diData, const QModelIndex& parent = QModelIndex());
-    void resetDatas(int num);
+    void resetDatas(QList<DiData*>* diDatas);
 
 signals:
 

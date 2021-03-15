@@ -94,6 +94,11 @@ SettingData *TabPage::getSettingData() const
     return m_settingData.data();
 }
 
+void TabPage::setPageName(const QString &name)
+{
+    m_pageName = name;
+}
+
 QString TabPage::getPageName() const
 {
     return m_pageName;

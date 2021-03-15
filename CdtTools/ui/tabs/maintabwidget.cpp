@@ -4,10 +4,14 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QStandardPaths>
+#include <QMultiMap>
 #include "fakeclosebutton.h"
 #include "maintabbar.h"
 #include "../tabpage.h"
 #include "../dialog/nameddialog.h"
+#include "../../common/saveconfig.h"
 
 MainTabWidget::MainTabWidget(QWidget *parent)
     : QTabWidget(parent)
@@ -109,8 +113,27 @@ void MainTabWidget::showContextMenu(int tabIndex)
         NamedDialog dlg(this->tabText(tabIndex));
         if (dlg.exec() == QDialog::Accepted) {
             this->setTabText(tabIndex, dlg.getNameString());
+            qobject_cast<TabPage*>(this->widget(tabIndex))->setPageName(dlg.getNameString());
         }
-
+    });
+    connect(menu.addAction(tr("Save")), &QAction::triggered, this, [=]{
+        auto saveFileName = QFileDialog::getSaveFileName(nullptr, tr("Save")
+                            , QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first()+"/cdt.bk", QLatin1String("All Files (*.*)"));
+        if (saveFileName.isNull()) {
+            return ;
+        }
+        ThreadPool::instance()->run([=]{
+            auto tab = qobject_cast<TabPage*>(this->widget(tabIndex));
+            tab->resetSettingData();
+            QMultiMap<QString, SettingData *> settingMap;
+            settingMap.insert(tab->getPageName(), tab->getSettingData());
+            try {
+                SaveConfig::saveTabConfig(settingMap, saveFileName);
+            } catch (std::exception& e) {
+                qDebug(e.what());
+            }
+//            emit this->saveFinish(success, success ? tr("Save %1 Success!").arg(saveFileName) : tr("Save %1 Failed!").arg(saveFileName));
+        });
     });
     connect(menu.addAction(tr("Split")), &QAction::triggered, this, &MainTabWidget::onDivideTab);
 

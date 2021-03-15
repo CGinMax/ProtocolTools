@@ -7,6 +7,8 @@
 #include "../network/networkbase.h"
 #include "cdtworkwidget.h"
 
+class QVBoxLayout;
+
 class ServerPage : public QWidget
 {
     Q_OBJECT
@@ -31,12 +33,12 @@ public slots:
     void onCloseDisconnected();
 
 private:
-    QScopedPointer<QTcpServer> m_tcpServer;
+    QSharedPointer<QTcpServer> m_tcpServer;
     QScopedPointer<QTabWidget> m_tabClients;
-
     QScopedPointer<CDTWorkWidget> m_centerWidget;
-
     QSharedPointer<SettingData> m_settingData;
+
+    QVBoxLayout* m_layout;
 };
 
 #endif // SERVERPAGE_H

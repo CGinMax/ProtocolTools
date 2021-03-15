@@ -108,17 +108,10 @@ void DiTableModel::insertRow(DiData *diData, const QModelIndex &parent)
     endInsertRows();
 }
 
-void DiTableModel::resetDatas(int num)
+void DiTableModel::resetDatas(QList<DiData *> *diDatas)
 {
     beginResetModel();
-    for (auto& di : *m_diDatas) {
-        delete di;
-        di = nullptr;
-    }
-    m_diDatas->clear();
-    for (int i = 0; i < num; i++) {
-        m_diDatas->append(new DiData(i, QString("Pt%1").arg(i), false));
-    }
+    m_diDatas = diDatas;
     endResetModel();
 
 }

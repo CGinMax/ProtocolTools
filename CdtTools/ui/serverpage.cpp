@@ -15,9 +15,9 @@ ServerPage::ServerPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent
     , m_settingData(ptCfg)
 {
 
-    auto layout = new QVBoxLayout(this);
-    layout->addWidget(m_tabClients.data());
-    layout->setContentsMargins(0, 0, 0, 0);
+    m_layout = new QVBoxLayout(this);
+    m_layout->addWidget(m_tabClients.data());
+    m_layout->setContentsMargins(0, 0, 0, 0);
     m_tabClients->setTabsClosable(true);
     auto tabbar = m_tabClients->tabBar();
     tabbar->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -85,6 +85,9 @@ void ServerPage::onUpdateData()
         onTabCloseRequested(i);
     }
     m_tabClients->clear();
+    m_tabClients.reset(new QTabWidget(this));
+    m_layout->addWidget(m_tabClients.data());
+//    m_centerWidget.reset(new CDTWorkWidget(m_tcpServer, m_settingData, this));
 }
 
 void ServerPage::onNewConnection()
@@ -115,12 +118,12 @@ void ServerPage::onDisconnected()
 
 void ServerPage::onTabCloseRequested(int index)
 {
-    if (QMessageBox::information(this, tr("Close Tab")
-                                 , QString("Close tab %1?").arg(m_tabClients->tabText(index))
-                                 , QMessageBox::Ok
-                                 , QMessageBox::Cancel) != QMessageBox::Ok) {
-        return ;
-    }
+//    if (QMessageBox::information(this, tr("Close Tab")
+//                                 , QString("Close tab %1?").arg(m_tabClients->tabText(index))
+//                                 , QMessageBox::Ok
+//                                 , QMessageBox::Cancel) != QMessageBox::Ok) {
+//        return ;
+//    }
     auto widget = qobject_cast<CDTWorkWidget*>(m_tabClients->widget(index));
     if (widget->isConnection()) {
         auto ret = QMessageBox::warning(widget, QStringLiteral("提示"), QStringLiteral("通讯正在进行，是否断开？"), QMessageBox::Ok, QMessageBox::Cancel);

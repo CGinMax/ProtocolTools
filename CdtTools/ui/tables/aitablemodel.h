@@ -22,7 +22,7 @@ public:
 
     void appendRow(const QModelIndex& parent = QModelIndex());
 
-    void resetDatas(int num);
+    void resetDatas(QList<AiData*>* aiDatas);
 signals:
 
 public slots:

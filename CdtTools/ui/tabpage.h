@@ -25,6 +25,7 @@ public:
 
     SettingData* getSettingData() const;
 
+    void setPageName(const QString& name);
     QString getPageName() const;
 
 signals:

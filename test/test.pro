@@ -10,6 +10,7 @@ SOURCES += \
     ../CdtTools/common/util.cpp \
     ../CdtTools/common/workerthread.cpp \
     ../CdtTools/common/ptcfg.cpp \
+    ../CdtTools/common/saveconfig.cpp \
     ../CdtTools/network/networkbase.cpp \
     ../CdtTools/network/tcpclient.cpp \
     ../CdtTools/network/tcpserver.cpp \
@@ -63,6 +64,7 @@ HEADERS += \
     ../CdtTools/common/util.h \
     ../CdtTools/common/workerthread.h \
     ../CdtTools/common/ptcfg.h \
+    ../CdtTools/common/saveconfig.h \
     ../CdtTools/network/networkbase.h \
     ../CdtTools/network/tcpclient.h \
     ../CdtTools/network/tcpserver.h \

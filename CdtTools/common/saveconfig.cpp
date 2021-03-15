@@ -8,10 +8,10 @@ SaveConfig::SaveConfig(QObject *parent) : QObject(parent)
 
 }
 
-bool SaveConfig::saveTabConfig(QMultiMap<QString, SettingData *> settingMap, const QString &saveFilePath)
+bool SaveConfig::saveTabConfig(QMultiMap<QString, SettingData *> &settingMap, const QString &saveFilePath)
 {
     QFile file(saveFilePath);
-    if (!file.open(QFile::ReadWrite)) {
+    if (!file.open(QFile::ReadWrite | QFile::Truncate)) {
         qDebug("Save failed!");
         throw "save " + saveFilePath.toStdString() + " failed";
     }
