@@ -126,7 +126,7 @@ void NrUdpProtocol::yxResponse(QByteArray &infoData)
                 di->setValue(yxValue > 0);
             }
             else {
-                qInfo("未找到遥信点，点号=%d", nSeq);
+//                qInfo("未找到遥信点，点号=%d", nSeq);
             }
 
             nSeq++;
@@ -149,7 +149,7 @@ void NrUdpProtocol::ycResponse(QByteArray &infoData)
             ai->setValue(ycValue);
         }
         else {
-            qInfo("未找到遥测点，点号=%d", nSeq);
+//            qInfo("未找到遥测点，点号=%d", nSeq);
         }
         nSeq++;
     }
@@ -187,7 +187,7 @@ void NrUdpProtocol::vyxResponse(QByteArray &infoData)
                 vdi->setValue(yxValue > 0);
             }
             else {
-                qInfo("未找到虚遥信点，点号=%d", nSeq);
+//                qInfo("未找到虚遥信点，点号=%d", nSeq);
             }
 
             nSeq++;

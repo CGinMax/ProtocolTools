@@ -8,6 +8,7 @@ PtCfg::PtCfg()
     m_globalDiList->append(new DiData());
     m_globalAiList->append(new AiData());
     m_globalVDiList->append(new DiData());
+    qDebug("init Map");
     initMap();
 }
 PtCfg::~PtCfg() {
@@ -16,14 +17,15 @@ PtCfg::~PtCfg() {
 
 void PtCfg::initMap()
 {
-    for (auto& di : *m_globalDiList) {
-        m_diMap.insert(di->io(), di);
+    for (int i = 0; i < m_globalDiList->size(); i++) {
+        m_diMap.insert(m_globalDiList->at(i)->io(), m_globalDiList->at(i));
     }
-    for (auto& ai : *m_globalAiList) {
-        m_aiMap.insert(ai->io(), ai);
+    for (int i = 0; i < m_globalAiList->size(); i++) {
+        m_aiMap.insert(m_globalAiList->at(i)->io(), m_globalAiList->at(i));
     }
-    for(auto& vdi : *m_globalVDiList) {
-        m_vdiMap.insert(vdi->io(), vdi);
+
+    for (int i = 0; i < m_globalVDiList->size(); i++) {
+        m_vdiMap.insert(m_globalVDiList->at(i)->io(), m_globalVDiList->at(i));
     }
 }
 

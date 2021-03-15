@@ -13,7 +13,6 @@
 #include "../protocol/nrudp/nrudpprotocol.h"
 #include "../common/threadpool.h"
 #include "../common/util.h"
-#include "../../qt-material-widgets/qtmaterialscrollbar.h"
 #include "dialog/ykdialog.h"
 #include <QDebug>
 #include <QMenu>
@@ -31,15 +30,6 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
 //    ui->horSplitter->setCollapsible(1, false);
     ui->vecSplitter->setCollapsible(0, false);
     ui->vecSplitter->setCollapsible(1, false);
-
-    auto infoVScroll = new QtMaterialScrollBar(ui->textYkInfo);
-    auto infoHScroll = new QtMaterialScrollBar(ui->textYkInfo);
-    ui->textYkInfo->setVerticalScrollBar(infoVScroll);
-    ui->textYkInfo->setHorizontalScrollBar(infoHScroll);
-    auto browserVScroll = new QtMaterialScrollBar(ui->textBrowser);
-    auto browserHScroll = new QtMaterialScrollBar(ui->textBrowser);
-    ui->textBrowser->setVerticalScrollBar(browserVScroll);
-    ui->textBrowser->setHorizontalScrollBar(browserHScroll);
 
     m_diModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalDiList, ui->viewDi);
     auto diHorHeader = new DiHeaderView(Qt::Horizontal, ui->viewDi);
