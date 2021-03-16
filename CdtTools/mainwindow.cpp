@@ -79,7 +79,7 @@ void MainWindow::on_actionImport_triggered()
     }
     ThreadPool::instance()->run([=]{
         try {
-            auto tabList = SaveConfig::import(openFileName);
+            auto tabList = SaveConfig::importConfig(openFileName);
             emit this->importFinish(tabList);
 
         } catch(std::exception& e) {
@@ -105,7 +105,7 @@ void MainWindow::on_actionSave_triggered()
             settingMap.insert(tab->getPageName(), tab->getSettingData());
         }
         try {
-            success = SaveConfig::saveTabConfig(settingMap, saveFileName);
+            success = SaveConfig::saveConfig(settingMap, saveFileName);
         } catch (std::exception& e) {
             qDebug(e.what());
         }

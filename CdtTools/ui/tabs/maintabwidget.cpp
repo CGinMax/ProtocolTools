@@ -128,7 +128,7 @@ void MainTabWidget::showContextMenu(int tabIndex)
             QMultiMap<QString, SettingData *> settingMap;
             settingMap.insert(tab->getPageName(), tab->getSettingData());
             try {
-                SaveConfig::saveTabConfig(settingMap, saveFileName);
+                SaveConfig::saveConfig(settingMap, saveFileName);
             } catch (std::exception& e) {
                 qDebug(e.what());
             }

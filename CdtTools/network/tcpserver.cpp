@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QThread>
 
-TcpServer::TcpServer(const QString &ip, ushort port, QObject *parent)
+TcpServer::TcpServer(QObject *parent)
     : m_socket(nullptr)
 {
     setParent(parent);

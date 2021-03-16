@@ -8,7 +8,7 @@ SaveConfig::SaveConfig(QObject *parent) : QObject(parent)
 
 }
 
-bool SaveConfig::saveTabConfig(QMultiMap<QString, SettingData *> &settingMap, const QString &saveFilePath)
+bool SaveConfig::saveConfig(QMultiMap<QString, SettingData *> &settingMap, const QString &saveFilePath)
 {
     QFile file(saveFilePath);
     if (!file.open(QFile::ReadWrite | QFile::Truncate)) {
@@ -25,7 +25,7 @@ bool SaveConfig::saveTabConfig(QMultiMap<QString, SettingData *> &settingMap, co
     return true;
 }
 
-QMultiMap<QString, SettingData *> SaveConfig::import(const QString &importPath)
+QMultiMap<QString, SettingData *> SaveConfig::importConfig(const QString &importPath)
 {
     QFile file(importPath);
     if (!file.open(QFile::ReadWrite)) {

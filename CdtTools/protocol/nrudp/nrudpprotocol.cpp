@@ -67,7 +67,7 @@ void NrUdpProtocol::processFrame()
         NrUdpFrame frame = m_frameQueue.dequeue();
         switch (frame.cmdCode) {
         case NrUdp::Yx:
-            showMessageBuffer(eMsgType::eMsgRecv, QStringLiteral("接收到遥测帧，正在处理..."), frame.allFrameBytes);
+            showMessageBuffer(eMsgType::eMsgRecv, QStringLiteral("接收到遥信帧，正在处理..."), frame.allFrameBytes);
             yxResponse(frame.infoData);
             break;
         case NrUdp::Yc | NrUdp::VirtualYx:
@@ -139,10 +139,8 @@ void NrUdpProtocol::ycResponse(QByteArray &infoData)
     int nSeq = infoData.at(0) & 0xFF;
     nSeq |= static_cast<int>(infoData.at(1) & 0xFF) << 8;
     for (int i = 2; i < infoData.size(); i += 4) {
-        int ycValue = infoData.at(i) & 0xFF;
-        ycValue |= static_cast<int>(infoData.at(i + 1) & 0xFF) << 8;
-        ycValue |= static_cast<int>(infoData.at(i + 2) & 0xFF) << 16;
-        ycValue |= static_cast<int>(infoData.at(i + 3) & 0xFF) << 24;
+        float ycValue = 0.0;
+        memcpy(&ycValue, infoData.data() + i, 4);
 
         auto ai = m_settingData->m_ptCfg->findAiById(nSeq);
         if (ai) {
@@ -221,7 +219,7 @@ void NrUdpProtocol::sendVDi()
     if (frameBytes.isEmpty()) {
         return ;
     }
-    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送全遥信"), frameBytes);
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送虚遥信"), frameBytes);
     send(frameBytes);
 }
 
@@ -395,7 +393,7 @@ void NrUdpProtocol::onDisconnected()
 void NrUdpProtocol::onTimeout()
 {
     m_yxSendCounter += 100;
-    m_yxSendCounter += 100;
+    m_ycSendCounter += 100;
     m_vyxSendCounter += 100;
     ProtocolBase::onTimeout();
 }

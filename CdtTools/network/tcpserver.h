@@ -11,8 +11,8 @@ class TcpServer : public NetworkBase
 {
     Q_OBJECT
 public:
-    explicit TcpServer(const QString& ip, ushort port, QObject* parent = nullptr);
-    TcpServer(QTcpSocket* socket, QObject* parent = nullptr);
+    explicit TcpServer(QObject* parent = nullptr);
+    explicit TcpServer(QTcpSocket* socket, QObject* parent = nullptr);
     ~TcpServer() override;
 
     // NetworkBase interface
@@ -27,21 +27,13 @@ public:
     bool isActived() override;
     QString toString() override;
 
-    QString ip() const;
-    ushort port() const;
-
 signals:
 
 public slots:
     void writeData(const QByteArray &data) override;
-//    void onNewConnection();
-//    void onReadyRead();
-//    void onDisconnected();
 
 private:
     QTcpSocket* m_socket;
-//    QScopedPointer<QTcpServer> m_server;
-//    QList<QTcpSocket*> m_sockets;
 };
 
 #endif // TCPSERVER_H

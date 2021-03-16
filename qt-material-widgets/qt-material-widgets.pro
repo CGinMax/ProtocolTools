@@ -54,7 +54,8 @@ SOURCES = \
     qtmaterialmenu.cpp \
     qtmaterialmenu_internal.cpp \
     qtmateriallist.cpp \
-    qtmateriallistitem.cpp
+    qtmateriallistitem.cpp \
+    qtmaterialdropdownbutton.cpp
 HEADERS = \
     qtmaterialavatar_p.h \
     qtmaterialavatar.h \
@@ -132,6 +133,8 @@ HEADERS = \
     qtmateriallist.h \
     qtmateriallist_p.h \
     qtmateriallistitem.h \
-    qtmateriallistitem_p.h
+    qtmateriallistitem_p.h \
+    qtmaterialdropdownbutton.h \
+    qtmaterialdropdownbutton_p.h
 RESOURCES += \
     resources.qrc

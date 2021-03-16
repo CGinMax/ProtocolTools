@@ -1,5 +1,6 @@
 TEMPLATE = subdirs
 
-SUBDIRS += CdtTools \
+SUBDIRS += \
     qt-material-widgets \
+    CdtTools \
     test\

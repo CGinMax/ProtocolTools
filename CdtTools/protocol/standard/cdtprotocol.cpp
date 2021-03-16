@@ -337,7 +337,7 @@ CDTFrame CDTProtocol::buildYCFrame(uint8_t startFuncode, const QMap<int, AiData 
     uint8_t curCode = startFuncode;
     QVector<uint8_t> combineList;
     int aiNum = ptMap.last()->io();
-    for (int i = 0; i < aiNum; i++) {
+    for (int i = 0; i <= aiNum; i++) {
         int aiValue = 0;
         if (ptMap.contains(i)) {
             aiValue = ptMap.value(i)->value();
