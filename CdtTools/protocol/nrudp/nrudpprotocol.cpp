@@ -248,7 +248,7 @@ void NrUdpProtocol::uploadVDi()
     }
 }
 
-NrUdpFrame NrUdpProtocol::buildYXFrame(uint8_t cmdCode, QList<DiData *> &ptList)
+NrUdpFrame NrUdpProtocol::buildYXFrame(uint8_t cmdCode, const QMap<int, DiData *> &ptMap)
 {
     NrUdpFrame frame;
     frame.cmdCode = cmdCode;
@@ -256,17 +256,22 @@ NrUdpFrame NrUdpProtocol::buildYXFrame(uint8_t cmdCode, QList<DiData *> &ptList)
     QList<uint8_t> combineByteList;
     uchar val = 0;
     int index = 0;
-    for (const auto& di: ptList) {
-        if (index % 8 == 0 && index != 0) {
-             combineByteList.append(val);
-            val = 0;
-            index = 0;
+    int lastIndex = ptMap.last()->io();
+    for (int i = 0; i <= lastIndex; i++) {
+
+        bool diVal = false;
+        if (ptMap.contains(i)) {
+            diVal = ptMap.value(i)->value();
         }
-        bool diVal = di->value();
         if (diVal) {
             val |= (1 << index % 8);
         }
         index++;
+        if (index % 8 == 0 && index != 0) {
+            combineByteList.append(val);
+            val = 0;
+            index = 0;
+        }
     }
     if (index % 8 != 0) {
         combineByteList.append(val);
@@ -274,26 +279,24 @@ NrUdpFrame NrUdpProtocol::buildYXFrame(uint8_t cmdCode, QList<DiData *> &ptList)
     std::for_each(combineByteList.begin(), combineByteList.end(), [&frame](uint8_t byte){
         frame.infoData.append(byte);
     });
-//    int offset = combineByteList.count() % 4;
-//    if (offset != 0) {
-//        for (int i = 0; i < 4 - offset; i++) {
-//            combineByteList.append(0);
-//        }
-//    }
 
     frame.length = static_cast<uint16_t>(9 + frame.infoData.size());
     return frame;
 }
 
-NrUdpFrame NrUdpProtocol::buildYCFrame(uint8_t cmdCode, QList<AiData *> &ptList)
+NrUdpFrame NrUdpProtocol::buildYCFrame(uint8_t cmdCode, const QMap<int, AiData *> &ptMap)
 {
     NrUdpFrame frame;
     frame.cmdCode = cmdCode;
-    int startIo = ptList.first()->io();
+    int startIo = ptMap.first()->io();
+    int aiNum = ptMap.last()->io();
     frame.infoData.append(static_cast<uint8_t>(startIo) & 0xFF);
     frame.infoData.append(static_cast<uint8_t>(startIo >> 8) & 0xFF);
-    for (auto& ai : ptList) {
-        float ycValue = static_cast<float>(ai->value());
+    for (int i = startIo; i <= aiNum; i++) {
+        float ycValue = 0.0;
+        if (ptMap.contains(i)) {
+            ycValue = static_cast<float>(ptMap.value(i)->value());
+        }
         // float 转字节数组
         char ycBytes[4] = {0};
         memcpy(ycBytes, &ycValue, 4);
@@ -316,7 +319,7 @@ QByteArray NrUdpProtocol::buildYXProtocol(const QSharedPointer<SettingData> &set
     if (settingData->m_ptCfg->m_globalDiList->isEmpty()) {
         return QByteArray();
     }
-    auto frame = NrUdpProtocol::buildYXFrame(0x01, *settingData->m_ptCfg->m_globalDiList);
+    auto frame = NrUdpProtocol::buildYXFrame(0x01, settingData->m_ptCfg->getDiMap());
     frame.setDataBuf();
     return frame.allFrameBytes;
 }
@@ -327,7 +330,7 @@ QByteArray NrUdpProtocol::buildYCProtocol(const QSharedPointer<SettingData> &set
         return QByteArray();
     }
 
-    auto frame = NrUdpProtocol::buildYCFrame(0x05, *settingData->m_ptCfg->m_globalAiList);
+    auto frame = NrUdpProtocol::buildYCFrame(0x05, settingData->m_ptCfg->getAiMap());
     frame.setDataBuf();
     return frame.allFrameBytes;
 }
@@ -338,7 +341,7 @@ QByteArray NrUdpProtocol::buildVYXProtocol(const QSharedPointer<SettingData> &se
         return QByteArray();
     }
 
-    auto frame = NrUdpProtocol::buildYXFrame(0x05, *settingData->m_ptCfg->m_globalVDiList);
+    auto frame = NrUdpProtocol::buildYXFrame(0x05, settingData->m_ptCfg->getVDiMap());
     frame.setDataBuf();
     return frame.allFrameBytes;
 }

@@ -48,9 +48,9 @@ public:
 
     void uploadVDi();
 
-    static NrUdpFrame buildYXFrame(uint8_t cmdCode, QList<DiData *> &ptList);
+    static NrUdpFrame buildYXFrame(uint8_t cmdCode, const QMap<int, DiData*>& ptMap);
 
-    static NrUdpFrame buildYCFrame(uint8_t cmdCode, QList<AiData *> &ptList);
+    static NrUdpFrame buildYCFrame(uint8_t cmdCode, const QMap<int, AiData*>& ptMap);
 
     static QByteArray buildYXProtocol(const QSharedPointer<SettingData>& settingData);
 
