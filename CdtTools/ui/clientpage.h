@@ -21,6 +21,7 @@ public:
     bool start();
     void stop();
 signals:
+    void clientDisconnected();
 
 public slots:
     void onUpdateData();

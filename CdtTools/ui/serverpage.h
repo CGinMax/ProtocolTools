@@ -4,9 +4,9 @@
 #include <QWidget>
 #include <QTcpServer>
 #include <QTabWidget>
+#include <QQueue>
 #include "../network/networkbase.h"
 #include "cdtworkwidget.h"
-
 class QVBoxLayout;
 
 class ServerPage : public QWidget
@@ -23,8 +23,6 @@ public:
 
     void stopListen();
     void stop();
-
-
 signals:
 
 public slots:
@@ -39,7 +37,7 @@ private:
     QScopedPointer<QTabWidget> m_tabClients;
     QScopedPointer<CDTWorkWidget> m_centerWidget;
     QSharedPointer<SettingData> m_settingData;
-
+    QQueue<CDTWorkWidget*> m_closedClient;
     QVBoxLayout* m_layout;
 };
 

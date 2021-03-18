@@ -70,6 +70,7 @@ void TabPage::initWidget()
     connect(this, &TabPage::updateData, m_serverPage.data(), &ServerPage::onUpdateData);
     connect(this, &TabPage::updateData, m_clientPage.data(), &ClientPage::onUpdateData);
     connect(this, &TabPage::updateData, m_udpPage.data(), &UdpPage::onUpdateData);
+    connect(m_clientPage.data(), &ClientPage::clientDisconnected, this, &TabPage::on_btnStop_clicked);
 }
 
 void TabPage::resetSettingData()

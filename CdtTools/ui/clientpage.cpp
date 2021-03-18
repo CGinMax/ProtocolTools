@@ -11,6 +11,8 @@ ClientPage::ClientPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent
     m_layout = new QVBoxLayout(this);
     m_layout->addWidget(m_centerWidget.data());
     m_layout->setContentsMargins(0, 0, 0, 0);
+
+    connect(m_tcpClient.data(), &TcpClient::disconnected, this, &ClientPage::clientDisconnected);
 }
 
 ClientPage::~ClientPage()

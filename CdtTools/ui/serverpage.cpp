@@ -102,7 +102,17 @@ void ServerPage::onNewConnection()
     auto centerWidget = new CDTWorkWidget(server, m_settingData);
     centerWidget->startCommunication(m_settingData);
     connect(centerWidget, &CDTWorkWidget::disconnected, this, &ServerPage::onDisconnected);
-
+    connect(server.data(), &NetworkBase::disconnected, this, [=](){
+        if (centerWidget) {
+//            if (m_closedClient.count() > 6) {
+//                auto clientWidget = m_closedClient.head();
+//                m_closedClient.pop_front();
+//                delete clientWidget;
+//                clientWidget = nullptr;
+//            }
+            m_closedClient.append(centerWidget);
+        }
+    });
 
     m_tabClients->insertTab(0, centerWidget, QIcon(":/icon/resources/signal-connect.png"), server->toString());
     m_tabClients->setCurrentIndex(0);
@@ -122,12 +132,6 @@ void ServerPage::onDisconnected()
 
 void ServerPage::onTabCloseRequested(int index)
 {
-//    if (QMessageBox::information(this, tr("Close Tab")
-//                                 , QString("Close tab %1?").arg(m_tabClients->tabText(index))
-//                                 , QMessageBox::Ok
-//                                 , QMessageBox::Cancel) != QMessageBox::Ok) {
-//        return ;
-//    }
     auto widget = qobject_cast<CDTWorkWidget*>(m_tabClients->widget(index));
     if (widget->isConnection()) {
         auto ret = QMessageBox::warning(widget, QStringLiteral("提示"), QStringLiteral("通讯正在进行，是否断开？"), QMessageBox::Ok, QMessageBox::Cancel);
@@ -137,24 +141,28 @@ void ServerPage::onTabCloseRequested(int index)
         }
         widget->stopCommunication();
     }
-
+    m_closedClient.removeOne(widget);
     delete widget;
     widget = nullptr;
 }
 
 void ServerPage::onCloseDisconnected()
 {
-    QList<int> delIndexs;
-    for (int i = 0; i < m_tabClients->count(); i++) {
-        auto widget = qobject_cast<CDTWorkWidget*>(m_tabClients->widget(i));
-        if (!widget->isConnection()) {
-            delete widget;
-            widget = nullptr;
-            delIndexs.append(i);
-        }
-    }
-    for (auto&& index : delIndexs) {
-        m_tabClients->removeTab(index);
-    }
+//    QList<int> delIndexs;
+//    for (int i = 0; i < m_tabClients->count(); i++) {
+//        qDebug("count:%d", m_tabClients->count());
+//        auto widget = qobject_cast<CDTWorkWidget*>(m_tabClients->widget(i));
+//        if (!widget->isConnection()) {
+//            delete widget;
+//            widget = nullptr;
+//            delIndexs.append(i);
+//        }
+//    }
+    std::for_each(m_closedClient.begin(), m_closedClient.end(), [](CDTWorkWidget* widget){
+        delete widget;
+        widget = nullptr;
+    });
+    m_closedClient.clear();
+
     m_tabClients->setCurrentIndex(-1);
 }
