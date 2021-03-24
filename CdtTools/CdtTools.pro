@@ -159,15 +159,3 @@ TRANSLATIONS += $$PWD/CdtTools_zh.ts
 RESOURCES += \
     resources.qrc
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../bin/release/ -lqt-material-widgets
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../bin/debug/ -lqt-material-widgets
-else:unix: LIBS += -L$$PWD/../bin/debug/ -lqt-material-widgets
-
-INCLUDEPATH += $$PWD/../qt-material-widgets
-DEPENDPATH += $$PWD/../qt-material-widgets
-
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../bin/release/libqt-material-widgets.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../bin/debug/libqt-material-widgets.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../bin/release/qt-material-widgets.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../bin/debug/qt-material-widgets.lib
-else:unix: PRE_TARGETDEPS += $$PWD/../bin/debug/libqt-material-widgets.a

@@ -2,8 +2,6 @@
 #define YKDIALOG_H
 
 #include <QDialog>
-#include "../../../qt-material-widgets/qtmaterialdialog.h"
-
 
 class YKDialog : public QDialog
 {
@@ -17,9 +15,7 @@ signals:
 public slots:
     void onBtnYesClicked();
     void onBtnNoClicked();
-    int exec() override;
 private:
-    QtMaterialDialog* m_dialog;
 };
 
 #endif // YKDIALOG_H
