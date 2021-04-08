@@ -2,6 +2,9 @@
 #include "ui_cdtsettingdlg.h"
 #include "../common/util.h"
 
+#include <QFileDialog>
+#include <QStandardPaths>
+
 QVector<PtCfg*> CDTSettingDlg::s_defaultCfgs;
 
 CDTSettingDlg::CDTSettingDlg(const QSharedPointer<PtCfg> &ptcfg, QWidget *parent)
@@ -148,4 +151,84 @@ void CDTSettingDlg::on_btnCancel_clicked()
 void CDTSettingDlg::on_cbbProtocol_currentIndexChanged(int index)
 {
     initWidgetData(*CDTSettingDlg::s_defaultCfgs[index]);
+}
+
+void CDTSettingDlg::onBtnImportClicked()
+{
+    auto sheetFileName = getSheetFileName();
+    if (sheetFileName.isEmpty()) {
+        return;
+    }
+
+    auto infoText = new QLabel(this);
+    QList<QByteArray> readLineDatas;
+    try {
+        readLineDatas = readFileData(sheetFileName);
+    } catch (std::exception& e) {
+        infoText->setText(QString("<font color=#FF0000>") + tr("error") + e.what() + QString("</font>"));
+        auto layout = qobject_cast<QGridLayout*>(ui->groupBox->layout());
+        layout->addWidget(infoText, layout->rowCount(), layout->columnCount());
+        return ;
+    }
+
+    infoText->setText(QString("<font color=#0000FF>") + tr("Import success:") + sheetFileName + QString("</font>"));
+    auto layout = qobject_cast<QGridLayout*>(ui->groupBox->layout());
+    layout->addWidget(infoText, layout->rowCount(), layout->columnCount());
+    // 解析数据
+
+    auto btn = qobject_cast<QPushButton*>(sender());
+    if (btn->objectName() == QLatin1String("btnYxImportSheet")) {
+
+    } else if (btn->objectName() == QLatin1String("btnYcImportSheet")) {
+
+    } else if (btn->objectName() == QLatin1String("btnVYxImportSheet")) {
+
+    }
+}
+
+QString CDTSettingDlg::getSheetFileName()
+{
+    auto sysDocumentPaths = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+    return QFileDialog::getOpenFileName(this, tr("Import Sheet"), sysDocumentPaths.first()
+                                        , QLatin1String("Txt(*.txt);;All Files (*.*)")/*, QLatin1String("Txt(*.txt)")*/);
+
+}
+
+QList<QByteArray> CDTSettingDlg::readFileData(const QString &filename)
+{
+    QList<QByteArray> lineDatas;
+    QFile file(filename);
+    if (!file.open(QFile::ReadWrite)) {
+        QString error = tr("Open file failed! ") + file.errorString();
+        throw error.toStdString().c_str();
+    }
+    while (!file.atEnd()) {
+        lineDatas.append(file.readLine());
+    }
+    file.close();
+    return lineDatas;
+}
+
+void CDTSettingDlg::parseYxSheet(const QList<QByteArray> &lineDatas)
+{
+    m_ptCfg->clearPoints();
+    for (auto& line : lineDatas) {
+         int idx = line.indexOf(' ');
+         int ptNo = line.left(idx).toInt();
+    }
+}
+
+void CDTSettingDlg::parseYcSheet(const QList<QByteArray> &lineDatas)
+{
+
+}
+
+void CDTSettingDlg::parseVYxSheet(const QList<QByteArray> &lineDatas)
+{
+
+}
+
+void CDTSettingDlg::on_btnYcImportSheet_clicked()
+{
+
 }

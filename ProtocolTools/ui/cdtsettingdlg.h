@@ -31,6 +31,14 @@ private slots:
 
     void on_cbbProtocol_currentIndexChanged(int index);
 
+    void onBtnImportClicked();
+
+private:
+    QString getSheetFileName();
+    QList<QByteArray> readFileData(const QString& filename);
+    void parseYxSheet(const QList<QByteArray>& lineDatas);
+    void parseYcSheet(const QList<QByteArray>& lineDatas);
+    void parseVYxSheet(const QList<QByteArray>& lineDatas);
 private:
     QSharedPointer<PtCfg> m_ptCfg;
     Ui::CDTSettingDlg *ui;
