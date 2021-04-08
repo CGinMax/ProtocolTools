@@ -130,7 +130,7 @@ void MainTabWidget::showContextMenu(int tabIndex)
             try {
                 SaveConfig::saveConfig(settingMap, saveFileName);
             } catch (std::exception& e) {
-                qDebug(e.what());
+                qDebug("%s", e.what());
             }
 //            emit this->saveFinish(success, success ? tr("Save %1 Success!").arg(saveFileName) : tr("Save %1 Failed!").arg(saveFileName));
         });

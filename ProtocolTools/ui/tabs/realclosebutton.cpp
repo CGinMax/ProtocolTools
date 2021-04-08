@@ -42,6 +42,7 @@ void RealCloseButton::leaveEvent(QEvent *event)
 
 void RealCloseButton::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event)
     QPainter painter(this);
     QStyleOption option;
     option.init(this);

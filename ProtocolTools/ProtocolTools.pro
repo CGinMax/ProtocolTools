@@ -8,7 +8,7 @@ QT       += core gui network concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = CdtTools
+TARGET = ProtocolTools
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -153,8 +153,8 @@ QMAKE_RPATHDIR += $${DESTDIR}
 QMAKE_RPATHDIR += ./../lib
 QMAKE_RPATHDIR += $${DESTDIR}/../lib
 
-TRANSLATIONS += $$PWD/CdtTools_en.ts
-TRANSLATIONS += $$PWD/CdtTools_zh.ts
+TRANSLATIONS += $$PWD/ProtocolTools_en.ts
+TRANSLATIONS += $$PWD/ProtocolTools_zh.ts
 
 RESOURCES += \
     resources.qrc

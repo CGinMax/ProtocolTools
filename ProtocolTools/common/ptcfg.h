@@ -64,9 +64,9 @@ public:
     uint8_t m_ykUnlock{0xAA};
     uint8_t m_ykLock{0x55};
 
-    int m_yxTime{1000};
-    int m_ycTime{1000};
-    int m_vyxTime{1000};
+    uint m_yxTime{1000};
+    uint m_ycTime{1000};
+    uint m_vyxTime{1000};
 
     bool m_isRandom{false};
 

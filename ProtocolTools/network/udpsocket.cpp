@@ -1,11 +1,11 @@
 #include "udpsocket.h"
 #include <QNetworkDatagram>
 UdpSocket::UdpSocket(QObject *parent)
-    : m_socket(new QUdpSocket(this))
+    : m_localAddress("0.0.0.0")
     , m_localPort(0)
-    , m_localAddress("0.0.0.0")
-    , m_remotePort(7990)
     , m_remoteAddress("127.0.0.1")
+    , m_remotePort(7990)
+    , m_socket(new QUdpSocket(this))
 {
     setParent(parent);
     connect(m_socket.data(), &QUdpSocket::disconnected, this, &UdpSocket::disconnected);

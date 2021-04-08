@@ -49,9 +49,9 @@ void CDTSettingDlg::initWidgetData(const PtCfg &setting)
     ui->edYkLock->setText(Util::num2Hex(setting.m_ykLock));
     ui->edYkUnlock->setText(Util::num2Hex(setting.m_ykUnlock));
 
-    ui->edYxTime->setValue(setting.m_yxTime);
-    ui->edYcTime->setValue(setting.m_ycTime);
-    ui->edVYxTime->setValue(setting.m_vyxTime);
+    ui->edYxTime->setValue(static_cast<int>(setting.m_yxTime));
+    ui->edYcTime->setValue(static_cast<int>(setting.m_ycTime));
+    ui->edVYxTime->setValue(static_cast<int>(setting.m_vyxTime));
 }
 
 void CDTSettingDlg::initDefaultCfgs()
@@ -131,9 +131,9 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_ykLock       = Util::hexString2Num(ui->edYkLock->text());
     m_ptCfg->m_ykUnlock     = Util::hexString2Num(ui->edYkUnlock->text());
 
-    m_ptCfg->m_yxTime       = ui->edYxTime->value();
-    m_ptCfg->m_ycTime       = ui->edYcTime->value();
-    m_ptCfg->m_vyxTime      = ui->edVYxTime->value();
+    m_ptCfg->m_yxTime       = static_cast<uint>(ui->edYxTime->value());
+    m_ptCfg->m_ycTime       = static_cast<uint>(ui->edYcTime->value());
+    m_ptCfg->m_vyxTime      = static_cast<uint>(ui->edVYxTime->value());
 
     m_ptCfg->resetPoints();
     accept();

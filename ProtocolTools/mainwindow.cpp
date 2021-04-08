@@ -83,15 +83,16 @@ void MainWindow::on_actionImport_triggered()
             emit this->importFinish(tabList);
 
         } catch(std::exception& e) {
-            qDebug(e.what());
+            qDebug("%s", e.what());
         }
     });
 }
 
 void MainWindow::on_actionSave_triggered()
 {
+    auto sysDocumentPaths = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     auto saveFileName = QFileDialog::getSaveFileName(nullptr, tr("Save")
-                        , QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first()+"/cdt.bk", QLatin1String("All Files (*.*)"));
+                        , sysDocumentPaths.first() + QLatin1String("/cdt.bk"), QLatin1String("All Files (*.*)"));
     if (saveFileName.isNull()) {
         return ;
     }
@@ -107,7 +108,7 @@ void MainWindow::on_actionSave_triggered()
         try {
             success = SaveConfig::saveConfig(settingMap, saveFileName);
         } catch (std::exception& e) {
-            qDebug(e.what());
+            qDebug("%s", e.what());
         }
         emit this->saveFinish(success, success ? tr("Save %1 Success!").arg(saveFileName) : tr("Save %1 Failed!").arg(saveFileName));
     });

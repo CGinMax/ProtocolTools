@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)
 
-project(CdtTools CXX)
+project(ProtocolTools CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)#?
 
