@@ -19,7 +19,15 @@ public:
 
     void clearPoints();
 
+    void clearYxPoints();
+
+    void clearYcPoints();
+
+    void clearVYxPoints();
+
+    // 临时方法
     void resetPoints();
+    void resetPoints(const QList<DiData>& diDatas, const QList<AiData>& aiDatas, const QList<DiData>& vdiDatas);
 
     DiData* findDiById(int id);
 

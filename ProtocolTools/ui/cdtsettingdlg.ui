@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>665</width>
-    <height>650</height>
+    <height>663</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -85,18 +85,11 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="groupBoxYx">
      <property name="title">
       <string>遥信</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="5">
-       <widget class="QLineEdit" name="edYxNum">
-        <property name="text">
-         <string>10</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="3">
        <widget class="QSpinBox" name="edYxTime">
         <property name="alignment">
@@ -113,20 +106,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="edYxType"/>
-      </item>
       <item row="0" column="4">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>遥信个数</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>起始IO地址</string>
         </property>
        </widget>
       </item>
@@ -137,20 +120,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>帧类别</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="edYxStartIo"/>
-      </item>
-      <item row="1" column="4" colspan="2">
-       <widget class="QPushButton" name="btnYxImportSheet">
-        <property name="text">
-         <string>导入遥信点表</string>
+         <string>起始IO地址</string>
         </property>
        </widget>
       </item>
@@ -161,22 +134,84 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="edYxType"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="edYxStartIo"/>
+      </item>
+      <item row="0" column="5">
+       <widget class="QLineEdit" name="edYxNum">
+        <property name="text">
+         <string>10</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>帧类别</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="3">
        <widget class="QLineEdit" name="edYxFuncode"/>
+      </item>
+      <item row="2" column="1" colspan="5">
+       <widget class="QLabel" name="txtYxSheetInfo">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="btnYxImportSheet">
+        <property name="text">
+         <string>导入遥信点表</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="groupBoxYc">
      <property name="title">
       <string>遥测</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_6">
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>帧类别</string>
+         <string>遥测个数</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>起始IO地址</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_20">
+        <property name="text">
+         <string>循环发送时间</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>功能码</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QCheckBox" name="cbRandom">
+        <property name="text">
+         <string>生成随机数</string>
         </property>
        </widget>
       </item>
@@ -196,42 +231,21 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="edYcStartIo"/>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="edYcType"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>起始IO地址</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_20">
-        <property name="text">
-         <string>循环发送时间</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="3">
        <widget class="QLineEdit" name="edYcFuncode"/>
       </item>
-      <item row="0" column="4">
-       <widget class="QLabel" name="label_9">
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="edYcStartIo"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>遥测个数</string>
+         <string>帧类别</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>功能码</string>
-        </property>
-       </widget>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="edYcType"/>
       </item>
       <item row="0" column="5">
        <widget class="QLineEdit" name="edYcNum">
@@ -240,14 +254,14 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="4">
-       <widget class="QCheckBox" name="cbRandom">
+      <item row="2" column="1" colspan="5">
+       <widget class="QLabel" name="txtYcSheetInfo">
         <property name="text">
-         <string>生成随机数</string>
+         <string>TextLabel</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="5">
+      <item row="2" column="0">
        <widget class="QPushButton" name="btnYcImportSheet">
         <property name="text">
          <string>导入遥测点表</string>
@@ -258,23 +272,24 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_4">
+    <widget class="QGroupBox" name="groupBoxVYx">
      <property name="title">
       <string>虚遥信</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_16">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_18">
         <property name="text">
-         <string>功能码</string>
+         <string>起始IO地址</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="edVYxStartIo"/>
-      </item>
-      <item row="0" column="3">
-       <widget class="QLineEdit" name="edVYxFuncode"/>
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>虚遥信个数</string>
+        </property>
+       </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_15">
@@ -287,6 +302,13 @@
        <widget class="QLabel" name="label_21">
         <property name="text">
          <string>循环发送时间</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>功能码</string>
         </property>
        </widget>
       </item>
@@ -309,19 +331,8 @@
       <item row="0" column="1">
        <widget class="QLineEdit" name="edVYxType"/>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_18">
-        <property name="text">
-         <string>起始IO地址</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QLabel" name="label_17">
-        <property name="text">
-         <string>虚遥信个数</string>
-        </property>
-       </widget>
+      <item row="0" column="3">
+       <widget class="QLineEdit" name="edVYxFuncode"/>
       </item>
       <item row="0" column="5">
        <widget class="QLineEdit" name="edVYxNum">
@@ -330,7 +341,17 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="4" colspan="2">
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="edVYxStartIo"/>
+      </item>
+      <item row="2" column="1" colspan="5">
+       <widget class="QLabel" name="txtVYxSheetInfo">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
        <widget class="QPushButton" name="btnVYxImportSheet">
         <property name="text">
          <string>导入虚遥信点表</string>

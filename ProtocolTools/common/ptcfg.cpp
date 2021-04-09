@@ -16,6 +16,9 @@ PtCfg::~PtCfg() {
 
 void PtCfg::initMap()
 {
+    m_diMap.clear();
+    m_aiMap.clear();
+    m_vdiMap.clear();
     for (int i = 0; i < m_globalDiList->size(); i++) {
         m_diMap.insert(m_globalDiList->at(i)->io(), m_globalDiList->at(i));
     }
@@ -30,31 +33,49 @@ void PtCfg::initMap()
 
 void PtCfg::clearPoints()
 {
+    clearYxPoints();
+
+    clearYcPoints();
+
+    clearVYxPoints();
+}
+
+void PtCfg::clearYxPoints()
+{
     for (auto& di : *m_globalDiList) {
         delete di;
         di = nullptr;
     }
     m_globalDiList->clear();
+    delete m_globalDiList;
+    m_globalDiList = nullptr;
+    m_diMap.clear();
+}
+
+void PtCfg::clearYcPoints()
+{
     for (auto& ai : *m_globalAiList) {
         delete ai;
         ai = nullptr;
     }
     m_globalAiList->clear();
+
+    delete m_globalAiList;
+    m_globalAiList = nullptr;
+    m_aiMap.clear();
+}
+
+void PtCfg::clearVYxPoints()
+{
     for (auto& vdi : *m_globalVDiList) {
         delete vdi;
         vdi = nullptr;
     }
     m_globalVDiList->clear();
 
-    delete m_globalDiList;
-    m_globalDiList = nullptr;
-    delete m_globalAiList;
-    m_globalAiList = nullptr;
     delete m_globalVDiList;
     m_globalVDiList = nullptr;
 
-    m_diMap.clear();
-    m_aiMap.clear();
     m_vdiMap.clear();
 }
 
@@ -76,6 +97,28 @@ void PtCfg::resetPoints()
     for (int i = 0; i < m_vyxNum; i++) {
         m_globalVDiList->append(new DiData(m_vyxStartIo + i, QString("Pt%1").arg(m_vyxStartIo + i), 0));
     }
+    initMap();
+}
+
+void PtCfg::resetPoints(const QList<DiData> &diDatas, const QList<AiData> &aiDatas, const QList<DiData> &vdiDatas)
+{
+    clearPoints();
+
+    m_globalDiList = new QList<DiData*>;
+    for (auto& di : diDatas) {
+        m_globalDiList->append(new DiData(di));
+    }
+
+    m_globalAiList = new QList<AiData*>;
+    for (auto& ai : aiDatas) {
+        m_globalAiList->append(new AiData(ai));
+    }
+
+    m_globalVDiList = new QList<DiData*>;
+    for (auto& vdi : vdiDatas) {
+        m_globalVDiList->append(new DiData(vdi));
+    }
+
     initMap();
 }
 

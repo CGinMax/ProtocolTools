@@ -8,7 +8,7 @@ class AiData : public QObject
     Q_OBJECT
 public:
     explicit AiData(QObject *parent = nullptr);
-    explicit AiData(int io, const QString& name, int value, QObject *parent = nullptr);
+    explicit AiData(int io, const QString& name, double value, QObject *parent = nullptr);
     ~AiData() = default;
 
     AiData(const AiData& other);
@@ -20,8 +20,8 @@ public:
     inline int io() const;
     inline void setName(const QString& name);
     inline QString name() const;
-    inline void setValue(int value);
-    inline int value() const;
+    inline void setValue(double value);
+    inline double value() const;
 
 signals:
 
@@ -30,7 +30,7 @@ public slots:
 private:
     int m_io{0};
     QString m_name{QString("Pt0")};
-    int m_value{0};
+    double m_value{0};
 };
 
 
@@ -54,12 +54,12 @@ inline QString AiData::name() const
     return m_name;
 }
 
-inline void AiData::setValue(int value)
+inline void AiData::setValue(double value)
 {
     m_value = value;
 }
 
-inline int AiData::value() const
+inline double AiData::value() const
 {
     return m_value;
 }

@@ -9,6 +9,8 @@ namespace Ui {
 class CDTSettingDlg;
 }
 
+QT_FORWARD_DECLARE_CLASS(QLabel)
+
 class CDTSettingDlg : public QDialog
 {
     Q_OBJECT
@@ -31,17 +33,28 @@ private slots:
 
     void on_cbbProtocol_currentIndexChanged(int index);
 
-    void onBtnImportClicked();
+    void on_btnYxImportSheet_clicked();
 
+    void on_btnYcImportSheet_clicked();
+
+    void on_btnVYxImportSheet_clicked();
 private:
+    QList<QByteArray> readDataFromSelectedFile(QLabel* infoLabel);
     QString getSheetFileName();
     QList<QByteArray> readFileData(const QString& filename);
-    void parseYxSheet(const QList<QByteArray>& lineDatas);
-    void parseYcSheet(const QList<QByteArray>& lineDatas);
-    void parseVYxSheet(const QList<QByteArray>& lineDatas);
+
+    /**
+     * @brief parseLineDataVaild 解析点表单行数据
+     * @param lineData           读取到的单行数据
+     * @return
+     */
+    bool parseLineDataVaild(const QByteArray& lineData);
 private:
     QSharedPointer<PtCfg> m_ptCfg;
     Ui::CDTSettingDlg *ui;
+    QList<DiData> m_confDiDatas;
+    QList<AiData> m_confAiDatas;
+    QList<DiData> m_confVDiDatas;
 };
 
 #endif // CDTSETTINGDLG_H

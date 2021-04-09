@@ -1,7 +1,7 @@
 #include "cdtsettingdlg.h"
 #include "ui_cdtsettingdlg.h"
 #include "../common/util.h"
-
+#include <exception>
 #include <QFileDialog>
 #include <QStandardPaths>
 
@@ -30,17 +30,20 @@ void CDTSettingDlg::initWidgetData(const PtCfg &setting)
     ui->edYxFuncode->setText(Util::num2Hex(setting.m_yxFuncode));
     ui->edYxNum->setText(QString::number(setting.m_yxNum));
     ui->edYxStartIo->setText(QString::number(setting.m_yxStartIo));
+    ui->txtYxSheetInfo->setHidden(true);
 
     ui->edYcType->setText(Util::num2Hex(setting.m_ycFrameType));
     ui->edYcFuncode->setText(Util::num2Hex(setting.m_ycFuncode));
     ui->edYcNum->setText(QString::number(setting.m_ycNum));
     ui->edYcStartIo->setText(QString::number(setting.m_ycStartIo));
     ui->cbRandom->setChecked(setting.m_isRandom);
+    ui->txtYcSheetInfo->setHidden(true);
 
     ui->edVYxType->setText(Util::num2Hex(setting.m_vyxFrameType));
     ui->edVYxFuncode->setText(Util::num2Hex(setting.m_vyxFuncode));
     ui->edVYxNum->setText(QString::number(setting.m_vyxNum));
     ui->edVYxStartIo->setText(QString::number(setting.m_vyxStartIo));
+    ui->txtVYxSheetInfo->setHidden(true);
 
     ui->edYkReqType->setText(Util::num2Hex(setting.m_ykReqType));
     ui->edYkAckType->setText(Util::num2Hex(setting.m_ykAckType));
@@ -55,6 +58,7 @@ void CDTSettingDlg::initWidgetData(const PtCfg &setting)
     ui->edYxTime->setValue(static_cast<int>(setting.m_yxTime));
     ui->edYcTime->setValue(static_cast<int>(setting.m_ycTime));
     ui->edVYxTime->setValue(static_cast<int>(setting.m_vyxTime));
+
 }
 
 void CDTSettingDlg::initDefaultCfgs()
@@ -112,17 +116,38 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_yxFuncode    = Util::hexString2Num(ui->edYxFuncode->text());
     m_ptCfg->m_yxNum        = ui->edYxNum->text().toInt();
     m_ptCfg->m_yxStartIo    = ui->edYxStartIo->text().toInt();
+    if (ui->edYxNum->isEnabled()) {
+        m_confDiDatas.clear();
+        for (int i = 0; i < m_ptCfg->m_yxNum; i++) {
+            int no = m_ptCfg->m_yxStartIo + i;
+            m_confDiDatas.append(DiData(no, tr("Point %1").arg(no), false));
+        }
+    }
 
     m_ptCfg->m_ycFrameType  = Util::hexString2Num(ui->edYcType->text());
     m_ptCfg->m_ycFuncode    = Util::hexString2Num(ui->edYcFuncode->text());
     m_ptCfg->m_ycNum        = ui->edYcNum->text().toInt();
     m_ptCfg->m_ycStartIo    = ui->edYcStartIo->text().toInt();
     m_ptCfg->m_isRandom     = ui->cbRandom->isChecked();
+    if (ui->edYcNum->isEnabled()) {
+        m_confAiDatas.clear();
+        for (int i = 0; i < m_ptCfg->m_ycNum; i++) {
+            int no = m_ptCfg->m_ycStartIo + i;
+            m_confAiDatas.append(AiData(no, tr("Point %1").arg(no), 0));
+        }
+    }
 
     m_ptCfg->m_vyxFrameType = Util::hexString2Num(ui->edVYxType->text());
     m_ptCfg->m_vyxFuncode   = Util::hexString2Num(ui->edVYxFuncode->text());
     m_ptCfg->m_vyxNum       = ui->edVYxNum->text().toInt();
     m_ptCfg->m_vyxStartIo   = ui->edVYxStartIo->text().toInt();
+    if (ui->edVYxNum->isEnabled()) {
+        m_confVDiDatas.clear();
+        for (int i = 0; i < m_ptCfg->m_vyxNum; i++) {
+            int no = m_ptCfg->m_vyxStartIo + i;
+            m_confVDiDatas.append(DiData(no, tr("Point %1").arg(no), false));
+        }
+    }
 
     m_ptCfg->m_ykReqType    = Util::hexString2Num(ui->edYkReqType->text());
     m_ptCfg->m_ykAckType    = Util::hexString2Num(ui->edYkAckType->text());
@@ -138,7 +163,7 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_ycTime       = static_cast<uint>(ui->edYcTime->value());
     m_ptCfg->m_vyxTime      = static_cast<uint>(ui->edVYxTime->value());
 
-    m_ptCfg->resetPoints();
+    m_ptCfg->resetPoints(m_confDiDatas, m_confAiDatas, m_confVDiDatas);
     accept();
 }
 
@@ -153,44 +178,106 @@ void CDTSettingDlg::on_cbbProtocol_currentIndexChanged(int index)
     initWidgetData(*CDTSettingDlg::s_defaultCfgs[index]);
 }
 
-void CDTSettingDlg::onBtnImportClicked()
+void CDTSettingDlg::on_btnYxImportSheet_clicked()
 {
-    auto sheetFileName = getSheetFileName();
-    if (sheetFileName.isEmpty()) {
-        return;
-    }
-
-    auto infoText = new QLabel(this);
-    QList<QByteArray> readLineDatas;
-    try {
-        readLineDatas = readFileData(sheetFileName);
-    } catch (std::exception& e) {
-        infoText->setText(QString("<font color=#FF0000>") + tr("error") + e.what() + QString("</font>"));
-        auto layout = qobject_cast<QGridLayout*>(ui->groupBox->layout());
-        layout->addWidget(infoText, layout->rowCount(), layout->columnCount());
+    auto readLineDatas = readDataFromSelectedFile(ui->txtYxSheetInfo);
+    if (readLineDatas.isEmpty()) {
         return ;
     }
 
-    infoText->setText(QString("<font color=#0000FF>") + tr("Import success:") + sheetFileName + QString("</font>"));
-    auto layout = qobject_cast<QGridLayout*>(ui->groupBox->layout());
-    layout->addWidget(infoText, layout->rowCount(), layout->columnCount());
     // 解析数据
-
-    auto btn = qobject_cast<QPushButton*>(sender());
-    if (btn->objectName() == QLatin1String("btnYxImportSheet")) {
-
-    } else if (btn->objectName() == QLatin1String("btnYcImportSheet")) {
-
-    } else if (btn->objectName() == QLatin1String("btnVYxImportSheet")) {
-
+    m_confDiDatas.clear();
+    for (auto& lineData : readLineDatas) {
+        // 无效则跳过该行数据
+        if (!parseLineDataVaild(lineData)) {
+            qInfo("Import yx sheet error:Read line data invaild!Please check you sheet file!");
+            continue;
+        }
+        int noIdx = lineData.indexOf(' ');
+        int ptNo = lineData.left(noIdx).toInt();
+        int nameIdx = lineData.indexOf(',');
+        QString ptName = lineData.mid(noIdx + 1, nameIdx - noIdx - 1);
+        m_confDiDatas.append(DiData(ptNo, ptName, false));
     }
+    ui->edYxNum->setText(QString::number(m_confDiDatas.size()));
+    ui->edYxNum->setEnabled(false);
+}
+
+void CDTSettingDlg::on_btnYcImportSheet_clicked()
+{
+    auto readLineDatas = readDataFromSelectedFile(ui->txtYcSheetInfo);
+    if (readLineDatas.isEmpty()) {
+        return ;
+    }
+
+    // 解析数据
+    m_confAiDatas.clear();
+
+    for (auto& lineData : readLineDatas) {
+        // 无效则跳过该行数据
+        if (!parseLineDataVaild(lineData)) {
+            qInfo("Import yc sheet error:Read line data invaild!Please check you sheet file!");
+            continue;
+        }
+        int noIdx = lineData.indexOf(' ');
+        int ptNo = lineData.left(noIdx).toInt();
+        int nameIdx = lineData.indexOf(',');
+        QString ptName = lineData.mid(noIdx + 1, nameIdx - noIdx - 1);
+        m_confAiDatas.append(AiData(ptNo, ptName, 0.0));
+    }
+    ui->edYcNum->setText(QString::number(m_confAiDatas.size()));
+    ui->edYcNum->setEnabled(false);
+}
+
+void CDTSettingDlg::on_btnVYxImportSheet_clicked()
+{
+    auto readLineDatas = readDataFromSelectedFile(ui->txtVYxSheetInfo);
+    if (readLineDatas.isEmpty()) {
+        return ;
+    }
+
+    // 解析数据
+    m_confVDiDatas.clear();
+    for (auto& lineData : readLineDatas) {
+        // 无效则跳过该行数据
+        if (!parseLineDataVaild(lineData)) {
+            qInfo("Import virtual yx sheet error:Read line data invaild!Please check you sheet file!");
+            continue;
+        }
+        int noIdx = lineData.indexOf(' ');
+        int ptNo = lineData.left(noIdx).toInt();
+        int nameIdx = lineData.indexOf(',');
+        QString ptName = lineData.mid(noIdx + 1, nameIdx - noIdx - 1);
+        m_confVDiDatas.append(DiData(ptNo, ptName, false));
+    }
+    ui->edVYxNum->setText(QString::number(m_confVDiDatas.size()));
+    ui->edVYxNum->setEnabled(false);
+}
+
+QList<QByteArray> CDTSettingDlg::readDataFromSelectedFile(QLabel *infoLabel)
+{
+    // 读取所选文件的数据
+    QList<QByteArray> readLineDatas;
+    auto sheetFileName = getSheetFileName();
+    if (sheetFileName.isEmpty()) {
+        return readLineDatas;
+    }
+
+    try {
+        readLineDatas = readFileData(sheetFileName);
+        infoLabel->setText(QString("<font color=#0000FF>") + tr("Import success:") + sheetFileName + QString("</font>"));
+    } catch (std::exception& e) {
+        infoLabel->setText(QString("<font color=#FF0000>") + tr("Error:") + e.what() + QString("</font>"));
+    }
+    infoLabel->setHidden(false);// 显示导入提示信息
+    return readLineDatas;
 }
 
 QString CDTSettingDlg::getSheetFileName()
 {
     auto sysDocumentPaths = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     return QFileDialog::getOpenFileName(this, tr("Import Sheet"), sysDocumentPaths.first()
-                                        , QLatin1String("Txt(*.txt);;All Files (*.*)")/*, QLatin1String("Txt(*.txt)")*/);
+                                        , QLatin1String("TXT(*.txt);;All Files (*.*)"));
 
 }
 
@@ -200,7 +287,13 @@ QList<QByteArray> CDTSettingDlg::readFileData(const QString &filename)
     QFile file(filename);
     if (!file.open(QFile::ReadWrite)) {
         QString error = tr("Open file failed! ") + file.errorString();
-        throw error.toStdString().c_str();
+        throw std::runtime_error(error.toStdString());
+    }
+    // 空文件异常
+    if (file.atEnd()) {
+        QString error = tr("File %1 is empty!").arg(filename);
+        file.close();
+        throw std::runtime_error(error.toStdString());
     }
     while (!file.atEnd()) {
         lineDatas.append(file.readLine());
@@ -209,26 +302,12 @@ QList<QByteArray> CDTSettingDlg::readFileData(const QString &filename)
     return lineDatas;
 }
 
-void CDTSettingDlg::parseYxSheet(const QList<QByteArray> &lineDatas)
+bool CDTSettingDlg::parseLineDataVaild(const QByteArray &lineData)
 {
-    m_ptCfg->clearPoints();
-    for (auto& line : lineDatas) {
-         int idx = line.indexOf(' ');
-         int ptNo = line.left(idx).toInt();
+    if (lineData.indexOf(' ') < 0 || lineData.indexOf(',') < 0) {
+        return false;
     }
-}
+    auto spaceWord = lineData.split(' ');
 
-void CDTSettingDlg::parseYcSheet(const QList<QByteArray> &lineDatas)
-{
-
-}
-
-void CDTSettingDlg::parseVYxSheet(const QList<QByteArray> &lineDatas)
-{
-
-}
-
-void CDTSettingDlg::on_btnYcImportSheet_clicked()
-{
-
+    return !spaceWord.isEmpty() && QVariant(spaceWord.first()).canConvert<int>();
 }

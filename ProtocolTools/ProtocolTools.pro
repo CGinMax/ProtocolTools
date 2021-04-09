@@ -77,7 +77,7 @@ SOURCES += \
     ui/udppage.cpp \
     ui/tables/diheaderview.cpp \
     ui/dialog/nameddialog.cpp \
-    common/saveconfig.cpp
+    common/savecontroller.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -132,7 +132,7 @@ HEADERS += \
     ui/udppage.h \
     ui/tables/diheaderview.h \
     ui/dialog/nameddialog.h \
-    common/saveconfig.h
+    common/savecontroller.h
 
 FORMS += \
         mainwindow.ui \

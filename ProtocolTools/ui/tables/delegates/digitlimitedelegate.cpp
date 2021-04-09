@@ -13,7 +13,8 @@ QWidget* DigitLimiteDelegate::createEditor(QWidget *parent, const QStyleOptionVi
     Q_UNUSED(index);
 
     QLineEdit* editor=new QLineEdit(parent);
-    QRegExp regExp("[0-9]{0,10}");
+//    QRegExp regExp("[0-9]{0,10}");
+    QRegExp regExp("[0-9]+([.]{1}[0-9]+){0,1}$");
     editor->setValidator(new QRegExpValidator(regExp,parent));
     connect(editor, &QLineEdit::textChanged, this, &DigitLimiteDelegate::onTextChanged);
     return editor;
@@ -21,7 +22,7 @@ QWidget* DigitLimiteDelegate::createEditor(QWidget *parent, const QStyleOptionVi
 
 void DigitLimiteDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-    QString text=index.model()->data(index,Qt::DisplayRole).toString();
+    QString text = QString::number(index.model()->data(index,Qt::DisplayRole).toDouble());
     QLineEdit *lineEdit=static_cast<QLineEdit*>(editor);
     lineEdit->setText(text);
 }
@@ -42,6 +43,11 @@ void DigitLimiteDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpti
 void DigitLimiteDelegate::onTextChanged(const QString &s)
 {
     Q_UNUSED(s)
-    emit commitData(qobject_cast<QLineEdit*>(sender()));
-    emit delegateValueChanged();
+    QRegExp regExp("[0-9]+([.]{1}[0-9]+){0,1}$");
+
+    if (regExp.exactMatch(s)) {
+
+        emit commitData(qobject_cast<QLineEdit*>(sender()));
+        emit delegateValueChanged();
+    }
 }

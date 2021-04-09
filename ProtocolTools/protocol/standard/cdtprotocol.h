@@ -10,6 +10,11 @@
 
 class CDTProtocol : public ProtocolBase
 {
+    union YcData{
+        float fdata = 0.0f;
+        int idata;
+    };
+
     Q_OBJECT
 public:
     CDTProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);

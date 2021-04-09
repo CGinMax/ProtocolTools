@@ -6,7 +6,7 @@ AiData::AiData(QObject *parent)
 
 }
 
-AiData::AiData(int io, const QString &name, int value, QObject *parent)
+AiData::AiData(int io, const QString &name, double value, QObject *parent)
     : QObject (parent)
     , m_io(io)
     , m_name(name)

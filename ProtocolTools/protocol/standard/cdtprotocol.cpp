@@ -332,19 +332,23 @@ CDTFrame CDTProtocol::buildYXFrame(uint8_t startFuncode, const QMap<int, DiData 
 
 CDTFrame CDTProtocol::buildYCFrame(uint8_t startFuncode, const QMap<int, AiData *> &ptMap)
 {
+
     CDTFrame frame;
 
     uint8_t curCode = startFuncode;
     QVector<uint8_t> combineList;
     int aiNum = ptMap.last()->io();
     for (int i = 0; i <= aiNum; i++) {
+//        YcData aiValue;
         int aiValue = 0;
         if (ptMap.contains(i)) {
-            aiValue = ptMap.value(i)->value();
+            aiValue = static_cast<int>(ptMap.value(i)->value());
         }
         if (aiValue > 0x07FF) {
             aiValue = 0x4000;// 溢出
         }
+//        combineList.append(static_cast<uint8_t>(aiValue.idata >> 8));
+//        combineList.append(static_cast<uint8_t>(aiValue.idata));
         combineList.append(static_cast<uint8_t>(aiValue >> 8));
         combineList.append(static_cast<uint8_t>(aiValue));
     }

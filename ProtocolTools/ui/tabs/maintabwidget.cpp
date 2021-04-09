@@ -11,11 +11,12 @@
 #include "maintabbar.h"
 #include "../tabpage.h"
 #include "../dialog/nameddialog.h"
-#include "../../common/saveconfig.h"
+#include "../../common/savecontroller.h"
 
-MainTabWidget::MainTabWidget(QWidget *parent)
+MainTabWidget::MainTabWidget(const QSharedPointer<SaveController> saveCtrl, QWidget *parent)
     : QTabWidget(parent)
     , m_lastTabIndex(-1)
+    , m_saveController(saveCtrl)
 {
     auto bar = new MainTabBar(this);
     setTabBar(bar);
@@ -26,6 +27,7 @@ MainTabWidget::MainTabWidget(QWidget *parent)
     connect(bar, &MainTabBar::tabAtIndexClicked, this, &MainTabWidget::onTabAtIndexClicked);
     connect(this, &QTabWidget::tabCloseRequested, this, &MainTabWidget::onTabCloseRequested);
     connect(this, &QTabWidget::tabBarClicked, this, &MainTabWidget::onTabBarClicked);
+
     m_lastTabIndex = addTab(new QWidget, "+");
     tabBar()->setTabButton(m_lastTabIndex
                            , static_cast<QTabBar::ButtonPosition>(style()->styleHint(QStyle::SH_TabBar_CloseButtonPosition, nullptr, tabBar()))
@@ -117,23 +119,12 @@ void MainTabWidget::showContextMenu(int tabIndex)
         }
     });
     connect(menu.addAction(tr("Save")), &QAction::triggered, this, [=]{
-        auto saveFileName = QFileDialog::getSaveFileName(nullptr, tr("Save")
-                            , QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first()+"/cdt.bk", QLatin1String("All Files (*.*)"));
-        if (saveFileName.isNull()) {
-            return ;
-        }
-        ThreadPool::instance()->run([=]{
-            auto tab = qobject_cast<TabPage*>(this->widget(tabIndex));
-            tab->resetSettingData();
-            QMultiMap<QString, SettingData *> settingMap;
-            settingMap.insert(tab->getPageName(), tab->getSettingData());
-            try {
-                SaveConfig::saveConfig(settingMap, saveFileName);
-            } catch (std::exception& e) {
-                qDebug("%s", e.what());
-            }
-//            emit this->saveFinish(success, success ? tr("Save %1 Success!").arg(saveFileName) : tr("Save %1 Failed!").arg(saveFileName));
-        });
+
+        auto tab = qobject_cast<TabPage*>(this->widget(tabIndex));
+        tab->resetSettingData();
+        QMultiMap<QString, SettingData *> settingMap;
+        settingMap.insert(tab->getPageName(), tab->getSettingData());
+        m_saveController->onActionSaveTriggered(settingMap);
     });
     connect(menu.addAction(tr("Split")), &QAction::triggered, this, &MainTabWidget::onDivideTab);
 

@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include "ui/tabs/maintabwidget.h"
-#include <QPushButton>
 
 class SettingData;
 namespace Ui {
@@ -19,13 +18,10 @@ public:
     ~MainWindow() override;
 
 signals:
-    void saveFinish(bool success, const QString& msg);
-    void importFinish(QMultiMap<QString, SettingData*>& settingMap);
 
 public slots:
     void onAddNewPage();
-    void onSaveFinish(bool success, const QString& msg);
-    void onImportFinish(QMultiMap<QString, SettingData*>& settingMap);
+    void onImportFinish(const QMultiMap<QString, SettingData*>& settingMap);
 
 private slots:
     void on_actionImport_triggered();
@@ -35,6 +31,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     MainTabWidget* m_mainTabs;
+    QSharedPointer<SaveController> m_saveController;
 };
 
 #endif // MAINWINDOW_H
