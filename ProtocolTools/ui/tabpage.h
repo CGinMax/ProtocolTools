@@ -23,6 +23,10 @@ public:
 
     void setConfigureWidgetEnabled(bool enabled);
 
+    void startCommunication();
+
+    void stopCommunication();
+
     SettingData* getSettingData() const;
 
     void setPageName(const QString& name);

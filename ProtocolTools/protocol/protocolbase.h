@@ -22,7 +22,6 @@ public:
         //接收
         eMsgRecv = 3,
     };
-    ProtocolBase();
     ProtocolBase(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
     virtual ~ProtocolBase();
 
@@ -30,8 +29,9 @@ public:
 
     virtual void run() {}
 
-
     bool initConnection();
+
+    virtual void processPortOpenSucceed();
 
     bool isConnection();
 
@@ -71,9 +71,10 @@ protected slots:
 protected:
     QSharedPointer<NetworkBase> m_network;
     QSharedPointer<SettingData> m_settingData;
-
     StrategyBase* m_strategy;
     QTimer *m_timer{nullptr};
+
+    int m_portOpenFailedCount;
 };
 
 #endif // PROTOCOLBASE_H

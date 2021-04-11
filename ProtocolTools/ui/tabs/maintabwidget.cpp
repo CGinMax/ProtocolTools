@@ -21,17 +21,12 @@ MainTabWidget::MainTabWidget(const QSharedPointer<SaveController> saveCtrl, QWid
     auto bar = new MainTabBar(this);
     setTabBar(bar);
 
-    setTabsClosable(true);
+    setTabsClosable(false);
     tabBar()->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
 
-    connect(bar, &MainTabBar::tabAtIndexClicked, this, &MainTabWidget::onTabAtIndexClicked);
     connect(this, &QTabWidget::tabCloseRequested, this, &MainTabWidget::onTabCloseRequested);
     connect(this, &QTabWidget::tabBarClicked, this, &MainTabWidget::onTabBarClicked);
 
-    m_lastTabIndex = addTab(new QWidget, "+");
-    tabBar()->setTabButton(m_lastTabIndex
-                           , static_cast<QTabBar::ButtonPosition>(style()->styleHint(QStyle::SH_TabBar_CloseButtonPosition, nullptr, tabBar()))
-                           , new FakeCloseButton);
 }
 
 int MainTabWidget::addTab(QWidget *widget, const QString &label)
@@ -66,10 +61,6 @@ void MainTabWidget::backToBeforeIndex(bool isBack)
 
 void MainTabWidget::onTabCloseRequested(int index)
 {
-    if (QMessageBox::information(this, tr("Close Tab"), QString("Close tab %1?").arg(tabText(index))
-                                 , QMessageBox::Ok, QMessageBox::Cancel) != QMessageBox::Ok) {
-        return;
-    }
     auto widget = this->widget(index);
     removeTab(index);
     delete widget;
@@ -79,20 +70,7 @@ void MainTabWidget::onTabCloseRequested(int index)
 
 void MainTabWidget::onTabBarClicked(int index)
 {
-    if (index == m_lastTabIndex) {
-        emit addNewPage();
-        return;
-    }
-
     m_opendIndex = index;
-}
-
-void MainTabWidget::onTabAtIndexClicked(int index)
-{
-    if (index < m_lastTabIndex) {
-        showContextMenu(index);
-        return;
-    }
 }
 
 void MainTabWidget::onDivideTab()
@@ -107,11 +85,28 @@ void MainTabWidget::onDivideTab()
     m_lastTabIndex--;
 }
 
+void MainTabWidget::onAddNewPage(TabPage *page)
+{
+    page->setParent(this);
+    addTab(page, page->getPageName());
+}
+
+void MainTabWidget::onRemovePage(TabPage *page)
+{
+    onTabCloseRequested(indexOf(page));
+}
+
+void MainTabWidget::onChangePageName(TabPage *page)
+{
+    auto index = indexOf(page);
+    setTabText(index, page->getPageName());
+}
+
 void MainTabWidget::showContextMenu(int tabIndex)
 {
     QMenu menu;
     m_contenxtIndex = tabIndex;
-    connect(menu.addAction(tr("Change Name")), &QAction::triggered, this, [this, tabIndex]{
+    connect(menu.addAction(tr("Change Name")), &QAction::triggered, this, [=]{
         NamedDialog dlg(this->tabText(tabIndex));
         if (dlg.exec() == QDialog::Accepted) {
             this->setTabText(tabIndex, dlg.getNameString());

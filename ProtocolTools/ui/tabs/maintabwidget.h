@@ -4,6 +4,8 @@
 #include <QTabWidget>
 #include "../../common/savecontroller.h"
 
+class TabPage;
+
 class MainTabWidget : public QTabWidget
 {
     Q_OBJECT
@@ -16,12 +18,14 @@ public:
     void backToBeforeIndex(bool isBack = false);
 signals:
     void addNewPage();
-
 public slots:
     void onTabCloseRequested(int index);
     void onTabBarClicked(int index);
-    void onTabAtIndexClicked(int index);
     void onDivideTab();
+
+    void onAddNewPage(TabPage* page);
+    void onRemovePage(TabPage* page);
+    void onChangePageName(TabPage* page);
 
 private:
     void showContextMenu(int tabIndex);

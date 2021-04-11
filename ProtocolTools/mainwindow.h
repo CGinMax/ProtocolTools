@@ -2,7 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSplitter>
 #include "ui/tabs/maintabwidget.h"
+#include "ui/trees/channeltreewidget.h"
+#include "ui/controller/stackedcontroller.h"
 
 class SettingData;
 namespace Ui {
@@ -30,8 +33,11 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    ChannelTreeWidget* m_treeWidget;
+    QSplitter* m_mainSplitter;
     MainTabWidget* m_mainTabs;
     QSharedPointer<SaveController> m_saveController;
+    QScopedPointer<StackedController> m_stackedController;
 };
 
 #endif // MAINWINDOW_H

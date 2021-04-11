@@ -44,6 +44,10 @@ TabPage::~TabPage()
 
 void TabPage::initWidget()
 {
+    ui->splitter->setCollapsible(0, false);
+    ui->splitter->setCollapsible(1, false);
+    ui->splitter->setStretchFactor(0, 1);
+    ui->splitter->setStretchFactor(1, 3);
     auto* intValid = new QIntValidator(0, 65535);
     QRegularExpression regExp(QLatin1String("^((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})(.((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})){3}$"));
     auto* regValid = new QRegularExpressionValidator(regExp);
@@ -89,6 +93,16 @@ void TabPage::setConfigureWidgetEnabled(bool enabled)
     ui->btnSetting->setEnabled(enabled);
     ui->btnStart->setEnabled(enabled);
     ui->btnStop->setEnabled(!enabled);
+}
+
+void TabPage::startCommunication()
+{
+    on_btnStart_clicked();
+}
+
+void TabPage::stopCommunication()
+{
+    on_btnStop_clicked();
 }
 
 SettingData *TabPage::getSettingData() const

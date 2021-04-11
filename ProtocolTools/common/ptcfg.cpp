@@ -1,4 +1,5 @@
 #include "ptcfg.h"
+#include <QDataStream>
 
 PtCfg::PtCfg()
     : m_globalDiList(new QList<DiData*>)
