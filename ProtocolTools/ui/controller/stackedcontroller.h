@@ -14,18 +14,18 @@ class StackedController : public QObject
 public:
     explicit StackedController(QStackedWidget* widget, QObject *parent = nullptr);
     ~StackedController() override;
-
+    void insertInitWidget(QTreeWidgetItem* item, QWidget* widget);
 
 signals:
-    void addNewPage(TabPage* page);
-    void removePage(TabPage* page);
-    void changePageName(TabPage* page);
+    void addNewPage(TabPage* page, eNetworkType type);
+    void removePage(TabPage* page, eNetworkType type);
+    void changePageName(TabPage* page, eNetworkType type);
 
 public slots:
     void onNotifyItemSelected(QTreeWidgetItem* item);
-    void onNotifyAddNewChannel(QTreeWidgetItem* item, const QSharedPointer<SettingData>& settingData);
-    void onNotifyDeleteChannel(QTreeWidgetItem* item);
-    void onNotifyChangeName(QTreeWidgetItem* item);
+    void onNotifyAddNewChannel(QTreeWidgetItem* item, const QSharedPointer<SettingData>& settingData, eNetworkType type);
+    void onNotifyDeleteChannel(QTreeWidgetItem* item, eNetworkType type);
+    void onNotifyChangeName(QTreeWidgetItem* item, eNetworkType type);
     void onNotifyChannelStart(QTreeWidgetItem* item);
     void onNotifyChannelStop(QTreeWidgetItem* item);
 

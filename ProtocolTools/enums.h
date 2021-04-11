@@ -2,6 +2,7 @@
 #define ENUMS_H
 
 enum eNetworkType{
+    eErrorNetworkType = -1,
     eTcpServer = 0,
     eTcpClient,
     eUdp,

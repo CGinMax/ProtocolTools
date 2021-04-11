@@ -10,14 +10,15 @@ class MainTabWidget : public QTabWidget
 {
     Q_OBJECT
 public:
-    explicit MainTabWidget(const QSharedPointer<SaveController> saveCtrl, QWidget *parent = nullptr);
+    explicit MainTabWidget(SaveController* saveCtrl, QWidget *parent = nullptr);
 
     int addTab(QWidget* widget, const QString& label);
     int addTab(QWidget* widget, const QIcon& icon, const QString& label);
 
     void backToBeforeIndex(bool isBack = false);
+
+    QMultiMap<QString, SettingData*> getAllChildrenSetting();
 signals:
-    void addNewPage();
 public slots:
     void onTabCloseRequested(int index);
     void onTabBarClicked(int index);
@@ -35,7 +36,7 @@ private:
     int m_lastTabIndex;
     int m_contenxtIndex;
 
-    QSharedPointer<SaveController> m_saveController;
+    SaveController* m_saveController;
 };
 
 #endif // MAINTABWIDGET_H

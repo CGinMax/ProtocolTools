@@ -13,7 +13,7 @@
 #include "../dialog/nameddialog.h"
 #include "../../common/savecontroller.h"
 
-MainTabWidget::MainTabWidget(const QSharedPointer<SaveController> saveCtrl, QWidget *parent)
+MainTabWidget::MainTabWidget(SaveController *saveCtrl, QWidget *parent)
     : QTabWidget(parent)
     , m_lastTabIndex(-1)
     , m_saveController(saveCtrl)
@@ -57,6 +57,17 @@ void MainTabWidget::backToBeforeIndex(bool isBack)
     else {
         m_opendIndex = currentIndex();
     }
+}
+
+QMultiMap<QString, SettingData *> MainTabWidget::getAllChildrenSetting()
+{
+    QMultiMap<QString, SettingData*> settingMap;
+    for (int i = 0; i < count() - 1; i++) {
+        auto tab = qobject_cast<TabPage*>(this->widget(i));
+        tab->resetSettingData();
+        settingMap.insert(tab->getPageName(), tab->getSettingData());
+    }
+    return settingMap;
 }
 
 void MainTabWidget::onTabCloseRequested(int index)

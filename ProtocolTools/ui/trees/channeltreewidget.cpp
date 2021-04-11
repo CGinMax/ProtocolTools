@@ -40,11 +40,11 @@ void ChannelTreeWidget::initMenuAction()
     m_parentNodeMenu.addAction(tr("Add Channel"), [this]{
         NamedDialog dlg(tr("Default Page"));
         if (dlg.exec() == QDialog::Accepted) {
-            auto item = new QTreeWidgetItem(this, {dlg.getNameString()});
+            auto item = new QTreeWidgetItem(m_currentPopupItem, {dlg.getNameString()});
             QSharedPointer<SettingData> settingData(new SettingData());
             m_nodeSettingDatas.insert(item, settingData);
 
-            emit notifyAddNewChannel(item, settingData);
+            emit notifyAddNewChannel(item, settingData, selectNetworkType(m_currentPopupItem));
         }
     });
     m_parentNodeMenu.addAction(tr("Delete Child Channel"), [this]{
@@ -54,7 +54,7 @@ void ChannelTreeWidget::initMenuAction()
         }
         for (auto& child : childrenChannel) {
             m_nodeSettingDatas.remove(child);
-            emit notifyDeleteChannel(child);
+            emit notifyDeleteChannel(child, selectNetworkType(m_currentPopupItem));
         }
     });
 
@@ -62,7 +62,7 @@ void ChannelTreeWidget::initMenuAction()
         NamedDialog dlg(m_currentPopupItem->text(0));
         if (dlg.exec() == QDialog::Accepted) {
             m_currentPopupItem->setText(0, dlg.getNameString());
-            emit notifyChangeName(m_currentPopupItem);
+            emit notifyChangeName(m_currentPopupItem, selectNetworkType(m_currentPopupItem));
         }
     });
     m_childNodeMenu.addAction(tr("Start"), [this]{
@@ -73,8 +73,23 @@ void ChannelTreeWidget::initMenuAction()
     });
     m_childNodeMenu.addAction(tr("Delete"), [this]{
         m_nodeSettingDatas.remove(m_currentPopupItem);
-        emit notifyDeleteChannel(m_currentPopupItem);
+        emit notifyDeleteChannel(m_currentPopupItem, selectNetworkType(m_currentPopupItem));
     });
+}
+
+QTreeWidgetItem *ChannelTreeWidget::tcpClientItem()
+{
+    return m_tcpClientParent;
+}
+
+QTreeWidgetItem *ChannelTreeWidget::tcpServerItem()
+{
+    return m_tcpServerParent;
+}
+
+QTreeWidgetItem *ChannelTreeWidget::udpItem()
+{
+    return m_udpParent;
 }
 
 void ChannelTreeWidget::onCustomContextMenuRequested(const QPoint &pos)
@@ -94,5 +109,18 @@ void ChannelTreeWidget::onCustomContextMenuRequested(const QPoint &pos)
     }
     else {
         m_childNodeMenu.exec(QCursor::pos());
+    }
+}
+
+eNetworkType ChannelTreeWidget::selectNetworkType(QTreeWidgetItem *item)
+{
+    if (item == m_tcpClientParent) {
+        return eNetworkType::eTcpClient;
+    } else if (item == m_tcpServerParent) {
+        return eNetworkType::eTcpServer;
+    } else if (item == m_udpParent) {
+        return eNetworkType::eUdp;
+    } else {
+        return eNetworkType::eErrorNetworkType;
     }
 }
