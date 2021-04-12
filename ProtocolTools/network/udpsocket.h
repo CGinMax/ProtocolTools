@@ -13,8 +13,8 @@ public:
     explicit UdpSocket(QObject *parent = nullptr);
 
 public:
-    void open() override;
-    void open(const QString &ip, ushort port) override;
+    bool open() override;
+    bool open(const QString &ip, ushort port) override;
     void close() override;
     bool write(const char *data, int size) override;
     bool write(const QByteArray &data) override;

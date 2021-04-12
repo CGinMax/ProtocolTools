@@ -25,20 +25,22 @@ TcpClient::~TcpClient()
 
 }
 
-void TcpClient::open()
+bool TcpClient::open()
 {
     if (isActived()) {
-        return;
+        return true;
     }
     m_socket->connectToHost(m_ip, m_port);
+    return m_socket->waitForConnected(100);
 }
 
-void TcpClient::open(const QString &ip, ushort port)
+bool TcpClient::open(const QString &ip, ushort port)
 {
     if (isActived()) {
-        return;
+        return true;
     }
     m_socket->connectToHost(ip, port);
+    return m_socket->waitForConnected(100);
 }
 
 void TcpClient::close()

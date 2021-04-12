@@ -15,7 +15,7 @@
 
 MainTabWidget::MainTabWidget(SaveController *saveCtrl, QWidget *parent)
     : QTabWidget(parent)
-    , m_lastTabIndex(-1)
+    , m_lastTabIndex(0)
     , m_saveController(saveCtrl)
 {
     auto bar = new MainTabBar(this);
@@ -26,7 +26,7 @@ MainTabWidget::MainTabWidget(SaveController *saveCtrl, QWidget *parent)
 
     connect(this, &QTabWidget::tabCloseRequested, this, &MainTabWidget::onTabCloseRequested);
     connect(this, &QTabWidget::tabBarClicked, this, &MainTabWidget::onTabBarClicked);
-
+    connect(this, &QTabWidget::currentChanged, this, &MainTabWidget::onCurrentChanged);
 }
 
 int MainTabWidget::addTab(QWidget *widget, const QString &label)
@@ -47,6 +47,17 @@ int MainTabWidget::addTab(QWidget *widget, const QIcon &icon, const QString &lab
     setCurrentIndex(m_lastTabIndex);
     m_lastTabIndex++;
     return tabIndex;
+}
+
+void MainTabWidget::removeTabByWidget(QWidget *widget)
+{
+    int index = indexOf(widget);
+    onTabCloseRequested(index);
+}
+
+void MainTabWidget::changeTabName(QWidget *widget, const QString &name)
+{
+    setTabText(indexOf(widget), name);
 }
 
 void MainTabWidget::backToBeforeIndex(bool isBack)
@@ -73,10 +84,16 @@ QMultiMap<QString, SettingData *> MainTabWidget::getAllChildrenSetting()
 void MainTabWidget::onTabCloseRequested(int index)
 {
     auto widget = this->widget(index);
-    removeTab(index);
+    this->removeTab(index);
     delete widget;
 
     m_lastTabIndex--;
+}
+
+void MainTabWidget::onCurrentChanged(int index)
+{
+    auto widget = this->widget(index);
+    emit currentTabChanged(widget);
 }
 
 void MainTabWidget::onTabBarClicked(int index)
@@ -94,23 +111,6 @@ void MainTabWidget::onDivideTab()
     widget->setGeometry(200, 200, 260, 360);
     widget->show();
     m_lastTabIndex--;
-}
-
-void MainTabWidget::onAddNewPage(TabPage *page)
-{
-    page->setParent(this);
-    addTab(page, page->getPageName());
-}
-
-void MainTabWidget::onRemovePage(TabPage *page)
-{
-    onTabCloseRequested(indexOf(page));
-}
-
-void MainTabWidget::onChangePageName(TabPage *page)
-{
-    auto index = indexOf(page);
-    setTabText(index, page->getPageName());
 }
 
 void MainTabWidget::showContextMenu(int tabIndex)

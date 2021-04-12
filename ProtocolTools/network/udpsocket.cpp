@@ -13,18 +13,19 @@ UdpSocket::UdpSocket(QObject *parent)
     connect(m_socket.data(), &QUdpSocket::readyRead, this, &UdpSocket::onReadyRead);
 }
 
-void UdpSocket::open()
+bool UdpSocket::open()
 {
-    if (isActived()) {
-        return;
-    }
+    return isActived();
+//    if (isActived()) {
+//        return true;
+//    }
 }
 
-void UdpSocket::open(const QString &ip, ushort port)
+bool UdpSocket::open(const QString &ip, ushort port)
 {
     m_localAddress = QHostAddress(ip);
     m_localPort = port;
-    m_socket->bind(QHostAddress(ip), port, QUdpSocket::ShareAddress);
+    return m_socket->bind(QHostAddress(ip), port, QUdpSocket::ShareAddress);
 }
 
 void UdpSocket::close()

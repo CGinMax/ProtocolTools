@@ -41,7 +41,6 @@ SOURCES += \
     protocol/interacte/cdtinteracte.cpp \
     protocol/ut/cdtexut.cpp \
     protocol/nr/cdtexnr.cpp \
-    ui/controller/stackedcontroller.cpp \
     ui/dialog/ykdialog.cpp \
     ui/tabpage.cpp \
     ui/clientpage.cpp \
@@ -79,7 +78,8 @@ SOURCES += \
     ui/udppage.cpp \
     ui/tables/diheaderview.cpp \
     ui/dialog/nameddialog.cpp \
-    common/savecontroller.cpp
+    common/savecontroller.cpp \
+    ui/controller/maintabcontroller.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -98,7 +98,6 @@ HEADERS += \
     protocol/interacte/cdtinteracte.h \
     protocol/ut/cdtexut.h \
     protocol/nr/cdtexnr.h \
-    ui/controller/stackedcontroller.h \
     ui/dialog/ykdialog.h \
     ui/tabpage.h \
     ui/clientpage.h \
@@ -136,7 +135,8 @@ HEADERS += \
     ui/udppage.h \
     ui/tables/diheaderview.h \
     ui/dialog/nameddialog.h \
-    common/savecontroller.h
+    common/savecontroller.h \
+    ui/controller/maintabcontroller.h
 
 FORMS += \
         mainwindow.ui \

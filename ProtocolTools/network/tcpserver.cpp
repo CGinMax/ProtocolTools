@@ -20,18 +20,20 @@ TcpServer::~TcpServer()
 {
 }
 
-void TcpServer::open()
+bool TcpServer::open()
 {
-    if (isActived()) {
-        return;
-    }
+    return isActived();
+//    if (isActived()) {
+//        return;
+//    }
 
 }
 
-void TcpServer::open(const QString &ip, ushort port)
+bool TcpServer::open(const QString &ip, ushort port)
 {
     Q_UNUSED(ip)
     Q_UNUSED(port)
+    return true;
 }
 
 void TcpServer::close()

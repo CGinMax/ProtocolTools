@@ -15,23 +15,28 @@ public:
     ~ChannelTreeWidget() override;
 
     void initMenuAction();
+    QTreeWidgetItem* addChannel(const QString& name, eNetworkType type);
     QTreeWidgetItem* tcpClientItem();
     QTreeWidgetItem* tcpServerItem();
     QTreeWidgetItem* udpItem();
 signals:
     void notifyItemSelected(QTreeWidgetItem* item);
-    void notifyAddNewChannel(QTreeWidgetItem* item, const QSharedPointer<SettingData>& settingData, eNetworkType type);
-    void notifyDeleteChannel(QTreeWidgetItem* item, eNetworkType type);
-    void notifyChangeName(QTreeWidgetItem* item, eNetworkType type);
+    void notifyAddNewChannel(QTreeWidgetItem* item, const QSharedPointer<SettingData>& settingData);
+    void notifyDeleteChannel(QTreeWidgetItem* item);
+    void notifyChangeName(QTreeWidgetItem* item);
     void notifyChannelStart(QTreeWidgetItem* item);
     void notifyChannelStop(QTreeWidgetItem* item);
 
+public slots:
+    void onCurrentItemChanged(QTreeWidgetItem* item);
+
 private slots:
+    void onItemClicked(QTreeWidgetItem* item);
     void onCustomContextMenuRequested(const QPoint& pos);
 
 private:
     eNetworkType selectNetworkType(QTreeWidgetItem* item);
-
+    QIcon createNetworkIcon(eNetworkType type);
 private:
     QTreeWidgetItem* m_tcpClientParent;
     QTreeWidgetItem* m_tcpServerParent;
@@ -40,7 +45,7 @@ private:
     QMenu m_parentNodeMenu;
     QMenu m_childNodeMenu;
 
-    QMap<QTreeWidgetItem*, QSharedPointer<SettingData>> m_nodeSettingDatas;
+    QList<QIcon> m_networkIcons;
 };
 
 #endif // CHANNELTREEWIDGET_H

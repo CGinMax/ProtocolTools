@@ -22,14 +22,15 @@ ClientPage::~ClientPage()
 bool ClientPage::start()
 {
     if (!m_settingData.isNull()) {
-        m_tcpClient->open(m_settingData->m_remoteIp, m_settingData->m_remotePort);
-        m_centerWidget->startCommunication(m_settingData);
-        return true;
-    }
-    else {
-        qInfo("错误，设置数据为空");
+        if (m_tcpClient->open(m_settingData->m_remoteIp, m_settingData->m_remotePort)) {
+            m_centerWidget->startCommunication(m_settingData);
+            return true;
+        }
+
         return false;
     }
+    qInfo("错误，设置数据为空");
+    return false;
 }
 
 void ClientPage::stop()

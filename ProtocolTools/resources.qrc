@@ -2,6 +2,9 @@
     <qresource prefix="/icon">
         <file>resources/signal-close.png</file>
         <file>resources/signal-connect.png</file>
+        <file>resources/client.png</file>
+        <file>resources/server.png</file>
+        <file>resources/udp.png</file>
     </qresource>
     <qresource prefix="/">
         <file>translations/CdtTools_en.qm</file>

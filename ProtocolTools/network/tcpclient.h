@@ -14,8 +14,8 @@ public:
     ~TcpClient() override;
 
     // NetworkBase interface
-    void open() override;
-    void open(const QString& ip, ushort port);
+    bool open() override;
+    bool open(const QString& ip, ushort port);
     void close() override;
     bool write(const char* data, int size) override;
     bool write(const QByteArray &data) override;

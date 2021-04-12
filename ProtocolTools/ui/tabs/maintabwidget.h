@@ -14,20 +14,18 @@ public:
 
     int addTab(QWidget* widget, const QString& label);
     int addTab(QWidget* widget, const QIcon& icon, const QString& label);
-
+    void removeTabByWidget(QWidget* widget);
+    void changeTabName(QWidget* widget, const QString& name);
     void backToBeforeIndex(bool isBack = false);
 
     QMultiMap<QString, SettingData*> getAllChildrenSetting();
 signals:
+    void currentTabChanged(QWidget* widget);
 public slots:
     void onTabCloseRequested(int index);
+    void onCurrentChanged(int index);
     void onTabBarClicked(int index);
     void onDivideTab();
-
-    void onAddNewPage(TabPage* page);
-    void onRemovePage(TabPage* page);
-    void onChangePageName(TabPage* page);
-
 private:
     void showContextMenu(int tabIndex);
 
