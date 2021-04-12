@@ -15,8 +15,8 @@ ChannelTreeWidget::ChannelTreeWidget(QWidget *parent)
     , m_udpParent(new QTreeWidgetItem(this))
     , m_currentPopupItem(nullptr)
 {
-    m_networkIcons.append(QIcon(":/icon/resources/client.png"));
     m_networkIcons.append(QIcon(":/icon/resources/server.png"));
+    m_networkIcons.append(QIcon(":/icon/resources/client.png"));
     m_networkIcons.append(QIcon(":/icon/resources/udp.png"));
 
     setStyle(QStyleFactory::create(QLatin1String("Windows")));
