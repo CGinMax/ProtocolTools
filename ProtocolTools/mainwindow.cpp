@@ -12,36 +12,30 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , m_treeWidget(new ChannelTreeWidget())
-    , m_mainSplitter(new QSplitter(this))
     , m_saveController(new SaveController(this))
 {
 
     ui->setupUi(this);
-    ui->mainToolBar->hide();
+    ui->splitter->setChildrenCollapsible(false);
+    ui->splitter->setStretchFactor(0, 1);
+    ui->splitter->setStretchFactor(1, 7);
+
     qRegisterMetaType<QMultiMap<QString, SettingData*>>("const QMultiMap<QString, SettingData*>&");
-    m_mainTabWidget = new MainTabWidget(m_saveController/*, this*/);
 
-    m_mainTabController = new MainTabController(m_mainTabWidget, this);
 
-    auto mainLayout = new QVBoxLayout(centralWidget());
-    mainLayout->addWidget(m_mainSplitter);
-    m_mainSplitter->setOrientation(Qt::Horizontal);
-    m_mainSplitter->insertWidget(0, m_treeWidget);
-    m_mainSplitter->insertWidget(1, m_mainTabWidget);
-    m_mainSplitter->setCollapsible(0, false);
-    m_mainSplitter->setCollapsible(1, false);
-    m_mainSplitter->setStretchFactor(0, 1);
-    m_mainSplitter->setStretchFactor(1, 3);
+    m_mainTabController = new MainTabController(ui->mainTabWidget, this);
 
-    connect(m_treeWidget, &ChannelTreeWidget::notifyItemSelected, m_mainTabController, &MainTabController::onNotifyItemSelected);
-    connect(m_treeWidget, &ChannelTreeWidget::notifyAddNewChannel, m_mainTabController, &MainTabController::onNotifyAddNewChannel);
-    connect(m_treeWidget, &ChannelTreeWidget::notifyDeleteChannel, m_mainTabController, &MainTabController::onNotifyDeleteChannel);
-    connect(m_treeWidget, &ChannelTreeWidget::notifyChangeName, m_mainTabController, &MainTabController::onNotifyChangeName);
-    connect(m_treeWidget, &ChannelTreeWidget::notifyChannelStart, m_mainTabController, &MainTabController::onNotifyChannelStart);
-    connect(m_treeWidget, &ChannelTreeWidget::notifyChannelStop, m_mainTabController, &MainTabController::onNotifyChannelStop);
-    connect(m_mainTabController, &MainTabController::currentItemChanged, m_treeWidget, &ChannelTreeWidget::onCurrentItemChanged);
-
+    connect(ui->treeWidget, &ChannelTreeWidget::notifyItemSelected, m_mainTabController, &MainTabController::onNotifyItemSelected);
+    connect(ui->treeWidget, &ChannelTreeWidget::notifyAddNewChannel, m_mainTabController, &MainTabController::onNotifyAddNewChannel);
+    connect(ui->treeWidget, &ChannelTreeWidget::notifyDeleteChannel, m_mainTabController, &MainTabController::onNotifyDeleteChannel);
+    connect(ui->treeWidget, &ChannelTreeWidget::notifyChangeName, m_mainTabController, &MainTabController::onNotifyChangeName);
+    connect(ui->treeWidget, &ChannelTreeWidget::notifyChannelStart, m_mainTabController, &MainTabController::onNotifyChannelStart);
+    connect(ui->treeWidget, &ChannelTreeWidget::notifyChannelStop, m_mainTabController, &MainTabController::onNotifyChannelStop);
+    connect(m_mainTabController, &MainTabController::currentItemChanged, ui->treeWidget, &ChannelTreeWidget::onCurrentItemChanged);
+    connect(m_mainTabController, &MainTabController::hasTabPage, this, [this](bool hasPage){
+        ui->stackedWidget->setCurrentIndex(hasPage ? static_cast<int>(StackPage::TabWidgetPage)
+                                                   : static_cast<int>(StackPage::EmptyPage));
+    });
     connect(m_saveController, &SaveController::importFinish, this, &MainWindow::onImportFinish);
 
     auto screenSize = qApp->primaryScreen()->availableSize();
@@ -58,7 +52,7 @@ MainWindow::~MainWindow()
 void MainWindow::onImportFinish(const QMultiMap<QString, SettingData *> &settingMap)
 {
     for (auto iter = settingMap.begin(); iter != settingMap.end(); iter++) {
-        auto item = m_treeWidget->addChannel(iter.key(), iter.value()->m_networkType);
+        auto item = ui->treeWidget->addChannel(iter.key(), iter.value()->m_networkType);
         m_mainTabController->onNotifyAddNewChannel(item, QSharedPointer<SettingData>(iter.value()));
     }
 }
@@ -70,6 +64,6 @@ void MainWindow::on_actionImport_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QMultiMap<QString, SettingData*> settingMap = m_mainTabWidget->getAllChildrenSetting();
+    QMultiMap<QString, SettingData*> settingMap = ui->mainTabWidget->getAllChildrenSetting();
     m_saveController->onActionSaveTriggered(settingMap);
 }

@@ -13,10 +13,9 @@
 #include "../dialog/nameddialog.h"
 #include "ui/controller/savecontroller.h"
 
-MainTabWidget::MainTabWidget(SaveController *saveCtrl, QWidget *parent)
+MainTabWidget::MainTabWidget(QWidget *parent)
     : QTabWidget(parent)
     , m_lastTabIndex(0)
-    , m_saveController(saveCtrl)
 {
     auto bar = new MainTabBar(this);
     setTabBar(bar);
@@ -25,8 +24,12 @@ MainTabWidget::MainTabWidget(SaveController *saveCtrl, QWidget *parent)
     tabBar()->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
 
     connect(this, &QTabWidget::tabCloseRequested, this, &MainTabWidget::onTabCloseRequested);
-    connect(this, &QTabWidget::tabBarClicked, this, &MainTabWidget::onTabBarClicked);
     connect(this, &QTabWidget::currentChanged, this, &MainTabWidget::onCurrentChanged);
+}
+
+MainTabWidget::~MainTabWidget()
+{
+
 }
 
 int MainTabWidget::addTab(QWidget *widget, const QString &label)
@@ -60,14 +63,9 @@ void MainTabWidget::changeTabName(QWidget *widget, const QString &name)
     setTabText(indexOf(widget), name);
 }
 
-void MainTabWidget::backToBeforeIndex(bool isBack)
+void MainTabWidget::setSaveController(SaveController *saveCtrl)
 {
-    if (isBack) {
-        setCurrentIndex(m_opendIndex);
-    }
-    else {
-        m_opendIndex = currentIndex();
-    }
+    m_saveController = saveCtrl;
 }
 
 QMultiMap<QString, SettingData *> MainTabWidget::getAllChildrenSetting()
@@ -94,49 +92,5 @@ void MainTabWidget::onCurrentChanged(int index)
 {
     auto widget = this->widget(index);
     emit currentTabChanged(widget);
-}
-
-void MainTabWidget::onTabBarClicked(int index)
-{
-    m_opendIndex = index;
-}
-
-void MainTabWidget::onDivideTab()
-{
-    auto widget = this->widget(m_contenxtIndex);
-    const auto tabName = tabText(m_contenxtIndex);
-    removeTab(m_contenxtIndex);
-    widget->setParent(nullptr);
-    widget->setWindowTitle(tabName);
-    widget->setGeometry(200, 200, 260, 360);
-    widget->show();
-    m_lastTabIndex--;
-}
-
-void MainTabWidget::showContextMenu(int tabIndex)
-{
-    QMenu menu;
-    m_contenxtIndex = tabIndex;
-    connect(menu.addAction(tr("Change Name")), &QAction::triggered, this, [=]{
-        NamedDialog dlg(this->tabText(tabIndex));
-        if (dlg.exec() == QDialog::Accepted) {
-            this->setTabText(tabIndex, dlg.getNameString());
-            qobject_cast<TabPage*>(this->widget(tabIndex))->setPageName(dlg.getNameString());
-        }
-    });
-    connect(menu.addAction(tr("Save")), &QAction::triggered, this, [=]{
-
-        auto tab = qobject_cast<TabPage*>(this->widget(tabIndex));
-        tab->resetSettingData();
-        QMultiMap<QString, SettingData *> settingMap;
-        settingMap.insert(tab->getPageName(), tab->getSettingData());
-        m_saveController->onActionSaveTriggered(settingMap);
-    });
-    connect(menu.addAction(tr("Split")), &QAction::triggered, this, &MainTabWidget::onDivideTab);
-
-    connect(menu.addAction(tr("Close")), &QAction::triggered, this, [this, tabIndex]{
-        emit this->tabCloseRequested(tabIndex);
-    });
-    menu.exec(QCursor::pos());
 }
 

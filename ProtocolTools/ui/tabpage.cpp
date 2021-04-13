@@ -43,8 +43,7 @@ TabPage::~TabPage()
 
 void TabPage::initWidget()
 {
-    ui->splitter->setCollapsible(0, false);
-    ui->splitter->setCollapsible(1, false);
+    ui->splitter->setChildrenCollapsible(false);
     ui->splitter->setStretchFactor(0, 1);
     ui->splitter->setStretchFactor(1, 3);
     auto* intValid = new QIntValidator(0, 65535);

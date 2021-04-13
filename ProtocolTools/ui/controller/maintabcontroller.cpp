@@ -25,6 +25,7 @@ void MainTabController::onNotifyAddNewChannel(QTreeWidgetItem *item, const QShar
     auto newPage = new TabPage(settingData, item->text(0));
     m_widget->addTab(newPage, item->icon(0), item->text(0));
     m_itemWidgetMap.insert(item, newPage);
+    emit hasTabPage(!m_itemWidgetMap.isEmpty());
 }
 
 void MainTabController::onNotifyDeleteChannel(QTreeWidgetItem *item)
@@ -33,6 +34,7 @@ void MainTabController::onNotifyDeleteChannel(QTreeWidgetItem *item)
     m_itemWidgetMap.remove(item);
     qobject_cast<TabPage*>(widget)->stopCommunication();
     m_widget->removeTabByWidget(widget);
+    emit hasTabPage(!m_itemWidgetMap.isEmpty());
 }
 
 void MainTabController::onNotifyChangeName(QTreeWidgetItem *item)

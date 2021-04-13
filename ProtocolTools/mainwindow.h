@@ -15,6 +15,10 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+    enum class StackPage{
+        EmptyPage = 0,
+        TabWidgetPage
+    };
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
@@ -33,9 +37,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    ChannelTreeWidget* m_treeWidget;
-    QSplitter* m_mainSplitter;
-    MainTabWidget* m_mainTabWidget;
 
     SaveController* m_saveController;
     MainTabController* m_mainTabController;

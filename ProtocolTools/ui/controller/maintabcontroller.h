@@ -16,8 +16,9 @@ public:
     ~MainTabController() override;
 
 signals:
-
     void currentItemChanged(QTreeWidgetItem* item);
+
+    void hasTabPage(bool hasPage);
 
 public slots:
     void onNotifyItemSelected(QTreeWidgetItem* item);
