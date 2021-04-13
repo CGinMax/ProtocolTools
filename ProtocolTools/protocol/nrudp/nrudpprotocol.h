@@ -5,7 +5,6 @@
 #include <QSharedPointer>
 #include "nrudpframe.h"
 #include "../protocolbase.h"
-#include "../../enums.h"
 
 class NrUdpProtocol : public ProtocolBase
 {

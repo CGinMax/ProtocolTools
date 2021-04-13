@@ -2,7 +2,7 @@
 #define SAVECONTROLLER_H
 
 #include <QObject>
-#include "ptcfg.h"
+#include "../../common/ptcfg.h"
 
 class SaveController : public QObject
 {

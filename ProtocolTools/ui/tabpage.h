@@ -15,7 +15,7 @@ class TabPage : public QWidget
 
 public:
     explicit TabPage(const QString& name = tr("Default Page"), QWidget *parent = nullptr);
-    explicit TabPage(QSharedPointer<SettingData> settingData, const QString& name = tr("Default Page"), QWidget *parent = nullptr);
+    explicit TabPage(const QSharedPointer<SettingData>& settingData, const QString& name, QWidget *parent = nullptr);
     ~TabPage() override;
     void initWidget();
 
@@ -35,7 +35,6 @@ public:
 signals:
     void updateData();
 private slots:
-    void on_cbbNetworkType_currentIndexChanged(int index);
 
     void on_btnStart_clicked();
 
@@ -49,6 +48,7 @@ private:
     QScopedPointer<ClientPage> m_clientPage;
     QScopedPointer<UdpPage> m_udpPage;
     QString m_pageName;
+    eNetworkType m_networkType;
     Ui::TabPage *ui;
 };
 

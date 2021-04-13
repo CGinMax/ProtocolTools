@@ -2,7 +2,6 @@
 #define CLIENTPAGE_H
 
 #include <QWidget>
-#include "../enums.h"
 #include "../common/threadpool.h"
 #include "../protocol/protocolbase.h"
 #include "../network/networkbase.h"

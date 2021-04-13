@@ -54,8 +54,9 @@ void ChannelTreeWidget::initMenuAction()
         NamedDialog dlg(defaultName);
         if (dlg.exec() == QDialog::Accepted) {
             auto item = new QTreeWidgetItem(m_currentPopupItem, {dlg.getNameString()});
-            item->setIcon(0, createNetworkIcon(selectNetworkType(m_currentPopupItem)));
-            QSharedPointer<SettingData> settingData(new SettingData());
+            auto networkType = selectNetworkType(m_currentPopupItem);
+            item->setIcon(0, createNetworkIcon(networkType));
+            QSharedPointer<SettingData> settingData(new SettingData(networkType));
             emit notifyAddNewChannel(item, settingData);
 
             pageNum++;

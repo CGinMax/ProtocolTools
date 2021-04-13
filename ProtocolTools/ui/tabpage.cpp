@@ -4,7 +4,6 @@
 #include <QIntValidator>
 #include <QButtonGroup>
 #include <QMessageBox>
-#include "../enums.h"
 #include "cdtsettingdlg.h"
 #include "../common/threadpool.h"
 
@@ -23,7 +22,7 @@ TabPage::TabPage(const QString& name, QWidget *parent)
 
 }
 
-TabPage::TabPage(QSharedPointer<SettingData> settingData, const QString& name, QWidget *parent)
+TabPage::TabPage(const QSharedPointer<SettingData> &settingData, const QString& name, QWidget *parent)
     : QWidget(parent)
     , m_settingData(settingData)
     , m_serverPage(new ServerPage(settingData, this))
@@ -59,7 +58,6 @@ void TabPage::initWidget()
     ui->editReomtePort->setText(QString::number(m_settingData->m_remotePort));
     ui->editRemoteIp->setValidator(regValid);
     ui->editReomtePort->setValidator(intValid);
-    ui->cbbNetworkType->setCurrentIndex(m_settingData->m_networkType);
     ui->cbbStationType->setCurrentIndex(m_settingData->m_stationType);
 
     auto btnGroup = new QButtonGroup(this);
@@ -83,7 +81,6 @@ void TabPage::resetSettingData()
     m_settingData->m_port = ui->editPort->text().toInt();
     m_settingData->m_remoteIp = ui->editRemoteIp->text();
     m_settingData->m_remotePort = ui->editReomtePort->text().toInt();
-    m_settingData->m_networkType = eNetworkType(ui->cbbNetworkType->currentIndex());
     m_settingData->m_stationType = eStationType(ui->cbbStationType->currentIndex());
 
 }
@@ -120,16 +117,11 @@ QString TabPage::getPageName() const
     return m_pageName;
 }
 
-void TabPage::on_cbbNetworkType_currentIndexChanged(int index)
-{
-    ui->stackedWidget->setCurrentIndex(index);
-}
-
 void TabPage::on_btnStart_clicked()
 {
     bool success = false;
     resetSettingData();
-    switch (ui->cbbNetworkType->currentIndex()) {
+    switch (m_settingData->m_networkType) {
     case eNetworkType::eTcpServer:
     {
         success = m_serverPage->start();
@@ -143,6 +135,9 @@ void TabPage::on_btnStart_clicked()
         break;
     case eNetworkType::eSerialPort:
         break;
+
+    default:
+        break;
     }
     if (!success) {
         QMessageBox::critical(this, tr("错误"), tr("打开通讯端口失败"), QMessageBox::Ok, QMessageBox::Cancel);
@@ -154,7 +149,7 @@ void TabPage::on_btnStart_clicked()
 
 void TabPage::on_btnStop_clicked()
 {
-    switch (ui->cbbNetworkType->currentIndex()) {
+    switch (m_settingData->m_networkType) {
     case eNetworkType::eTcpServer:
         m_serverPage->stop();
         break;
@@ -165,6 +160,9 @@ void TabPage::on_btnStop_clicked()
         m_udpPage->stop();
         break;
     case eNetworkType::eSerialPort:
+        break;
+
+    default:
         break;
     }
     setConfigureWidgetEnabled(true);

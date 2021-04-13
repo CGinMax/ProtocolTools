@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QAbstractTableModel>
-#include "didata.h"
+#include "../../common/didata.h"
 
 QT_FORWARD_DECLARE_CLASS(DiData);
 

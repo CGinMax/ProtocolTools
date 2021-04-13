@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-#include "../enums.h"
 #include "../common/threadpool.h"
 #include "../protocol/protocolbase.h"
 #include "../network/networkbase.h"

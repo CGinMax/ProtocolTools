@@ -1,5 +1,4 @@
 #include "aitablemodel.h"
-#include "aidata.h"
 #include <QRandomGenerator>
 
 AiTableModel::AiTableModel(const QStringList &headers, QObject *parent)

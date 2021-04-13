@@ -6,7 +6,6 @@
 #include "../cdtframe.h"
 #include "../protocolbase.h"
 #include "../../network/networkbase.h"
-#include "../../enums.h"
 
 class CDTProtocol : public ProtocolBase
 {

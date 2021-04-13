@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QAbstractTableModel>
-#include "../../common/ptcfg.h"
+#include "../../common/aidata.h"
 
 QT_FORWARD_DECLARE_CLASS(AiData);
 class AiTableModel : public QAbstractTableModel

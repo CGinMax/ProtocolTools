@@ -2,7 +2,7 @@
 #define MAINTABWIDGET_H
 
 #include <QTabWidget>
-#include "../../common/savecontroller.h"
+#include "../controller/savecontroller.h"
 
 class TabPage;
 

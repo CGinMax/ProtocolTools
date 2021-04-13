@@ -1,13 +1,13 @@
 #ifndef PTCFG_H
 #define PTCFG_H
 
-#include "../enums.h"
+#include "enums.h"
 #include <QSharedPointer>
 #include <QPointer>
 #include <QList>
 #include <QMap>
-#include "../ui/tables/aidata.h"
-#include "../ui/tables/didata.h"
+#include "aidata.h"
+#include "didata.h"
 
 class PtCfg
 {
@@ -88,15 +88,17 @@ private:
     QMap<int, DiData*> m_vdiMap;
 };
 
-struct SettingData{
-
-    SettingData()
-        : m_ptCfg(new PtCfg)
+class SettingData{
+public:
+    explicit SettingData(eNetworkType type = eNetworkType::eTcpServer)
+        : m_networkType(type)
+        , m_ptCfg(new PtCfg)
     {}
 
     void save(QDataStream& dataStream);
 
     void load(QDataStream& dataStream);
+
     QString m_ip{QLatin1String("127.0.0.1")};
     int m_port{2404};
     QString m_remoteIp{QLatin1String("127.0.0.1")};
