@@ -2,4 +2,4 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     ProtocolTools \
-#    test\
+    test\
