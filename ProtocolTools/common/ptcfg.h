@@ -102,7 +102,7 @@ public:
     QString m_ip{QLatin1String("127.0.0.1")};
     int m_port{2404};
     QString m_remoteIp{QLatin1String("127.0.0.1")};
-    int m_remotePort{8080};
+    int m_remotePort{2404};
     eNetworkType m_networkType{eNetworkType::eTcpServer};
     eStationType m_stationType{eStationType::Minitor};
     QSharedPointer<PtCfg> m_ptCfg;

@@ -9,7 +9,6 @@ UdpSocket::UdpSocket(QObject *parent)
 {
     setParent(parent);
     connect(m_socket.data(), &QUdpSocket::disconnected, this, &UdpSocket::disconnected);
-//    connect(m_socket.data(), &QUdpSocket::readyRead, this, &NetworkBase::readyRead);
     connect(m_socket.data(), &QUdpSocket::readyRead, this, &UdpSocket::onReadyRead);
 }
 
@@ -21,11 +20,11 @@ bool UdpSocket::open()
 //    }
 }
 
-bool UdpSocket::open(const QString &ip, ushort port)
+bool UdpSocket::open(const PortParam &param)
 {
-    m_localAddress = QHostAddress(ip);
-    m_localPort = port;
-    return m_socket->bind(QHostAddress(ip), port, QUdpSocket::ShareAddress);
+    m_localAddress = QHostAddress(param.m_ip);
+    m_localPort = param.m_port;
+    return m_socket->bind(m_localAddress, m_localPort, QUdpSocket::ShareAddress);
 }
 
 void UdpSocket::close()

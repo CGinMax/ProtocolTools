@@ -6,18 +6,18 @@ TcpClient::TcpClient(const QString &ip, ushort port, QObject *parent)
     , m_socket(new QTcpSocket(this))
 {
     setParent(parent);
-    connect(m_socket.get(), &QTcpSocket::connected, this, &TcpClient::connected);
-    connect(m_socket.get(), &QTcpSocket::disconnected, this, &TcpClient::disconnected);
-    connect(m_socket.get(), &QTcpSocket::readyRead, this, &TcpClient::readyRead);
+    connect(m_socket.data(), &QTcpSocket::connected, this, &TcpClient::connected);
+    connect(m_socket.data(), &QTcpSocket::disconnected, this, &TcpClient::disconnected);
+    connect(m_socket.data(), &QTcpSocket::readyRead, this, &TcpClient::readyRead);
 }
 
 TcpClient::TcpClient(QObject *parent)
     : m_socket(new QTcpSocket(this))
 {
     setParent(parent);
-    connect(m_socket.get(), &QTcpSocket::connected, this, &TcpClient::connected);
-    connect(m_socket.get(), &QTcpSocket::disconnected, this, &TcpClient::disconnected);
-    connect(m_socket.get(), &QTcpSocket::readyRead, this, &TcpClient::readyRead);
+    connect(m_socket.data(), &QTcpSocket::connected, this, &TcpClient::connected);
+    connect(m_socket.data(), &QTcpSocket::disconnected, this, &TcpClient::disconnected);
+    connect(m_socket.data(), &QTcpSocket::readyRead, this, &TcpClient::readyRead);
 }
 
 TcpClient::~TcpClient()
@@ -34,12 +34,12 @@ bool TcpClient::open()
     return m_socket->waitForConnected(100);
 }
 
-bool TcpClient::open(const QString &ip, ushort port)
+bool TcpClient::open(const PortParam &param)
 {
     if (isActived()) {
         return true;
     }
-    m_socket->connectToHost(ip, port);
+    m_socket->connectToHost(param.m_ip, param.m_port);
     return m_socket->waitForConnected(100);
 }
 

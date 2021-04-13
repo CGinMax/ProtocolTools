@@ -29,10 +29,9 @@ bool TcpServer::open()
 
 }
 
-bool TcpServer::open(const QString &ip, ushort port)
+bool TcpServer::open(const PortParam &param)
 {
-    Q_UNUSED(ip)
-    Q_UNUSED(port)
+    Q_UNUSED(param)
     return true;
 }
 

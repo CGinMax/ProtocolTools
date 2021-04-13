@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->splitter->setChildrenCollapsible(false);
     ui->splitter->setStretchFactor(0, 1);
-    ui->splitter->setStretchFactor(1, 7);
+    ui->splitter->setStretchFactor(1, 10);
 
     qRegisterMetaType<QMultiMap<QString, SettingData*>>("const QMultiMap<QString, SettingData*>&");
 

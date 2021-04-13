@@ -18,7 +18,7 @@ public:
     // NetworkBase interface
 public:
     bool open() override;
-    bool open(const QString& ip, ushort port) override;
+    bool open(const PortParam& param) override;
     void close() override;
     bool write(const char* data, int size) override;
     bool write(const QByteArray& data) override;

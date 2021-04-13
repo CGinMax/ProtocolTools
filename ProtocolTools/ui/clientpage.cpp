@@ -22,7 +22,7 @@ ClientPage::~ClientPage()
 bool ClientPage::start()
 {
     if (!m_settingData.isNull()) {
-        if (m_tcpClient->open(m_settingData->m_remoteIp, m_settingData->m_remotePort)) {
+        if (m_tcpClient->open(PortParam(m_settingData->m_remoteIp, static_cast<ushort>(m_settingData->m_remotePort)))) {
             m_centerWidget->startCommunication(m_settingData);
             return true;
         }

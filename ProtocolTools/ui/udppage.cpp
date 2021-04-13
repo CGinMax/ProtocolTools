@@ -30,7 +30,7 @@ bool UdpPage::start(const QString &localIp, int localPort, const QString &remote
 {
     auto udp = dynamic_cast<UdpSocket*>(m_udp.data());
     udp->setRemoteParam(remoteIp, remotePort);
-    udp->open(localIp, static_cast<ushort>(localPort));
+    udp->open(PortParam(localIp, static_cast<ushort>(localPort)));
     m_centerWidget->startCommunication(m_settingData);
     return true;
 
