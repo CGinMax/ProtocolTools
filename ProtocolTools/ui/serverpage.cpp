@@ -44,24 +44,23 @@ void ServerPage::initTabWidget()
 bool ServerPage::start()
 {
     if (!m_settingData.isNull()) {
-        return start(m_settingData->m_ip, m_settingData->m_port);
+        return start(m_settingData->m_portParam);
     }
-    else {
-        qInfo("settin data empty");
-        return false;
-    }
+
+    qInfo("Failed:setting data empty");
+    return false;
 }
 
-bool ServerPage::start(const QString &ip, int port)
+bool ServerPage::start(const PortParam &param)
 {
     QHostAddress address;
-    if (ip == "0.0.0.0") {
+    if (param.m_localIp == "0.0.0.0") {
         address = QHostAddress::Any;
     }
     else {
-        address = QHostAddress(ip);
+        address = QHostAddress(param.m_localIp);
     }
-    return m_tcpServer->listen(address, port);
+    return m_tcpServer->listen(address, static_cast<quint16>(param.m_localPort));
 }
 
 void ServerPage::stopListen()

@@ -1,31 +1,31 @@
-#ifndef CLIENTPAGE_H
-#define CLIENTPAGE_H
+#ifndef SERIALPORTPAGE_H
+#define SERIALPORTPAGE_H
 
 #include <QWidget>
+#include "../network/serialport.h"
 #include "../protocol/protocolbase.h"
-#include "../network/tcpclient.h"
 #include "cdtworkwidget.h"
 
 class QVBoxLayout;
-
-class ClientPage : public QWidget
+class SerialPortPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ClientPage(const QSharedPointer<SettingData> &settingData, QWidget *parent = nullptr);
-    ~ClientPage() override;
+    explicit SerialPortPage(const QSharedPointer<SettingData>& settingData, QWidget *parent = nullptr);
+    ~SerialPortPage() override;
 
     bool start();
+
     void stop();
 signals:
-    void clientDisconnected();
 
 public slots:
     void onUpdateData();
 private:
-    QSharedPointer<NetworkBase> m_tcpClient;
+    QSharedPointer<NetworkBase> m_serialPort;
     QSharedPointer<SettingData> m_settingData;
     QScopedPointer<CDTWorkWidget> m_centerWidget;
     QVBoxLayout* m_layout;
 };
-#endif // CLIENTPAGE_H
+
+#endif // SERIALPORTPAGE_H

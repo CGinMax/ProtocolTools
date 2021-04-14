@@ -1,13 +1,13 @@
 #ifndef PTCFG_H
 #define PTCFG_H
 
-#include "enums.h"
 #include <QSharedPointer>
-#include <QPointer>
 #include <QList>
 #include <QMap>
+#include "enums.h"
 #include "aidata.h"
 #include "didata.h"
+#include "portparam.h"
 
 class PtCfg
 {
@@ -99,10 +99,7 @@ public:
 
     void load(QDataStream& dataStream);
 
-    QString m_ip{QLatin1String("127.0.0.1")};
-    int m_port{2404};
-    QString m_remoteIp{QLatin1String("127.0.0.1")};
-    int m_remotePort{2404};
+    PortParam m_portParam;
     eNetworkType m_networkType{eNetworkType::eTcpServer};
     eStationType m_stationType{eStationType::Minitor};
     QSharedPointer<PtCfg> m_ptCfg;

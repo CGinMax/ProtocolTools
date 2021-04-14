@@ -18,7 +18,7 @@ public:
     ~UdpPage() override;
 
     bool start();
-    bool start(const QString& localIp, int localPort, const QString& remoteIp, int remotePort);
+    bool start(const PortParam& param);
     void stop();
 signals:
 

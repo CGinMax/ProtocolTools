@@ -39,10 +39,7 @@ HEADERS += \
 
 
 FORMS += \
-        mainwindow.ui \
-    ui/tabpage.ui \
-    ui/cdtsettingdlg.ui \
-    ui/cdtworkwidget.ui
+        mainwindow.ui
 
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug

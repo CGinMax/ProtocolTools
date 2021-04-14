@@ -19,18 +19,17 @@ UdpPage::~UdpPage()
 bool UdpPage::start()
 {
     if (!m_settingData.isNull()) {
-        return start(m_settingData->m_ip, m_settingData->m_port, m_settingData->m_remoteIp, m_settingData->m_remotePort);
+        return start(m_settingData->m_portParam);
     }
 
     qInfo("错误，设置数据为空");
     return false;
 }
 
-bool UdpPage::start(const QString &localIp, int localPort, const QString &remoteIp, int remotePort)
+bool UdpPage::start(const PortParam &param)
 {
     auto udp = dynamic_cast<UdpSocket*>(m_udp.data());
-    udp->setRemoteParam(remoteIp, remotePort);
-    udp->open(PortParam(localIp, static_cast<ushort>(localPort)));
+    udp->open(param);
     m_centerWidget->startCommunication(m_settingData);
     return true;
 

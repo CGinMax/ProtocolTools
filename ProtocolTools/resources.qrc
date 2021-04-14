@@ -5,6 +5,7 @@
         <file>resources/client.png</file>
         <file>resources/server.png</file>
         <file>resources/udp.png</file>
+        <file>resources/serialport.png</file>
     </qresource>
     <qresource prefix="/">
         <file>translations/CdtTools_en.qm</file>

@@ -49,25 +49,48 @@ void TabPage::initWidget()
     auto* intValid = new QIntValidator(0, 65535);
     QRegularExpression regExp(QLatin1String("^((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})(.((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})){3}$"));
     auto* regValid = new QRegularExpressionValidator(regExp);
-    ui->editIp->setText(m_settingData->m_ip);
-    ui->editPort->setText(QString::number(m_settingData->m_port));
+    ui->editIp->setText(m_settingData->m_portParam.m_localIp);
+    ui->editPort->setText(QString::number(m_settingData->m_portParam.m_localPort));
     ui->editIp->setValidator(regValid);
     ui->editPort->setValidator(intValid);
-    ui->editRemoteIp->setText(m_settingData->m_remoteIp);
-    ui->editReomtePort->setText(QString::number(m_settingData->m_remotePort));
+    ui->editRemoteIp->setText(m_settingData->m_portParam.m_remoteIp);
+    ui->editReomtePort->setText(QString::number(m_settingData->m_portParam.m_remotePort));
     ui->editRemoteIp->setValidator(regValid);
     ui->editReomtePort->setValidator(intValid);
+
+    auto devList = QSerialPortInfo::availablePorts();
+    for (auto& devInfo : devList) {
+        ui->cbbDevList->addItem(devInfo.portName(), devInfo.portName());
+    }
+    auto baudrateList = QSerialPortInfo::standardBaudRates();
+    for (auto& baudrate : baudrateList) {
+        ui->cbbBaudRate->addItem(QString::number(baudrate), baudrate);
+    }
+    for (int i = 8; i >= 5; i--){
+        ui->cbbDataBit->addItem(QString::number(i), i);
+    }
+    ui->cbbStopBit->addItem(QString("1"), 1);
+    ui->cbbStopBit->addItem(QString("1.5"), 3);
+    ui->cbbStopBit->addItem(QString("2"), 2);
+    ui->cbbParityBit->addItem(tr("None"), 0);
+    ui->cbbParityBit->addItem(tr("Even Parity"), 2);
+    ui->cbbParityBit->addItem(tr("Odd Parity"), 3);
+    ui->cbbParityBit->addItem(tr("Space Parity"), 4);
+    ui->cbbParityBit->addItem(tr("Mark Parity"), 5);
+
     ui->cbbStationType->setCurrentIndex(m_settingData->m_stationType);
+
+    ui->paramStackedWidget->setCurrentIndex(static_cast<int>(m_settingData->m_networkType) >= 3 ? 1 : 0);
 
     auto btnGroup = new QButtonGroup(this);
     btnGroup->addButton(ui->btnStart);
     btnGroup->addButton(ui->btnStop);
     btnGroup->setExclusive(true);
 
-    ui->stackedWidget->addWidget(m_serverPage.data());
-    ui->stackedWidget->addWidget(m_clientPage.data());
-    ui->stackedWidget->addWidget(m_udpPage.data());
-    ui->stackedWidget->setCurrentIndex(m_settingData->m_networkType);
+    ui->pageStackedWidget->addWidget(m_serverPage.data());
+    ui->pageStackedWidget->addWidget(m_clientPage.data());
+    ui->pageStackedWidget->addWidget(m_udpPage.data());
+    ui->pageStackedWidget->setCurrentIndex(m_settingData->m_networkType);
     connect(this, &TabPage::updateData, m_serverPage.data(), &ServerPage::onUpdateData);
     connect(this, &TabPage::updateData, m_clientPage.data(), &ClientPage::onUpdateData);
     connect(this, &TabPage::updateData, m_udpPage.data(), &UdpPage::onUpdateData);
@@ -76,10 +99,17 @@ void TabPage::initWidget()
 
 void TabPage::resetSettingData()
 {
-    m_settingData->m_ip = ui->editIp->text();
-    m_settingData->m_port = ui->editPort->text().toInt();
-    m_settingData->m_remoteIp = ui->editRemoteIp->text();
-    m_settingData->m_remotePort = ui->editReomtePort->text().toInt();
+    m_settingData->m_portParam.m_localIp = ui->editIp->text();
+    m_settingData->m_portParam.m_localPort = ui->editPort->text().toInt();
+    m_settingData->m_portParam.m_remoteIp = ui->editRemoteIp->text();
+    m_settingData->m_portParam.m_remotePort = ui->editReomtePort->text().toInt();
+
+    m_settingData->m_portParam.m_portName = ui->cbbDevList->currentData().toString();
+    m_settingData->m_portParam.m_baudRate = ui->cbbBaudRate->currentData().toInt();
+    m_settingData->m_portParam.m_dataBits = static_cast<QSerialPort::DataBits>(ui->cbbDataBit->currentData().toInt());
+    m_settingData->m_portParam.m_stopBits = static_cast<QSerialPort::StopBits>(ui->cbbStopBit->currentData().toInt());
+    m_settingData->m_portParam.m_parity = static_cast<QSerialPort::Parity>(ui->cbbParityBit->currentData().toInt());
+
     m_settingData->m_stationType = eStationType(ui->cbbStationType->currentIndex());
 
 }
@@ -122,9 +152,7 @@ void TabPage::on_btnStart_clicked()
     resetSettingData();
     switch (m_settingData->m_networkType) {
     case eNetworkType::eTcpServer:
-    {
         success = m_serverPage->start();
-    }
         break;
     case eNetworkType::eTcpClient:
         success = m_clientPage->start();
@@ -133,13 +161,14 @@ void TabPage::on_btnStart_clicked()
         success = m_udpPage->start();
         break;
     case eNetworkType::eSerialPort:
+        success = m_serialPage->start();
         break;
 
     default:
         break;
     }
     if (!success) {
-        QMessageBox::critical(this, tr("错误"), tr("打开通讯端口失败"), QMessageBox::Ok, QMessageBox::Cancel);
+        QMessageBox::critical(this, tr("Error"), tr("Open Communication Failed!"), QMessageBox::Ok, QMessageBox::Cancel);
         return ;
     }
     setConfigureWidgetEnabled(false);
@@ -159,6 +188,7 @@ void TabPage::on_btnStop_clicked()
         m_udpPage->stop();
         break;
     case eNetworkType::eSerialPort:
+        m_serialPage->stop();
         break;
 
     default:

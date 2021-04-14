@@ -19,6 +19,7 @@ public:
     QTreeWidgetItem* tcpClientItem();
     QTreeWidgetItem* tcpServerItem();
     QTreeWidgetItem* udpItem();
+    QTreeWidgetItem* serialPortItem();
 signals:
     void notifyItemSelected(QTreeWidgetItem* item);
     void notifyAddNewChannel(QTreeWidgetItem* item, const QSharedPointer<SettingData>& settingData);
@@ -41,6 +42,7 @@ private:
     QTreeWidgetItem* m_tcpClientParent;
     QTreeWidgetItem* m_tcpServerParent;
     QTreeWidgetItem* m_udpParent;
+    QTreeWidgetItem* m_serialPortParent;
     QTreeWidgetItem* m_currentPopupItem;
     QMenu m_parentNodeMenu;
     QMenu m_childNodeMenu;

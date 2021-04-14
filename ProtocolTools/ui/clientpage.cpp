@@ -2,11 +2,11 @@
 #include <QVBoxLayout>
 #include <QHostAddress>
 
-ClientPage::ClientPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent)
+ClientPage::ClientPage(const QSharedPointer<SettingData> &settingData, QWidget *parent)
     : QWidget(parent)
     , m_tcpClient(new TcpClient())
-    , m_settingData(ptCfg)
-    , m_centerWidget(new CDTWorkWidget(m_tcpClient, ptCfg, this))
+    , m_settingData(settingData)
+    , m_centerWidget(new CDTWorkWidget(m_tcpClient, settingData, this))
 {
     m_layout = new QVBoxLayout(this);
     m_layout->addWidget(m_centerWidget.data());
@@ -22,14 +22,15 @@ ClientPage::~ClientPage()
 bool ClientPage::start()
 {
     if (!m_settingData.isNull()) {
-        if (m_tcpClient->open(PortParam(m_settingData->m_remoteIp, static_cast<ushort>(m_settingData->m_remotePort)))) {
+        if (m_tcpClient->open(m_settingData->m_portParam)) {
             m_centerWidget->startCommunication(m_settingData);
             return true;
         }
 
+        qInfo("错误，启动失败");
         return false;
     }
-    qInfo("错误，设置数据为空");
+    qInfo("错误，启动失败");
     return false;
 }
 

@@ -22,8 +22,10 @@ bool UdpSocket::open()
 
 bool UdpSocket::open(const PortParam &param)
 {
-    m_localAddress = QHostAddress(param.m_ip);
-    m_localPort = param.m_port;
+    m_localAddress = QHostAddress(param.m_localIp);
+    m_localPort = static_cast<quint16>(param.m_localPort);
+    m_remoteAddress = QHostAddress(param.m_remoteIp);
+    m_remotePort = static_cast<quint16>(param.m_remotePort);
     return m_socket->bind(m_localAddress, m_localPort, QUdpSocket::ShareAddress);
 }
 

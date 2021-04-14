@@ -39,7 +39,7 @@ bool TcpClient::open(const PortParam &param)
     if (isActived()) {
         return true;
     }
-    m_socket->connectToHost(param.m_ip, param.m_port);
+    m_socket->connectToHost(param.m_remoteIp, static_cast<quint16>(param.m_remotePort));
     return m_socket->waitForConnected(100);
 }
 

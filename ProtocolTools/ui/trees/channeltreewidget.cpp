@@ -13,26 +13,31 @@ ChannelTreeWidget::ChannelTreeWidget(QWidget *parent)
     , m_tcpClientParent(new QTreeWidgetItem(this))
     , m_tcpServerParent(new QTreeWidgetItem(this))
     , m_udpParent(new QTreeWidgetItem(this))
+    , m_serialPortParent(new QTreeWidgetItem(this))
     , m_currentPopupItem(nullptr)
 {
     m_networkIcons.append(QIcon(":/icon/resources/server.png"));
     m_networkIcons.append(QIcon(":/icon/resources/client.png"));
     m_networkIcons.append(QIcon(":/icon/resources/udp.png"));
+    m_networkIcons.append(QIcon(":/icon/resources/serialport.png"));
 
     setStyle(QStyleFactory::create(QLatin1String("Windows")));
     initMenuAction();
     m_tcpClientParent->setText(0, tr("Tcp Client"));
     m_tcpServerParent->setText(0, tr("Tcp Server"));
     m_udpParent->setText(0, tr("Udp"));
+    m_serialPortParent->setText(0, tr("Serial Port"));
 
     m_tcpClientParent->setExpanded(true);
     m_tcpServerParent->setExpanded(true);
     m_udpParent->setExpanded(true);
+    m_serialPortParent->setExpanded(true);
 
     setHeaderLabel(tr("Channel"));
     insertTopLevelItem(0, m_tcpClientParent);
     insertTopLevelItem(1, m_tcpServerParent);
     insertTopLevelItem(2, m_udpParent);
+    insertTopLevelItem(3, m_serialPortParent);
 
     setAnimated(true);
     connect(this, &QTreeWidget::itemClicked, this, &ChannelTreeWidget::onItemClicked);
@@ -100,20 +105,22 @@ QTreeWidgetItem *ChannelTreeWidget::addChannel(const QString &name, eNetworkType
     switch (type) {
     case eNetworkType::eTcpClient:
         item = new QTreeWidgetItem(m_tcpClientParent, {name});
-        item->setIcon(0, createNetworkIcon(eNetworkType::eTcpClient));
         break;
     case eNetworkType::eTcpServer:
         item = new QTreeWidgetItem(m_tcpServerParent, {name});
-        item->setIcon(0, createNetworkIcon(eNetworkType::eTcpServer));
         break;
     case eNetworkType::eUdp:
         item = new QTreeWidgetItem(m_udpParent, {name});
-        item->setIcon(0, createNetworkIcon(eNetworkType::eUdp));
+        break;
+    case eNetworkType::eSerialPort:
+        item = new QTreeWidgetItem(m_serialPortParent, {name});
         break;
     default:
         break;
     }
-
+    if (item != nullptr) {
+        item->setIcon(0, createNetworkIcon(type));
+    }
     return item;
 }
 
@@ -132,6 +139,11 @@ QTreeWidgetItem *ChannelTreeWidget::udpItem()
     return m_udpParent;
 }
 
+QTreeWidgetItem *ChannelTreeWidget::serialPortItem()
+{
+    return m_serialPortParent;
+}
+
 void ChannelTreeWidget::onCurrentItemChanged(QTreeWidgetItem *item)
 {
     this->setCurrentItem(item);
@@ -141,7 +153,8 @@ void ChannelTreeWidget::onItemClicked(QTreeWidgetItem *item)
 {
     if (item == m_tcpClientParent
        || item == m_tcpServerParent
-       || item == m_udpParent) {
+       || item == m_udpParent
+       || item == m_serialPortParent) {
         return ;
     }
 
@@ -158,7 +171,8 @@ void ChannelTreeWidget::onCustomContextMenuRequested(const QPoint &pos)
     m_currentPopupItem = popupItem;
     if (popupItem == m_tcpClientParent
        || popupItem == m_tcpServerParent
-       || popupItem == m_udpParent) {
+       || popupItem == m_udpParent
+       || popupItem == m_serialPortParent) {
         // 显示菜单
 
         m_parentNodeMenu.exec(QCursor::pos());
@@ -176,7 +190,10 @@ eNetworkType ChannelTreeWidget::selectNetworkType(QTreeWidgetItem *item)
         return eNetworkType::eTcpServer;
     } else if (item == m_udpParent) {
         return eNetworkType::eUdp;
-    } else {
+    } else if (item == m_serialPortParent) {
+        return eNetworkType::eSerialPort;
+    }
+    else {
         return eNetworkType::eErrorNetworkType;
     }
 }

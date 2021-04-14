@@ -2,23 +2,7 @@
 #define NETWORKBASE_H
 
 #include <QObject>
-#include <QSerialPort>
-struct PortParam{
-    PortParam();
-    PortParam(const QString& ip, ushort port);
-    PortParam(const QString& portName, int baudRate, QSerialPort::DataBits dataBits
-              , QSerialPort::StopBits stopBits, QSerialPort::Parity parity);
-    // network
-    QString m_ip{QString()};
-    ushort m_port{2404};
-
-    // serial port
-    QString m_portName{QString()};
-    int m_baudRate{9600};
-    QSerialPort::DataBits m_dataBits{QSerialPort::Data8};
-    QSerialPort::StopBits m_stopBits{QSerialPort::OneStop};
-    QSerialPort::Parity m_parity{QSerialPort::NoParity};
-};
+#include "../common/portparam.h"
 
 class NetworkBase : public QObject
 {

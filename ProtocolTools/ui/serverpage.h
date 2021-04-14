@@ -19,7 +19,7 @@ public:
     void initTabWidget();
 
     bool start();
-    bool start(const QString& ip, int port);
+    bool start(const PortParam& param);
 
     void stopListen();
     void stop();

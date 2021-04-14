@@ -22,7 +22,8 @@ SOURCES += \
     $$PWD/tables/diheaderview.cpp \
     $$PWD/dialog/nameddialog.cpp \
     $$PWD/controller/savecontroller.cpp \
-    $$PWD/controller/maintabcontroller.cpp
+    $$PWD/controller/maintabcontroller.cpp \
+    $$PWD/serialportpage.cpp
 
 HEADERS += \
     $$PWD/dialog/ykdialog.h \
@@ -44,4 +45,10 @@ HEADERS += \
     $$PWD/tables/diheaderview.h \
     $$PWD/dialog/nameddialog.h \
     $$PWD/controller/savecontroller.h \
-    $$PWD/controller/maintabcontroller.h
+    $$PWD/controller/maintabcontroller.h \
+    $$PWD/serialportpage.h
+
+FORMS += \
+    $$PWD/tabpage.ui \
+    $$PWD/cdtsettingdlg.ui \
+    $$PWD/cdtworkwidget.ui

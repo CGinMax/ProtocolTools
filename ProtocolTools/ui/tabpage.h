@@ -5,6 +5,7 @@
 #include "serverpage.h"
 #include "clientpage.h"
 #include "udppage.h"
+#include "serialportpage.h"
 namespace Ui {
 class TabPage;
 }
@@ -47,6 +48,7 @@ private:
     QScopedPointer<ServerPage> m_serverPage;
     QScopedPointer<ClientPage> m_clientPage;
     QScopedPointer<UdpPage> m_udpPage;
+    QScopedPointer<SerialPortPage> m_serialPage;
     QString m_pageName;
     eNetworkType m_networkType;
     Ui::TabPage *ui;

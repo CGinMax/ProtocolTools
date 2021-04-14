@@ -186,7 +186,8 @@ void PtCfg::load(QDataStream &dataStream)
 
 void SettingData::save(QDataStream &dataStream)
 {
-    dataStream << m_ip << m_port << m_remoteIp << m_remotePort << m_networkType << m_stationType;
+//    dataStream << m_portParam.m_localIp <<
+//    dataStream << m_ip << m_port << m_remoteIp << m_remotePort << m_networkType << m_stationType;
     m_ptCfg->save(dataStream);
 }
 
@@ -194,7 +195,7 @@ void SettingData::load(QDataStream &dataStream)
 {
     int networkType = 0;
     int stationType = 0;
-    dataStream >> m_ip >> m_port >> m_remoteIp >> m_remotePort >> networkType >> stationType;
+//    dataStream >> m_ip >> m_port >> m_remoteIp >> m_remotePort >> networkType >> stationType;
     m_networkType = eNetworkType(networkType);
     m_stationType = eStationType(stationType);
     m_ptCfg->load(dataStream);
