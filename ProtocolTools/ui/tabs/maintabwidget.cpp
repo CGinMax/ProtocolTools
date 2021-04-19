@@ -94,3 +94,15 @@ void MainTabWidget::onCurrentChanged(int index)
     emit currentTabChanged(widget);
 }
 
+//void MainTabWidget::onCloseAllCommunication()
+//{
+//    if (this->count() <= 0) {
+//        return;
+//    }
+
+//    for (int i = 0; i < this->count(); i++) {
+//        auto page = qobject_cast<TabPage*>(widget(i));
+//        page->stopCommunication();
+//    }
+//}
+

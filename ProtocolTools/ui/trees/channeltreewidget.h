@@ -28,8 +28,15 @@ signals:
     void notifyChannelStart(QTreeWidgetItem* item);
     void notifyChannelStop(QTreeWidgetItem* item);
 
+    void itemChangeSelect(bool isChild);
+
 public slots:
     void onCurrentItemChanged(QTreeWidgetItem* item);
+    void onStart();
+    void onStop();
+    void onStopAll();
+    void onDelete();
+    void onDeleteAllChild();
 
 private slots:
     void onItemClicked(QTreeWidgetItem* item);
@@ -38,6 +45,7 @@ private slots:
 private:
     eNetworkType selectNetworkType(QTreeWidgetItem* item);
     QIcon createNetworkIcon(eNetworkType type);
+
 private:
     QTreeWidgetItem* m_tcpClientParent;
     QTreeWidgetItem* m_tcpServerParent;

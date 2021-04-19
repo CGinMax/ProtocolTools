@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     auto customTrans = new QTranslator();
-    customTrans->load(QLatin1String(":/translations/CdtTools_zh.qm"));
+    customTrans->load(QLatin1String(":/translations/ProtocolTools_zh.qm"));
     a.installTranslator(customTrans);
 
     auto systemTrans = new QTranslator();

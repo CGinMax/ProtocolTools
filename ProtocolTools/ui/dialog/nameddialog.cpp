@@ -8,7 +8,7 @@ NamedDialog::NamedDialog(const QString &defaultName, QWidget *parent)
         m_btnOk.setEnabled(!text.isEmpty());
     });
 
-    m_label.setText("Name:");
+    m_label.setText(tr("Name:"));
     m_editName.setText(defaultName);
     m_btnOk.setText(tr("Ok"));
     m_btnCancel.setText(tr("Cancel"));

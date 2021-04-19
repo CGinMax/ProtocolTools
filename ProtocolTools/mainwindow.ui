@@ -35,7 +35,7 @@
       <widget class="ChannelTreeWidget" name="treeWidget">
        <column>
         <property name="text">
-         <string notr="true">Channel</string>
+         <string notr="true"/>
         </property>
        </column>
       </widget>

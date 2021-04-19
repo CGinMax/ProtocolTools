@@ -6,10 +6,16 @@
         <file>resources/server.png</file>
         <file>resources/udp.png</file>
         <file>resources/serialport.png</file>
+        <file>resources/close-all-icon.png</file>
+        <file>resources/close-icon.png</file>
+        <file>resources/delete-all-icon.png</file>
+        <file>resources/delete-icon.png</file>
+        <file>resources/export-icon.png</file>
+        <file>resources/import-icon.png</file>
+        <file>resources/start-icon.png</file>
     </qresource>
     <qresource prefix="/">
-        <file>translations/CdtTools_en.qm</file>
-        <file>translations/CdtTools_zh.qm</file>
         <file>translations/qt_zh_CN.qm</file>
+        <file>translations/ProtocolTools_zh.qm</file>
     </qresource>
 </RCC>

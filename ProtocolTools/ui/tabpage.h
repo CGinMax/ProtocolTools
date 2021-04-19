@@ -43,6 +43,8 @@ private slots:
 
     void on_btnSetting_clicked();
 
+    void on_chbBaudRate_toggled(bool checked);
+
 private:
     QSharedPointer<SettingData> m_settingData;
     QScopedPointer<ServerPage> m_serverPage;

@@ -13,6 +13,7 @@ TabPage::TabPage(const QString& name, QWidget *parent)
     , m_serverPage(new ServerPage(m_settingData, this))
     , m_clientPage(new ClientPage(m_settingData,this))
     , m_udpPage(new UdpPage(m_settingData, this))
+    , m_serialPage(new SerialPortPage(m_settingData, this))
     , m_pageName(name)
     , ui(new Ui::TabPage)
 
@@ -28,6 +29,7 @@ TabPage::TabPage(const QSharedPointer<SettingData> &settingData, const QString& 
     , m_serverPage(new ServerPage(settingData, this))
     , m_clientPage(new ClientPage(settingData,this))
     , m_udpPage(new UdpPage(settingData, this))
+    , m_serialPage(new SerialPortPage(m_settingData, this))
     , m_pageName(name)
     , ui(new Ui::TabPage)
 {
@@ -78,6 +80,8 @@ void TabPage::initWidget()
     ui->cbbParityBit->addItem(tr("Space Parity"), 4);
     ui->cbbParityBit->addItem(tr("Mark Parity"), 5);
 
+    ui->cbbBaudRate->setCurrentText(QLatin1String("9600"));
+
     ui->cbbStationType->setCurrentIndex(m_settingData->m_stationType);
 
     ui->paramStackedWidget->setCurrentIndex(static_cast<int>(m_settingData->m_networkType) >= 3 ? 1 : 0);
@@ -90,10 +94,12 @@ void TabPage::initWidget()
     ui->pageStackedWidget->addWidget(m_serverPage.data());
     ui->pageStackedWidget->addWidget(m_clientPage.data());
     ui->pageStackedWidget->addWidget(m_udpPage.data());
+    ui->pageStackedWidget->addWidget(m_serialPage.data());
     ui->pageStackedWidget->setCurrentIndex(m_settingData->m_networkType);
     connect(this, &TabPage::updateData, m_serverPage.data(), &ServerPage::onUpdateData);
     connect(this, &TabPage::updateData, m_clientPage.data(), &ClientPage::onUpdateData);
     connect(this, &TabPage::updateData, m_udpPage.data(), &UdpPage::onUpdateData);
+    connect(this, &TabPage::updateData, m_serialPage.data(), &SerialPortPage::onUpdateData);
     connect(m_clientPage.data(), &ClientPage::clientDisconnected, this, &TabPage::on_btnStop_clicked);
 }
 
@@ -202,4 +208,9 @@ void TabPage::on_btnSetting_clicked()
     CDTSettingDlg dlg(m_settingData->m_ptCfg, this);
     dlg.exec();
     emit updateData();
+}
+
+void TabPage::on_chbBaudRate_toggled(bool checked)
+{
+    ui->cbbBaudRate->setEditable(checked);
 }

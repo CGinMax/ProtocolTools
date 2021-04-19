@@ -33,7 +33,6 @@ ChannelTreeWidget::ChannelTreeWidget(QWidget *parent)
     m_udpParent->setExpanded(true);
     m_serialPortParent->setExpanded(true);
 
-    setHeaderLabel(tr("Channel"));
     insertTopLevelItem(0, m_tcpClientParent);
     insertTopLevelItem(1, m_tcpServerParent);
     insertTopLevelItem(2, m_udpParent);
@@ -44,6 +43,7 @@ ChannelTreeWidget::ChannelTreeWidget(QWidget *parent)
 
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, &QWidget::customContextMenuRequested, this, &ChannelTreeWidget::onCustomContextMenuRequested);
+    setCurrentItem(m_tcpClientParent);
 }
 
 ChannelTreeWidget::~ChannelTreeWidget()
@@ -67,15 +67,7 @@ void ChannelTreeWidget::initMenuAction()
             pageNum++;
         }
     });
-    m_parentNodeMenu.addAction(tr("Delete Child Channel"), [this]{
-        auto childrenChannel = m_currentPopupItem->takeChildren();
-        if (childrenChannel.isEmpty()) {
-            return;
-        }
-        for (auto& child : childrenChannel) {
-            emit notifyDeleteChannel(child);
-        }
-    });
+    m_parentNodeMenu.addAction(tr("Delete Child Channel"), this, &ChannelTreeWidget::onDeleteAllChild);
 
     m_childNodeMenu.addAction(tr("Change Name"), [this]{
         NamedDialog dlg(m_currentPopupItem->text(0));
@@ -84,19 +76,9 @@ void ChannelTreeWidget::initMenuAction()
             emit notifyChangeName(m_currentPopupItem);
         }
     });
-    m_childNodeMenu.addAction(tr("Start"), [this]{
-        emit notifyChannelStart(m_currentPopupItem);
-    });
-    m_childNodeMenu.addAction(tr("Stop"), [this]{
-        emit notifyChannelStop(m_currentPopupItem);
-    });
-    m_childNodeMenu.addAction(tr("Delete"), [this]{
-        emit notifyDeleteChannel(m_currentPopupItem);
-        auto parentItem = m_currentPopupItem->parent();
-        parentItem->removeChild(m_currentPopupItem);
-        m_currentPopupItem = parentItem;
-        this->setCurrentItem(m_currentPopupItem);
-    });
+    m_childNodeMenu.addAction(tr("Start"), this, &ChannelTreeWidget::onStart);
+    m_childNodeMenu.addAction(tr("Stop"), this, &ChannelTreeWidget::onStop);
+    m_childNodeMenu.addAction(tr("Delete"), this, &ChannelTreeWidget::onDelete);
 }
 
 QTreeWidgetItem *ChannelTreeWidget::addChannel(const QString &name, eNetworkType type)
@@ -149,16 +131,57 @@ void ChannelTreeWidget::onCurrentItemChanged(QTreeWidgetItem *item)
     this->setCurrentItem(item);
 }
 
+void ChannelTreeWidget::onStart()
+{
+    emit notifyChannelStart(m_currentPopupItem);
+}
+
+void ChannelTreeWidget::onStop()
+{
+    emit notifyChannelStop(m_currentPopupItem);
+}
+
+void ChannelTreeWidget::onStopAll()
+{
+    for (int i = 0; i < m_currentPopupItem->childCount(); i++) {
+        emit notifyChannelStop(m_currentPopupItem->child(i));
+    }
+}
+
+void ChannelTreeWidget::onDelete()
+{
+    emit notifyDeleteChannel(m_currentPopupItem);
+    auto parentItem = m_currentPopupItem->parent();
+    parentItem->removeChild(m_currentPopupItem);
+    m_currentPopupItem = parentItem;
+    this->setCurrentItem(m_currentPopupItem);
+}
+
+void ChannelTreeWidget::onDeleteAllChild()
+{
+    auto childrenChannel = m_currentPopupItem->takeChildren();
+    if (childrenChannel.isEmpty()) {
+        return;
+    }
+    for (auto& child : childrenChannel) {
+        emit notifyDeleteChannel(child);
+    }
+}
+
 void ChannelTreeWidget::onItemClicked(QTreeWidgetItem *item)
 {
+    m_currentPopupItem = item;
     if (item == m_tcpClientParent
        || item == m_tcpServerParent
        || item == m_udpParent
        || item == m_serialPortParent) {
+        emit itemChangeSelect(false);
         return ;
     }
 
     emit notifyItemSelected(item);
+    emit itemChangeSelect(true);
+
 }
 
 void ChannelTreeWidget::onCustomContextMenuRequested(const QPoint &pos)

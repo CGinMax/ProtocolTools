@@ -16,15 +16,24 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
+    m_mainTabController = new MainTabController(ui->mainTabWidget, this);
+
     ui->splitter->setChildrenCollapsible(false);
     ui->splitter->setStretchFactor(0, 1);
     ui->splitter->setStretchFactor(1, 10);
+    ui->treeWidget->setHeaderLabel(tr("Channel"));
+    ui->mainToolBar->addAction(QIcon(":/icon/resources/export-icon.png"), tr("Save"), this, &MainWindow::on_actionSave_triggered);
+    ui->mainToolBar->addAction(QIcon(":/icon/resources/import-icon.png"), tr("Import"), this, &MainWindow::on_actionImport_triggered);
+    ui->mainToolBar->addSeparator();
+    m_start = ui->mainToolBar->addAction(QIcon(":/icon/resources/start-icon.png"),tr("Start"), ui->treeWidget, &ChannelTreeWidget::onStart);
+    m_close = ui->mainToolBar->addAction(QIcon(":/icon/resources/close-icon.png"), tr("Close"), ui->treeWidget, &ChannelTreeWidget::onStop);
+    m_closeAll =  ui->mainToolBar->addAction(QIcon(":/icon/resources/close-all-icon.png"), tr("Close All"), ui->treeWidget, &ChannelTreeWidget::onStopAll);
+    m_delete = ui->mainToolBar->addAction(QIcon(":/icon/resources/delete-icon.png"), tr("Delete"), ui->treeWidget, &ChannelTreeWidget::onDelete);
+    m_deleteAll = ui->mainToolBar->addAction(QIcon(":/icon/resources/delete-all-icon.png"), tr("Delete All"), ui->treeWidget, &ChannelTreeWidget::onDeleteAllChild);
 
     qRegisterMetaType<QMultiMap<QString, SettingData*>>("const QMultiMap<QString, SettingData*>&");
 
-
-    m_mainTabController = new MainTabController(ui->mainTabWidget, this);
-
+    connect(ui->treeWidget, &ChannelTreeWidget::itemChangeSelect, this, &MainWindow::onItemChangeSelect);
     connect(ui->treeWidget, &ChannelTreeWidget::notifyItemSelected, m_mainTabController, &MainTabController::onNotifyItemSelected);
     connect(ui->treeWidget, &ChannelTreeWidget::notifyAddNewChannel, m_mainTabController, &MainTabController::onNotifyAddNewChannel);
     connect(ui->treeWidget, &ChannelTreeWidget::notifyDeleteChannel, m_mainTabController, &MainTabController::onNotifyDeleteChannel);
@@ -37,6 +46,8 @@ MainWindow::MainWindow(QWidget *parent)
                                                    : static_cast<int>(StackPage::EmptyPage));
     });
     connect(m_saveController, &SaveController::importFinish, this, &MainWindow::onImportFinish);
+
+    onItemChangeSelect(false);
 
     auto screenSize = qApp->primaryScreen()->availableSize();
     setGeometry((screenSize.width() - width()) / 2, (screenSize.height() - height()) / 2, width(), height());
@@ -54,6 +65,18 @@ void MainWindow::onImportFinish(const QMultiMap<QString, SettingData *> &setting
     for (auto iter = settingMap.begin(); iter != settingMap.end(); iter++) {
         auto item = ui->treeWidget->addChannel(iter.key(), iter.value()->m_networkType);
         m_mainTabController->onNotifyAddNewChannel(item, QSharedPointer<SettingData>(iter.value()));
+    }
+}
+
+void MainWindow::onItemChangeSelect(bool isChild)
+{
+
+    m_start->setEnabled(isChild);
+    m_close->setEnabled(isChild);
+    m_delete->setEnabled(isChild);
+    m_closeAll->setEnabled(!isChild);
+    m_deleteAll->setEnabled(!isChild);
+    if (isChild) {
     }
 }
 

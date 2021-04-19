@@ -26,6 +26,7 @@ signals:
 public slots:
     void onTabCloseRequested(int index);
     void onCurrentChanged(int index);
+//    void onCloseAllCommunication();
 private:
 
 private:
