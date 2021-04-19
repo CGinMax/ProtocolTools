@@ -2,22 +2,17 @@
 #define PORTPARAM_H
 
 #include <QSerialPort>
+#include <QDataStream>
+
 struct PortParam{
     PortParam() = default;
-    PortParam(const QString& localIp, int localPort, const QString& remoteIp, int remotePort)
-        : m_localIp(localIp)
-        , m_localPort(localPort)
-        , m_remoteIp(remoteIp)
-        , m_remotePort(remotePort)
-    {}
+    PortParam(const QString& localIp, int localPort, const QString& remoteIp, int remotePort);
     PortParam(const QString& portName, int baudRate, QSerialPort::DataBits dataBits
-              , QSerialPort::StopBits stopBits, QSerialPort::Parity parity)
-        : m_portName(portName)
-        , m_baudRate(baudRate)
-        , m_dataBits(dataBits)
-        , m_stopBits(stopBits)
-        , m_parity(parity)
-    {}
+              , QSerialPort::StopBits stopBits, QSerialPort::Parity parity);
+
+    void save(QDataStream& dataStream);
+
+    void load(QDataStream& dataStream);
 
     // network
     QString m_localIp{QLatin1String("127.0.0.1")};

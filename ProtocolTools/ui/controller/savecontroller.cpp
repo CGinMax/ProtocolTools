@@ -43,7 +43,7 @@ QMultiMap<QString, SettingData *> SaveController::importConfig(const QString &im
         ds >> pageName;
         auto settingData = new SettingData();
         settingData->load(ds);
-        settingData->m_ptCfg->resetPoints();
+//        settingData->m_ptCfg->resetPoints();
         settingMap.insert(pageName, settingData);
     }
 

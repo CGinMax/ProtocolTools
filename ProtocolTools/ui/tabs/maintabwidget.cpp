@@ -71,7 +71,7 @@ void MainTabWidget::setSaveController(SaveController *saveCtrl)
 QMultiMap<QString, SettingData *> MainTabWidget::getAllChildrenSetting()
 {
     QMultiMap<QString, SettingData*> settingMap;
-    for (int i = 0; i < count() - 1; i++) {
+    for (int i = 0; i < count(); i++) {
         auto tab = qobject_cast<TabPage*>(this->widget(i));
         tab->resetSettingData();
         settingMap.insert(tab->getPageName(), tab->getSettingData());

@@ -277,7 +277,7 @@ QString CDTSettingDlg::getSheetFileName()
 {
     auto sysDocumentPaths = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     return QFileDialog::getOpenFileName(this, tr("Import Sheet"), sysDocumentPaths.first()
-                                        , QLatin1String("TXT(*.txt);;All Files (*.*)"));
+                                        , QLatin1String("All Files (*.*);;TXT(*.txt)"));
 
 }
 

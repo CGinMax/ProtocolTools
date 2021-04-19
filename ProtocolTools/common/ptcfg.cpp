@@ -172,6 +172,18 @@ void PtCfg::save(QDataStream &dataStream)
                << m_ycFrameType << m_ycFuncode << m_ycNum << m_ycStartIo << m_ycTime << m_isRandom
                << m_vyxFrameType << m_vyxFuncode << m_vyxNum << m_vyxStartIo << m_vyxTime
                << m_ykReqType << m_ykAckType << m_ykReqCode << m_ykAckCode << m_ykExeCode << m_ykClose << m_ykOpen << m_ykUnlock << m_ykLock;
+
+    for (int i = 0; i < m_yxNum; i++) {
+        dataStream << m_globalDiList->at(i)->io() << m_globalDiList->at(i)->name();
+    }
+
+    for (int i = 0; i < m_ycNum; i++) {
+        dataStream << m_globalAiList->at(i)->io() << m_globalAiList->at(i)->name();
+    }
+
+    for (int i = 0; i < m_vyxNum; i++) {
+        dataStream << m_globalVDiList->at(i)->io() << m_globalVDiList->at(i)->name();
+    }
 }
 
 void PtCfg::load(QDataStream &dataStream)
@@ -182,12 +194,36 @@ void PtCfg::load(QDataStream &dataStream)
                >> m_vyxFrameType >> m_vyxFuncode >> m_vyxNum >> m_vyxStartIo >> m_vyxTime
                >> m_ykReqType >> m_ykAckType >> m_ykReqCode >> m_ykAckCode >> m_ykExeCode >> m_ykClose >> m_ykOpen >> m_ykUnlock >> m_ykLock;
     m_protocol = eProtocol(protocolType);
+
+    QList<DiData> diList;
+    for (int i = 0; i < m_yxNum; i++) {
+        QString name{QString()};
+        int io = 0;
+        dataStream >> io >> name;
+        diList.append(DiData(io, name, false));
+    }
+    QList<AiData> aiList;
+    for (int i = 0; i < m_ycNum; i++) {
+        QString name{QString()};
+        int io = 0;
+        dataStream >> io >> name;
+        aiList.append(AiData(io, name, 0.0));
+    }
+    QList<DiData> vdiList;
+    for (int i = 0; i < m_vyxNum; i++) {
+        QString name{QString()};
+        int io = 0;
+        dataStream >> io >> name;
+        vdiList.append(DiData(io, name, false));
+    }
+
+    resetPoints(diList, aiList, vdiList);
 }
 
 void SettingData::save(QDataStream &dataStream)
 {
-//    dataStream << m_portParam.m_localIp <<
-//    dataStream << m_ip << m_port << m_remoteIp << m_remotePort << m_networkType << m_stationType;
+    m_portParam.save(dataStream);
+    dataStream << m_networkType << m_stationType;
     m_ptCfg->save(dataStream);
 }
 
@@ -195,7 +231,8 @@ void SettingData::load(QDataStream &dataStream)
 {
     int networkType = 0;
     int stationType = 0;
-//    dataStream >> m_ip >> m_port >> m_remoteIp >> m_remotePort >> networkType >> stationType;
+    m_portParam.load(dataStream);
+    dataStream >> networkType >> stationType;
     m_networkType = eNetworkType(networkType);
     m_stationType = eStationType(stationType);
     m_ptCfg->load(dataStream);
