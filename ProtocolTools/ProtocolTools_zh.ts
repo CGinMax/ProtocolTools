@@ -105,7 +105,7 @@
         <location filename="ui/cdtsettingdlg.ui" line="260"/>
         <location filename="ui/cdtsettingdlg.ui" line="350"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="170"/>
@@ -297,10 +297,29 @@
         <translation type="vanished">清除</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.cpp" line="245"/>
-        <location filename="ui/cdtworkwidget.cpp" line="255"/>
         <source>Clear</source>
-        <translation>清空</translation>
+        <translation type="vanished">清空</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtworkwidget.cpp" line="35"/>
+        <location filename="ui/cdtworkwidget.cpp" line="65"/>
+        <location filename="ui/cdtworkwidget.cpp" line="90"/>
+        <source>IO</source>
+        <translation>IO地址</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtworkwidget.cpp" line="35"/>
+        <location filename="ui/cdtworkwidget.cpp" line="65"/>
+        <location filename="ui/cdtworkwidget.cpp" line="90"/>
+        <source>Name</source>
+        <translation>名称</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtworkwidget.cpp" line="35"/>
+        <location filename="ui/cdtworkwidget.cpp" line="65"/>
+        <location filename="ui/cdtworkwidget.cpp" line="90"/>
+        <source>Value</source>
+        <translation>实时值</translation>
     </message>
 </context>
 <context>

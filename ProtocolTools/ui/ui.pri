@@ -23,7 +23,10 @@ SOURCES += \
     $$PWD/dialog/nameddialog.cpp \
     $$PWD/controller/savecontroller.cpp \
     $$PWD/controller/maintabcontroller.cpp \
-    $$PWD/serialportpage.cpp
+    $$PWD/serialportpage.cpp \
+    $$PWD/tables/aiheaderview.cpp \
+    $$PWD/components/switchbutton.cpp \
+    $$PWD/components/switchbutton_internal.cpp
 
 HEADERS += \
     $$PWD/dialog/ykdialog.h \
@@ -46,7 +49,11 @@ HEADERS += \
     $$PWD/dialog/nameddialog.h \
     $$PWD/controller/savecontroller.h \
     $$PWD/controller/maintabcontroller.h \
-    $$PWD/serialportpage.h
+    $$PWD/serialportpage.h \
+    $$PWD/tables/aiheaderview.h \
+    $$PWD/components/switchbutton.h \
+    $$PWD/components/switchbutton_p.h \
+    $$PWD/components/switchbutton_internal.h
 
 FORMS += \
     $$PWD/tabpage.ui \

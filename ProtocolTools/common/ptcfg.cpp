@@ -169,7 +169,7 @@ QMap<int, DiData *> PtCfg::getVDiMap()
 void PtCfg::save(QDataStream &dataStream)
 {
     dataStream << int(m_protocol) << m_controlType << m_yxFrameType << m_yxFuncode << m_yxNum << m_yxStartIo << m_yxTime
-               << m_ycFrameType << m_ycFuncode << m_ycNum << m_ycStartIo << m_ycTime << m_isRandom
+               << m_ycFrameType << m_ycFuncode << m_ycNum << m_ycStartIo << m_ycTime
                << m_vyxFrameType << m_vyxFuncode << m_vyxNum << m_vyxStartIo << m_vyxTime
                << m_ykReqType << m_ykAckType << m_ykReqCode << m_ykAckCode << m_ykExeCode << m_ykClose << m_ykOpen << m_ykUnlock << m_ykLock;
 
@@ -190,7 +190,7 @@ void PtCfg::load(QDataStream &dataStream)
 {
     int protocolType = 0;
     dataStream >> protocolType >> m_controlType >> m_yxFrameType >> m_yxFuncode >> m_yxNum >> m_yxStartIo >> m_yxTime
-               >> m_ycFrameType >> m_ycFuncode >> m_ycNum >> m_ycStartIo >> m_ycTime >> m_isRandom
+               >> m_ycFrameType >> m_ycFuncode >> m_ycNum >> m_ycStartIo >> m_ycTime
                >> m_vyxFrameType >> m_vyxFuncode >> m_vyxNum >> m_vyxStartIo >> m_vyxTime
                >> m_ykReqType >> m_ykAckType >> m_ykReqCode >> m_ykAckCode >> m_ykExeCode >> m_ykClose >> m_ykOpen >> m_ykUnlock >> m_ykLock;
     m_protocol = eProtocol(protocolType);

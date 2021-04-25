@@ -47,7 +47,7 @@ QVariant DiTableModel::data(const QModelIndex &index, int role) const
         case 1:
             return m_diDatas->at(index.row())->name();
         case 2:
-            return m_diDatas->at(index.row())->value() ? QStringLiteral("合") : QStringLiteral("分");
+            return m_diDatas->at(index.row())->value();// true ? false
         }
     }
 
@@ -63,7 +63,8 @@ bool DiTableModel::setData(const QModelIndex &index, const QVariant &value, int 
     if (role == Qt::EditRole) {
         if (index.column() == 2) {
 
-            bool offon = value.toString() == QStringLiteral("合") ? true : false;
+//            bool offon = value.toString() == QStringLiteral("合") ? true : false;
+            bool offon = value.toBool();
             m_diDatas->at(index.row())->setValue(offon);
             dataChanged(index, index);
             return true;

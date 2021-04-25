@@ -289,10 +289,10 @@ NrUdpFrame NrUdpProtocol::buildYCFrame(uint8_t cmdCode, const QMap<int, AiData *
     NrUdpFrame frame;
     frame.cmdCode = cmdCode;
     int startIo = ptMap.first()->io();
-    int aiNum = ptMap.last()->io();
-    frame.infoData.append(static_cast<uint8_t>(startIo) & 0xFF);
-    frame.infoData.append(static_cast<uint8_t>(startIo >> 8) & 0xFF);
-    for (int i = startIo; i <= aiNum; i++) {
+    int lastIo = ptMap.last()->io();
+    frame.infoData.append(static_cast<char>(startIo & 0xFF));
+    frame.infoData.append(static_cast<char>(startIo >> 8 & 0xFF));
+    for (int i = startIo; i <= lastIo; i++) {
         float ycValue = 0.0;
         if (ptMap.contains(i)) {
             ycValue = static_cast<float>(ptMap.value(i)->value());

@@ -1,5 +1,6 @@
 ﻿#include "comboboxdelegate.h"
 #include <QMessageBox>
+#include "../../components/switchbutton.h"
 
 ComboBoxDelegate::ComboBoxDelegate(QObject *parent)
     :QItemDelegate(parent)
@@ -14,27 +15,35 @@ void ComboBoxDelegate::setItems(QStringList items)
 
 QWidget* ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
 {
-    QComboBox* editor=new QComboBox(parent);
-    editor->addItems(itemList);
+    auto editor = new SwitchButton(parent);
+//    QComboBox* editor=new QComboBox(parent);
+//    editor->addItems(itemList);
     editor->installEventFilter(const_cast<ComboBoxDelegate*>(this));
-    editor->setCurrentIndex(0);
-    connect(editor, &QComboBox::currentTextChanged, this, &ComboBoxDelegate::onCurrentTextChange);
+    connect(editor, &SwitchButton::toggled, this, &ComboBoxDelegate::onToggled);
+//    editor->setCurrentIndex(0);
+//    connect(editor, &QComboBox::currentTextChanged, this, &ComboBoxDelegate::onCurrentTextChange);
     return editor;
 }
 
 void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-    QString text=index.model()->data(index,Qt::DisplayRole).toString();
-    QComboBox *comboBox=static_cast<QComboBox*>(editor);
-    int curIndex=comboBox->findText(text);
-    comboBox->setCurrentIndex(curIndex);
+    bool offOn = index.model()->data(index, Qt::DisplayRole).toBool();
+    auto btn = static_cast<SwitchButton*>(editor);
+    btn->setChecked(offOn);
+//    QString text=index.model()->data(index,Qt::DisplayRole).toString();
+//    QComboBox *comboBox=static_cast<QComboBox*>(editor);
+//    int curIndex=comboBox->findText(text);
+//    comboBox->setCurrentIndex(curIndex);
 }
 
 void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-    QComboBox* comboBox=static_cast<QComboBox*>(editor);
-    QString text=comboBox->currentText();
-    model->setData(index,text,Qt::EditRole);
+    auto btn = static_cast<SwitchButton*>(editor);
+    bool offOn = btn->isChecked();
+    model->setData(index, offOn, Qt::EditRole);
+//    QComboBox* comboBox=static_cast<QComboBox*>(editor);
+//    QString text=comboBox->currentText();
+//    model->setData(index,text,Qt::EditRole);
 }
 
 void ComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -44,9 +53,9 @@ void ComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionV
     editor->setGeometry(option.rect);
 }
 
-void ComboBoxDelegate::onCurrentTextChange(const QString &s)
+void ComboBoxDelegate::onToggled(bool toggled)
 {
-    Q_UNUSED(s)
-    emit commitData(qobject_cast<QComboBox*>(sender()));
+    Q_UNUSED(toggled)
+    emit commitData(qobject_cast<QWidget*>(sender()));
     emit delegateValueChanged();
 }

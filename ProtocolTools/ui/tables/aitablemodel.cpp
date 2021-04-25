@@ -5,6 +5,7 @@ AiTableModel::AiTableModel(const QStringList &headers, QObject *parent)
     : QAbstractTableModel(parent)
     , m_headers(headers)
     , m_aiDatas(nullptr)
+    , m_isRandom(false)
 {
 
 }
@@ -13,6 +14,7 @@ AiTableModel::AiTableModel(const QStringList &headers, QList<AiData *> *aiDatas,
     : QAbstractTableModel(parent)
     , m_headers(headers)
     , m_aiDatas(aiDatas)
+    , m_isRandom(false)
 {
 
 }
@@ -117,8 +119,16 @@ void AiTableModel::resetDatas(QList<AiData *> *aiDatas)
     endResetModel();
 }
 
+void AiTableModel::onNotifyRandom(bool isRandom)
+{
+    m_isRandom = isRandom;
+}
+
 void AiTableModel::randomNumber()
 {
+    if (!m_isRandom) {
+        return ;
+    }
     for (int i = 0; i < m_aiDatas->size(); i++) {
         m_aiDatas->at(i)->setValue(QRandomGenerator::global()->bounded(static_cast<double>(0x7FF)));
     }

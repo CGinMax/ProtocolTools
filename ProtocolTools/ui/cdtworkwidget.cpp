@@ -5,6 +5,7 @@
 #include "tables/delegates/comboboxdelegate.h"
 #include "tables/delegates/digitlimitedelegate.h"
 #include "tables/diheaderview.h"
+#include "tables/aiheaderview.h"
 #include "../protocol/standard/cdtprotocol.h"
 #include "../protocol/interacte/cdtinteracte.h"
 #include "../protocol/cycle/cdtstandard.h"
@@ -18,6 +19,8 @@
 #include <QMenu>
 #include <QThread>
 
+#include <climits>
+
 CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData, QWidget *parent)
     : QWidget(parent)
     , m_protocol(nullptr)
@@ -26,12 +29,11 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
 {
     ui->setupUi(this);
 
-//    ui->horSplitter->setCollapsible(0, false);
-//    ui->horSplitter->setCollapsible(1, false);
     ui->vecSplitter->setCollapsible(0, false);
     ui->vecSplitter->setCollapsible(1, false);
+    ui->edPtId->setRange(0, INT_MAX);
 
-    m_diModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalDiList, ui->viewDi);
+    m_diModel = new DiTableModel({tr("IO"), tr("Name"), tr("Value")}, settingData->m_ptCfg->m_globalDiList, ui->viewDi);
     auto diHorHeader = new DiHeaderView(Qt::Horizontal, ui->viewDi);
     diHorHeader->setMinimumHeight(30);
     connect(diHorHeader, &DiHeaderView::notifyAllChanged, m_diModel, &DiTableModel::onNotifyAllChanged);
@@ -48,7 +50,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     for (int i = 0; i < m_diModel->rowCount(QModelIndex()); i++) {
         ui->viewDi->openPersistentEditor(m_diModel->index(i, 2));
     }
-    connect(diDelegate, &ComboBoxDelegate::delegateValueChanged, [=](){
+    connect(diDelegate, &ComboBoxDelegate::delegateValueChanged, this, [=](){
         QString protocolString;
         if (settingData->m_ptCfg->m_protocol == eProtocol::NRUdp) {
             protocolString = Util::bytes2String(NrUdpProtocol::buildYXProtocol(settingData));
@@ -61,7 +63,11 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     });
     emit diDelegate->delegateValueChanged();
 
-    m_aiModel = new AiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalAiList, ui->viewAi);
+    m_aiModel = new AiTableModel({tr("IO"), tr("Name"), tr("Value")}, settingData->m_ptCfg->m_globalAiList, ui->viewAi);
+    auto aiHorHeader = new AiHeaderView(Qt::Horizontal, ui->viewAi);
+    aiHorHeader->setMinimumHeight(30);
+    connect(aiHorHeader, &AiHeaderView::notifyIsRandom, m_aiModel, &AiTableModel::onNotifyRandom);
+    ui->viewAi->setHorizontalHeader(aiHorHeader);
     ui->viewAi->setModel(m_aiModel);
     ui->viewAi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewAi->horizontalHeader()->setMinimumHeight(30);
@@ -73,7 +79,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     for (int i = 0; i < m_aiModel->rowCount(QModelIndex()); i++) {
         ui->viewAi->openPersistentEditor(m_aiModel->index(i, 2));
     }
-    connect(aiDelegate, &DigitLimiteDelegate::delegateValueChanged, [=](){
+    connect(aiDelegate, &DigitLimiteDelegate::delegateValueChanged, this, [=](){
         QString protocolString;
         if (settingData->m_ptCfg->m_protocol == eProtocol::NRUdp) {
             protocolString = Util::bytes2String(NrUdpProtocol::buildYCProtocol(settingData));
@@ -86,7 +92,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     });
     emit aiDelegate->delegateValueChanged();
 
-    m_vdiModel = new DiTableModel({"Id", "Name", "Value"}, settingData->m_ptCfg->m_globalVDiList, ui->viewVDi);
+    m_vdiModel = new DiTableModel({tr("IO"), tr("Name"), tr("Value")}, settingData->m_ptCfg->m_globalVDiList, ui->viewVDi);
     auto vdiHorHeader = new DiHeaderView(Qt::Horizontal, ui->viewVDi);
     vdiHorHeader->setMinimumHeight(30);
     connect(vdiHorHeader, &DiHeaderView::notifyAllChanged, m_vdiModel, &DiTableModel::onNotifyAllChanged);
@@ -102,7 +108,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     for (int i = 0; i < m_vdiModel->rowCount(QModelIndex()); i++) {
         ui->viewVDi->openPersistentEditor(m_vdiModel->index(i, 2));
     }
-    connect(vyxDelegate, &ComboBoxDelegate::delegateValueChanged, [=](){
+    connect(vyxDelegate, &ComboBoxDelegate::delegateValueChanged, this, [=](){
         QString protocolString;
         if (settingData->m_ptCfg->m_protocol == eProtocol::NRUdp) {
             protocolString = Util::bytes2String(NrUdpProtocol::buildVYXProtocol(settingData));
@@ -115,10 +121,8 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     });
     emit vyxDelegate->delegateValueChanged();
 
-    bool isRandom = settingData->m_ptCfg->m_isRandom;
-    connect(&m_viewTimer, &QTimer::timeout, [this, isRandom]{
-        if (isRandom)
-            m_aiModel->randomNumber();
+    connect(&m_viewTimer, &QTimer::timeout, this, [this]{
+        m_aiModel->randomNumber();
         ui->viewAi->viewport()->update();
         ui->viewDi->viewport()->update();
         emit m_diModel->dataChanged(m_diModel->index(0, 2), m_diModel->index(m_diModel->rowCount(QModelIndex()), 2));
@@ -133,17 +137,17 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->textBrowser->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->textBrowser, &QTextBrowser::customContextMenuRequested, this, &CDTWorkWidget::onTextBrowserContextMenuRequested);
 
-    connect(ui->btnLock, &QPushButton::clicked, [=]{
+    connect(ui->btnLock, &QPushButton::clicked, this, [=]{
         emit this->lockOrUnlock(true);
     });
-    connect(ui->btnUnlock, &QPushButton::clicked, [=]{
+    connect(ui->btnUnlock, &QPushButton::clicked, this, [=]{
         emit this->lockOrUnlock(false);
     });
 }
 
 CDTWorkWidget::~CDTWorkWidget()
 {
-    if (m_protocol) {
+    if (m_protocol != nullptr) {
         delete m_protocol;
         m_protocol = nullptr;
     }

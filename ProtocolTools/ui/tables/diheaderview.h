@@ -11,7 +11,7 @@ class DiHeaderView : public QHeaderView
     Q_OBJECT
 public:
     explicit DiHeaderView(Qt::Orientation orientation, QWidget *parent = nullptr);
-    ~DiHeaderView() override;
+    ~DiHeaderView() override = default;
 
     // QHeaderView interface
 protected:

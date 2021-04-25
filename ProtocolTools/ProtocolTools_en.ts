@@ -294,9 +294,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.cpp" line="245"/>
-        <location filename="ui/cdtworkwidget.cpp" line="255"/>
-        <source>Clear</source>
+        <location filename="ui/cdtworkwidget.cpp" line="35"/>
+        <location filename="ui/cdtworkwidget.cpp" line="65"/>
+        <location filename="ui/cdtworkwidget.cpp" line="90"/>
+        <source>IO</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/cdtworkwidget.cpp" line="35"/>
+        <location filename="ui/cdtworkwidget.cpp" line="65"/>
+        <location filename="ui/cdtworkwidget.cpp" line="90"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/cdtworkwidget.cpp" line="35"/>
+        <location filename="ui/cdtworkwidget.cpp" line="65"/>
+        <location filename="ui/cdtworkwidget.cpp" line="90"/>
+        <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

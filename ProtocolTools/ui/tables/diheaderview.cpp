@@ -8,18 +8,14 @@ DiHeaderView::DiHeaderView(Qt::Orientation orientation, QWidget *parent)
     connect(m_cbb.data(), QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DiHeaderView::onCbbCurrentIndexChanged);
 }
 
-DiHeaderView::~DiHeaderView()
-{
-}
-
 void DiHeaderView::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
 {
     if (logicalIndex == 2) {
         m_cbb->setGeometry(rect);
+        return ;
     }
-    else {
-        QHeaderView::paintSection(painter, rect, logicalIndex);
-    }
+    QHeaderView::paintSection(painter, rect, logicalIndex);
+
 }
 
 void DiHeaderView::onCbbCurrentIndexChanged(int index)

@@ -36,7 +36,6 @@ void CDTSettingDlg::initWidgetData(const PtCfg &setting)
     ui->edYcFuncode->setText(Util::num2Hex(setting.m_ycFuncode));
     ui->edYcNum->setText(QString::number(setting.m_ycNum));
     ui->edYcStartIo->setText(QString::number(setting.m_ycStartIo));
-    ui->cbRandom->setChecked(setting.m_isRandom);
     ui->txtYcSheetInfo->setHidden(true);
 
     ui->edVYxType->setText(Util::num2Hex(setting.m_vyxFrameType));
@@ -128,7 +127,6 @@ void CDTSettingDlg::on_btnOk_clicked()
     m_ptCfg->m_ycFuncode    = Util::hexString2Num(ui->edYcFuncode->text());
     m_ptCfg->m_ycNum        = ui->edYcNum->text().toInt();
     m_ptCfg->m_ycStartIo    = ui->edYcStartIo->text().toInt();
-    m_ptCfg->m_isRandom     = ui->cbRandom->isChecked();
     if (ui->edYcNum->isEnabled()) {
         m_confAiDatas.clear();
         for (int i = 0; i < m_ptCfg->m_ycNum; i++) {

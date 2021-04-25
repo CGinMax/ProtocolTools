@@ -76,7 +76,6 @@ public:
     uint m_ycTime{1000};
     uint m_vyxTime{1000};
 
-    bool m_isRandom{false};
 
     QList<DiData*>* m_globalDiList{nullptr};
     QList<AiData*>* m_globalAiList{nullptr};

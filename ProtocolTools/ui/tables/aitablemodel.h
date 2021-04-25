@@ -26,11 +26,13 @@ public:
 signals:
 
 public slots:
+    void onNotifyRandom(bool isRandom);
     void randomNumber();
 
 private:
     QStringList m_headers;
     QList<AiData*>* m_aiDatas;
+    bool m_isRandom;
 };
 
 #endif // AITABLEMODEL_H

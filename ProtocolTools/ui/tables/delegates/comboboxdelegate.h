@@ -57,7 +57,7 @@ public:
 signals:
     void delegateValueChanged();
 public slots:
-    void onCurrentTextChange(const QString& s);
+    void onToggled(bool toggled);
 private:
     QStringList itemList;//选项列表
 };
