@@ -17,7 +17,9 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 //    SwitchButton bt;
-//    bt.setGeometry(100, 100 ,100,100);
+//    bt.setGeometry(100, 100 ,200,200);
+
+//    bt.setTrackMargins(QMargins(20, 5, 20, 5));
 //    bt.show();
 
     return a.exec();

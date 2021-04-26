@@ -16,6 +16,7 @@ void ComboBoxDelegate::setItems(QStringList items)
 QWidget* ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
 {
     auto editor = new SwitchButton(parent);
+    editor->setTrackMargins(QMargins(15, 5, 15, 5));
 //    QComboBox* editor=new QComboBox(parent);
 //    editor->addItems(itemList);
     editor->installEventFilter(const_cast<ComboBoxDelegate*>(this));

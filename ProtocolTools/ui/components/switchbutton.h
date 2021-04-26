@@ -14,8 +14,6 @@ class SwitchButton : public QAbstractButton
     Q_PROPERTY(QColor activeColor WRITE setActiveColor READ activeColor)
     Q_PROPERTY(QColor inactiveColor WRITE setInactiveColor READ inactiveColor)
     Q_PROPERTY(QColor trackColor WRITE setTrackColor READ trackColor)
-    Q_PROPERTY(QString activeText WRITE setActiveText READ activeText)
-    Q_PROPERTY(QString inactiveText WRITE setInactiveText READ inactiveText)
 public:
     explicit SwitchButton(QWidget *parent = nullptr);
     ~SwitchButton() override;
@@ -32,14 +30,23 @@ public:
     void setTrackColor(const QColor &color);
     QColor trackColor() const;
 
-    void setActiveText(const QString& text);
-    QString activeText() const;
-
-    void setInactiveText(const QString& text);
-    QString inactiveText();
-
     void setOrientation(Qt::Orientation orientation);
     Qt::Orientation orientation() const;
+
+    void setThumbMargins(const QMargins& margins);
+    QMargins thumbMargins() const;
+
+    void setTrackMargins(const QMargins& margins);
+    QMargins trackMargins() const;
+
+    void setPenWidth(qreal penWidth);
+    qreal penWidth() const;
+
+    QRect thumbRect() const;
+
+    QRect trackRect() const;
+
+    void setOffStateWidth(int offWidth);
 
     QSize sizeHint() const Q_DECL_OVERRIDE;
 

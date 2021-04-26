@@ -41,7 +41,9 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->viewDi->setHorizontalHeader(diHorHeader);
     ui->viewDi->setModel(m_diModel);
     ui->viewDi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->viewDi->horizontalHeader()->setFixedHeight(40);
     ui->viewDi->verticalHeader()->setVisible(false);
+    ui->viewDi->verticalHeader()->setDefaultSectionSize(40);
     ui->viewDi->setEditTriggers(QAbstractItemView::DoubleClicked);
     ui->viewDi->setSelectionBehavior(QAbstractItemView::SelectItems);
     auto diDelegate = new ComboBoxDelegate(ui->viewDi);
@@ -72,6 +74,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->viewAi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewAi->horizontalHeader()->setMinimumHeight(30);
     ui->viewAi->verticalHeader()->setVisible(false);
+    ui->viewAi->verticalHeader()->setDefaultSectionSize(40);
     ui->viewAi->setEditTriggers(QAbstractItemView::DoubleClicked);
     ui->viewAi->setSelectionBehavior(QAbstractItemView::SelectItems);
     auto aiDelegate = new DigitLimiteDelegate();
@@ -100,6 +103,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const Q
     ui->viewVDi->setModel(m_vdiModel);
     ui->viewVDi->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->viewVDi->verticalHeader()->setVisible(false);
+    ui->viewVDi->verticalHeader()->setDefaultSectionSize(40);
     ui->viewVDi->setEditTriggers(QAbstractItemView::DoubleClicked);
     ui->viewVDi->setSelectionBehavior(QAbstractItemView::SelectItems);
     auto vyxDelegate = new ComboBoxDelegate(ui->viewVDi);

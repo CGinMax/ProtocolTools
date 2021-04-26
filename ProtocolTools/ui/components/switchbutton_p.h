@@ -3,6 +3,7 @@
 
 #include <Qt>
 #include <QColor>
+#include <QMargins>
 class QStateMachine;
 class QState;
 class SwitchButton;
@@ -23,6 +24,8 @@ public:
     SwitchButton              *q_ptr;
     SwitchButtonThumb         *thumb;
     SwitchButtonTrack         *track;
+    QMargins                   trackMargins;
+    QMargins                   thumbMargins;
     QStateMachine             *stateMachine;
     QState                    *offState;
     QState                    *onState;
@@ -31,8 +34,7 @@ public:
     QColor                     activeColor;
     QColor                     inactiveColor;
     QColor                     trackColor;
-    QString                    activeText;
-    QString                    inactiveText;
+    qreal                      penWidth;
 };
 
 #endif // SWITCHBUTTON_P_H

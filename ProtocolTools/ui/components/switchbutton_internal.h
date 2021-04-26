@@ -8,6 +8,7 @@ class SwitchButtonThumb : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(qreal shift WRITE setShift READ shift)
+    Q_PROPERTY(qreal thumbWidth WRITE setThumbWidth READ thumbWidth)
     Q_PROPERTY(QColor thumbColor WRITE setThumbColor READ thumbColor)
 public:
     explicit SwitchButtonThumb(SwitchButton* parent);
@@ -15,6 +16,9 @@ public:
 
     void setShift(qreal shift);
     inline qreal shift() const;
+
+    void setThumbWidth(qreal thumbWidth);
+    inline qreal thumbWidth() const;
 
     inline qreal offset() const;
 
@@ -31,12 +35,20 @@ private:
     SwitchButton*     m_switchBtn;
     QColor                  m_thumbColor;
     qreal                   m_shift;
+    qreal                   m_thumbWidth;
     qreal                   m_offset;
+    int m_leftPadding;
+
 };
 
 inline qreal SwitchButtonThumb::shift() const
 {
     return m_shift;
+}
+
+inline qreal SwitchButtonThumb::thumbWidth() const
+{
+    return m_thumbWidth;
 }
 
 inline qreal SwitchButtonThumb::offset() const

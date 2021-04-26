@@ -101,6 +101,7 @@ void TabPage::initWidget()
     connect(this, &TabPage::updateData, m_udpPage.data(), &UdpPage::onUpdateData);
     connect(this, &TabPage::updateData, m_serialPage.data(), &SerialPortPage::onUpdateData);
     connect(m_clientPage.data(), &ClientPage::clientDisconnected, this, &TabPage::on_btnStop_clicked);
+
 }
 
 void TabPage::resetSettingData()

@@ -3,6 +3,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QEvent>
 #include <QPainter>
+#include <QDebug>
 
 SwitchButtonThumb::SwitchButtonThumb(SwitchButton *parent)
     : QWidget(parent)
@@ -27,7 +28,7 @@ SwitchButtonThumb::~SwitchButtonThumb()
 
 void SwitchButtonThumb::setShift(qreal shift)
 {
-    if (m_shift == shift) {
+    if (qFuzzyCompare(m_shift, shift)) {
         return ;
     }
 
@@ -35,11 +36,17 @@ void SwitchButtonThumb::setShift(qreal shift)
     updateOffset();
 }
 
+void SwitchButtonThumb::setThumbWidth(qreal thumbWidth)
+{
+    m_thumbWidth = thumbWidth;
+    update();
+}
+
 bool SwitchButtonThumb::eventFilter(QObject *obj, QEvent *event)
 {
     const QEvent::Type type = event->type();
     if (type == QEvent::Resize || type == QEvent::Move) {
-        setGeometry(m_switchBtn->rect().adjusted(8, 8, -8, -8));
+        setGeometry(m_switchBtn->thumbRect());
         updateOffset();
     }
 
@@ -53,38 +60,37 @@ void SwitchButtonThumb::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(m_switchBtn->isEnabled() ? m_thumbColor : Qt::white);
+    QPen pen(QBrush(QColor(Qt::white)), m_switchBtn->penWidth(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    painter.setPen(pen);
+    painter.setBrush(Qt::NoBrush);
 
-    painter.setBrush(brush);
-    painter.setPen(Qt::NoPen);
-
-    int s;
     QRectF r;
-
-    if (Qt::Horizontal == m_switchBtn->orientation()) {
-        s = height()-10;
-        r = QRectF(5+m_offset, 0, height(), height());
+    if (m_switchBtn->orientation() == Qt::Horizontal) {
+        r = QRectF(m_offset, m_switchBtn->thumbMargins().top(), m_thumbWidth, qMax(static_cast<int>(m_thumbWidth), height() - m_switchBtn->thumbMargins().top() - m_switchBtn->thumbMargins().bottom()));
     } else {
-        s = width()-10;
-        r = QRectF(5, 5+m_offset, s, s);
+//        r = QRectF(5, 5 + m_offset, width(), m_thumbWidth);
     }
 
     painter.drawEllipse(r);
 
     if (!m_switchBtn->isEnabled()) {
-        brush.setColor(m_switchBtn->disabledColor());
-        painter.setBrush(brush);
+        pen.setColor(m_switchBtn->disabledColor());
+        painter.setPen(pen);
         painter.drawEllipse(r);
     }
+
 }
 
 void SwitchButtonThumb::updateOffset()
 {
     const QSize s(Qt::Horizontal == m_switchBtn->orientation()
                   ? size() : size().transposed());
-    m_offset = m_shift*static_cast<qreal>(s.width()-s.height());
+    auto thumbRect = m_switchBtn->thumbRect();
+
+    m_offset = m_switchBtn->penWidth() / 2 + m_shift * static_cast<qreal>(thumbRect.width() - m_switchBtn->penWidth());
+
+    int circleWidth = m_switchBtn->trackRect().height() / 2;
+    m_switchBtn->setOffStateWidth(circleWidth);
     update();
 }
 
@@ -112,7 +118,7 @@ bool SwitchButtonTrack::eventFilter(QObject *obj, QEvent *event)
     const QEvent::Type type = event->type();
 
     if (QEvent::Resize == type || QEvent::Move == type) {
-        setGeometry(m_switchBtn->rect());
+        setGeometry(m_switchBtn->trackRect());
     }
     return QWidget::eventFilter(obj, event);
 }
@@ -127,7 +133,7 @@ void SwitchButtonTrack::paintEvent(QPaintEvent *event)
     QBrush brush;
     if (m_switchBtn->isEnabled()) {
         brush.setColor(m_trackColor);
-        painter.setOpacity(0.8);
+        painter.setOpacity(1);
     } else {
         brush.setColor(m_switchBtn->disabledColor());
         painter.setOpacity(0.6);
@@ -138,16 +144,15 @@ void SwitchButtonTrack::paintEvent(QPaintEvent *event)
 
     if (Qt::Horizontal == m_switchBtn->orientation()) {
         const int h = height()/2;
-        const QRect r(0, h/2, width(), h);
         painter.save();
         painter.setOpacity(1);
         painter.setBrush(QBrush(Qt::white));
-        painter.drawRect(QRect(0, 0, width(), height()));
+        painter.drawRect(m_switchBtn->rect());
         painter.restore();
-        painter.drawRoundedRect(r.adjusted(14, 0, -14, 0/*-4*/), h/2, h/2);
+        painter.drawRoundedRect(rect(), h/*/2*/, h/*/2*/);
     } else {
-        const int w = width()/2;
-        const QRect r(w/2, 0, w, height());
-        painter.drawRoundedRect(r.adjusted(4, 14, -4, -14), w/2, w/2);
+//        const int w = width()/2;
+//        const QRect r(w/2, 0, w, height());
+//        painter.drawRoundedRect(r.adjusted(4, 14, -4, -14), w/2, w/2);
     }
 }

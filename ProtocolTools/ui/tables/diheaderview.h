@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QHeaderView>
-#include <QComboBox>
 #include <QScopedPointer>
+
+#include "../components/switchbutton.h"
+class SwitchButton;
 
 class DiHeaderView : public QHeaderView
 {
@@ -21,11 +23,10 @@ signals:
 public slots:
 
 private slots:
-    void onCbbCurrentIndexChanged(int index);
 
 
 private:
-    QScopedPointer<QComboBox> m_cbb;
+    QScopedPointer<SwitchButton> m_swBtn;
 };
 
 #endif // DIHEADERVIEW_H
