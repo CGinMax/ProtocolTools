@@ -1,10 +1,16 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QTranslator>
+#include <QFontDatabase>
+#include <QDebug>
+
 int main(int argc, char *argv[])
 {
-
     QApplication a(argc, argv);
+    int fontid = QFontDatabase::addApplicationFont(QLatin1String(":/fonts/resources/fonts/OPPOSans-M.ttf"));
+    auto fontFamilies = QFontDatabase::applicationFontFamilies(fontid);
+    QFont font(fontFamilies.first());
+    a.setFont(font);
     auto customTrans = new QTranslator();
     customTrans->load(QLatin1String(":/translations/ProtocolTools_zh.qm"));
     a.installTranslator(customTrans);

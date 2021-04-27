@@ -18,4 +18,7 @@
         <file>translations/qt_zh_CN.qm</file>
         <file>translations/ProtocolTools_zh.qm</file>
     </qresource>
+    <qresource prefix="/fonts">
+        <file>resources/fonts/OPPOSans-M.ttf</file>
+    </qresource>
 </RCC>

@@ -83,6 +83,9 @@
      <height>28</height>
     </rect>
    </property>
+   <property name="nativeMenuBar">
+    <bool>false</bool>
+   </property>
    <widget class="QMenu" name="menuMenu">
     <property name="title">
      <string>Menu</string>
@@ -93,6 +96,9 @@
    <addaction name="menuMenu"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
