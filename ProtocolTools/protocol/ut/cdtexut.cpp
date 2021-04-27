@@ -2,7 +2,7 @@
 #include "utwfstrategy.h"
 #include "utmintorstrategy.h"
 
-CDTExUt::CDTExUt(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
+CDTExUt::CDTExUt(const QSharedPointer<CommunicationBase> &network, const QSharedPointer<SettingData> &settingData)
     : CDTProtocol (network, settingData)
 {
 

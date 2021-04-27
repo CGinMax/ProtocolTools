@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QTimer>
-#include "../network/networkbase.h"
+#include "../network/communicationbase.h"
 #include "../common/ptcfg.h"
 #include "strategybase.h"
 
@@ -22,7 +22,7 @@ public:
         //接收
         eMsgRecv = 3,
     };
-    ProtocolBase(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
+    ProtocolBase(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData);
     virtual ~ProtocolBase();
 
     virtual void initStrategy() = 0;
@@ -69,7 +69,7 @@ protected slots:
     virtual void onTimeout();
 
 protected:
-    QSharedPointer<NetworkBase> m_network;
+    QSharedPointer<CommunicationBase> m_network;
     QSharedPointer<SettingData> m_settingData;
     StrategyBase* m_strategy;
     QTimer *m_timer{nullptr};

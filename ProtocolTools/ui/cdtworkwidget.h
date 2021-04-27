@@ -19,7 +19,7 @@ class CDTWorkWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CDTWorkWidget(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData, QWidget *parent = nullptr);
+    explicit CDTWorkWidget(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData, QWidget *parent = nullptr);
     ~CDTWorkWidget() override;
 
     void startCommunication(const QSharedPointer<SettingData> &settingData);
@@ -49,7 +49,7 @@ private:
     DiTableModel* m_vdiModel;
     QTimer m_viewTimer;
     ProtocolBase* m_protocol;
-    QSharedPointer<NetworkBase> m_network;
+    QSharedPointer<CommunicationBase> m_network;
     QScopedPointer<Ui::CDTWorkWidget> ui;
 
 

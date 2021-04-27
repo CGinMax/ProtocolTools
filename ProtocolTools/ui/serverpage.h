@@ -5,7 +5,7 @@
 #include <QTcpServer>
 #include <QTabWidget>
 #include <QQueue>
-#include "../network/networkbase.h"
+#include "../network/communicationbase.h"
 #include "cdtworkwidget.h"
 class QVBoxLayout;
 

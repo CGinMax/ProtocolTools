@@ -7,7 +7,7 @@ class CDTExNr : public CDTProtocol
 {
     Q_OBJECT
 public:
-    explicit CDTExNr(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
+    explicit CDTExNr(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTExNr() override;
 
     void initStrategy() override;

@@ -22,7 +22,7 @@ signals:
 public slots:
     void onUpdateData();
 private:
-    QSharedPointer<NetworkBase> m_serialPort;
+    QSharedPointer<CommunicationBase> m_serialPort;
     QSharedPointer<SettingData> m_settingData;
     QScopedPointer<CDTWorkWidget> m_centerWidget;
     QVBoxLayout* m_layout;

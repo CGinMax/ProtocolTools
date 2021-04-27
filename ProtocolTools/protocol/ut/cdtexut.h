@@ -7,7 +7,7 @@ class CDTExUt : public CDTProtocol
 {
     Q_OBJECT
 public:
-    explicit CDTExUt(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
+    explicit CDTExUt(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTExUt() override;
 
     void initStrategy() override;

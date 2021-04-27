@@ -10,7 +10,7 @@ class NrUdpProtocol : public ProtocolBase
 {
     Q_OBJECT
 public:
-    NrUdpProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
+    NrUdpProtocol(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData);
     ~NrUdpProtocol() override;
 
     void initStrategy() override;

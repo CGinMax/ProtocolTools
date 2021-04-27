@@ -1,12 +1,12 @@
 #ifndef UDPSOCKET_H
 #define UDPSOCKET_H
 
-#include "networkbase.h"
+#include "communicationbase.h"
 #include <QUdpSocket>
 #include <QHostAddress>
 #include <QScopedPointer>
 
-class UdpSocket : public NetworkBase
+class UdpSocket : public CommunicationBase
 {
     Q_OBJECT
 public:

@@ -6,7 +6,7 @@ CONFIG += c++11
 TEMPLATE = app
 
 include(../ProtocolTools/common/common.pri)
-include(../ProtocolTools/network/network.pri)
+#include(../ProtocolTools/network/network.pri)
 include(../ProtocolTools/protocol/protocol.pri)
 #include(../ProtocolTools/ui/ui.pri)
 

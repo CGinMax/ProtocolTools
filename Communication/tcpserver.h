@@ -1,13 +1,13 @@
 #ifndef TCPSERVER_H
 #define TCPSERVER_H
 
-#include "networkbase.h"
+#include "communicationbase.h"
 #include <QList>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QScopedPointer>
 
-class TcpServer : public NetworkBase
+class TcpServer : public CommunicationBase
 {
     Q_OBJECT
 public:

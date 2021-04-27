@@ -3,7 +3,7 @@
 #include "standardmintorstrategy.h"
 #include <QtMath>
 
-CDTStandard::CDTStandard(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData)
+CDTStandard::CDTStandard(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData)
     : CDTProtocol (network, settingData)
     , m_cycleTime(2000)// 2s
     , m_cycleTimer(0)

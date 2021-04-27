@@ -1,14 +1,14 @@
-#ifndef NETWORKBASE_H
-#define NETWORKBASE_H
+#ifndef COMMUNICATIONBASE_H
+#define COMMUNICATIONBASE_H
 
 #include <QObject>
-#include "../common/portparam.h"
+#include "portparam.h"
 
-class NetworkBase : public QObject
+class CommunicationBase : public QObject
 {
     Q_OBJECT
 public:
-    virtual ~NetworkBase();
+    ~CommunicationBase() override;
 
     virtual bool open() = 0;
     virtual bool open(const PortParam& param) = 0;
@@ -31,4 +31,4 @@ public slots:
     virtual void writeData(const QByteArray& data) = 0;
 };
 
-#endif // NETWORKBASE_H
+#endif // COMMUNICATIONBASE_H

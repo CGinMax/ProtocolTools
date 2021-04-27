@@ -24,11 +24,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
-INCLUDEPATH += $$PWD/../spdlog/include
-DEPENDPATH == $$PWD/../spdlog/include
 
 include(common/common.pri)
-include(network/network.pri)
+#include(network/network.pri)
 include(protocol/protocol.pri)
 include(ui/ui.pri)
 
@@ -44,13 +42,20 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
+INCLUDEPATH += $$PWD/../spdlog/include
+DEPENDPATH += $$PWD/../spdlog/include
+
+INCLUDEPATH += $$PWD/../Communication/
+DEPENDPATH += $$PWD/../Communication/
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug
     LIBS += -L$$PWD/../bin/debug -lspdlog
+    LIBS += -L$$PWD/../bin/debug/lib -lCommunication
 }
 else {
     DESTDIR = $$PWD/../bin/release
     LIBS += -L$$PWD/../bin/release -lspdlog
+    LIBS += -L$$PWD/../bin/release/lib -lCommunication
 }
 
 

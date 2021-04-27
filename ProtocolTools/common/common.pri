@@ -9,8 +9,7 @@ SOURCES += \
     $$PWD/util.cpp \
     $$PWD/ptcfg.cpp \
     $$PWD/aidata.cpp \
-    $$PWD/didata.cpp \
-    $$PWD/portparam.cpp
+    $$PWD/didata.cpp
 
 HEADERS += \
     $$PWD/enums.h \
@@ -19,5 +18,4 @@ HEADERS += \
     $$PWD/util.h \
     $$PWD/ptcfg.h \
     $$PWD/aidata.h \
-    $$PWD/didata.h \
-    $$PWD/portparam.h
+    $$PWD/didata.h

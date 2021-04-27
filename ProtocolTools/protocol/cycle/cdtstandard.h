@@ -7,7 +7,7 @@ class CDTStandard : public CDTProtocol
 {
     Q_OBJECT
 public:
-    CDTStandard(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
+    CDTStandard(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTStandard() override;
 
     void initStrategy() override;

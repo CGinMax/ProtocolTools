@@ -5,7 +5,7 @@
 #include <QVBoxLayout>
 #include "../common/threadpool.h"
 #include "../protocol/protocolbase.h"
-#include "../network/networkbase.h"
+#include "../network/communicationbase.h"
 #include "../network/udpsocket.h"
 #include "cdtworkwidget.h"
 
@@ -26,7 +26,7 @@ public slots:
     void onUpdateData();
 
 private:
-    QSharedPointer<NetworkBase> m_udp;
+    QSharedPointer<CommunicationBase> m_udp;
     QSharedPointer<SettingData> m_settingData;
     QScopedPointer<CDTWorkWidget> m_centerWidget;
     QVBoxLayout* m_layout;

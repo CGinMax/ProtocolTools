@@ -5,7 +5,7 @@
 #include <QSharedPointer>
 #include "../cdtframe.h"
 #include "../protocolbase.h"
-#include "../../network/networkbase.h"
+#include "../../network/communicationbase.h"
 
 class CDTProtocol : public ProtocolBase
 {
@@ -16,7 +16,7 @@ class CDTProtocol : public ProtocolBase
 
     Q_OBJECT
 public:
-    CDTProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
+    CDTProtocol(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData);
     ~CDTProtocol() override;
 
     void initStrategy() override;

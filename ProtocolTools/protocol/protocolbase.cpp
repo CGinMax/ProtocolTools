@@ -5,14 +5,14 @@
 #include <QThread>
 #include <QTimer>
 
-ProtocolBase::ProtocolBase(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
+ProtocolBase::ProtocolBase(const QSharedPointer<CommunicationBase> &network, const QSharedPointer<SettingData> &settingData)
     : m_network(network)
     , m_settingData(settingData)
     , m_strategy(nullptr)
     , m_portOpenFailedCount(0)
 {
-    connect(this, &ProtocolBase::write, network.data(), &NetworkBase::writeData);
-    connect(m_network.data(), &NetworkBase::readyRead, this, &ProtocolBase::onReadyRead);
+    connect(this, &ProtocolBase::write, network.data(), &CommunicationBase::writeData);
+    connect(m_network.data(), &CommunicationBase::readyRead, this, &ProtocolBase::onReadyRead);
 }
 
 ProtocolBase::~ProtocolBase()
@@ -163,7 +163,7 @@ void ProtocolBase::stop()
         delete m_timer;
         m_timer = nullptr;
     }
-    disconnect(m_network.data(), &NetworkBase::readyRead, this, &ProtocolBase::onReadyRead);
+    disconnect(m_network.data(), &CommunicationBase::readyRead, this, &ProtocolBase::onReadyRead);
 }
 
 void ProtocolBase::onTimeout()

@@ -1,10 +1,10 @@
 #ifndef TCPCLIENT_H
 #define TCPCLIENT_H
 
-#include "networkbase.h"
+#include "communicationbase.h"
 #include <QTcpSocket>
 
-class TcpClient : public NetworkBase
+class TcpClient : public CommunicationBase
 {
     Q_OBJECT
 public:

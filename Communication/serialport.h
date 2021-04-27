@@ -1,10 +1,10 @@
 #ifndef SERIALPORT_H
 #define SERIALPORT_H
 
-#include "networkbase.h"
+#include "communicationbase.h"
 #include <QSerialPortInfo>
 
-class SerialPort : public NetworkBase
+class SerialPort : public CommunicationBase
 {
     Q_OBJECT
 public:

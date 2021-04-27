@@ -21,7 +21,7 @@
 
 #include <climits>
 
-CDTWorkWidget::CDTWorkWidget(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData, QWidget *parent)
+CDTWorkWidget::CDTWorkWidget(const QSharedPointer<CommunicationBase> &network, const QSharedPointer<SettingData> &settingData, QWidget *parent)
     : QWidget(parent)
     , m_protocol(nullptr)
     , m_network(network)
@@ -187,7 +187,7 @@ void CDTWorkWidget::startCommunication(const QSharedPointer<SettingData> &settin
         connect(this, &CDTWorkWidget::startYK, this->m_protocol, &ProtocolBase::sendYk);
         connect(this, &CDTWorkWidget::reverseYx, this->m_protocol, &ProtocolBase::onReverseYx);
         connect(this->m_protocol, &ProtocolBase::notifyYK, this, &CDTWorkWidget::onNotifyYK);
-        connect(this->m_network.data(), &NetworkBase::disconnected, this, &CDTWorkWidget::disconnected);
+        connect(this->m_network.data(), &CommunicationBase::disconnected, this, &CDTWorkWidget::disconnected);
         this->m_protocol->initStrategy();
         this->m_protocol->start();
     });

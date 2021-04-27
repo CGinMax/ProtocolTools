@@ -96,12 +96,12 @@ void ServerPage::onUpdateData()
 void ServerPage::onNewConnection()
 {
 
-    QSharedPointer<NetworkBase> server(new TcpServer(m_tcpServer->nextPendingConnection()));
+    QSharedPointer<CommunicationBase> server(new TcpServer(m_tcpServer->nextPendingConnection()));
 
     auto centerWidget = new CDTWorkWidget(server, m_settingData);
     centerWidget->startCommunication(m_settingData);
     connect(centerWidget, &CDTWorkWidget::disconnected, this, &ServerPage::onDisconnected);
-    connect(server.data(), &NetworkBase::disconnected, this, [=](){
+    connect(server.data(), &CommunicationBase::disconnected, this, [=](){
         if (centerWidget) {
 //            if (m_closedClient.count() > 6) {
 //                auto clientWidget = m_closedClient.head();

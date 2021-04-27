@@ -7,7 +7,7 @@ class CDTInteracte : public CDTProtocol
 {
     Q_OBJECT
 public:
-    CDTInteracte(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData);
+    CDTInteracte(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData);
 
     void initStrategy() override;
 

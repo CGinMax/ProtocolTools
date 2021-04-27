@@ -2,7 +2,7 @@
 #include "interwfstrategy.h"
 #include "intermintorstrategy.h"
 
-CDTInteracte::CDTInteracte(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
+CDTInteracte::CDTInteracte(const QSharedPointer<CommunicationBase> &network, const QSharedPointer<SettingData> &settingData)
     : CDTProtocol (network, settingData)
 {
 

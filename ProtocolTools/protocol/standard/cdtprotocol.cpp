@@ -4,14 +4,14 @@
 #include "cdtmintorstrategy.h"
 #include "cdtwfstrategy.h"
 
-CDTProtocol::CDTProtocol(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
+CDTProtocol::CDTProtocol(const QSharedPointer<CommunicationBase> &network, const QSharedPointer<SettingData> &settingData)
     : ProtocolBase(network, settingData)
     , m_isRunYK(false)
     , m_yxCounter(0)
     , m_ycCounter(0)
 {
 
-    connect(m_network.data(), &NetworkBase::disconnected, this, &CDTProtocol::onDisconnected, Qt::BlockingQueuedConnection);
+    connect(m_network.data(), &CommunicationBase::disconnected, this, &CDTProtocol::onDisconnected, Qt::BlockingQueuedConnection);
 
 }
 

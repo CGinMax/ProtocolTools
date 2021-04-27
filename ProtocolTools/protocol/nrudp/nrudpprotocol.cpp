@@ -3,15 +3,15 @@
 #include "nrudpmintorstrategy.h"
 #include <algorithm>
 
-NrUdpProtocol::NrUdpProtocol(const QSharedPointer<NetworkBase>& network, const QSharedPointer<SettingData>& settingData)
+NrUdpProtocol::NrUdpProtocol(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData)
     : ProtocolBase(network, settingData)
     , m_yxSendCounter(0)
     , m_ycSendCounter(0)
     , m_vyxSendCounter(0)
     , m_isRunYK(false)
 {
-    connect(m_network.data(), &NetworkBase::disconnected, this, &NrUdpProtocol::onDisconnected, Qt::BlockingQueuedConnection);
-    connect(m_network.data(), &NetworkBase::recvData, this, &NrUdpProtocol::onRecvBytes);
+    connect(m_network.data(), &CommunicationBase::disconnected, this, &NrUdpProtocol::onDisconnected, Qt::BlockingQueuedConnection);
+    connect(m_network.data(), &CommunicationBase::recvData, this, &NrUdpProtocol::onRecvBytes);
 }
 
 NrUdpProtocol::~NrUdpProtocol()

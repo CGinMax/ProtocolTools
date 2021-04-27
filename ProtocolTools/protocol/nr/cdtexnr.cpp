@@ -2,7 +2,7 @@
 #include "nrwfstrategy.h"
 #include "nrmintorstrategy.h"
 
-CDTExNr::CDTExNr(const QSharedPointer<NetworkBase> &network, const QSharedPointer<SettingData> &settingData)
+CDTExNr::CDTExNr(const QSharedPointer<CommunicationBase> &network, const QSharedPointer<SettingData> &settingData)
     : CDTProtocol (network, settingData)
 {
 
