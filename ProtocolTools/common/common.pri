@@ -1,6 +1,6 @@
 #common pri
 
-QT       += core concurrent
+QT       += core concurrent network serialport
 
 CONFIG += c++11
 SOURCES += \
@@ -19,3 +19,12 @@ HEADERS += \
     $$PWD/ptcfg.h \
     $$PWD/aidata.h \
     $$PWD/didata.h
+
+INCLUDEPATH += $$PWD/../../Communication/
+DEPENDPATH += $$PWD/../../Communication/
+CONFIG(debug, debug|release){
+    LIBS += -L$$PWD/../../bin/debug -lCommunication
+}
+else {
+    LIBS += -L$$PWD/../../bin/release -lCommunication
+}

@@ -6,7 +6,6 @@
 #include <QMenu>
 #include <QDebug>
 
-#include "../network/tcpserver.h"
 
 ServerPage::ServerPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent)
     : QWidget(parent)

@@ -1,6 +1,6 @@
 #protocol pri
 
-QT       += core concurrent
+QT       += core concurrent network serialport
 
 CONFIG += c++11
 SOURCES += \

@@ -5,6 +5,7 @@ UdpSocket::UdpSocket(QObject *parent)
     , m_localPort(0)
     , m_remoteAddress("127.0.0.1")
     , m_remotePort(7990)
+    , m_udpMode(PortParam::UdpSingle)
     , m_socket(new QUdpSocket(this))
 {
     setParent(parent);
@@ -26,23 +27,53 @@ bool UdpSocket::open(const PortParam &param)
     m_localPort = static_cast<quint16>(param.m_localPort);
     m_remoteAddress = QHostAddress(param.m_remoteIp);
     m_remotePort = static_cast<quint16>(param.m_remotePort);
-    return m_socket->bind(m_localAddress, m_localPort, QUdpSocket::ShareAddress);
+    m_udpMode = param.m_udpMode;
+    bool success = false;
+    QAbstractSocket::BindFlag bindFlag = QAbstractSocket::DefaultForPlatform;
+
+    if (m_udpMode == PortParam::UdpMulticastGroup)
+    {
+        // 可配?
+        m_socket->setSocketOption(QAbstractSocket::MulticastTtlOption, 1);
+        bindFlag = QAbstractSocket::ShareAddress;
+    }
+
+    success = m_socket->bind(m_localAddress, m_localPort, QAbstractSocket::ShareAddress);
+
+    if (success && m_udpMode == PortParam::UdpMulticastGroup)
+    {// 组播
+        success = m_socket->joinMulticastGroup(m_remoteAddress);
+    }
+
+    return success;
 }
 
 void UdpSocket::close()
 {
-    m_socket->disconnectFromHost();
+//    m_socket->close();
+//    m_socket == nullptr;??
+
+    if (m_udpMode == PortParam::UdpMulticastGroup)
+    {
+        m_socket->leaveMulticastGroup(m_remoteAddress);
+    }
     m_socket->close();
 }
 
 bool UdpSocket::write(const char *data, int size)
 {
-    return m_socket->writeDatagram(data, size, m_remoteAddress, m_remotePort) > 0;
+    QHostAddress sendAddr = m_udpMode == PortParam::UdpBroadcast ? QHostAddress::Broadcast : m_remoteAddress;
+    auto len = m_socket->writeDatagram(data, size, sendAddr, m_remotePort);
+    m_socket->flush();
+    return len > 0;
 }
 
 bool UdpSocket::write(const QByteArray &data)
 {
-    return m_socket->writeDatagram(data, m_remoteAddress, m_remotePort) > 0;
+    QHostAddress sendAddr = m_udpMode == PortParam::UdpBroadcast ? QHostAddress::Broadcast : m_remoteAddress;
+    auto len = m_socket->writeDatagram(data, sendAddr, m_remotePort);
+    m_socket->flush();
+    return len > 0;
 }
 
 int UdpSocket::read(char *data, int size)
@@ -58,10 +89,6 @@ QByteArray UdpSocket::readAll()
     QByteArray ba(datagram, static_cast<int>(readLen));
     delete[] datagram;
     return ba;
-//    auto datagram = m_socket->receiveDatagram();
-//    m_address = datagram.senderAddress();
-//    m_port = datagram.senderPort();
-//    return datagram.data();
 }
 
 bool UdpSocket::isActived()

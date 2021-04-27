@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QTimer>
-#include "../network/communicationbase.h"
+#include "../../Communication/communicationbase.h"
 #include "../common/ptcfg.h"
 #include "strategybase.h"
 

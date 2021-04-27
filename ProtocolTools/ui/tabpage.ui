@@ -43,7 +43,7 @@
        <item row="1" column="0" colspan="2">
         <widget class="QStackedWidget" name="paramStackedWidget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="networkPage">
           <layout class="QGridLayout" name="gridLayout">
@@ -216,6 +216,25 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cbbUdpMode">
+         <item>
+          <property name="text">
+           <string>Single</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Broadcast</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Multicast Group</string>
+          </property>
+         </item>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -1,11 +1,14 @@
 #communication lib
-QT -= gui
+
 QT += core network serialport
 
 TARGET = Communication
 TEMPLATE = lib
 
 CONFIG += c++11
+
+DEFINES += COMMUNICATION_LIBRARY
+
 SOURCES += \
     $$PWD/communicationbase.cpp \
     $$PWD/tcpserver.cpp \
@@ -20,11 +23,12 @@ HEADERS += \
     $$PWD/tcpclient.h \
     $$PWD/udpsocket.h \
     $$PWD/serialport.h \
-    $$PWD/portparam.h
+    $$PWD/portparam.h \
+    $$PWD/communication_global.h
 
 CONFIG(debug, debug|release){
-    DESTDIR = $$PWD/../bin/debug/lib
+    DESTDIR = $$PWD/../bin/debug
 }
 else {
-    DESTDIR = $$PWD/../bin/release/lib
+    DESTDIR = $$PWD/../bin/release
 }

@@ -6,7 +6,7 @@
 #include <QHostAddress>
 #include <QScopedPointer>
 
-class UdpSocket : public CommunicationBase
+class COMMUNICATIONSHARED_EXPORT UdpSocket : public CommunicationBase
 {
     Q_OBJECT
 public:
@@ -37,6 +37,7 @@ private:
     quint16 m_localPort;
     QHostAddress m_remoteAddress;
     quint16 m_remotePort;
+    PortParam::eUdpMode m_udpMode;
     QScopedPointer<QUdpSocket> m_socket;
 };
 

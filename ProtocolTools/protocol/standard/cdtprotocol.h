@@ -5,7 +5,7 @@
 #include <QSharedPointer>
 #include "../cdtframe.h"
 #include "../protocolbase.h"
-#include "../../network/communicationbase.h"
+#include "../../../Communication/communicationbase.h"
 
 class CDTProtocol : public ProtocolBase
 {

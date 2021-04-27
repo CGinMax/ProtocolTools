@@ -215,3 +215,8 @@ void TabPage::on_chbBaudRate_toggled(bool checked)
 {
     ui->cbbBaudRate->setEditable(checked);
 }
+
+void TabPage::on_cbbUdpMode_currentIndexChanged(int index)
+{
+    m_settingData->m_portParam.m_udpMode = PortParam::eUdpMode(index);
+}

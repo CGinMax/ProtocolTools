@@ -7,7 +7,7 @@
 #include <QTcpSocket>
 #include <QScopedPointer>
 
-class TcpServer : public CommunicationBase
+class COMMUNICATIONSHARED_EXPORT TcpServer : public CommunicationBase
 {
     Q_OBJECT
 public:

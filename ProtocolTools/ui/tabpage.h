@@ -45,6 +45,8 @@ private slots:
 
     void on_chbBaudRate_toggled(bool checked);
 
+    void on_cbbUdpMode_currentIndexChanged(int index);
+
 private:
     QSharedPointer<SettingData> m_settingData;
     QScopedPointer<ServerPage> m_serverPage;

@@ -4,7 +4,7 @@
 #include "communicationbase.h"
 #include <QSerialPortInfo>
 
-class SerialPort : public CommunicationBase
+class COMMUNICATIONSHARED_EXPORT SerialPort : public CommunicationBase
 {
     Q_OBJECT
 public:

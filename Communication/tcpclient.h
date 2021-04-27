@@ -4,7 +4,7 @@
 #include "communicationbase.h"
 #include <QTcpSocket>
 
-class TcpClient : public CommunicationBase
+class COMMUNICATIONSHARED_EXPORT TcpClient : public CommunicationBase
 {
     Q_OBJECT
 public:

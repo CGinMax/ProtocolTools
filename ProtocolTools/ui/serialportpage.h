@@ -2,7 +2,7 @@
 #define SERIALPORTPAGE_H
 
 #include <QWidget>
-#include "../network/serialport.h"
+#include "../../Communication/serialport.h"
 #include "../protocol/protocolbase.h"
 #include "cdtworkwidget.h"
 

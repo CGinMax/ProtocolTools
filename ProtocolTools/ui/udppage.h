@@ -5,8 +5,7 @@
 #include <QVBoxLayout>
 #include "../common/threadpool.h"
 #include "../protocol/protocolbase.h"
-#include "../network/communicationbase.h"
-#include "../network/udpsocket.h"
+#include "../../Communication/udpsocket.h"
 #include "cdtworkwidget.h"
 
 

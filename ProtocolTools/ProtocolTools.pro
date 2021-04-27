@@ -42,6 +42,7 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
+
 INCLUDEPATH += $$PWD/../spdlog/include
 DEPENDPATH += $$PWD/../spdlog/include
 
@@ -50,16 +51,16 @@ DEPENDPATH += $$PWD/../Communication/
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug
     LIBS += -L$$PWD/../bin/debug -lspdlog
-    LIBS += -L$$PWD/../bin/debug/lib -lCommunication
+    LIBS += -L$$PWD/../bin/debug -lCommunication
 }
 else {
     DESTDIR = $$PWD/../bin/release
     LIBS += -L$$PWD/../bin/release -lspdlog
-    LIBS += -L$$PWD/../bin/release/lib -lCommunication
+    LIBS += -L$$PWD/../bin/release -lCommunication
 }
 
-
 QMAKE_RPATHDIR += ./
+QMAKE_RPATHDIR += ./lib
 QMAKE_RPATHDIR += $${DESTDIR}
 QMAKE_RPATHDIR += ./../lib
 QMAKE_RPATHDIR += $${DESTDIR}/../lib

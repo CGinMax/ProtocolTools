@@ -4,7 +4,7 @@
 #include <QObject>
 #include "portparam.h"
 
-class CommunicationBase : public QObject
+class COMMUNICATIONSHARED_EXPORT CommunicationBase : public QObject
 {
     Q_OBJECT
 public:
