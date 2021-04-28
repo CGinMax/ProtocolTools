@@ -21,7 +21,7 @@ public:
     void init();
     void setupProperties();
 
-    SwitchButton              *q_ptr;
+    SwitchButton              *const q_ptr;
     SwitchButtonThumb         *thumb;
     SwitchButtonTrack         *track;
     QMargins                   trackMargins;

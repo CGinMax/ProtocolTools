@@ -58,7 +58,7 @@ public slots:
 
 private:
     Q_DECLARE_PRIVATE(SwitchButton)
-    QScopedPointer<SwitchButtonPrivate> d_ptr;
+    const QScopedPointer<SwitchButtonPrivate> d_ptr;
 };
 
 #endif // SWITCHBUTTON_H

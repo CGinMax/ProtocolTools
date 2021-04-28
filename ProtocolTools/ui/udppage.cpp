@@ -29,7 +29,9 @@ bool UdpPage::start()
 bool UdpPage::start(const PortParam &param)
 {
     auto udp = dynamic_cast<UdpSocket*>(m_udp.data());
-    udp->open(param);
+    if (!udp->open(param)) {
+        return false;
+    }
     m_centerWidget->startCommunication(m_settingData);
     return true;
 

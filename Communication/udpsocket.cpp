@@ -70,8 +70,8 @@ bool UdpSocket::write(const char *data, int size)
 
 bool UdpSocket::write(const QByteArray &data)
 {
-    QHostAddress sendAddr = m_udpMode == PortParam::UdpBroadcast ? QHostAddress::Broadcast : m_remoteAddress;
-    auto len = m_socket->writeDatagram(data, sendAddr, m_remotePort);
+//    QHostAddress sendAddr = m_udpMode == PortParam::UdpBroadcast ? QHostAddress::Broadcast : m_remoteAddress;
+    auto len = m_socket->writeDatagram(data, m_remoteAddress, m_remotePort);
     m_socket->flush();
     return len > 0;
 }

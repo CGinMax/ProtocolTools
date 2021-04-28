@@ -5,3 +5,4 @@ SUBDIRS += \
     spdlog \
     ProtocolTools \
     test\
+    PressPlateTool
