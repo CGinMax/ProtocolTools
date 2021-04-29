@@ -1,22 +1,20 @@
 #include "expandtile.h"
+#include "ui_expandtile.h"
 #include <QGridLayout>
 #include <QMouseEvent>
-
 ExpandTile::ExpandTile(const QString &title, QWidget *parent)
     : QWidget(parent)
-    , m_title(new QLabel(this))
-    , m_icon(new QLabel(this))
+    , ui(new Ui::ExpandTile)
+    , m_icon(new TileIcon(this))
     , m_checked(false)
 {
-    m_icon->setText("aaa");
-    m_title->setTextFormat(Qt::TextFormat::RichText);
-    m_title->setText(QString("<b>%1</b>").arg(title));
-    auto mainLayout = new QGridLayout(this);
-    mainLayout->setSpacing(4);
-    mainLayout->addWidget(m_icon, 0, 0 );
-    mainLayout->addWidget(m_title, 0, 1);
-    auto subTitle = new QLabel("subtitle", this);
-    mainLayout->addWidget(subTitle, 1, 1);
+    ui->setupUi(this);
+    m_icon->setPixmap(QPixmap("/home/shijm/Documents/QtProject/ProtocolTools-Solution/PressPlateTool/resources/icons/down-arrow.png"));
+    m_icon->setAlignment(Qt::AlignRight);
+
+    ui->txtTitle->setTextFormat(Qt::TextFormat::RichText);
+    ui->txtTitle->setText(QString("<b>%1</b>").arg(title));
+    ui->gridLayout->addWidget(m_icon, 0, 3);
 }
 
 ExpandTile::~ExpandTile()
@@ -26,7 +24,7 @@ ExpandTile::~ExpandTile()
 
 void ExpandTile::setTitle(const QString &title)
 {
-    m_title->setText(QString("<b>%1</b>").arg(title));
+    ui->txtTitle->setText(QString("<b>%1</b>").arg(title));
 }
 
 void ExpandTile::setChecked(bool checked)
@@ -35,6 +33,7 @@ void ExpandTile::setChecked(bool checked)
         return ;
     }
     m_checked = checked;
+    m_icon->rotateIcon(checked);
     emit toggled(checked);
 }
 

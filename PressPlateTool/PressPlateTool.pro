@@ -21,7 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 CONFIG += c++11
-include(ui/ui.pri)
+
 SOURCES += \
         main.cpp \
         mainwindow.cpp
@@ -59,3 +59,5 @@ QMAKE_RPATHDIR += $${DESTDIR}/../lib
 TRANSLATIONS += $$PWD/PressPlateTool_en.ts
 TRANSLATIONS += $$PWD/PressPlateTool_zh.ts
 
+include(ui/ui.pri)
+include(protocol/protocol.pri)

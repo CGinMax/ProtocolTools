@@ -92,7 +92,7 @@ void ExpandWidgetItem::updateContentAnimation()
     }
     auto contentAnimation = static_cast<QPropertyAnimation *>(m_transitionAimation->animationAt(m_transitionAimation->animationCount() - 1));
     contentAnimation->setDuration(d->m_animationDuration);
-    contentAnimation->setStartValue(0);
+    contentAnimation->setStartValue(1);
     contentAnimation->setEndValue(contentHeight);
 }
 

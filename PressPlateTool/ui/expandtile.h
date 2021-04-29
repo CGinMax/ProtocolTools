@@ -2,7 +2,11 @@
 #define EXPANDTILE_H
 
 #include <QWidget>
-#include <QLabel>
+#include "tileicon.h"
+
+namespace Ui {
+class ExpandTile;
+}
 
 class ExpandTile : public QWidget
 {
@@ -21,10 +25,9 @@ signals:
 public slots:
 
 protected:
+    Ui::ExpandTile* ui;
     void mousePressEvent(QMouseEvent *event) override;
-
-    QLabel* m_title;
-    QLabel* m_icon;
+    TileIcon* m_icon;
     bool m_checked;
 private:
 };
