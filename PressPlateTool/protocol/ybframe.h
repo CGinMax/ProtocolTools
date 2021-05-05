@@ -8,6 +8,8 @@
 #include <iterator>
 #include <vector>
 
+#include "content/icontent.h"
+
 enum eYBFrameType
 {
     YBCollector = 0x20,
@@ -46,7 +48,7 @@ class YBFrame
 public:
     static uint16_t checkCRC16(std::vector<uint8_t> buff, int offset);
     YBFrame();
-    ~YBFrame() = default;
+    ~YBFrame();
     YBFrame(const YBFrame& other);
     YBFrame& operator=(const YBFrame& other);
     static std::pair<YBFrame, eYBParseResult> parseBytesToFrame(std::list<uint8_t>& datas);
@@ -64,7 +66,11 @@ public:
 
     static const uint8_t frameMinLen = 17; // 17
 
+    std::string parseToString();
+
 private:
+    bool isSend;
+    IContent* dataContent;
 };
 
 #endif // YBFRAME_H

@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <iterator>
 
+#include "content/contentfactory.h"
+
 const std::array<uint8_t, 6> YBFrame::header = {0xEB, 0x90, 0xEB, 0x90, 0xEB, 0x90};
 
 YBFrame::YBFrame()
@@ -12,8 +14,16 @@ YBFrame::YBFrame()
     , funCode(0)
     , dataLen(0)
     , crcCode(0)
+    , dataContent(nullptr)
 {
 
+}
+
+YBFrame::~YBFrame()
+{
+    if (dataContent) {
+        delete dataContent;
+    }
 }
 
 YBFrame::YBFrame(const YBFrame &other)
@@ -109,6 +119,20 @@ uint16_t YBFrame::calcCrc(const YBFrame &frame)
 
     return checkCRC16(crcvec, 0);
 
+}
+
+std::string YBFrame::parseToString()
+{
+    std::list<std::string> strList;
+    dataContent = ContentFactory::createContent(funCode);
+    strList.push_back(dataContent->toString(data, true));
+
+
+    std::string result;
+    for (auto& str : strList) {
+        result += str;
+    }
+    return result;
 }
 
 uint16_t YBFrame::checkCRC16(std::vector<uint8_t> buff, int offset)
