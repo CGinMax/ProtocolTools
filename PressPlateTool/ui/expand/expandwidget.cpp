@@ -22,7 +22,8 @@ void ExpandWidget::addExpandItem(ExpandWidgetItem *item)
     if (item == nullptr) {
         return;
     }
-    ui->scrollLayout->addWidget(item);
+    ui->scrollLayout->insertWidget(ui->scrollLayout->count() - 1, item);
+//    ui->scrollLayout->addWidget(item);
     m_itemList.append(item);
 }
 

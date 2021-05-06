@@ -2,28 +2,33 @@
 #include "ui_mainwindow.h"
 #include <QScreen>
 
-#include <QVBoxLayout>
-#include "ui/expandwidgetitem.h"
-#include "ui/expandwidget.h"
-#include <QPlainTextEdit>
+#include "ui/expand/expandwidgetitem.h"
+#include "ui/expand/expandwidget.h"
+#include "ui/expand/gatheroperwidget.h"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    auto mainLayout = new QVBoxLayout(ui->centralWidget);
 
-    auto expandWidget = new ExpandWidget(this);
+    ui->mainSplitter->setChildrenCollapsible(false);
+    ui->mainSplitter->setStretchFactor(0, 1);
+    ui->mainSplitter->setStretchFactor(1, 9);
 
-    for (int i = 0; i < 10; i++) {
-        auto tile = new ExpandTile("title");
-        auto widget = new ExpandWidgetItem(tile);
-        widget->setContentWidget(new QPlainTextEdit(widget));
-        expandWidget->addExpandItem(widget);
+    auto tile = new ExpandTile("title");
+    auto widget = new ExpandWidgetItem(tile);
+    widget->setBorderRadius(8);
+    widget->setContentWidget(new GatherOperWidget(widget));
+    ui->expandWidget->addExpandItem(widget);
 
-    }
-
-    mainLayout->addWidget(expandWidget);
+//    auto expandWidget = new ExpandWidget(this);
+//    for (int i = 0; i < 10; i++) {
+//        auto tile = new ExpandTile("title");
+//        auto widget = new ExpandWidgetItem(tile);
+//        widget->setBorderRadius(5);
+//        widget->setContentWidget(new GatherOperWidget(widget));
+//        ui->expandWidget->addExpandItem(widget);
+//    }
 
     auto screenSize = qApp->primaryScreen()->availableSize();
     setGeometry((screenSize.width() - width()) / 2, (screenSize.height() - height()) / 2, width(), height());

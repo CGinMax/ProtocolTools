@@ -10,7 +10,7 @@
 ExpandWidgetItemPrivate::ExpandWidgetItemPrivate(ExpandWidgetItem* q)
     : q_ptr(q)
     , m_borderColor(QColor(Qt::transparent))
-    , m_backgroundColor(QColor(0xFFEBECF1))
+    , m_backgroundColor(QColor(0xFAFBFB))
     , m_isExpanded(false)
     , m_borderRadius(0)
     , m_animationDuration(200)

@@ -5,18 +5,21 @@ QT += gui core widgets
 CONFIG += c++11
 
 HEADERS += \
-    $$PWD/expandwidgetitem.h \
-    $$PWD/expandwidgetitem_p.h \
-    $$PWD/expandtile.h \
-    $$PWD/expandwidget.h \
-    $$PWD/tileicon.h
+    $$PWD/expand/expandwidgetitem.h \
+    $$PWD/expand/expandwidgetitem_p.h \
+    $$PWD/expand/expandtile.h \
+    $$PWD/expand/expandwidget.h \
+    $$PWD/expand/tileicon.h \
+    $$PWD/expand/gatheroperwidget.h
 
 SOURCES += \
-    $$PWD/expandwidgetitem.cpp \
-    $$PWD/expandtile.cpp \
-    $$PWD/expandwidget.cpp \
-    $$PWD/tileicon.cpp
+    $$PWD/expand/expandwidgetitem.cpp \
+    $$PWD/expand/expandtile.cpp \
+    $$PWD/expand/expandwidget.cpp \
+    $$PWD/expand/tileicon.cpp \
+    $$PWD/expand/gatheroperwidget.cpp
 
 FORMS += \
-    $$PWD/expandwidget.ui \
-    $$PWD/expandtile.ui
+    $$PWD/expand/expandwidget.ui \
+    $$PWD/expand/expandtile.ui \
+    $$PWD/expand/gatheroperwidget.ui
