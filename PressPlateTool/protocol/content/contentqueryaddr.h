@@ -6,9 +6,14 @@
 class ContentQueryAddr : public IContent
 {
 public:
-    ContentQueryAddr();
+    explicit ContentQueryAddr(uint8_t low = 0x00, uint8_t high = 0x00);
 
-    std::string toString(const std::vector<uint8_t> &datas, bool isSend) override;
+    std::string toString(bool isSend) override;
+
+    std::vector<uint8_t> toByteVector() override;
+
+private:
+    uint16_t addr;
 };
 
 #endif // CONTENTQUERYADDR_H

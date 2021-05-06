@@ -6,9 +6,15 @@
 class ContentReportStatus : public IContent
 {
 public:
-    ContentReportStatus();
+    explicit ContentReportStatus(uint8_t curCode, uint8_t settingCode);
 
-    std::string toString(const std::vector<uint8_t> &datas, bool isSend) override;
+    std::string toString(bool isSend) override;
+
+    std::vector<uint8_t> toByteVector() override;
+
+private:
+    uint8_t currentCode;
+    uint8_t setCode;
 };
 
 #endif // CONTENTREPORTSTATUS_H

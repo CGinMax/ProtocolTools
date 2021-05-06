@@ -6,9 +6,14 @@
 class ContentQueryVersion : public IContent
 {
 public:
-    ContentQueryVersion();
+    explicit ContentQueryVersion(const std::vector<uint8_t>& datas);
 
-    std::string toString(const std::vector<uint8_t> &datas, bool isSend) override;
+    std::string toString(bool isSend) override;
+
+    std::vector<uint8_t> toByteVector() override;
+
+private:
+    std::vector<uint8_t> datas;
 };
 
 #endif // CONTENTQUERYVERSION_H

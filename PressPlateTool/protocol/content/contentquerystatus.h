@@ -6,10 +6,17 @@
 class ContentQueryStatus : public IContent
 {
 public:
-    ContentQueryStatus();
+    explicit ContentQueryStatus(uint8_t curCode = 0x00, uint8_t setCode = 0x00);
 
     static std::array<std::string, 6> currentStatus;
-    std::string toString(const std::vector<uint8_t> &datas, bool isSend) override;
+    std::string toString(bool isSend) override;
+
+    std::vector<uint8_t> toByteVector() override;
+
+private:
+    uint8_t currentCode;
+    uint8_t setCode;
+
 };
 
 #endif // CONTENTQUERYSTATUS_H

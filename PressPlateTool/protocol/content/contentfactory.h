@@ -7,7 +7,7 @@ class ContentFactory
 public:
     ContentFactory();
 
-    static IContent* createContent(uint8_t funCode);
+    static IContent* createContent(uint8_t funCode, const std::vector<uint8_t>& datas = std::vector<uint8_t>());
 };
 
 #endif // CONTENTFACTORY_H

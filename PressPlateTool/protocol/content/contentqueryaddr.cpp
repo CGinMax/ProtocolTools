@@ -1,21 +1,26 @@
 #include "contentqueryaddr.h"
 
-ContentQueryAddr::ContentQueryAddr()
+ContentQueryAddr::ContentQueryAddr(uint8_t low, uint8_t high)
 {
-
+    addr = high;
+    addr = static_cast<uint16_t>(addr << 8) | low;
 }
 
-
-std::string ContentQueryAddr::toString(const std::vector<uint8_t> &datas, bool isSend)
+std::string ContentQueryAddr::toString(bool isSend)
 {
-    if (isSend || datas.empty()) {
+    if (isSend) {
         return std::string();
     }
 
     std::string result = u8"查询地址=";
-    uint16_t addr = datas.at(0);
-    addr = (addr << 8) | datas.at(1);
+    result += std::to_string(addr);//hex
+    return result;
+}
 
-    result += std::to_string(addr) + "()";//hex
+std::vector<uint8_t> ContentQueryAddr::toByteVector()
+{
+    std::vector<uint8_t> result;
+    result.push_back(addr & 0xFF);
+    result.push_back((addr >> 8) & 0xFF);
     return result;
 }

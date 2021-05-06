@@ -1,15 +1,16 @@
 #include "contentsettingstatus.h"
 
-ContentSettingStatus::ContentSettingStatus()
+ContentSettingStatus::ContentSettingStatus(uint8_t statusCode)
+    : statusCode(statusCode)
 {
 
 }
 
-std::string ContentSettingStatus::toString(const std::vector<uint8_t> &datas, bool isSend)
+std::string ContentSettingStatus::toString(bool isSend)
 {
     std::string result;
     if (isSend) {
-        switch (datas.at(0)) {
+        switch (statusCode) {
         case 0x00:
             result += u8"应分";
             break;
@@ -27,11 +28,17 @@ std::string ContentSettingStatus::toString(const std::vector<uint8_t> &datas, bo
         return result;
     }
 
-    // 接收的
-    if (datas.at(0) == 0x00) {
+    // 接收
+    if (statusCode == 0x00) {
         result += u8"设定失败";
-    } else if (datas.at(0) == 0x01) {
+    } else if (statusCode == 0x01) {
         result += u8"设定成功";
     }
     return result;
+}
+
+
+std::vector<uint8_t> ContentSettingStatus::toByteVector()
+{
+    return {statusCode};
 }

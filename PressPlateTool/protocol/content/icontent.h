@@ -10,7 +10,8 @@ class IContent
 public:
     virtual ~IContent();
 
-    virtual std::string toString(const std::vector<uint8_t>& datas, bool isSend) = 0;
+    virtual std::string toString(bool isSend) = 0;
+    virtual std::vector<uint8_t> toByteVector() = 0;
 };
 
 #endif // ICONTENT_H

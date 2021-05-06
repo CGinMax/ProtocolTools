@@ -1,10 +1,12 @@
 #include "ybframe.h"
 #include <algorithm>
 #include <iterator>
-
+#include "utilhelper.h"
 #include "content/contentfactory.h"
 
-const std::array<uint8_t, 6> YBFrame::header = {0xEB, 0x90, 0xEB, 0x90, 0xEB, 0x90};
+std::map<int, std::string> YBFrame::frameTypeMap{{0x02, u8"一匙通PC软件"}, {0x20, u8"压版采集器"}, {0x21, u8"压版传感器"}};
+
+const std::array<uint8_t, 4> YBFrame::header = {0xEB, 0x90, 0xEB, 0x90};
 
 YBFrame::YBFrame()
     : srcType(0)
@@ -14,6 +16,7 @@ YBFrame::YBFrame()
     , funCode(0)
     , dataLen(0)
     , crcCode(0)
+    , isSend(true)
     , dataContent(nullptr)
 {
 
@@ -21,9 +24,7 @@ YBFrame::YBFrame()
 
 YBFrame::~YBFrame()
 {
-    if (dataContent) {
-        delete dataContent;
-    }
+    delete dataContent;
 }
 
 YBFrame::YBFrame(const YBFrame &other)
@@ -42,6 +43,8 @@ YBFrame &YBFrame::operator=(const YBFrame &other)
     dataLen = other.dataLen;
     std::copy(other.data.begin(), other.data.end(), std::back_inserter(data));
     crcCode = other.crcCode;
+    isSend = other.isSend;
+    dataContent = other.dataContent;
     return *this;
 }
 
@@ -54,7 +57,7 @@ std::pair<YBFrame, eYBParseResult> YBFrame::parseBytesToFrame(std::list<uint8_t>
         return std::make_pair(YBFrame(), eYBParseResult::HeaderError);
     }
 
-    std::advance(iter, 6);
+    std::advance(iter, header.size());
 
     if (iter == datas.end()
             || static_cast<int>(std::distance(iter, datas.end())) < static_cast<int>(frameMinLen - header.size())) {
@@ -100,12 +103,15 @@ std::pair<YBFrame, eYBParseResult> YBFrame::parseBytesToFrame(std::list<uint8_t>
         return std::make_pair(frame, eYBParseResult::CrcError);
     }
 
+    frame.isSend = false;
+    // 完整时删除完整报文数据
+    datas.erase(datas.begin(), iter);
     return std::make_pair(frame, eYBParseResult::NoError);
 }
 
 uint16_t YBFrame::calcCrc(const YBFrame &frame)
 {
-    std::vector<uint8_t> crcvec(frameMinLen - 8 + frame.data.size(), 0);
+    std::vector<uint8_t> crcvec(frameMinLen - header.size() - 2 + frame.data.size(), 0);
     crcvec[0] = frame.srcType;
     crcvec[1] = frame.dstType;
     crcvec[2] = static_cast<uint8_t>(frame.srcAddr);
@@ -124,15 +130,72 @@ uint16_t YBFrame::calcCrc(const YBFrame &frame)
 std::string YBFrame::parseToString()
 {
     std::list<std::string> strList;
-    dataContent = ContentFactory::createContent(funCode);
-    strList.push_back(dataContent->toString(data, true));
 
+    strList.emplace_back(u8"源类型:");
+    strList.emplace_back(frameTypeMap.at(srcType));
+    strList.emplace_back(u8"(" + UtilHelper::num2HexString(srcType) + u8")");
+    strList.emplace_back(u8", 目的类型:");
+    strList.emplace_back(frameTypeMap.at(dstType));
+    strList.emplace_back(u8"(" + UtilHelper::num2HexString(dstType) + u8")");
+
+    strList.emplace_back(u8", 源地址:");
+    strList.emplace_back(std::to_string(srcAddr));
+
+    strList.emplace_back(u8", 目的地址:");
+    strList.emplace_back(std::to_string(dstAddr));
+
+    strList.emplace_back(u8", 功能码:");
+    strList.emplace_back(std::to_string(funCode));
+    strList.emplace_back(u8"(" + UtilHelper::num2HexString(funCode) + u8")");
+
+    strList.emplace_back(u8", 数据正文长度:");
+    strList.emplace_back(std::to_string(dataLen));
+
+    if (dataContent == nullptr) {
+        dataContent = ContentFactory::createContent(funCode, data);
+    }
+    std::string contentStr = dataContent->toString(isSend);
+    if (!contentStr.empty()) {
+        strList.push_back(contentStr);
+    }
+
+    strList.emplace_back(u8", crc16校验码:");
+    strList.emplace_back(std::to_string(crcCode));
+    strList.emplace_back(u8"(" + UtilHelper::num2HexString(crcCode | 0xFF) + " " + UtilHelper::num2HexString((crcCode >> 8) | 0xFF) + u8")");
 
     std::string result;
     for (auto& str : strList) {
         result += str;
     }
     return result;
+}
+
+std::vector<uint8_t> YBFrame::packetFrame()
+{
+    if (dataLen > 0 && dataContent != nullptr) {
+        data = dataContent->toByteVector();
+    }
+    crcCode = calcCrc(*this);
+
+    uint pos = 0;
+    std::vector<uint8_t> packetDatas(frameMinLen + data.size(), 0);
+    std::copy(header.begin(), header.end(), packetDatas.begin());
+    pos += header.size();
+
+    packetDatas[pos++] = srcType;
+    packetDatas[pos++] = dstType;
+    packetDatas[pos++] = srcAddr & 0xFF;
+    packetDatas[pos++] = (srcAddr >> 8) & 0xFF;
+    packetDatas[pos++] = dstAddr & 0xFF;
+    packetDatas[pos++] = (dstAddr >> 8) & 0xFF;
+    packetDatas[pos++] = funCode;
+    packetDatas[pos++] = dataLen & 0xFF;
+    packetDatas[pos++] = (dataLen >> 8) & 0xFF;
+    std::copy(data.begin(), data.end(), packetDatas.begin() + pos);
+    pos += data.size();
+    packetDatas[pos++] = crcCode & 0xFF;
+    packetDatas[pos++] = (crcCode >> 8) & 0xFF;
+    return packetDatas;
 }
 
 uint16_t YBFrame::checkCRC16(std::vector<uint8_t> buff, int offset)

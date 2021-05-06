@@ -1,42 +1,48 @@
 #include "contentfactory.h"
 #include "../ybframe.h"
+#include "contentnakerror.h"
 #include "contentqueryaddr.h"
 #include "contentquerystatus.h"
 #include "contentqueryversion.h"
 #include "contentreportstatus.h"
 #include "contentsettingaddr.h"
 #include "contentsettingstatus.h"
+#include "contentforcesetaddr.h"
 
 ContentFactory::ContentFactory()
 {
 
 }
 
-IContent *ContentFactory::createContent(uint8_t funCode)
+IContent *ContentFactory::createContent(uint8_t funCode, const std::vector<uint8_t> &datas)
 {
     IContent* content = nullptr;
     switch (funCode) {
+    case eYBFunCode::NAKCode:
+        content = new ContentNAKError(datas.at(0), datas.at(1));
+        break;
     case eYBFunCode::SettingStatusCode:
-        content = new ContentSettingStatus();
+        content = new ContentSettingStatus(datas.at(0));
         break;
     case eYBFunCode::QueryStatusCode:
-        content = new ContentQueryStatus();
+        content = datas.empty() ? new ContentQueryStatus() : new ContentQueryStatus(datas.at(0), datas.at(1));
         break;
     case eYBFunCode::QueryVersionCode:
-        content = new ContentQueryVersion();
+        content = new ContentQueryVersion(datas);
         break;
     case eYBFunCode::SettingAddrCode:
-        content = new ContentSettingAddr();
+        content = new ContentSettingAddr(datas.at(0));
         break;
     case eYBFunCode::ReportStatusCode:
-        content = new ContentReportStatus();
+        content = new ContentReportStatus(datas.at(0), datas.at(1));
         break;
     case eYBFunCode::UpgradeCode:
         break;
     case eYBFunCode::ForceSettingAddrCode:
+        content = datas.empty() ? new ContentForceSetAddr() : new ContentForceSetAddr(datas.at(0), datas.at(1));
         break;
     case eYBFunCode::QueryAddrCode:
-        content = new ContentQueryAddr();
+        content = datas.empty() ? new ContentQueryAddr() : new ContentQueryAddr(datas.at(0), datas.at(1));
         break;
     }
 

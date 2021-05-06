@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <utility>
 #include <array>
+#include <map>
 #include <list>
 #include <iterator>
 #include <vector>
@@ -12,7 +13,8 @@
 
 enum eYBFrameType
 {
-    YBCollector = 0x20,
+    PCSoftware  = 0x02,
+    YBGather    = 0x20,
     YBSensor    = 0x21,
 };
 
@@ -25,6 +27,7 @@ enum eYBNAKCode
 
 enum eYBFunCode
 {
+    NAKCode                 = 0x01,
     SettingStatusCode       = 0x02,
     QueryStatusCode         = 0x03,
     QueryVersionCode        = 0x04,
@@ -53,8 +56,12 @@ public:
     YBFrame& operator=(const YBFrame& other);
     static std::pair<YBFrame, eYBParseResult> parseBytesToFrame(std::list<uint8_t>& datas);
     static uint16_t calcCrc(const YBFrame& frame);
+    std::string parseToString();
+
+    std::vector<uint8_t> packetFrame();
+
     // 报文数据
-    static const std::array<uint8_t, 6> header;
+    static const std::array<uint8_t, 4> header;
     uint8_t srcType;
     uint8_t dstType;
     uint16_t srcAddr;
@@ -64,11 +71,10 @@ public:
     std::vector<uint8_t> data;
     uint16_t crcCode;
 
-    static const uint8_t frameMinLen = 17; // 17
+    static const uint8_t frameMinLen = 15; // 15
 
-    std::string parseToString();
+    static std::map<int, std::string> frameTypeMap;
 
-private:
     bool isSend;
     IContent* dataContent;
 };
