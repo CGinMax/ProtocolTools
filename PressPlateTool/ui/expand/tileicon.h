@@ -9,7 +9,7 @@ class TileIcon : public QLabel
     Q_OBJECT
     Q_PROPERTY(qreal rotation WRITE setRotation READ rotation)
 public:
-    explicit TileIcon(QWidget *parent = nullptr);
+    explicit TileIcon(const QPixmap& pixmap, QWidget *parent = nullptr);
 
     void setRotation(qreal angle);
     qreal rotation() const;
@@ -22,6 +22,7 @@ public slots:
 private:
     qreal m_rotation;
     QPropertyAnimation* m_rotationAnimation;
+    QPixmap m_pixmap;
 };
 
 #endif // TILEICON_H

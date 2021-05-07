@@ -19,16 +19,19 @@ public:
     ~ExpandWidget() override;
     void addExpandItem(ExpandWidgetItem* item);
     void insertExpandItem(int index, ExpandWidgetItem* item);
-
+    void removeExpandItem(ExpandWidgetItem* item);
     int indexOf(ExpandWidgetItem* item);
 
 signals:
 
 public slots:
+    void onNotifySelected();
+
 
 protected:
     Ui::ExpandWidget* ui;
     QList<ExpandWidgetItem*> m_itemList;
+    ExpandWidgetItem* m_checkItem;
 };
 
 #endif // EXPANDWIDGET_H

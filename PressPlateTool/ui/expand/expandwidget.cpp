@@ -7,6 +7,7 @@
 ExpandWidget::ExpandWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ExpandWidget)
+    , m_checkItem(nullptr)
 {
     ui->setupUi(this);
 }
@@ -23,8 +24,13 @@ void ExpandWidget::addExpandItem(ExpandWidgetItem *item)
         return;
     }
     ui->scrollLayout->insertWidget(ui->scrollLayout->count() - 1, item);
-//    ui->scrollLayout->addWidget(item);
     m_itemList.append(item);
+    if (m_checkItem) {
+        m_checkItem->setIsSelected(false);
+    }
+    m_checkItem = item;
+    m_checkItem->setIsSelected(true);
+    connect(item, &ExpandWidgetItem::notifySelected, this, &ExpandWidget::onNotifySelected);
 }
 
 void ExpandWidget::insertExpandItem(int index, ExpandWidgetItem *item)
@@ -34,6 +40,32 @@ void ExpandWidget::insertExpandItem(int index, ExpandWidgetItem *item)
     }
     ui->scrollLayout->insertWidget(index, item);
     m_itemList.insert(index, item);
+
+    if (m_checkItem) {
+        m_checkItem->setIsSelected(false);
+    }
+    m_checkItem = item;
+    m_checkItem->setIsSelected(true);
+    connect(item, &ExpandWidgetItem::notifySelected, this, &ExpandWidget::onNotifySelected);
+}
+
+void ExpandWidget::removeExpandItem(ExpandWidgetItem* item)
+{
+    if (m_checkItem && m_checkItem == item) {
+        m_checkItem->setIsSelected(false);
+        auto index = indexOf(item);
+        if (index == 0 && m_itemList.count() == 1) {
+            m_checkItem = nullptr;
+        } else if (index == 0){
+            m_checkItem = m_itemList.at(index + 1);
+            m_checkItem->setIsSelected(true);
+        } else {
+            m_checkItem = m_itemList.at(index - 1);
+            m_checkItem->setIsSelected(true);
+        }
+    }
+
+    //TODO(shijm): remove item
 }
 
 int ExpandWidget::indexOf(ExpandWidgetItem *item)
@@ -43,4 +75,14 @@ int ExpandWidget::indexOf(ExpandWidgetItem *item)
     }
 
     return m_itemList.indexOf(item);
+}
+
+void ExpandWidget::onNotifySelected()
+{
+    auto item = qobject_cast<ExpandWidgetItem*>(sender());
+    if (m_checkItem) {
+        m_checkItem->setIsSelected(false);
+    }
+    m_checkItem = item;
+    m_checkItem->setIsSelected(true);
 }

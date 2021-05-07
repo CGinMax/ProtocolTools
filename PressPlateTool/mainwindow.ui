@@ -14,14 +14,53 @@
    <string>Press Plate Tool</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QSplitter" name="mainSplitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="ExpandWidget" name="expandWidget" native="true"/>
-      <widget class="QWidget" name="widget_2" native="true"/>
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit"/>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="ExpandWidget" name="expandWidget" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="GatherDetailPage" name="widget_2" native="true"/>
      </widget>
     </item>
    </layout>
@@ -52,6 +91,12 @@
    <class>ExpandWidget</class>
    <extends>QWidget</extends>
    <header>ui/expand/expandwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GatherDetailPage</class>
+   <extends>QWidget</extends>
+   <header>ui/gatherdetailpage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

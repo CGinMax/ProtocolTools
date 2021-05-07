@@ -2,25 +2,28 @@
 #include <QPixmap>
 #include <QTransform>
 
-TileIcon::TileIcon(QWidget *parent)
+TileIcon::TileIcon(const QPixmap &pixmap, QWidget *parent)
     : QLabel(parent)
     , m_rotation(0.0)
     , m_rotationAnimation(new QPropertyAnimation(this))
+    , m_pixmap(pixmap)
 {
+    QTransform t;
+    t.rotate(-90);
+    setPixmap(m_pixmap.transformed(t));
+
     m_rotationAnimation->setTargetObject(this);
     m_rotationAnimation->setPropertyName(QByteArray("rotation"));
     m_rotationAnimation->setDuration(150);
-    m_rotationAnimation->setStartValue(0.0);
-    m_rotationAnimation->setEndValue(90.0);
+    m_rotationAnimation->setStartValue(-90.0);
+    m_rotationAnimation->setEndValue(0.0);
 }
 
 void TileIcon::setRotation(qreal angle)
 {
-    auto iconPixmap = this->pixmap();
-    QTransform t;
-    t.rotate(angle);
-    iconPixmap->transformed(t);
-    setPixmap(*iconPixmap);
+//    QTransform t;
+//    t.rotate(angle);
+//    setPixmap(m_pixmap.transformed(t));
 }
 
 qreal TileIcon::rotation() const

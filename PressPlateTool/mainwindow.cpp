@@ -12,23 +12,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->mainSplitter->setChildrenCollapsible(false);
-    ui->mainSplitter->setStretchFactor(0, 1);
-    ui->mainSplitter->setStretchFactor(1, 9);
+    ui->mainSplitter->setStretchFactor(0, 2);
+    ui->mainSplitter->setStretchFactor(1, 5);
 
-    auto tile = new ExpandTile("title");
-    auto widget = new ExpandWidgetItem(tile);
-    widget->setBorderRadius(8);
-    widget->setContentWidget(new GatherOperWidget(widget));
-    ui->expandWidget->addExpandItem(widget);
+//    auto tile = new ExpandTile("title");
+//    auto widget = new ExpandWidgetItem(tile);
+//    widget->setBorderRadius(8);
+//    widget->setContentWidget(new GatherOperWidget(widget));
+//    ui->expandWidget->addExpandItem(widget);
 
 //    auto expandWidget = new ExpandWidget(this);
-//    for (int i = 0; i < 10; i++) {
-//        auto tile = new ExpandTile("title");
-//        auto widget = new ExpandWidgetItem(tile);
-//        widget->setBorderRadius(5);
-//        widget->setContentWidget(new GatherOperWidget(widget));
-//        ui->expandWidget->addExpandItem(widget);
-//    }
+    for (int i = 0; i < 10; i++) {
+        auto tile = new ExpandTile("title");
+        auto widget = new ExpandWidgetItem(tile);
+        widget->setBorderRadius(5);
+        widget->setContentWidget(new GatherOperWidget(widget));
+        ui->expandWidget->addExpandItem(widget);
+    }
 
     auto screenSize = qApp->primaryScreen()->availableSize();
     setGeometry((screenSize.width() - width()) / 2, (screenSize.height() - height()) / 2, width(), height());

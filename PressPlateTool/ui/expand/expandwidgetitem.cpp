@@ -3,17 +3,18 @@
 #include <QEvent>
 #include <QPainter>
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QPropertyAnimation>
 #include <QGraphicsDropShadowEffect>
 #include <QDebug>
 
 ExpandWidgetItemPrivate::ExpandWidgetItemPrivate(ExpandWidgetItem* q)
     : q_ptr(q)
-    , m_borderColor(QColor(Qt::transparent))
+    , m_borderColor(QColor(Qt::blue))
     , m_backgroundColor(QColor(0xFAFBFB))
     , m_isExpanded(false)
     , m_borderRadius(0)
-    , m_animationDuration(200)
+    , m_animationDuration(150)
 {
 
 }
@@ -30,6 +31,7 @@ void ExpandWidgetItemPrivate::init()
 ExpandWidgetItem::ExpandWidgetItem(ExpandTile *tile, QWidget *parent)
     : QWidget(parent)
     , d_ptr(new ExpandWidgetItemPrivate(this))
+    , m_isSelected(false)
     , m_tile(tile)
     , m_contentArea(new QWidget(this))
     , m_transitionAimation(new QParallelAnimationGroup(this))
@@ -41,15 +43,17 @@ ExpandWidgetItem::ExpandWidgetItem(ExpandTile *tile, QWidget *parent)
     m_contentArea->setMaximumHeight(0);
     m_contentArea->setMinimumHeight(0);
 
-    auto mainLayout = new QVBoxLayout(this);
+    auto mainLayout = new QGridLayout(this);
+//    auto mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(0);
     mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->addWidget(m_tile);
-    mainLayout->addWidget(m_contentArea);
+    mainLayout->addWidget(m_tile, 0, 0);
+    mainLayout->addWidget(m_contentArea, 1, 0);
+    /*    mainLayout->addWidget(m_tile);
+    mainLayout->addWidget(m_contentArea);*/
 
     auto contentLayout = new QVBoxLayout(m_contentArea);
     contentLayout->setSpacing(0);
-//    contentLayout->setContentsMargins(0, 0, 0, 0);
 
     m_transitionAimation->addAnimation(new QPropertyAnimation(this, QByteArray("minimumHeight")));
     m_transitionAimation->addAnimation(new QPropertyAnimation(this, QByteArray("maximumHeight")));
@@ -92,7 +96,8 @@ void ExpandWidgetItem::updateContentAnimation()
     }
     auto contentAnimation = static_cast<QPropertyAnimation *>(m_transitionAimation->animationAt(m_transitionAimation->animationCount() - 1));
     contentAnimation->setDuration(d->m_animationDuration);
-    contentAnimation->setStartValue(1);
+    contentAnimation->setStartValue(0);
+//    contentAnimation->setEndValue(m_contentArea->maximumHeight());
     contentAnimation->setEndValue(contentHeight);
 }
 
@@ -160,10 +165,20 @@ void ExpandWidgetItem::expand(bool needExpanded)
     m_transitionAimation->start();
 }
 
+bool ExpandWidgetItem::isSelected() const
+{
+    return m_isSelected;
+}
+
+void ExpandWidgetItem::setIsSelected(bool isSelected)
+{
+    m_isSelected = isSelected;
+}
+
 bool ExpandWidgetItem::event(QEvent *event)
 {
     // 效率差换painter
-    if (event->type() == QEvent::HoverEnter) {
+    /*if (event->type() == QEvent::HoverEnter) {
         auto effect = new QGraphicsDropShadowEffect(this);
         effect->setBlurRadius(6);
         effect->setColor(QColor(0, 0, 0, 80));
@@ -171,8 +186,10 @@ bool ExpandWidgetItem::event(QEvent *event)
         setGraphicsEffect(effect);
     } else if (event->type() == QEvent::HoverLeave) {
         setGraphicsEffect(nullptr);
+    } else */if (event->type() == QEvent::MouseButtonPress) {
+        emit notifySelected();
     }
-    QWidget::event(event);
+    return QWidget::event(event);
 }
 
 void ExpandWidgetItem::paintEvent(QPaintEvent *event)
@@ -184,9 +201,14 @@ void ExpandWidgetItem::paintEvent(QPaintEvent *event)
 
     QBrush brush(d->m_backgroundColor);
     painter.setBrush(brush);
-    QPen pen(d->m_borderColor);
-    pen.setWidth(2);
-    painter.setPen(pen);
+    if (m_isSelected) {
+        QPen pen(d->m_borderColor);
+        pen.setWidth(2);
+        painter.setPen(pen);
+    } else {
+        painter.setPen(Qt::NoPen);
+    }
+
     painter.drawRoundedRect(rect(), d->m_borderRadius, d->m_borderRadius);
     QWidget::paintEvent(event);
 }

@@ -7,6 +7,7 @@
 #include <QScrollArea>
 
 #include "expandtile.h"
+#include "../../common/gatherdata.h"
 
 class ExpandWidgetItemPrivate;
 
@@ -36,8 +37,12 @@ public:
     bool expanded() const;
     void setExpanded(bool expanded);
 
+    bool isSelected() const;
+    void setIsSelected(bool isSelected);
+
 signals:
     void expandedChanged(bool expanded);
+    void notifySelected();
 public slots:
     void expand(bool needExpanded);
 
@@ -47,10 +52,12 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
     const QScopedPointer<ExpandWidgetItemPrivate> d_ptr;
+    bool m_isSelected;
     ExpandTile* m_tile;
     QWidget* m_contentArea;
     QParallelAnimationGroup* m_transitionAimation;
 private:
+    QSharedPointer<GatherData> m_gatherData;
 };
 
 #endif // EXPANDWIDGETITEM_H

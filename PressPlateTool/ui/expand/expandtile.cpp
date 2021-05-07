@@ -5,11 +5,11 @@
 ExpandTile::ExpandTile(const QString &title, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ExpandTile)
-    , m_icon(new TileIcon(this))
+    , m_icon(new TileIcon(QPixmap("/home/shijm/Documents/QtProject/ProtocolTools-Solution/PressPlateTool/resources/icons/down-arrow.png"),this))
     , m_checked(false)
 {
     ui->setupUi(this);
-    m_icon->setPixmap(QPixmap("/home/shijm/Documents/QtProject/ProtocolTools-Solution/PressPlateTool/resources/icons/down-arrow.png"));
+//    m_icon->setPixmap();
     m_icon->setAlignment(Qt::AlignRight);
 
     ui->txtTitle->setTextFormat(Qt::TextFormat::RichText);

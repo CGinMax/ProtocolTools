@@ -61,3 +61,4 @@ TRANSLATIONS += $$PWD/PressPlateTool_zh.ts
 
 include(ui/ui.pri)
 include(protocol/protocol.pri)
+include(common/common.pri)
