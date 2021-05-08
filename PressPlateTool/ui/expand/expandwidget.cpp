@@ -3,6 +3,7 @@
 #include <QVBoxLayout>
 #include <QList>
 #include "expandwidgetitem.h"
+#include "gatheroperwidget.h"
 
 ExpandWidget::ExpandWidget(QWidget *parent)
     : QWidget(parent)
@@ -75,6 +76,17 @@ int ExpandWidget::indexOf(ExpandWidgetItem *item)
     }
 
     return m_itemList.indexOf(item);
+}
+
+ExpandWidgetItem *ExpandWidget::createExpandWidget(const QString &name, int radius)
+{
+
+    auto tile = new ExpandTile(name);
+    auto widget = new ExpandWidgetItem(tile);
+    widget->setBorderRadius(radius);
+    widget->setContentWidget(new GatherOperWidget(widget));
+
+    return widget;
 }
 
 void ExpandWidget::onNotifySelected()

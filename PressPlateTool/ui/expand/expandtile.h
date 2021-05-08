@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "tileicon.h"
-
+#include "../editableeventfilter.h"
 namespace Ui {
 class ExpandTile;
 }
@@ -20,6 +20,8 @@ public:
 
     void setChecked(bool checked);
     bool checked() const;
+
+    void setEventFilter(QWidget* widget);
 signals:
     void toggled(bool checked);
 public slots:
@@ -30,6 +32,7 @@ protected:
     TileIcon* m_icon;
     bool m_checked;
 private:
+    EditableEventFilter* m_editFilter;
 };
 
 #endif // EXPANDTILE_H

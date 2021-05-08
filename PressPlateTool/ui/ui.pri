@@ -16,7 +16,10 @@ HEADERS += \
     $$PWD/tables/listviewitem.h \
     $$PWD/gatherdetailpage.h \
     $$PWD/tables/ybtableview.h \
-    $$PWD/tables/listheader.h
+    $$PWD/tables/listheader.h \
+    $$PWD/buttons/fabbutton.h \
+    $$PWD/buttons/fabcircularmenu.h \
+    $$PWD/editableeventfilter.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -29,7 +32,10 @@ SOURCES += \
     $$PWD/tables/listviewitem.cpp \
     $$PWD/gatherdetailpage.cpp \
     $$PWD/tables/ybtableview.cpp \
-    $$PWD/tables/listheader.cpp
+    $$PWD/tables/listheader.cpp \
+    $$PWD/buttons/fabbutton.cpp \
+    $$PWD/buttons/fabcircularmenu.cpp \
+    $$PWD/editableeventfilter.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \

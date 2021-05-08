@@ -7,14 +7,20 @@ ExpandTile::ExpandTile(const QString &title, QWidget *parent)
     , ui(new Ui::ExpandTile)
     , m_icon(new TileIcon(QPixmap("/home/shijm/Documents/QtProject/ProtocolTools-Solution/PressPlateTool/resources/icons/down-arrow.png"),this))
     , m_checked(false)
+    , m_editFilter(new EditableEventFilter(this))
 {
     ui->setupUi(this);
-//    m_icon->setPixmap();
+
     m_icon->setAlignment(Qt::AlignRight);
 
-    ui->txtTitle->setTextFormat(Qt::TextFormat::RichText);
-    ui->txtTitle->setText(QString("<b>%1</b>").arg(title));
+    auto font = ui->editTitle->font();
+    font.setBold(true);
+    font.setPixelSize(14);
+    ui->editTitle->setFont(font);
+    ui->editTitle->setText(title);
     ui->gridLayout->addWidget(m_icon, 0, 3);
+
+    setEventFilter(ui->editTitle);
 }
 
 ExpandTile::~ExpandTile()
@@ -24,7 +30,7 @@ ExpandTile::~ExpandTile()
 
 void ExpandTile::setTitle(const QString &title)
 {
-    ui->txtTitle->setText(QString("<b>%1</b>").arg(title));
+    ui->editTitle->setText(title);
 }
 
 void ExpandTile::setChecked(bool checked)
@@ -40,6 +46,11 @@ void ExpandTile::setChecked(bool checked)
 bool ExpandTile::checked() const
 {
     return m_checked;
+}
+
+void ExpandTile::setEventFilter(QWidget *widget)
+{
+    widget->installEventFilter(m_editFilter);
 }
 
 void ExpandTile::mousePressEvent(QMouseEvent *event)

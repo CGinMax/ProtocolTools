@@ -16,7 +16,7 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="1,0">
    <property name="leftMargin">
     <number>4</number>
    </property>
@@ -29,13 +29,6 @@
    <property name="bottomMargin">
     <number>4</number>
    </property>
-   <item row="1" column="1">
-    <widget class="QLabel" name="txtVersion">
-     <property name="text">
-      <string>version</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="txtId">
      <property name="text">
@@ -43,12 +36,22 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="txtTitle">
+   <item row="1" column="1">
+    <widget class="QLabel" name="txtVersion">
      <property name="text">
-      <string>title</string>
+      <string>version</string>
      </property>
     </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="btnQueryVersion">
+     <property name="text">
+      <string>Query Version</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLineEdit" name="editTitle"/>
    </item>
   </layout>
  </widget>

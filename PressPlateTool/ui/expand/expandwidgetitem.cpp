@@ -49,8 +49,6 @@ ExpandWidgetItem::ExpandWidgetItem(ExpandTile *tile, QWidget *parent)
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->addWidget(m_tile, 0, 0);
     mainLayout->addWidget(m_contentArea, 1, 0);
-    /*    mainLayout->addWidget(m_tile);
-    mainLayout->addWidget(m_contentArea);*/
 
     auto contentLayout = new QVBoxLayout(m_contentArea);
     contentLayout->setSpacing(0);

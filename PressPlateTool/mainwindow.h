@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include "ui/buttons/fabcircularmenu.h"
 namespace Ui {
 class MainWindow;
 }
@@ -15,8 +15,14 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void onNotifyAddOne();
+
+    void onNotifyAddMulti();
+
 private:
     Ui::MainWindow *ui;
+    FabCircularMenu* m_fabMenu;
 };
 
 #endif // MAINWINDOW_H

@@ -22,6 +22,8 @@ public:
     void removeExpandItem(ExpandWidgetItem* item);
     int indexOf(ExpandWidgetItem* item);
 
+
+    static ExpandWidgetItem* createExpandWidget(const QString& name = tr("untitled"), int radius = 8);
 signals:
 
 public slots:
