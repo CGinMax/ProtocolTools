@@ -4,6 +4,8 @@
 #include <QWidget>
 #include "tileicon.h"
 #include "../editableeventfilter.h"
+
+class QLineEdit;
 namespace Ui {
 class ExpandTile;
 }
@@ -21,7 +23,7 @@ public:
     void setChecked(bool checked);
     bool checked() const;
 
-    void setEventFilter(QWidget* widget);
+    void setEventFilter(QLineEdit* edit);
 signals:
     void toggled(bool checked);
 public slots:

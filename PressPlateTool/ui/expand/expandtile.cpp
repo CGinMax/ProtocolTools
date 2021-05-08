@@ -20,6 +20,7 @@ ExpandTile::ExpandTile(const QString &title, QWidget *parent)
     ui->editTitle->setText(title);
     ui->gridLayout->addWidget(m_icon, 0, 3);
 
+
     setEventFilter(ui->editTitle);
 }
 
@@ -48,9 +49,14 @@ bool ExpandTile::checked() const
     return m_checked;
 }
 
-void ExpandTile::setEventFilter(QWidget *widget)
+void ExpandTile::setEventFilter(QLineEdit *edit)
 {
-    widget->installEventFilter(m_editFilter);
+    connect(edit, &QLineEdit::editingFinished, this, [=]{
+        edit->setStyleSheet("background-color:transparent;");
+        edit->setFrame(false);
+        edit->setReadOnly(true);
+    });
+    edit->installEventFilter(m_editFilter);
 }
 
 void ExpandTile::mousePressEvent(QMouseEvent *event)
