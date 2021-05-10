@@ -1,28 +1,55 @@
 #include "gatherdata.h"
 
-GatherData::GatherData(QObject *parent) : QObject(parent)
+GatherData::GatherData(const QString &name, QObject *parent)
+    : QObject(parent)
+    , m_name(name)
+    , m_id(1)
+    , m_addr(1)
+    , m_version(QString())
 {
 
 }
 
-QString GatherData::id() const
+GatherData::~GatherData()
+{
+}
+
+QString GatherData::name() const
+{
+    return m_name;
+}
+
+void GatherData::setName(const QString &name)
+{
+    if (m_name == name) {
+        return ;
+    }
+    m_name = name;
+    emit nameChanged(name);
+}
+
+int GatherData::id() const
 {
     return m_id;
 }
 
-void GatherData::setId(const QString &id)
+void GatherData::setId(int id)
 {
     m_id = id;
 }
 
-QString GatherData::addr() const
+int GatherData::addr() const
 {
     return m_addr;
 }
 
-void GatherData::setAddr(const QString &addr)
+void GatherData::setAddr(int addr)
 {
+    if (m_addr == addr) {
+        return ;
+    }
     m_addr = addr;
+    emit addrChanged(addr);
 }
 
 QString GatherData::version() const
@@ -33,4 +60,14 @@ QString GatherData::version() const
 void GatherData::setVersion(const QString &version)
 {
     m_version = version;
+}
+
+PortParam GatherData::portParam() const
+{
+    return m_portParam;
+}
+
+void GatherData::setPortParam(const PortParam &portParam)
+{
+    m_portParam = portParam;
 }

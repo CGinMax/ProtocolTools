@@ -67,7 +67,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="GatherDetailPage" name="widget_2" native="true"/>
+      <widget class="GatherDetailPage" name="gatherDetailPage" native="true"/>
      </widget>
     </item>
    </layout>

@@ -8,13 +8,14 @@
 #include <list>
 #include <iterator>
 #include <vector>
+#include <memory>
 
 #include "content/icontent.h"
 
 enum eYBFrameType
 {
     PCSoftware  = 0x02,
-    YBGather    = 0x20,
+    YBGather    = 0x09,
     YBSensor    = 0x21,
 };
 
@@ -28,11 +29,12 @@ enum eYBNAKCode
 enum eYBFunCode
 {
     NAKCode                 = 0x01,
-    SettingStatusCode       = 0x02,
+    SetStatusCode           = 0x02,
     QueryStatusCode         = 0x03,
     QueryVersionCode        = 0x04,
-    SettingAddrCode         = 0x05,
+    SetAddressCode          = 0x05,
     ReportStatusCode        = 0x06,
+    SetSensorNumCode        = 0x0A,
     UpgradeCode             = 0x84,
     ForceSettingAddrCode    = 0x90,
     QueryAddrCode           = 0x91,
@@ -76,7 +78,7 @@ public:
     static std::map<int, std::string> frameTypeMap;
 
     bool isSend;
-    IContent* dataContent;
+    std::shared_ptr<IContent> dataContent;
 };
 
 #endif // YBFRAME_H

@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QScopedPointer>
 #include <QPropertyAnimation>
 #include <QGraphicsDropShadowEffect>
 #include <QDebug>
@@ -28,20 +29,21 @@ void ExpandWidgetItemPrivate::init()
 {
 }
 
-ExpandWidgetItem::ExpandWidgetItem(ExpandTile *tile, QWidget *parent)
+ExpandWidgetItem::ExpandWidgetItem(ExpandTile *tile, GatherController *controller, QWidget *parent)
     : QWidget(parent)
     , d_ptr(new ExpandWidgetItemPrivate(this))
     , m_isSelected(false)
     , m_tile(tile)
     , m_contentArea(new QWidget(this))
     , m_transitionAimation(new QParallelAnimationGroup(this))
+    , m_controller(controller)
 {
     d_ptr->init();
     m_tile->setParent(this);
 
-    m_contentArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_contentArea->setMaximumHeight(0);
-    m_contentArea->setMinimumHeight(0);
+//    m_contentArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+//    m_contentArea->setMaximumHeight(0);
+//    m_contentArea->setMinimumHeight(0);
 
     auto mainLayout = new QGridLayout(this);
 //    auto mainLayout = new QVBoxLayout(this);
@@ -57,9 +59,10 @@ ExpandWidgetItem::ExpandWidgetItem(ExpandTile *tile, QWidget *parent)
     m_transitionAimation->addAnimation(new QPropertyAnimation(this, QByteArray("maximumHeight")));
     m_transitionAimation->addAnimation(new QPropertyAnimation(m_contentArea, QByteArray("maximumHeight")));
 
-    connect(m_tile, &ExpandTile::toggled, this, [this](bool checked){
-        this->expand(checked);
-    });
+//    connect(m_tile, &ExpandTile::toggled, this, [this](bool checked){
+//        this->expand(checked);
+//    });
+
 }
 
 ExpandWidgetItem::~ExpandWidgetItem()
@@ -95,8 +98,17 @@ void ExpandWidgetItem::updateContentAnimation()
     auto contentAnimation = static_cast<QPropertyAnimation *>(m_transitionAimation->animationAt(m_transitionAimation->animationCount() - 1));
     contentAnimation->setDuration(d->m_animationDuration);
     contentAnimation->setStartValue(0);
-//    contentAnimation->setEndValue(m_contentArea->maximumHeight());
     contentAnimation->setEndValue(contentHeight);
+}
+
+GatherController *ExpandWidgetItem::getController()
+{
+    return m_controller.data();
+}
+
+YBProtocolChannel *ExpandWidgetItem::getProtocol()
+{
+    return m_controller->protocol();
 }
 
 QColor ExpandWidgetItem::color() const
@@ -171,6 +183,7 @@ bool ExpandWidgetItem::isSelected() const
 void ExpandWidgetItem::setIsSelected(bool isSelected)
 {
     m_isSelected = isSelected;
+    update();
 }
 
 bool ExpandWidgetItem::event(QEvent *event)
@@ -185,7 +198,7 @@ bool ExpandWidgetItem::event(QEvent *event)
     } else if (event->type() == QEvent::HoverLeave) {
         setGraphicsEffect(nullptr);
     } else */if (event->type() == QEvent::MouseButtonPress) {
-        emit notifySelected();
+        emit notifySelected(this);
     }
     return QWidget::event(event);
 }

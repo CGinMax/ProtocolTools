@@ -12,8 +12,14 @@ public:
     explicit GatherOperWidget(QWidget *parent = nullptr);
     ~GatherOperWidget() override;
 signals:
-
+    void setGatherAddress(int addr);
+    void resetSensorCount(int count);
 public slots:
+
+private slots:
+    void on_btnSetAddr_clicked();
+
+    void on_btnReset_clicked();
 
 private:
     Ui::GatherOperWidget* ui;

@@ -12,3 +12,13 @@ GatherOperWidget::~GatherOperWidget()
 {
     delete ui;
 }
+
+void GatherOperWidget::on_btnSetAddr_clicked()
+{
+    emit setGatherAddress(ui->editAddr->text().toInt());
+}
+
+void GatherOperWidget::on_btnReset_clicked()
+{
+    emit resetSensorCount(ui->editYBNum->text().toInt());
+}

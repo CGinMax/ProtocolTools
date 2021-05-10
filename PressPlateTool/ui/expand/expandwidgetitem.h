@@ -7,7 +7,7 @@
 #include <QScrollArea>
 
 #include "expandtile.h"
-#include "../../common/gatherdata.h"
+#include "gathercontroller.h"
 
 class ExpandWidgetItemPrivate;
 
@@ -17,13 +17,15 @@ class ExpandWidgetItem : public QWidget
     Q_DECLARE_PRIVATE(ExpandWidgetItem)
     Q_PROPERTY(bool isExpanded WRITE setExpanded READ expanded NOTIFY expandedChanged)
 public:
-    explicit ExpandWidgetItem(ExpandTile* tile, QWidget *parent = nullptr);
+    explicit ExpandWidgetItem(ExpandTile* tile, GatherController* controller, QWidget *parent = nullptr);
     ~ExpandWidgetItem() override;
 
     void setContentWidget(QWidget* widget);
 
     void updateContentAnimation();
 
+    GatherController* getController();
+    YBProtocolChannel* getProtocol();
 
     QColor color() const;
     void setBorderColor(const QColor &color);
@@ -42,10 +44,9 @@ public:
 
 signals:
     void expandedChanged(bool expanded);
-    void notifySelected();
+    void notifySelected(ExpandWidgetItem* item);
 public slots:
     void expand(bool needExpanded);
-
 
 protected:
     bool event(QEvent *event) override;
@@ -57,7 +58,7 @@ protected:
     QWidget* m_contentArea;
     QParallelAnimationGroup* m_transitionAimation;
 private:
-    QSharedPointer<GatherData> m_gatherData;
+    QScopedPointer<GatherController> m_controller;
 };
 
 #endif // EXPANDWIDGETITEM_H

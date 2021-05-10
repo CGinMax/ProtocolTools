@@ -4,12 +4,14 @@
 #include <QList>
 #include "expandwidgetitem.h"
 #include "gatheroperwidget.h"
-
+#include "gathercontroller.h"
+#include <QMetaType>
 ExpandWidget::ExpandWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ExpandWidget)
     , m_checkItem(nullptr)
 {
+    qRegisterMetaType<QSharedPointer<GatherData> >("const QSharedPointer<GatherData> &");
     ui->setupUi(this);
 }
 
@@ -26,11 +28,7 @@ void ExpandWidget::addExpandItem(ExpandWidgetItem *item)
     }
     ui->scrollLayout->insertWidget(ui->scrollLayout->count() - 1, item);
     m_itemList.append(item);
-    if (m_checkItem) {
-        m_checkItem->setIsSelected(false);
-    }
-    m_checkItem = item;
-    m_checkItem->setIsSelected(true);
+    onNotifySelected(item);
     connect(item, &ExpandWidgetItem::notifySelected, this, &ExpandWidget::onNotifySelected);
 }
 
@@ -41,32 +39,26 @@ void ExpandWidget::insertExpandItem(int index, ExpandWidgetItem *item)
     }
     ui->scrollLayout->insertWidget(index, item);
     m_itemList.insert(index, item);
-
-    if (m_checkItem) {
-        m_checkItem->setIsSelected(false);
-    }
-    m_checkItem = item;
-    m_checkItem->setIsSelected(true);
+    onNotifySelected(item);
     connect(item, &ExpandWidgetItem::notifySelected, this, &ExpandWidget::onNotifySelected);
 }
 
 void ExpandWidget::removeExpandItem(ExpandWidgetItem* item)
 {
     if (m_checkItem && m_checkItem == item) {
-        m_checkItem->setIsSelected(false);
         auto index = indexOf(item);
         if (index == 0 && m_itemList.count() == 1) {
             m_checkItem = nullptr;
         } else if (index == 0){
-            m_checkItem = m_itemList.at(index + 1);
-            m_checkItem->setIsSelected(true);
+            onNotifySelected(m_itemList.at(index + 1));
         } else {
-            m_checkItem = m_itemList.at(index - 1);
-            m_checkItem->setIsSelected(true);
+            onNotifySelected(m_itemList.at(index - 1));
         }
     }
 
-    //TODO(shijm): remove item
+    ui->scrollLayout->removeWidget(item);
+    m_itemList.removeOne(item);
+    delete item;
 }
 
 int ExpandWidget::indexOf(ExpandWidgetItem *item)
@@ -78,23 +70,31 @@ int ExpandWidget::indexOf(ExpandWidgetItem *item)
     return m_itemList.indexOf(item);
 }
 
-ExpandWidgetItem *ExpandWidget::createExpandWidget(const QString &name, int radius)
+ExpandWidgetItem *ExpandWidget::createExpandWidget(const PortParam &portParam, const QString &name, int radius)
 {
-
+    auto data = new GatherData(name);
+    data->setPortParam(portParam);
+    auto controller = new GatherController(data);
     auto tile = new ExpandTile(name);
-    auto widget = new ExpandWidgetItem(tile);
+    auto widget = new ExpandWidgetItem(tile, controller);
+    auto operWidget = new GatherOperWidget(widget);
     widget->setBorderRadius(radius);
-    widget->setContentWidget(new GatherOperWidget(widget));
-
+    widget->setContentWidget(operWidget);
+    controller->setExpandTile(tile);
+    controller->setOperWidget(operWidget);
     return widget;
 }
 
-void ExpandWidget::onNotifySelected()
+void ExpandWidget::onNotifySelected(ExpandWidgetItem *item)
 {
-    auto item = qobject_cast<ExpandWidgetItem*>(sender());
     if (m_checkItem) {
         m_checkItem->setIsSelected(false);
     }
     m_checkItem = item;
+    if (item == nullptr) {
+        emit itemChanged(QSharedPointer<GatherData>(nullptr));
+        return;
+    }
     m_checkItem->setIsSelected(true);
+    emit itemChanged(m_checkItem->getController()->gatherData());
 }

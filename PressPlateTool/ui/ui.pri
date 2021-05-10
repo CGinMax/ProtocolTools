@@ -19,7 +19,9 @@ HEADERS += \
     $$PWD/tables/listheader.h \
     $$PWD/buttons/fabbutton.h \
     $$PWD/buttons/fabcircularmenu.h \
-    $$PWD/editableeventfilter.h
+    $$PWD/editableeventfilter.h \
+    $$PWD/expand/gathercontroller.h \
+    $$PWD/dialogs/serialportdialog.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -35,7 +37,9 @@ SOURCES += \
     $$PWD/tables/listheader.cpp \
     $$PWD/buttons/fabbutton.cpp \
     $$PWD/buttons/fabcircularmenu.cpp \
-    $$PWD/editableeventfilter.cpp
+    $$PWD/editableeventfilter.cpp \
+    $$PWD/expand/gathercontroller.cpp \
+    $$PWD/dialogs/serialportdialog.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \
@@ -43,4 +47,5 @@ FORMS += \
     $$PWD/expand/gatheroperwidget.ui \
     $$PWD/tables/listviewitem.ui \
     $$PWD/gatherdetailpage.ui \
-    $$PWD/tables/listheader.ui
+    $$PWD/tables/listheader.ui \
+    $$PWD/dialogs/serialportdialog.ui

@@ -4,9 +4,10 @@
 #include <QWidget>
 #include <QScrollArea>
 
+class GatherData;
 class QVBoxLayout;
 class ExpandWidgetItem;
-
+class PortParam;
 namespace Ui {
 class ExpandWidget;
 }
@@ -23,11 +24,12 @@ public:
     int indexOf(ExpandWidgetItem* item);
 
 
-    static ExpandWidgetItem* createExpandWidget(const QString& name = tr("untitled"), int radius = 8);
+    static ExpandWidgetItem* createExpandWidget(const PortParam& portParam, const QString& name = tr("untitled"), int radius = 8);
 signals:
+    void itemChanged(const QSharedPointer<GatherData>& gatherData);
 
 public slots:
-    void onNotifySelected();
+    void onNotifySelected(ExpandWidgetItem* item);
 
 
 protected:

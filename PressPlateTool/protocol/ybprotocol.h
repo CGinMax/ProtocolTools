@@ -18,7 +18,8 @@ public:
 
     eYBParseResult parseToFrame();
 
-    std::deque<YBFrame> getRecvFrameQueue();
+    bool recvFrameEmpty();
+    YBFrame popRecvFrame();
 
 //    void processFrame(const YBFrame& frame);// 外部处理
 
@@ -30,19 +31,20 @@ public:
 
     YBFrame queryVersion(eYBFrameType type, uint16_t dstAddr);
 
-    YBFrame settingAddr(eYBFrameType type, uint8_t addr);
+    YBFrame settingAddress(eYBFrameType type, uint8_t addr);
+
+    YBFrame setSensorNum(uint16_t dstAddr, uint8_t num);
 
     // 暂时不用
     YBFrame upgradeProgram(const std::vector<uint8_t>& contentData);
 
     YBFrame forceSettingAddr(uint16_t addr);
 
-    YBFrame queryAddr(eYBFrameType type, uint16_t dstAddr);
+    YBFrame queryAddress(eYBFrameType type, uint16_t dstAddr);
 
 
 private:
     std::deque<YBFrame> recvFrameQueue;
-    std::deque<YBFrame> sendFrameQueue;
     std::list<uint8_t> recvDataList;
 };
 

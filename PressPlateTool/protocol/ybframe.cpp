@@ -24,7 +24,6 @@ YBFrame::YBFrame()
 
 YBFrame::~YBFrame()
 {
-    delete dataContent;
 }
 
 YBFrame::YBFrame(const YBFrame &other)
@@ -104,6 +103,9 @@ std::pair<YBFrame, eYBParseResult> YBFrame::parseBytesToFrame(std::list<uint8_t>
     }
 
     frame.isSend = false;
+    if (frame.dataContent == nullptr) {
+        frame.dataContent.reset(ContentFactory::createContent(frame.funCode, frame.data));
+    }
     // 完整时删除完整报文数据
     datas.erase(datas.begin(), iter);
     return std::make_pair(frame, eYBParseResult::NoError);
@@ -152,7 +154,7 @@ std::string YBFrame::parseToString()
     strList.emplace_back(std::to_string(dataLen));
 
     if (dataContent == nullptr) {
-        dataContent = ContentFactory::createContent(funCode, data);
+        dataContent.reset(ContentFactory::createContent(funCode, data));
     }
     std::string contentStr = dataContent->toString(isSend);
     if (!contentStr.empty()) {

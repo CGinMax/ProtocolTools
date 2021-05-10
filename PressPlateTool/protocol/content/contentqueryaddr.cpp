@@ -4,6 +4,7 @@ ContentQueryAddr::ContentQueryAddr(uint8_t low, uint8_t high)
 {
     addr = high;
     addr = static_cast<uint16_t>(addr << 8) | low;
+    funCode = 0x91;
 }
 
 std::string ContentQueryAddr::toString(bool isSend)
@@ -24,3 +25,4 @@ std::vector<uint8_t> ContentQueryAddr::toByteVector()
     result.push_back((addr >> 8) & 0xFF);
     return result;
 }
+

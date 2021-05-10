@@ -5,7 +5,7 @@ ContentForceSetAddr::ContentForceSetAddr(uint8_t low, uint8_t high)
 {
     addr = high;
     addr = static_cast<uint16_t>(addr << 8) | low;
-
+    funCode = 0x90;
 }
 
 
@@ -24,3 +24,4 @@ std::vector<uint8_t> ContentForceSetAddr::toByteVector()
     result.push_back((addr >> 8) & 0xFF);
     return result;
 }
+

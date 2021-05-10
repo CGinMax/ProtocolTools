@@ -41,6 +41,9 @@
        </rect>
       </property>
       <layout class="QVBoxLayout" name="scrollLayout">
+       <property name="spacing">
+        <number>12</number>
+       </property>
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">

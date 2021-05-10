@@ -19,18 +19,24 @@ public:
     ~ExpandTile() override;
 
     void setTitle(const QString& title);
+    void setHardwareVersion(const QString& ver);
+    void setSoftwareVersion(const QString& ver);
+    void setProductDescript(const QString& desc);
 
     void setChecked(bool checked);
     bool checked() const;
 
     void setEventFilter(QLineEdit* edit);
 signals:
+    void queryVersion();
     void toggled(bool checked);
+    void titleChanged(const QString& name);
 public slots:
 
 protected:
-    Ui::ExpandTile* ui;
     void mousePressEvent(QMouseEvent *event) override;
+protected:
+    Ui::ExpandTile* ui;
     TileIcon* m_icon;
     bool m_checked;
 private:

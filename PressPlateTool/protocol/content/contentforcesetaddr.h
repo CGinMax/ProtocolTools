@@ -10,6 +10,10 @@ public:
     std::string toString(bool isSend) override;
 
     std::vector<uint8_t> toByteVector() override;
+
+    uint16_t testAddress() override {
+        return addr;
+    }
 private:
     uint16_t addr;
 };

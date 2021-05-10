@@ -9,7 +9,7 @@ class ProtocolChannelBase : public QObject
 {
     Q_OBJECT
 public:
-    ProtocolChannelBase();
+    explicit ProtocolChannelBase(const QSharedPointer<CommunicationBase>& communication, QObject* parent = nullptr);
     ~ProtocolChannelBase() override;
 
     virtual void run() {}

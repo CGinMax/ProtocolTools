@@ -1,7 +1,9 @@
 #include "protocolchannelbase.h"
 
-ProtocolChannelBase::ProtocolChannelBase()
-    : m_loopTimer(new QTimer())
+ProtocolChannelBase::ProtocolChannelBase(const QSharedPointer<CommunicationBase> &communication, QObject *parent)
+    : QObject(parent)
+    , m_communication(communication)
+    , m_loopTimer(new QTimer())
 {
     connect(this, &ProtocolChannelBase::write, m_communication.data(), &CommunicationBase::writeData);
     connect(m_loopTimer.data(), &QTimer::timeout, this, &ProtocolChannelBase::onTimeout);

@@ -6,7 +6,7 @@ ContentQueryStatus::ContentQueryStatus(uint8_t curCode, uint8_t setCode)
     : currentCode(curCode)
     , setCode(setCode)
 {
-
+    funCode = 0x03;
 }
 
 std::string ContentQueryStatus::toString(bool isSend)

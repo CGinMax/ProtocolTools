@@ -20,7 +20,8 @@ HEADERS += \
     $$PWD/ybprotocolchannel.h \
     $$PWD/protocolchannelbase.h \
     $$PWD/content/contentnakerror.h \
-    $$PWD/content/contentforcesetaddr.h
+    $$PWD/content/contentforcesetaddr.h \
+    $$PWD/content/contentsetsensornum.h
 
 SOURCES += \
     $$PWD/content/contentfactory.cpp \
@@ -38,4 +39,5 @@ SOURCES += \
     $$PWD/ybprotocolchannel.cpp \
     $$PWD/protocolchannelbase.cpp \
     $$PWD/content/contentnakerror.cpp \
-    $$PWD/content/contentforcesetaddr.cpp
+    $$PWD/content/contentforcesetaddr.cpp \
+    $$PWD/content/contentsetsensornum.cpp

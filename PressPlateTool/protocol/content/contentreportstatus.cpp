@@ -5,7 +5,7 @@ ContentReportStatus::ContentReportStatus(uint8_t curCode, uint8_t settingCode)
     : currentCode(curCode)
     , setCode(settingCode)
 {
-
+    funCode = 0x06;
 }
 
 std::string ContentReportStatus::toString(bool isSend)
