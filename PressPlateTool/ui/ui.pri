@@ -21,7 +21,9 @@ HEADERS += \
     $$PWD/buttons/fabcircularmenu.h \
     $$PWD/editableeventfilter.h \
     $$PWD/expand/gathercontroller.h \
-    $$PWD/dialogs/serialportdialog.h
+    $$PWD/dialogs/serialportdialog.h \
+    $$PWD/buttons/rippleoverlay.h \
+    $$PWD/buttons/rippleanimation.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -39,7 +41,9 @@ SOURCES += \
     $$PWD/buttons/fabcircularmenu.cpp \
     $$PWD/editableeventfilter.cpp \
     $$PWD/expand/gathercontroller.cpp \
-    $$PWD/dialogs/serialportdialog.cpp
+    $$PWD/dialogs/serialportdialog.cpp \
+    $$PWD/buttons/rippleoverlay.cpp \
+    $$PWD/buttons/rippleanimation.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \

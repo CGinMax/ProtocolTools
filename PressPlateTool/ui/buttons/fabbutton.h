@@ -8,6 +8,8 @@
 #include <QEventTransition>
 #include <QGraphicsDropShadowEffect>
 
+class RippleOverlay;
+
 class FabButton : public QAbstractButton
 {
     Q_OBJECT
@@ -63,6 +65,8 @@ private:
     int m_iconSize;
     int m_diameter;
     QColor m_backgroundColor;
+    RippleOverlay* m_rippleOverly;
+
     QStateMachine* m_stateMachine;
     QState* m_unhoverState;
     QState* m_hoverState;

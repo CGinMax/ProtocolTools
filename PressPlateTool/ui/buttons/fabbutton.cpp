@@ -1,4 +1,5 @@
 #include "fabbutton.h"
+#include "rippleoverlay.h"
 #include <QEvent>
 #include <QPainter>
 #include <QPropertyAnimation>
@@ -78,6 +79,15 @@ FabButton::FabButton(QWidget *parent)
     if (parentWidget()) {
         parentWidget()->installEventFilter(this);
     }
+
+    m_rippleOverly = new RippleOverlay(this);
+
+    m_rippleOverly->setClipping(true);
+    QPainterPath path;
+    QRect square = QRect(0, 0, m_diameter, m_diameter);
+    square.moveCenter(rect().center());
+    path.addEllipse(square);
+    m_rippleOverly->setClipPath(path);
 
     setCheckable(true);
     setChecked(false);
@@ -290,6 +300,11 @@ int FabButton::diameter() const
 void FabButton::setDiameter(int diameter)
 {
     m_diameter = diameter;
+    QPainterPath path;
+    QRect square = QRect(0, 0, m_diameter, m_diameter);
+    square.moveCenter(rect().center());
+    path.addEllipse(square);
+    m_rippleOverly->setClipPath(path);
     update();
 }
 
