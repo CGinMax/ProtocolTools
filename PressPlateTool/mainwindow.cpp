@@ -5,7 +5,7 @@
 #include "ui/expand/expandwidgetitem.h"
 #include "ui/expand/expandwidget.h"
 #include "ui/dialogs/serialportdialog.h"
-#include "ui/buttons/fabbutton.h"
+#include "ui/buttons/circlebutton.h"
 
 int MainWindow::createNo = 1;
 
@@ -30,40 +30,23 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     m_fabMenu = new FabCircularMenu(this);
-    auto oneBtn = new FabButton(m_fabMenu);
+    auto oneBtn = new CircleButton(m_fabMenu);
     oneBtn->setIcon(QIcon(":/icons/add-one.png"));
-    oneBtn->setCorner(Qt::TopLeftCorner);
-    oneBtn->setOffset(0, 0);
     oneBtn->setIconSize(18);
     oneBtn->setCheckable(false);
     oneBtn->setDiameter(36);
     oneBtn->setShadowEnabled(false);
     oneBtn->setHoverEnabled(false);
-    auto multiBtn = new FabButton(m_fabMenu);
+    auto multiBtn = new CircleButton(m_fabMenu);
     multiBtn->setIcon(QIcon(":/icons/add-multi.png"));
-    multiBtn->setCorner(Qt::TopLeftCorner);
-    multiBtn->setOffset(0, 0);
     multiBtn->setIconSize(18);
     multiBtn->setCheckable(false);
     multiBtn->setDiameter(36);
     multiBtn->setShadowEnabled(false);
     multiBtn->setHoverEnabled(false);
-//    auto btn3 = new FabButton(this);
-//    btn3->setCorner(Qt::TopLeftCorner);
-//    btn3->setOffset(0, 0);
-//    btn3->setIconSize(18);
-//    btn3->setCheckable(false);
-//    btn3->setDiameter(36);
-//    auto btn4 = new FabButton(this);
-//    btn4->setCorner(Qt::TopLeftCorner);
-//    btn4->setOffset(0, 0);
-//    btn4->setIconSize(18);
-//    btn4->setCheckable(false);
-//    btn4->setDiameter(36);
-    m_fabMenu->addButton(oneBtn);
-    m_fabMenu->addButton(multiBtn);
-//    m_fabMenu->addButton(btn3);
-//    m_fabMenu->addButton(btn4);
+
+//    m_fabMenu->addButton(oneBtn);
+//    m_fabMenu->addButton(multiBtn);
     connect(oneBtn, &QAbstractButton::clicked, this, &MainWindow::onNotifyAddOne);
     connect(multiBtn, &QAbstractButton::clicked, this, &MainWindow::onNotifyAddMulti);
 

@@ -14,6 +14,9 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     , m_openState(new QState())
     , m_closeState(new QState())
 {
+    m_menuBtn->setHoverEnabled(true);
+    m_menuBtn->setCorner(Qt::BottomLeftCorner);
+
     m_distance = static_cast<qreal>(m_menuBtn->diameter()) * 2.5;
 
     setMouseTracking(true);

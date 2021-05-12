@@ -17,14 +17,15 @@ HEADERS += \
     $$PWD/gatherdetailpage.h \
     $$PWD/tables/ybtableview.h \
     $$PWD/tables/listheader.h \
-    $$PWD/buttons/fabbutton.h \
     $$PWD/buttons/fabcircularmenu.h \
     $$PWD/editableeventfilter.h \
     $$PWD/expand/gathercontroller.h \
     $$PWD/dialogs/serialportdialog.h \
     $$PWD/buttons/rippleoverlay.h \
     $$PWD/buttons/rippleanimation.h \
-    $$PWD/page/tablepage.h
+    $$PWD/page/tablepage.h \
+    $$PWD/buttons/circlebutton.h \
+    $$PWD/buttons/fabbutton.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -38,14 +39,15 @@ SOURCES += \
     $$PWD/gatherdetailpage.cpp \
     $$PWD/tables/ybtableview.cpp \
     $$PWD/tables/listheader.cpp \
-    $$PWD/buttons/fabbutton.cpp \
     $$PWD/buttons/fabcircularmenu.cpp \
     $$PWD/editableeventfilter.cpp \
     $$PWD/expand/gathercontroller.cpp \
     $$PWD/dialogs/serialportdialog.cpp \
     $$PWD/buttons/rippleoverlay.cpp \
     $$PWD/buttons/rippleanimation.cpp \
-    $$PWD/page/tablepage.cpp
+    $$PWD/page/tablepage.cpp \
+    $$PWD/buttons/circlebutton.cpp \
+    $$PWD/buttons/fabbutton.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \
