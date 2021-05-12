@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLinkedList>
+#include <QPainterPath>
 
 class RippleAnimation;
 

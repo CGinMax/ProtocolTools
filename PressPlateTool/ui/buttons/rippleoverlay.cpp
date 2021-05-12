@@ -2,7 +2,6 @@
 #include "rippleanimation.h"
 #include <QEvent>
 #include <QMouseEvent>
-#include <QPainterPath>
 #include <QPainter>
 
 RippleOverlay::RippleOverlay(QWidget *parent)

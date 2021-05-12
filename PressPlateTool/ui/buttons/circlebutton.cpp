@@ -2,6 +2,7 @@
 #include "rippleoverlay.h"
 #include <QEvent>
 #include <QPainter>
+#include <QPainterPath>
 
 CircleButton::CircleButton(QWidget *parent)
     : QAbstractButton(parent)
