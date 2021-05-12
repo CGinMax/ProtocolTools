@@ -7,17 +7,6 @@ ListHeader::ListHeader(QWidget *parent)
     , m_backgroundColor(QColor("#F7F7F8"))
 {
     ui->setupUi(this);
-//    auto txtId = new QLabel(tr("Id"), this);
-//    auto txtAddr = new QLabel(tr("Address"), this);
-//    auto txtCurrentStatus = new QLabel(tr("Current Status"), this);
-//    auto txtConfigedStatus = new QLabel(tr("Configed Status"), this);
-//    auto txtVersion = new QLabel(tr("Version"), this);
-//    auto layout = new QHBoxLayout(this);
-//    layout->addWidget(txtId);
-//    layout->addWidget(txtAddr);
-//    layout->addWidget(txtCurrentStatus);
-//    layout->addWidget(txtConfigedStatus);
-//    layout->addWidget(txtVersion);
 }
 
 

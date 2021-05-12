@@ -2,21 +2,16 @@
 #include "ui_gatherdetailpage.h"
 #include "tables/listdelegate.h"
 #include "tables/listheader.h"
+#include "expand/gathercontroller.h"
+#include "../protocol/ybprotocolchannel.h"
 
 GatherDetailPage::GatherDetailPage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GatherDetailPage)
 {
     ui->setupUi(this);
-    auto header = new ListHeader(this);
-    ui->tableLayout->addWidget(header);
-    m_table = new YBTableView(this);
-    auto delegate = new ListDelegate(qobject_cast<QAbstractListModel*>(m_table->model()), m_table);
-    m_table->setItemDelegate(delegate);
-    m_table->openPersistentEditor(m_table->model()->index(0, 0));
-    m_table->openPersistentEditor(m_table->model()->index(1, 0));
-    ui->tableLayout->addWidget(m_table);
-    m_table->stackUnder(header);
+    m_tablePage = new TablePage(ui->tabWidget);
+    ui->tabWidget->addTab(m_tablePage, tr("Sensors"));
 }
 
 GatherDetailPage::~GatherDetailPage()
@@ -24,14 +19,15 @@ GatherDetailPage::~GatherDetailPage()
     delete ui;
 }
 
-void GatherDetailPage::onItemChanged(const QSharedPointer<GatherData> &gatherData)
+void GatherDetailPage::onItemChanged(GatherController *controller)
 {
     if (!m_gatherData.isNull()) {
         disconnect(m_gatherData.data(), &GatherData::nameChanged, this, &GatherDetailPage::onNameChanged);
         disconnect(m_gatherData.data(), &GatherData::addrChanged, this, &GatherDetailPage::onAddrChanged);
     }
-    if (!gatherData.isNull()) {
-        m_gatherData = gatherData;
+    if (controller != nullptr) {
+        m_tablePage->setProtocol(controller->protocol());
+        m_gatherData = controller->gatherData();
         ui->txtName->setText(m_gatherData->name());
         ui->txtAddress->setText(QString::number(m_gatherData->addr()));
 

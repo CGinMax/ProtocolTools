@@ -15,7 +15,7 @@
 enum eYBFrameType
 {
     PCSoftware  = 0x02,
-    YBGather    = 0x09,
+    YBGather    = 0x20,
     YBSensor    = 0x21,
 };
 

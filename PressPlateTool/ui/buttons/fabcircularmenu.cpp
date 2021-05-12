@@ -14,11 +14,10 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     , m_openState(new QState())
     , m_closeState(new QState())
 {
-    m_oneAngle = -(M_PI / 8.0 );
-    m_multiAngle = -(M_PI / 8.0 * 3.0);
     m_distance = static_cast<qreal>(m_menuBtn->diameter()) * 2.5;
 
-    setAttribute(Qt::WA_TransparentForMouseEvents);
+    setMouseTracking(true);
+    setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_NoSystemBackground);
     m_stateMachine->addState(m_openState);
     m_stateMachine->addState(m_closeState);
@@ -50,14 +49,9 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     m_stateMachine->setInitialState(m_closeState);
     m_stateMachine->start();
 
-    m_menuBtn->setIcon(QPixmap("/home/shijm/Documents/QtProject/ProtocolTools-Solution/PressPlateTool/resources/icons/down-arrow.png"));
+    m_menuBtn->setIcon(QIcon(":/icons/fab-menu.png"));
     m_menuBtn->raise();
-    m_addOneBtn = new QPushButton("one", parent);
-    m_addMultiBtn = new QPushButton("multi", parent);
-
     updateCircularBtnGeometry();
-    connect(m_addOneBtn, &QPushButton::clicked, this, &FabCircularMenu::notifyAddOne);
-    connect(m_addMultiBtn, &QPushButton::clicked, this, &FabCircularMenu::notifyAddMulti);
 }
 
 FabCircularMenu::~FabCircularMenu()
@@ -66,21 +60,29 @@ FabCircularMenu::~FabCircularMenu()
     delete m_closeState;
 }
 
-void FabCircularMenu::updateCircularBtnGeometry()
+void FabCircularMenu::addButton(QAbstractButton *btn)
+{
+    if (m_btnList.count() > 4) {
+        qDebug("Failed! It is more than 4 buttons");
+        return ;
+    }
+    btn->setParent(parentWidget());
+    m_btnList.append(btn);
+    btn->raise();
+    resetBtnsInitAngle();
+}
+
+void FabCircularMenu::insertButton(int index, QAbstractButton *btn)
 {
 
-    qreal btn1x = parentWidget()->rect().x() + m_distance * qCos(m_angle + m_oneAngle);
-    qreal btn1y = parentWidget()->rect().y() + parentWidget()->height() - m_distance * qSin(m_angle + m_oneAngle);
-    auto rect = m_addOneBtn->rect();
-    rect.moveCenter(QPoint(btn1x, btn1y));
-    m_addOneBtn->setGeometry(rect);
-
-
-    int btn2x = parentWidget()->rect().x() + m_distance * qCos(m_angle + m_multiAngle);
-    int btn2y = parentWidget()->rect().y() + parentWidget()->height() - m_distance * qSin(m_angle + m_multiAngle);
-    rect = m_addMultiBtn->rect();
-    rect.moveCenter(QPoint(btn2x, btn2y));
-    m_addMultiBtn->setGeometry(rect);
+    if (m_btnList.count() > 4) {
+        qDebug("Failed! It is more than 4 buttons");
+        return ;
+    }
+    btn->setParent(parentWidget());
+    m_btnList.insert(index, btn);
+    btn->raise();
+    resetBtnsInitAngle();
 }
 
 qreal FabCircularMenu::angle() const
@@ -92,4 +94,29 @@ void FabCircularMenu::setAngle(qreal angle)
 {
     m_angle = angle;
     updateCircularBtnGeometry();
+}
+
+void FabCircularMenu::updateCircularBtnGeometry()
+{
+    for (auto& btn : m_btnList) {
+        qreal btnx = parentWidget()->rect().x() + m_distance * qCos(m_angle + m_initAngleMap.value(btn));
+        qreal btny = parentWidget()->rect().y() + parentWidget()->height() - m_distance * qSin(m_angle + m_initAngleMap.value(btn));
+        auto rect = btn->rect();
+        rect.moveCenter(QPoint(btnx, btny));
+        btn->setGeometry(rect);
+    }
+}
+
+void FabCircularMenu::resetBtnsInitAngle()
+{
+    m_initAngleMap.clear();
+    qreal apart = (m_distance - 8 - 8) / m_btnList.count();
+//    qDebug() << "------------";
+//    qDebug() << apart;
+    for (int i = 0; i < m_btnList.count(); i++) {
+        qreal btnDistance = 8 + (m_btnList.count() - i) * apart;
+        m_initAngleMap.insert(m_btnList.at(i), -qAcos(btnDistance / m_distance));
+//        qDebug() << "distance:" << btnDistance;
+//        qDebug() << "angle:" << -qAcos(btnDistance / m_distance);
+    }
 }

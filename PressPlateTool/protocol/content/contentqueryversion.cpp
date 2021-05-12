@@ -10,21 +10,29 @@ ContentQueryVersion::ContentQueryVersion(const std::vector<uint8_t> &datas)
     if (datas.empty()) {
         return ;
     }
-    uint8_t verLow = datas.at(0);
-    uint8_t verHeigh = datas.at(1);
+    auto iter = datas.begin();
+    uint8_t verLow = *iter++;
+    uint8_t verHeigh = *iter++;
     hardwareVer = std::to_string(verHeigh) + "." + std::to_string(verLow);
-    verLow = datas.at(2);
-    verHeigh = datas.at(3);
-    softwareVer = std::to_string(verLow) + "." + std::to_string(verLow);
-//    std::string desc;
-//    if (datas.at(5) == 0x0B) {
-//        desc = u8"通用款";
-//    }
-//    uint8_t flagLen = datas.at(7);
-//    for (size_t i = 0; i < flagLen; i++) {
-//        productDesc += static_cast<char>(datas.at(8 + i));
-//    }
-//    productDesc += desc;
+    verLow = *iter++;
+    verHeigh = *iter++;
+    softwareVer = std::to_string(verHeigh) + "." + std::to_string(verLow);
+    if (iter == datas.end()) {
+        return;
+    }
+
+    std::string desc;
+    iter++;// 4:0x00
+    if (*iter++ == 0x0B) {
+        desc = u8"通用款";
+    }
+    iter++;// 6:0x02
+    uint8_t flagLen = *iter++;
+    while (iter != datas.end()) {
+        productDesc += static_cast<char>(*iter++);
+    }
+
+    productDesc += desc;
 }
 
 std::string ContentQueryVersion::toString(bool isSend)

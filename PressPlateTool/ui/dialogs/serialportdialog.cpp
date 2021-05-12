@@ -2,14 +2,19 @@
 #include "ui_serialportdialog.h"
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <climits>
 
-SerialPortDialog::SerialPortDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SerialPortDialog)
+SerialPortDialog::SerialPortDialog(bool isMulti, QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::SerialPortDialog)
+    , m_gatherNum(1)
+
 {
     ui->setupUi(this);
+    ui->txtNum->setHidden(!isMulti);
+    ui->editNum->setHidden(!isMulti);
 
-
+    ui->editNum->setRange(1, INT_MAX);
     auto devList = QSerialPortInfo::availablePorts();
     for (auto& devInfo : devList) {
         ui->cbbDevList->addItem(devInfo.portName(), devInfo.portName());
@@ -43,8 +48,14 @@ PortParam SerialPortDialog::portParam() const
     return m_portParam;
 }
 
+int SerialPortDialog::gatherNum() const
+{
+    return m_gatherNum;
+}
+
 void SerialPortDialog::on_btnOk_clicked()
 {
+    m_gatherNum = ui->editNum->value();
     m_portParam.m_portName = ui->cbbDevList->currentData().toString();
     m_portParam.m_baudRate = ui->cbbBaudRate->currentData().toInt();
     m_portParam.m_dataBits = static_cast<QSerialPort::DataBits>(ui->cbbDataBit->currentData().toInt());

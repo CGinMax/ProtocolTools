@@ -3,7 +3,10 @@
 
 #include <QWidget>
 #include "tables/ybtableview.h"
-#include "common/gatherdata.h"
+#include "page/tablepage.h"
+class GatherData;
+class GatherController;
+class YBProtocolChannel;
 
 namespace Ui {
 class GatherDetailPage;
@@ -18,7 +21,7 @@ public:
     ~GatherDetailPage() override;
 
 public slots:
-    void onItemChanged(const QSharedPointer<GatherData>& gatherData);
+    void onItemChanged(GatherController* controller);
 
     void onNameChanged(const QString& name);
 
@@ -27,7 +30,7 @@ public slots:
 private:
     Ui::GatherDetailPage *ui;
 
-    YBTableView* m_table;
+    TablePage* m_tablePage;
 
     QSharedPointer<GatherData> m_gatherData;
 };

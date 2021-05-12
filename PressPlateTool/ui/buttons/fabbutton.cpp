@@ -13,6 +13,8 @@ FabButton::FabButton(QWidget *parent)
     , m_iconSize(24)
     , m_diameter(56)
     , m_backgroundColor(QColor(Qt::lightGray))
+    , m_foregroundColor(QColor(Qt::white))
+    , m_hoveEnabled(true)
     , m_stateMachine(new QStateMachine(this))
     , m_unhoverState(new QState())
     , m_hoverState(new QState())
@@ -40,25 +42,21 @@ FabButton::FabButton(QWidget *parent)
     m_pressedState->assignProperty(m_effect, "blurRadius", 28);
 
     QEventTransition* transition = nullptr;
-    transition = new QEventTransition(this, QEvent::HoverEnter);
-    transition->setTargetState(m_hoverState);
-    m_unhoverState->addTransition(transition);
+    m_hoverTransition = new QEventTransition(this, QEvent::HoverEnter);
+    m_hoverTransition->setTargetState(m_hoverState);
+    m_unhoverState->addTransition(m_hoverTransition);
+
+    m_unhoverTransition = new QEventTransition(this, QEvent::HoverLeave);
+    m_unhoverTransition->setTargetState(m_unhoverState);
+    m_hoverState->addTransition(m_unhoverTransition);
 
     transition = new QEventTransition(this, QEvent::MouseButtonPress);
     transition->setTargetState(m_pressedState);
     m_hoverState->addTransition(transition);
 
-//    transition = new QEventTransition(this, QEvent::MouseButtonDblClick);
-//    transition->setTargetState(m_pressedState);
-//    m_normalState->addTransition(transition);
-
     transition = new QEventTransition(this, QEvent::MouseButtonRelease);
     transition->setTargetState(m_hoverState);
     m_pressedState->addTransition(transition);
-
-    transition = new QEventTransition(this, QEvent::HoverLeave);
-    transition->setTargetState(m_unhoverState);
-    m_hoverState->addTransition(transition);
 
     auto animation = new QPropertyAnimation(m_effect, "offset", this);
     animation->setDuration(100);
@@ -83,11 +81,7 @@ FabButton::FabButton(QWidget *parent)
     m_rippleOverly = new RippleOverlay(this);
 
     m_rippleOverly->setClipping(true);
-    QPainterPath path;
-    QRect square = QRect(0, 0, m_diameter, m_diameter);
-    square.moveCenter(rect().center());
-    path.addEllipse(square);
-    m_rippleOverly->setClipPath(path);
+    updateRippleClipPath();
 
     setCheckable(true);
     setChecked(false);
@@ -101,32 +95,147 @@ FabButton::~FabButton()
     delete m_effect;
 }
 
-QRect FabButton::fabGeometry() const
+QSize FabButton::sizeHint() const
 {
-    QWidget *parent = parentWidget();
-    if (!parent) {
-        return QRect();
-    }
+    return QSize(diameter(), diameter());
+}
 
-    const int s = diameter();
-    // Qt::BottomRightCorner
-    QRect rect(parent->width() - (m_offsetX + s), parent->height() - (m_offsetY + s), s, s);
-    switch (m_corner)
-    {
-    case Qt::TopLeftCorner:
-        rect = QRect(m_offsetX, m_offsetY, s, s);
-        break;
-    case Qt::TopRightCorner:
-        rect = QRect(parent->width() - (m_offsetX + s), m_offsetY, s, s);
-        break;
-    case Qt::BottomLeftCorner:
-        rect = QRect(m_offsetX, parent->height() - (m_offsetY + s), s, s);
-        break;
-    default:
-        break;
-    }
-    return rect;
+void FabButton::setShadowEnabled(bool enabled)
+{
+    enabled ? m_stateMachine->start() : m_stateMachine->stop();
+    m_effect->setEnabled(enabled);
+}
 
+void FabButton::setHoverEnabled(bool enabled)
+{
+    if (m_hoveEnabled == enabled) {
+        return ;
+    }
+    m_stateMachine->stop();
+    if (enabled) {
+        m_unhoverState->addTransition(m_hoverTransition);
+        m_hoverState->addTransition(m_unhoverTransition);
+        m_stateMachine->setInitialState(m_unhoverState);
+    }
+    else {
+        m_unhoverState->removeTransition(m_hoverTransition);
+        m_hoverState->removeTransition(m_unhoverTransition);
+        m_stateMachine->setInitialState(m_hoverState);
+    }
+    m_stateMachine->start();
+}
+
+
+qreal FabButton::opacity() const
+{
+    return m_opacity;
+}
+
+void FabButton::setOpacity(const qreal &opacity)
+{
+    m_opacity = opacity;
+    update();
+}
+
+int FabButton::iconSize() const
+{
+    return m_iconSize;
+}
+
+void FabButton::setIconSize(int iconSize)
+{
+    m_iconSize = iconSize;
+    update();
+}
+
+int FabButton::diameter() const
+{
+    return m_diameter;
+}
+
+void FabButton::setDiameter(int diameter)
+{
+    m_diameter = diameter;
+    updateRippleClipPath();
+    update();
+}
+
+QColor FabButton::backgroundColor() const
+{
+    return m_backgroundColor;
+}
+
+void FabButton::setBackgroundColor(const QColor &backgroundColor)
+{
+    m_backgroundColor = backgroundColor;
+    update();
+}
+
+QColor FabButton::foregroundColor() const
+{
+    return m_foregroundColor;
+}
+
+void FabButton::setForegroundColor(const QColor &foregroundColor)
+{
+    m_foregroundColor = foregroundColor;
+}
+
+Qt::Corner FabButton::corner() const
+{
+    return m_corner;
+}
+
+void FabButton::setCorner(Qt::Corner corner)
+{
+    if (m_corner == corner) {
+        return;
+    }
+    m_corner = corner;
+    setGeometry(fabGeometry());
+    update();
+}
+
+int FabButton::offsetX() const
+{
+    return m_offsetX;
+}
+
+void FabButton::setOffsetX(int x)
+{
+    m_offsetX = x;
+    setGeometry(fabGeometry());
+    update();
+}
+
+int FabButton::offsetY() const
+{
+    return m_offsetY;
+}
+
+void FabButton::setOffsetY(int y)
+{
+    m_offsetY = y;
+    setGeometry(fabGeometry());
+    update();
+}
+
+void FabButton::setOffset(int x, int y)
+{
+    m_offsetX = x;
+    m_offsetY = y;
+    setGeometry(fabGeometry());
+    update();
+}
+
+void FabButton::setOffset(const QSize &size)
+{
+    setOffset(size.width(), size.height());
+}
+
+QSize FabButton::offset() const
+{
+    return QSize(m_offsetX, m_offsetY);
 }
 
 
@@ -164,17 +273,16 @@ bool FabButton::event(QEvent *event)
     return QAbstractButton::event(event);
 }
 
-qreal FabButton::opacity() const
+bool FabButton::eventFilter(QObject *obj, QEvent *event)
 {
-    return m_opacity;
-}
+    const QEvent::Type type = event->type();
+    if (type == QEvent::Move || type == QEvent::Resize) {
+        setGeometry(fabGeometry());
+        updateRippleClipPath();
+    }
 
-void FabButton::setOpacity(const qreal &opacity)
-{
-    m_opacity = opacity;
-    update();
+    return QAbstractButton::eventFilter(obj, event);
 }
-
 
 void FabButton::paintEvent(QPaintEvent *event)
 {
@@ -205,122 +313,46 @@ void FabButton::paintEvent(QPaintEvent *event)
     QPixmap pixmap = icon().pixmap(QSize(m_iconSize, m_iconSize));
     QPainter icon(&pixmap);
     icon.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    if (!isEnabled()) {
-        icon.fillRect(pixmap.rect(), QColor(0xE0E0E0));
-    }
-//    icon.fillRect(pixmap.rect(), isEnabled() ? foregroundColor()
-//                                             : disabledForegroundColor());
+
+    icon.fillRect(pixmap.rect(), isEnabled() ? foregroundColor()
+                                             : QColor(0xE0E0E0));
     painter.drawPixmap(iconGeometry, pixmap);
 
 }
 
-bool FabButton::eventFilter(QObject *obj, QEvent *event)
+QRect FabButton::fabGeometry() const
 {
-    const QEvent::Type type = event->type();
-    if (type == QEvent::Move || type == QEvent::Resize) {
-        setGeometry(fabGeometry());
+    QWidget *parent = parentWidget();
+    if (!parent) {
+        return QRect();
     }
 
-    return QAbstractButton::eventFilter(obj, event);
-}
-
-int FabButton::offsetY() const
-{
-    return m_offsetY;
-}
-
-void FabButton::setOffsetY(int y)
-{
-    m_offsetY = y;
-    setGeometry(fabGeometry());
-    update();
-}
-
-void FabButton::setOffset(int x, int y)
-{
-    m_offsetX = x;
-    m_offsetY = y;
-    setGeometry(fabGeometry());
-    update();
-}
-
-void FabButton::setOffset(const QSize &size)
-{
-    setOffset(size.width(), size.height());
-}
-
-QSize FabButton::offset() const
-{
-    return QSize(m_offsetX, m_offsetY);
-}
-
-int FabButton::offsetX() const
-{
-    return m_offsetX;
-}
-
-void FabButton::setOffsetX(int x)
-{
-    m_offsetX = x;
-    setGeometry(fabGeometry());
-    update();
-}
-
-Qt::Corner FabButton::corner() const
-{
-    return m_corner;
-}
-
-void FabButton::setCorner(Qt::Corner corner)
-{
-    if (m_corner == corner) {
-        return;
+    const int s = diameter();
+    // Qt::BottomRightCorner
+    QRect rect(parent->width() - (m_offsetX + s), parent->height() - (m_offsetY + s), s, s);
+    switch (m_corner)
+    {
+    case Qt::TopLeftCorner:
+        rect = QRect(m_offsetX, m_offsetY, s, s);
+        break;
+    case Qt::TopRightCorner:
+        rect = QRect(parent->width() - (m_offsetX + s), m_offsetY, s, s);
+        break;
+    case Qt::BottomLeftCorner:
+        rect = QRect(m_offsetX, parent->height() - (m_offsetY + s), s, s);
+        break;
+    default:
+        break;
     }
-    m_corner = corner;
-    setGeometry(fabGeometry());
-    update();
+    return rect;
+
 }
 
-QColor FabButton::backgroundColor() const
+void FabButton::updateRippleClipPath()
 {
-    return m_backgroundColor;
-}
-
-void FabButton::setBackgroundColor(const QColor &backgroundColor)
-{
-    m_backgroundColor = backgroundColor;
-    update();
-}
-
-int FabButton::diameter() const
-{
-    return m_diameter;
-}
-
-void FabButton::setDiameter(int diameter)
-{
-    m_diameter = diameter;
     QPainterPath path;
     QRect square = QRect(0, 0, m_diameter, m_diameter);
     square.moveCenter(rect().center());
     path.addEllipse(square);
     m_rippleOverly->setClipPath(path);
-    update();
-}
-
-int FabButton::iconSize() const
-{
-    return m_iconSize;
-}
-
-void FabButton::setIconSize(int iconSize)
-{
-    m_iconSize = iconSize;
-    update();
-}
-
-
-QSize FabButton::sizeHint() const
-{
-    return QSize(diameter(), diameter());
 }

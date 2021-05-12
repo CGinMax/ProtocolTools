@@ -11,9 +11,16 @@ class GatherOperWidget : public QWidget
 public:
     explicit GatherOperWidget(QWidget *parent = nullptr);
     ~GatherOperWidget() override;
+
+    int getInputAddress();
+
+    void setButtonsOpened(bool isOpen);
 signals:
     void setGatherAddress(int addr);
     void resetSensorCount(int count);
+
+    void openCommunication();
+    void closeCommunication();
 public slots:
 
 private slots:

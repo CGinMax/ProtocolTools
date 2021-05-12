@@ -13,16 +13,20 @@ class FabCircularMenu : public QWidget
 public:
     explicit FabCircularMenu(QWidget *parent);
     ~FabCircularMenu() override;
+    void addButton(QAbstractButton* btn);
+
+    void insertButton(int index, QAbstractButton* btn);
 
 
-    void updateCircularBtnGeometry();
 
     qreal angle() const;
     void setAngle(qreal angle);
 
+private:
+    void updateCircularBtnGeometry();
+    void resetBtnsInitAngle();
+
 signals:
-    void notifyAddOne();
-    void notifyAddMulti();
 
 public slots:
 
@@ -30,14 +34,11 @@ private:
     qreal m_angle;
     qreal m_distance;
     FabButton* m_menuBtn;
-    qreal m_oneAngle;
-    qreal m_multiAngle;
-    QPushButton* m_addOneBtn;
-    QPushButton* m_addMultiBtn;
     QStateMachine* m_stateMachine;
     QState* m_openState;
     QState* m_closeState;
-//    QList<QAbstractButton*> m_btnList;
+    QMap<QAbstractButton*, qreal> m_initAngleMap;
+    QList<QAbstractButton*> m_btnList;
 };
 
 #endif // FABCIRCULARMENU_H

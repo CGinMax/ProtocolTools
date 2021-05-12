@@ -3,8 +3,8 @@
 GatherData::GatherData(const QString &name, QObject *parent)
     : QObject(parent)
     , m_name(name)
-    , m_id(1)
-    , m_addr(1)
+    , m_id(-1)
+    , m_addr(-1)
     , m_version(QString())
 {
 

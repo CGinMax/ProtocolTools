@@ -27,6 +27,7 @@ public:
 
     void processReply(ProtocolReply* reply, QObject* obj, std::function<void()> finishFun, std::function<void()> errorFun);
 signals:
+    void stopProtocolChannel();
 
 public slots:
     void onQueryVersion();
@@ -39,7 +40,7 @@ private:
     ExpandTile* m_tile;
     GatherOperWidget* m_operWidget;
     QSharedPointer<CommunicationBase> m_communication;
-    QScopedPointer<ProtocolChannelBase> m_protocol;
+    QSharedPointer<ProtocolChannelBase> m_protocol;
 };
 
 #endif // GATHERCONTROLLER_H

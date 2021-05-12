@@ -3,6 +3,8 @@
 #include "expandtile.h"
 #include "gatheroperwidget.h"
 #include "serialport.h"
+
+#include <QMessageBox>
 GatherController::GatherController(GatherData *data, QObject *parent)
     : QObject(parent)
     , m_gatherData(data)
@@ -10,16 +12,17 @@ GatherController::GatherController(GatherData *data, QObject *parent)
     , m_operWidget(nullptr)
     , m_communication(new SerialPort(this))
 {
-    m_communication->open(data->portParam());
     ThreadPool::instance()->run([=](){
         this->m_protocol.reset(new YBProtocolChannel(this->m_communication));
         this->m_protocol->start();
+        connect(this, &GatherController::stopProtocolChannel, this->m_protocol.data(), &ProtocolChannelBase::stop, Qt::BlockingQueuedConnection);
     });
 
 }
 
 GatherController::~GatherController()
 {
+    emit stopProtocolChannel();
     m_communication->close();
 }
 
@@ -46,7 +49,16 @@ void GatherController::setOperWidget(GatherOperWidget *operWidget)
     m_operWidget = operWidget;
     connect(operWidget, &GatherOperWidget::setGatherAddress, this, &GatherController::onSetGatherAddress);
     connect(operWidget, &GatherOperWidget::resetSensorCount, this, &GatherController::onResetSensorCount);
-
+    connect(operWidget, &GatherOperWidget::openCommunication, this, [=]{
+        auto success = this->m_communication->open(m_gatherData->portParam());
+        if (!success) {
+            QMessageBox::information(operWidget, tr("Information"), tr("Open failed!"), QMessageBox::Ok);
+        }
+        operWidget->setButtonsOpened(success);
+    });
+    connect(operWidget, &GatherOperWidget::closeCommunication, this, [=]{
+        this->m_communication->close();
+    });
 }
 
 YBProtocolChannel *GatherController::protocol()
@@ -88,7 +100,7 @@ void GatherController::onSetGatherAddress(int addr)
     auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr));
     processReply(reply, this, [=]{
         if (reply->result->success()) {
-            m_gatherData->setAddr(reply->result->setAddress());
+            m_gatherData->setAddr(m_operWidget->getInputAddress());
         } else {
             //TODO(shijm): 失败处理
             qDebug("address failed");

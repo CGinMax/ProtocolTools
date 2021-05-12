@@ -15,6 +15,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    static int createNo;
+
 public slots:
     void onNotifyAddOne();
 

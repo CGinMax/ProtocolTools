@@ -5,28 +5,38 @@ YBTableModel::YBTableModel(const QStringList &headers, QObject *parent)
     : QAbstractListModel(parent)
     , m_headers(headers)
 {
-
+    m_roleNames = {{RoleId, QByteArray("Id")}
+              ,{RoleAddress, QByteArray("Address")}
+              ,{RoleVersion, QByteArray("Version")}
+              ,{RoleCurrentStatus, QByteArray("CurrentStatus")}
+              ,{RoleConfigedStatus, QByteArray("ConfigedStatus")}};
 }
-
 
 int YBTableModel::rowCount(const QModelIndex &parent) const
 {
-    return dataList.count();
+    Q_UNUSED(parent);
+    return m_sensorDataList.count();
 }
 
 QVariant YBTableModel::data(const QModelIndex &index, int role) const
 {
-    if (index.row() >= dataList.count()) {
+    if (!index.isValid() || index.row() >= m_sensorDataList.count()) {
         return QVariant();
     }
 
     switch (role) {
-    case Qt::UserRole + 1:
-        return "1";
-    case Qt::UserRole +2:
-        return "1.2";
+    case RoleId:
+        return index.row() + 1;
+    case RoleAddress:
+        return m_sensorDataList.at(index.row()).addr();
+    case RoleVersion:
+        return m_sensorDataList.at(index.row()).version();
+    case RoleCurrentStatus:
+        return m_sensorDataList.at(index.row()).currentStatus();
+    case RoleConfigedStatus:
+        return m_sensorDataList.at(index.row()).configedStatus();
     case Qt::SizeHintRole:
-        return QSize(100, 60);
+        return QSize(100, 130);
     }
 
     return QVariant();
@@ -34,14 +44,24 @@ QVariant YBTableModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> YBTableModel::roleNames() const
 {
-    return {{Qt::UserRole + 1, "Id"}, {Qt::UserRole + 2, "Version"}};
+    return m_roleNames;
 }
 
 void YBTableModel::append()
 {
-    beginInsertRows(QModelIndex(), 0, 1);
-    dataList.append("112211");
+    beginInsertRows(QModelIndex(), m_sensorDataList.count(), m_sensorDataList.count() + 1);
+    YBSensorData data;
+    data.setAddr(1);
+    m_sensorDataList.append(data);
     endInsertRows();
+}
+
+void YBTableModel::clearAllSensor()
+{
+    beginRemoveRows(QModelIndex(), 0, m_sensorDataList.count());
+
+    m_sensorDataList.clear();
+    endRemoveRows();
 }
 
 
@@ -53,8 +73,6 @@ bool YBTableModel::setData(const QModelIndex &index, const QVariant &value, int 
 
     if (role == Qt::EditRole) {
         if (index.column() == 0) {
-
-//            m_aiDatas->at(index.row())->setValue(value.toDouble());
             dataChanged(index, index);
             return true;
         }

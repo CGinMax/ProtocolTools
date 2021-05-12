@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/add-multi.png</file>
+        <file>icons/add-one.png</file>
+        <file>icons/fab-menu.png</file>
+    </qresource>
+</RCC>

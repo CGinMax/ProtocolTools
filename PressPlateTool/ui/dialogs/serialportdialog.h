@@ -13,10 +13,11 @@ class SerialPortDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SerialPortDialog(QWidget *parent = nullptr);
+    explicit SerialPortDialog(bool isMulti = false, QWidget *parent = nullptr);
     ~SerialPortDialog();
 
     PortParam portParam() const;
+    int gatherNum() const;
 
 private slots:
     void on_btnOk_clicked();
@@ -26,6 +27,7 @@ private slots:
 private:
     Ui::SerialPortDialog *ui;
     PortParam m_portParam;
+    int m_gatherNum;
 };
 
 #endif // SERIALPORTDIALOG_H

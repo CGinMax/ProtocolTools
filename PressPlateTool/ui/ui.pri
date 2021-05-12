@@ -23,7 +23,8 @@ HEADERS += \
     $$PWD/expand/gathercontroller.h \
     $$PWD/dialogs/serialportdialog.h \
     $$PWD/buttons/rippleoverlay.h \
-    $$PWD/buttons/rippleanimation.h
+    $$PWD/buttons/rippleanimation.h \
+    $$PWD/page/tablepage.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -43,7 +44,8 @@ SOURCES += \
     $$PWD/expand/gathercontroller.cpp \
     $$PWD/dialogs/serialportdialog.cpp \
     $$PWD/buttons/rippleoverlay.cpp \
-    $$PWD/buttons/rippleanimation.cpp
+    $$PWD/buttons/rippleanimation.cpp \
+    $$PWD/page/tablepage.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \
@@ -52,4 +54,5 @@ FORMS += \
     $$PWD/tables/listviewitem.ui \
     $$PWD/gatherdetailpage.ui \
     $$PWD/tables/listheader.ui \
-    $$PWD/dialogs/serialportdialog.ui
+    $$PWD/dialogs/serialportdialog.ui \
+    $$PWD/page/tablepage.ui

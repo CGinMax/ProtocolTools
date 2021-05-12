@@ -13,6 +13,7 @@ ExpandWidget::ExpandWidget(QWidget *parent)
 {
     qRegisterMetaType<QSharedPointer<GatherData> >("const QSharedPointer<GatherData> &");
     ui->setupUi(this);
+    setStyleSheet("QWidget#scrollAreaWidgetContents{background-color:#F0F3F4;}");
 }
 
 ExpandWidget::~ExpandWidget()
@@ -92,9 +93,9 @@ void ExpandWidget::onNotifySelected(ExpandWidgetItem *item)
     }
     m_checkItem = item;
     if (item == nullptr) {
-        emit itemChanged(QSharedPointer<GatherData>(nullptr));
+        emit itemChanged(nullptr);
         return;
     }
     m_checkItem->setIsSelected(true);
-    emit itemChanged(m_checkItem->getController()->gatherData());
+    emit itemChanged(m_checkItem->getController());
 }

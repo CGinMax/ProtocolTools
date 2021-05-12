@@ -99,6 +99,8 @@ std::pair<YBFrame, eYBParseResult> YBFrame::parseBytesToFrame(std::list<uint8_t>
     frame.crcCode = static_cast<uint16_t>(hight << 8) | low;
 
     if (currentCrc != frame.crcCode) {
+        // crc错误删除错误报文
+        datas.erase(datas.begin(), iter);
         return std::make_pair(frame, eYBParseResult::CrcError);
     }
 

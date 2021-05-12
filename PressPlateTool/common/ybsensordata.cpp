@@ -12,22 +12,11 @@ YBSensorData::YBSensorData(const YBSensorData &other)
 
 YBSensorData &YBSensorData::operator=(const YBSensorData &other)
 {
-    m_id = other.m_id;
     m_currentStatus = other.m_currentStatus;
     m_configedStatus = other.m_configedStatus;
     m_addr = other.m_addr;
     m_version = other.m_version;
     return *this;
-}
-
-QString YBSensorData::id() const
-{
-    return m_id;
-}
-
-void YBSensorData::setId(const QString &id)
-{
-    m_id = id;
 }
 
 YBStatus YBSensorData::currentStatus() const

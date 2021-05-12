@@ -20,7 +20,9 @@ public:
 
     QSize sizeHint() const override;
 
-    QRect fabGeometry() const;
+    void setShadowEnabled(bool enabled);
+
+    void setHoverEnabled(bool enabled);
 
     qreal opacity() const;
     void setOpacity(const qreal &opacity);
@@ -33,6 +35,9 @@ public:
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor &backgroundColor);
+
+    QColor foregroundColor() const;
+    void setForegroundColor(const QColor &foregroundColor);
 
     Qt::Corner corner() const;
     void setCorner(Qt::Corner corner);
@@ -52,6 +57,8 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
+    QRect fabGeometry() const;
+    void updateRippleClipPath();
 signals:
 
 public slots:
@@ -65,12 +72,16 @@ private:
     int m_iconSize;
     int m_diameter;
     QColor m_backgroundColor;
+    QColor m_foregroundColor;
     RippleOverlay* m_rippleOverly;
 
+    bool m_hoveEnabled;
     QStateMachine* m_stateMachine;
     QState* m_unhoverState;
     QState* m_hoverState;
     QState* m_pressedState;
+    QEventTransition* m_hoverTransition;
+    QEventTransition* m_unhoverTransition;
     QGraphicsDropShadowEffect* m_effect;
 
 };

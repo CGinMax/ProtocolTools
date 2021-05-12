@@ -5,6 +5,7 @@
 #include <QScrollArea>
 
 class GatherData;
+class GatherController;
 class QVBoxLayout;
 class ExpandWidgetItem;
 class PortParam;
@@ -26,7 +27,7 @@ public:
 
     static ExpandWidgetItem* createExpandWidget(const PortParam& portParam, const QString& name = tr("untitled"), int radius = 8);
 signals:
-    void itemChanged(const QSharedPointer<GatherData>& gatherData);
+    void itemChanged(GatherController* controller);
 
 public slots:
     void onNotifySelected(ExpandWidgetItem* item);

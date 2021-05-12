@@ -12,10 +12,16 @@ class ListViewItem : public QWidget
 public:
     explicit ListViewItem(QWidget *parent = nullptr);
 
-    void setId(const QString& id);
-
-    void setVersion(const QString& version);
+    void setName(const QString& name);
+    void setAddress(int addr);
+    void setHardwareVersion(const QString& version);
+    void setSoftwareVersion(const QString& version);
+    void setProductionDescription(const QString& desc);
 signals:
+    void notifySetAddr(int addr);
+    void notifyQueryStatus();
+    void notifyQueryVersion();
+    void notifyDelete();
 
 public slots:
 
@@ -25,6 +31,8 @@ private:
     // QWidget interface
 protected:
     void paintEvent(QPaintEvent *event) override;
+private slots:
+    void on_btnSetAddr_clicked();
 };
 
 #endif // LISTVIEWITEM_H

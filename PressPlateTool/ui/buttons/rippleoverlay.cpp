@@ -126,7 +126,7 @@ bool RippleOverlay::eventFilter(QObject *watched, QEvent *event)
         auto ripple = new RippleAnimation(pos, this, parent());
         ripple->setOpacity(0.5);
         ripple->setRadius(redius);
-        ripple->setBrush(Qt::white);
+        ripple->setBrush(Qt::gray);
 
         addRipple(ripple);
     }

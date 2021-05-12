@@ -1,13 +1,23 @@
 #ifndef YBTABLEMODEL_H
 #define YBTABLEMODEL_H
 
-#include <QObject>
 #include <QAbstractTableModel>
 #include <QAbstractListModel>
+#include <QList>
+#include <QHash>
+
+#include "../../common/ybsensordata.h"
 class YBTableModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    enum eModelRoles{
+        RoleId = Qt::UserRole + 1,
+        RoleAddress,
+        RoleVersion,
+        RoleCurrentStatus,
+        RoleConfigedStatus,
+    };
     explicit YBTableModel(const QStringList& headers, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
@@ -18,15 +28,18 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     void append();
+    void clearAllSensor();
 
 signals:
 
 public slots:
 
-private:
+protected:
     QStringList m_headers;
-    QStringList dataList;
+    QHash<int, QByteArray> m_roleNames;
+private:
 
+    QList<YBSensorData> m_sensorDataList;
 };
 
 #endif // YBTABLEMODEL_H

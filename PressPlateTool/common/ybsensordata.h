@@ -18,11 +18,9 @@ class YBSensorData : public QObject
     Q_OBJECT
 public:
     explicit YBSensorData(QObject *parent = nullptr);
+    ~YBSensorData() override = default;
     YBSensorData(const YBSensorData& other);
     YBSensorData& operator=(const YBSensorData& other);
-
-    QString id() const;
-    void setId(const QString &id);
 
     YBStatus currentStatus() const;
     void setCurrentStatus(const YBStatus &currentStatus);
@@ -41,7 +39,6 @@ signals:
 public slots:
 
 private:
-    QString m_id;
     YBStatus m_currentStatus;
     YBStatus m_configedStatus;
     uint8_t m_addr;

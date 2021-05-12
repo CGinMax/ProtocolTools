@@ -40,8 +40,8 @@ eYBParseResult YBProtocol::parseToFrame()
     if (result.second == eYBParseResult::NoError) {
         recvFrameQueue.emplace_back(result.first);
         // TODO(shijm): show recv
-    } else {
-
+    } else if (result.second == eYBParseResult::CrcError) {
+        // TODO(shijm): 显示错误报文
     }
     return result.second;
 }

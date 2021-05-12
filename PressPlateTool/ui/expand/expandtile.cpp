@@ -1,6 +1,7 @@
 #include "expandtile.h"
 #include "ui_expandtile.h"
 #include <QGridLayout>
+#include <QFontMetrics>
 #include <QMouseEvent>
 ExpandTile::ExpandTile(const QString &title, QWidget *parent)
     : QWidget(parent)
@@ -47,6 +48,8 @@ void ExpandTile::setSoftwareVersion(const QString &ver)
 void ExpandTile::setProductDescript(const QString &desc)
 {
     ui->txtProductDesc->setText(desc);
+//    QFontMetrics metrics(ui->txtProductDesc->font());
+//    ui->txtProductDesc->setText(metrics.elidedText(desc, Qt::ElideRight, ui->txtProductDesc->width()));
 }
 
 void ExpandTile::setChecked(bool checked)
