@@ -26,7 +26,7 @@ public:
     void setHoverEnabled(bool enabled);
 
     qreal opacity() const;
-    void setOpacity(const qreal &opacity);
+    void setOpacity(qreal opacity);
 
     int iconSize() const;
     void setIconSize(int iconSize);
@@ -47,6 +47,9 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
     void updateRippleClipPath();
+
+    void initShadowAnimation();
+    void initHoverAnimation();
 signals:
 
 public slots:
@@ -60,9 +63,11 @@ protected:
     RippleOverlay* m_rippleOverly;
 
     bool m_hoveEnabled;
-    QStateMachine* m_stateMachine;
+    QStateMachine* m_shadowMachine;
+    QStateMachine* m_hoverMachine;
     QState* m_unhoverState;
     QState* m_hoverState;
+    QState* m_normalState;
     QState* m_pressedState;
     QEventTransition* m_hoverTransition;
     QEventTransition* m_unhoverTransition;

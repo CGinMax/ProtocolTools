@@ -66,22 +66,10 @@ YBProtocolChannel *GatherController::protocol()
     return static_cast<YBProtocolChannel*>(m_protocol.data());
 }
 
-void GatherController::processReply(ProtocolReply *reply, QObject *obj, std::function<void()> finishFun, std::function<void()> errorFun)
-{
-    connect(reply, &ProtocolReply::finished, obj, [=]{
-        finishFun();
-        reply->deleteLater();
-    });
-    connect(reply, &ProtocolReply::error, obj, [=]{
-        errorFun();
-        reply->deleteLater();
-    });
-}
-
 void GatherController::onQueryVersion()
 {
     auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(m_gatherData->addr()));
-    processReply(reply, this, [=]{
+    YBProtocolChannel::processReply(reply, [=]{
         m_tile->setHardwareVersion(QString::fromStdString(reply->result->hardwareVersion()));
         m_tile->setSoftwareVersion(QString::fromStdString(reply->result->softwareVersion()));
         m_tile->setProductDescript(QString::fromStdString(reply->result->productDescript()));
@@ -98,7 +86,7 @@ void GatherController::onTitleChanged(const QString &title)
 void GatherController::onSetGatherAddress(int addr)
 {
     auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr));
-    processReply(reply, this, [=]{
+    YBProtocolChannel::processReply(reply, [=]{
         if (reply->result->success()) {
             m_gatherData->setAddr(m_operWidget->getInputAddress());
         } else {
@@ -114,7 +102,7 @@ void GatherController::onSetGatherAddress(int addr)
 void GatherController::onResetSensorCount(int count)
 {
     auto reply = protocol()->setSensorNum(static_cast<uint16_t>(m_gatherData->addr()), static_cast<uint8_t>(count));
-    processReply(reply, this, [=]{
+    YBProtocolChannel::processReply(reply, [=]{
         if (reply->result->success()) {
             qDebug("reset count success");
         } else {

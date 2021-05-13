@@ -30,23 +30,21 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     m_fabMenu = new FabCircularMenu(this);
-    auto oneBtn = new CircleButton(m_fabMenu);
+    auto oneBtn = new CircleButton(this);
     oneBtn->setIcon(QIcon(":/icons/add-one.png"));
     oneBtn->setIconSize(18);
     oneBtn->setCheckable(false);
     oneBtn->setDiameter(36);
     oneBtn->setShadowEnabled(false);
-    oneBtn->setHoverEnabled(false);
-    auto multiBtn = new CircleButton(m_fabMenu);
+    auto multiBtn = new CircleButton(this);
     multiBtn->setIcon(QIcon(":/icons/add-multi.png"));
     multiBtn->setIconSize(18);
     multiBtn->setCheckable(false);
     multiBtn->setDiameter(36);
     multiBtn->setShadowEnabled(false);
-    multiBtn->setHoverEnabled(false);
 
-//    m_fabMenu->addButton(oneBtn);
-//    m_fabMenu->addButton(multiBtn);
+    m_fabMenu->addButton(oneBtn);
+    m_fabMenu->addButton(multiBtn);
     connect(oneBtn, &QAbstractButton::clicked, this, &MainWindow::onNotifyAddOne);
     connect(multiBtn, &QAbstractButton::clicked, this, &MainWindow::onNotifyAddMulti);
 
@@ -64,6 +62,7 @@ void MainWindow::onNotifyAddOne()
 {
     SerialPortDialog dialog(false, this);
     if(dialog.exec() == QDialog::Accepted) {
+        m_fabMenu->setChecked(false);
         ui->expandWidget->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), tr("Gather%1").arg(createNo++), 8));
     }
 }
@@ -74,6 +73,7 @@ void MainWindow::onNotifyAddMulti()
     if (dialog.exec() == QDialog::Accepted) {
         int num = dialog.gatherNum();
         for (int i = 0; i < num; i++) {
+            m_fabMenu->setChecked(false);
             ui->expandWidget->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), tr("Gather%1").arg(createNo++), 8));
         }
     }

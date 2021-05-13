@@ -25,7 +25,6 @@ public:
 
     YBProtocolChannel* protocol();
 
-    void processReply(ProtocolReply* reply, QObject* obj, std::function<void()> finishFun, std::function<void()> errorFun);
 signals:
     void stopProtocolChannel();
 

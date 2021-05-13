@@ -14,6 +14,10 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     , m_openState(new QState())
     , m_closeState(new QState())
 {
+    if (parent != nullptr) {
+        parent->installEventFilter(this);
+    }
+    m_menuBtn->setOpacity(0.5);
     m_menuBtn->setHoverEnabled(true);
     m_menuBtn->setCorner(Qt::BottomLeftCorner);
 
@@ -88,6 +92,11 @@ void FabCircularMenu::insertButton(int index, QAbstractButton *btn)
     resetBtnsInitAngle();
 }
 
+void FabCircularMenu::setChecked(bool checked)
+{
+    m_menuBtn->setChecked(checked);
+}
+
 qreal FabCircularMenu::angle() const
 {
     return m_angle;
@@ -121,5 +130,13 @@ void FabCircularMenu::resetBtnsInitAngle()
         m_initAngleMap.insert(m_btnList.at(i), -qAcos(btnDistance / m_distance));
 //        qDebug() << "distance:" << btnDistance;
 //        qDebug() << "angle:" << -qAcos(btnDistance / m_distance);
+    }
+}
+
+
+bool FabCircularMenu::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::Move || event->type() == QEvent::Resize) {
+        updateCircularBtnGeometry();
     }
 }

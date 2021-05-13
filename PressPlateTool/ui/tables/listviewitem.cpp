@@ -7,10 +7,12 @@ ListViewItem::ListViewItem(QWidget *parent)
     , ui(new Ui::ListViewItem)
 {
     ui->setupUi(this);
+    ui->cbbChangeStatus->setCurrentIndex(2);
     ui->editAddr->setRange(0, INT_MAX);
 
-    connect(ui->btnQueryStatus, &QPushButton::clicked, this, &ListViewItem::notifyQueryStatus);
-    connect(ui->btnQueryVersion, &QPushButton::clicked, this, &ListViewItem::notifyQueryVersion);
+    connect(ui->btnSetAddr, &QPushButton::clicked, this, [=]{ emit this->notifySetAddr(ui->editAddr->value()); });
+    connect(ui->btnQueryStatus, &QPushButton::clicked, this, [=]{ emit this->notifyQueryStatus(ui->editAddr->value()); });
+    connect(ui->btnQueryVersion, &QPushButton::clicked, this, [=]{ emit this->notifyQueryVersion(ui->editAddr->value()); });
     connect(ui->btnDelete, &QPushButton::clicked, this, &ListViewItem::notifyDelete);
 }
 
@@ -22,6 +24,21 @@ void ListViewItem::setName(const QString &name)
 void ListViewItem::setAddress(int addr)
 {
     ui->editAddr->setValue(addr);
+}
+
+int ListViewItem::address() const
+{
+    return ui->editAddr->value();
+}
+
+void ListViewItem::setCurrentStatus(int status)
+{
+    ui->txtCurStatus->setText(QString::number(status));
+}
+
+void ListViewItem::setConfigedStatus(int status)
+{
+    ui->txtSetStatus->setText(QString::number(status));
 }
 
 void ListViewItem::setHardwareVersion(const QString &version)
@@ -51,7 +68,11 @@ void ListViewItem::paintEvent(QPaintEvent *event)
     painter.drawRoundedRect(rect(), 3, 3);
 }
 
-void ListViewItem::on_btnSetAddr_clicked()
+void ListViewItem::on_cbbChangeStatus_currentIndexChanged(int index)
 {
-    emit notifySetAddr(ui->editAddr->value());
+    int status =index;
+    if (index != 0 && index != 1) {
+        status = 0xFF;
+    }
+    emit statusChanged(ui->editAddr->value(), status);
 }

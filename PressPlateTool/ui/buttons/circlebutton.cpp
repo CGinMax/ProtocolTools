@@ -6,15 +6,17 @@
 
 CircleButton::CircleButton(QWidget *parent)
     : QAbstractButton(parent)
-    , m_opacity(0.5)
+    , m_opacity(1.0)
     , m_iconSize(24)
     , m_diameter(56)
     , m_backgroundColor(QColor(Qt::lightGray))
     , m_foregroundColor(QColor(Qt::white))
     , m_hoveEnabled(false)
-    , m_stateMachine(new QStateMachine(this))
+    , m_shadowMachine(new QStateMachine(this))
+    , m_hoverMachine(new QStateMachine(this))
     , m_unhoverState(new QState())
     , m_hoverState(new QState())
+    , m_normalState(new QState())
     , m_pressedState(new QState())
     , m_effect(new QGraphicsDropShadowEffect(this))
 {
@@ -23,66 +25,15 @@ CircleButton::CircleButton(QWidget *parent)
     m_effect->setColor(QColor(0, 0, 0, 105));
     setGraphicsEffect(m_effect);
 
-    m_stateMachine->addState(m_unhoverState);
-    m_stateMachine->addState(m_hoverState);
-    m_stateMachine->addState(m_pressedState);
-
-    m_unhoverState->assignProperty(m_effect, "offset", QPointF(0, 0));
-    m_unhoverState->assignProperty(m_effect, "blurRadius", 0);
-    m_unhoverState->assignProperty(this, "opacity", m_opacity);
-
-    m_hoverState->assignProperty(m_effect, "offset", QPointF(0, 6));
-    m_hoverState->assignProperty(m_effect, "blurRadius", 16);
-    m_hoverState->assignProperty(this, "opacity", 1.0);
-
-    m_pressedState->assignProperty(m_effect, "offset", QPointF(0, 11));
-    m_pressedState->assignProperty(m_effect, "blurRadius", 28);
-
-    m_hoverTransition = new QEventTransition(this, QEvent::HoverEnter);
-    m_hoverTransition->setTargetState(m_hoverState);
-
-    m_unhoverTransition = new QEventTransition(this, QEvent::HoverLeave);
-    m_unhoverTransition->setTargetState(m_unhoverState);
-
-    m_unhoverAnimation = new QPropertyAnimation(this, "opacity", this);
-    m_unhoverAnimation->setDuration(100);
-
-    m_hoverAnimation = new QPropertyAnimation(this, "opacity", this);
-    m_hoverAnimation->setDuration(100);
-
-    if (m_hoveEnabled) {
-        m_unhoverState->addTransition(m_hoverTransition);
-        m_hoverTransition->addAnimation(m_hoverAnimation);
-        m_hoverState->addTransition(m_unhoverTransition);
-        m_unhoverTransition->addAnimation(m_unhoverAnimation);
-    }
-
-    QEventTransition* transition = nullptr;
-    transition = new QEventTransition(this, QEvent::MouseButtonPress);
-    transition->setTargetState(m_pressedState);
-    m_hoverState->addTransition(transition);
-
-    transition = new QEventTransition(this, QEvent::MouseButtonRelease);
-    transition->setTargetState(m_hoverState);
-    m_pressedState->addTransition(transition);
-
-    auto animation = new QPropertyAnimation(m_effect, "offset", this);
-    animation->setDuration(100);
-    m_stateMachine->addDefaultAnimation(animation);
-
-    animation = new QPropertyAnimation(m_effect, "blurRadius", this);
-    animation->setDuration(100);
-    m_stateMachine->addDefaultAnimation(animation);
-
-
-    m_stateMachine->setInitialState(m_hoveEnabled ? m_unhoverState : m_hoverState);
-    m_stateMachine->start();
+    initShadowAnimation();
+    initHoverAnimation();
 
     m_rippleOverly = new RippleOverlay(this);
 
     m_rippleOverly->setClipping(true);
     updateRippleClipPath();
 
+    resize(diameter(), diameter());
 }
 
 CircleButton::~CircleButton()
@@ -100,7 +51,7 @@ QSize CircleButton::sizeHint() const
 
 void CircleButton::setShadowEnabled(bool enabled)
 {
-    enabled ? m_stateMachine->start() : m_stateMachine->stop();
+    enabled ? m_shadowMachine->start() : m_shadowMachine->stop();
     m_effect->setEnabled(enabled);
 }
 
@@ -109,22 +60,23 @@ void CircleButton::setHoverEnabled(bool enabled)
     if (m_hoveEnabled == enabled) {
         return ;
     }
-    m_stateMachine->stop();
+    m_hoveEnabled = enabled;
+    m_hoverMachine->stop();
     if (enabled) {
         m_unhoverState->addTransition(m_hoverTransition);
-        m_hoverTransition->addAnimation(m_hoverAnimation);
+//        m_hoverTransition->addAnimation(m_hoverAnimation);
         m_hoverState->addTransition(m_unhoverTransition);
-        m_unhoverTransition->addAnimation(m_unhoverAnimation);
-        m_stateMachine->setInitialState(m_unhoverState);
+//        m_unhoverTransition->addAnimation(m_unhoverAnimation);
+        m_hoverMachine->setInitialState(m_unhoverState);
     }
     else {
-        m_hoverTransition->removeAnimation(m_hoverAnimation);
+//        m_hoverTransition->removeAnimation(m_hoverAnimation);
         m_unhoverState->removeTransition(m_hoverTransition);
-        m_unhoverTransition->removeAnimation(m_unhoverAnimation);
+//        m_unhoverTransition->removeAnimation(m_unhoverAnimation);
         m_hoverState->removeTransition(m_unhoverTransition);
-        m_stateMachine->setInitialState(m_hoverState);
+        m_hoverMachine->setInitialState(m_hoverState);
     }
-    m_stateMachine->start();
+    m_hoverMachine->start();
 }
 
 
@@ -133,9 +85,11 @@ qreal CircleButton::opacity() const
     return m_opacity;
 }
 
-void CircleButton::setOpacity(const qreal &opacity)
+void CircleButton::setOpacity(qreal opacity)
 {
     m_opacity = opacity;
+
+    m_unhoverState->assignProperty(this, "opacity", m_opacity);
     update();
 }
 
@@ -158,6 +112,8 @@ int CircleButton::diameter() const
 void CircleButton::setDiameter(int diameter)
 {
     m_diameter = diameter;
+
+    resize(diameter, diameter);
     updateRippleClipPath();
     update();
 }
@@ -187,13 +143,23 @@ bool CircleButton::event(QEvent *event)
 {
     if (event->type() == QEvent::EnabledChange) {
         if (isEnabled()) {
-            m_stateMachine->start();
+            m_shadowMachine->start();
             m_effect->setEnabled(true);
         } else {
-            m_stateMachine->stop();
+            m_shadowMachine->stop();
             m_effect->setEnabled(false);
         }
     }
+    if (m_hoveEnabled) {
+        if (event->type() == QEvent::HoverEnter){
+            setOpacity(1.0);
+            m_effect->setEnabled(true);
+        } else if (event->type() == QEvent::HoverLeave) {
+            setOpacity(0.5);
+            m_effect->setEnabled(false);
+        }
+    }
+
     return QAbstractButton::event(event);
 }
 
@@ -234,7 +200,6 @@ void CircleButton::paintEvent(QPaintEvent *event)
 
 }
 
-
 void CircleButton::updateRippleClipPath()
 {
     QPainterPath path;
@@ -242,4 +207,80 @@ void CircleButton::updateRippleClipPath()
     square.moveCenter(rect().center());
     path.addEllipse(square);
     m_rippleOverly->setClipPath(path);
+}
+
+void CircleButton::initShadowAnimation()
+{
+    m_shadowMachine->addState(m_normalState);
+    m_shadowMachine->addState(m_pressedState);
+
+    m_normalState->assignProperty(m_effect, "offset", QPointF(0, 6));
+    m_normalState->assignProperty(m_effect, "blurRadius", 16);
+
+    m_pressedState->assignProperty(m_effect, "offset", QPointF(0, 11));
+    m_pressedState->assignProperty(m_effect, "blurRadius", 28);
+
+    QEventTransition* transition = nullptr;
+    transition = new QEventTransition(this, QEvent::MouseButtonPress);
+    transition->setTargetState(m_pressedState);
+    m_normalState->addTransition(transition);
+
+    transition = new QEventTransition(this, QEvent::MouseButtonRelease);
+    transition->setTargetState(m_normalState);
+    m_pressedState->addTransition(transition);
+
+    auto animation = new QPropertyAnimation(m_effect, "offset", this);
+    animation->setDuration(100);
+    m_shadowMachine->addDefaultAnimation(animation);
+
+    animation = new QPropertyAnimation(m_effect, "blurRadius", this);
+    animation->setDuration(100);
+    m_shadowMachine->addDefaultAnimation(animation);
+
+    m_shadowMachine->setInitialState(m_normalState);
+    m_shadowMachine->start();
+}
+
+void CircleButton::initHoverAnimation()
+{
+    m_hoverMachine->addState(m_unhoverState);
+    m_hoverMachine->addState(m_hoverState);
+
+    m_unhoverState->assignProperty(m_effect, "offset", QPointF(0, 0));
+    m_unhoverState->assignProperty(m_effect, "blurRadius", 0);
+    m_unhoverState->assignProperty(this, "opacity", m_opacity);
+
+    m_hoverState->assignProperty(m_effect, "offset", QPointF(0, 6));
+    m_hoverState->assignProperty(m_effect, "blurRadius", 16);
+    m_hoverState->assignProperty(this, "opacity", 1.0);
+
+
+    m_hoverTransition = new QEventTransition(this, QEvent::HoverEnter);
+    m_hoverTransition->setTargetState(m_hoverState);
+
+    m_unhoverTransition = new QEventTransition(this, QEvent::HoverLeave);
+    m_unhoverTransition->setTargetState(m_unhoverState);
+
+    auto animation = new QPropertyAnimation(this, "opacity", this);
+    animation->setDuration(100);
+//    m_hoverMachine->addDefaultAnimation(animation);
+    m_hoverTransition->addAnimation(animation);
+
+    animation = new QPropertyAnimation(this, "opacity", this);
+    animation->setDuration(100);
+    m_unhoverTransition->addAnimation(animation);
+//    m_hoverMachine->addDefaultAnimation(animation);
+
+
+    if (m_hoveEnabled) {
+        m_unhoverState->addTransition(m_hoverTransition);
+//        m_hoverTransition->addAnimation(m_hoverAnimation);
+        m_hoverState->addTransition(m_unhoverTransition);
+//        m_unhoverTransition->addAnimation(m_unhoverAnimation);
+
+//        m_hoverMachine->addDefaultAnimation(m_unhoverAnimation);
+//        m_hoverMachine->addDefaultAnimation(m_hoverAnimation);
+        m_hoverMachine->setInitialState(m_unhoverState);
+        m_hoverMachine->start();
+    }
 }

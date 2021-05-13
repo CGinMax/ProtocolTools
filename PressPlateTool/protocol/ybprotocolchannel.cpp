@@ -23,7 +23,6 @@ void YBProtocolChannel::run()
         auto ucharVector = frame.packetFrame();
         QByteArray bytearray(reinterpret_cast<char*>(ucharVector.data()), ucharVector.size());
 
-        qDebug() << m_communication->isActived();
         emit write(bytearray);
     }
 }
@@ -62,9 +61,24 @@ ProtocolReply *YBProtocolChannel::setAddress(eYBFrameType type, uint8_t addr)
     return m_curReply;
 }
 
+ProtocolReply *YBProtocolChannel::queryStatus(uint16_t dstAddr)
+{
+    m_sendFrameQueue.push_back(m_protocol->queryStatus(dstAddr));
+    m_curReply = new ProtocolReply();
+    return m_curReply;
+}
+
 ProtocolReply *YBProtocolChannel::queryVersion(eYBFrameType type, uint16_t dstAddr)
 {
     m_sendFrameQueue.push_back(m_protocol->queryVersion(type, dstAddr));
+
+    m_curReply = new ProtocolReply();
+    return m_curReply;
+}
+
+ProtocolReply *YBProtocolChannel::setStatus(uint8_t status, uint16_t dstAddr)
+{
+    m_sendFrameQueue.push_back(m_protocol->settingStatus(status, dstAddr));
 
     m_curReply = new ProtocolReply();
     return m_curReply;
@@ -76,6 +90,18 @@ ProtocolReply *YBProtocolChannel::setSensorNum(uint16_t dstAddr, uint8_t num)
 
     m_curReply = new ProtocolReply();
     return m_curReply;
+}
+
+void YBProtocolChannel::processReply(ProtocolReply *reply, std::function<void ()> finishFun, std::function<void ()> errorFun)
+{
+    connect(reply, &ProtocolReply::finished, [=]{
+        finishFun();
+        reply->deleteLater();
+    });
+    connect(reply, &ProtocolReply::error, [=]{
+        errorFun();
+        reply->deleteLater();
+    });
 }
 
 void YBProtocolChannel::onReadyRead()

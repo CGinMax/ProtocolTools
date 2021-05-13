@@ -17,7 +17,7 @@ public:
 
     void insertButton(int index, QAbstractButton* btn);
 
-
+    void setChecked(bool checked);
 
     qreal angle() const;
     void setAngle(qreal angle);
@@ -25,6 +25,7 @@ public:
 private:
     void updateCircularBtnGeometry();
     void resetBtnsInitAngle();
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 signals:
 
@@ -39,6 +40,7 @@ private:
     QState* m_closeState;
     QMap<QAbstractButton*, qreal> m_initAngleMap;
     QList<QAbstractButton*> m_btnList;
+
 };
 
 #endif // FABCIRCULARMENU_H

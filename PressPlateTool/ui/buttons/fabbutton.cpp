@@ -6,6 +6,9 @@ FabButton::FabButton(QWidget *parent)
     , m_offsetX(8)
     , m_offsetY(8)
 {
+    if (parent != nullptr) {
+        parent->installEventFilter(this);
+    }
     setGeometry(fabGeometry());
     setCheckable(true);
     setChecked(false);

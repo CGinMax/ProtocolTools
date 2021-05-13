@@ -4,6 +4,8 @@
 #include "protocolchannelbase.h"
 #include "ybprotocol.h"
 
+#include <functional>
+
 class ProtocolReply : public QObject
 {
     Q_OBJECT
@@ -31,9 +33,15 @@ public:
 
     ProtocolReply* setAddress(eYBFrameType type, uint8_t addr);
 
+    ProtocolReply* queryStatus(uint16_t dstAddr);
+
     ProtocolReply* queryVersion(eYBFrameType type, uint16_t dstAddr);
 
+    ProtocolReply* setStatus(uint8_t status, uint16_t dstAddr);
+
     ProtocolReply* setSensorNum(uint16_t dstAddr, uint8_t num);
+
+    static void processReply(ProtocolReply *reply, std::function<void()> finishFun, std::function<void()> errorFun);
 
 signals:
     void reportStatus(int addr, uint8_t curStatus, uint8_t confStatus);

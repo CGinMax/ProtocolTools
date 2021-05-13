@@ -139,6 +139,25 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="6">
+    <widget class="QComboBox" name="cbbChangeStatus">
+     <item>
+      <property name="text">
+       <string>Open</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Close</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Unconfiged</string>
+      </property>
+     </item>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

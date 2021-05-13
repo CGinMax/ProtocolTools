@@ -56,14 +56,16 @@ void YBTableModel::append()
     endInsertRows();
 }
 
-void YBTableModel::clearAllSensor()
+void YBTableModel::deleteSensors(int first, int last)
 {
-    beginRemoveRows(QModelIndex(), 0, m_sensorDataList.count());
-
-    m_sensorDataList.clear();
+    beginRemoveRows(QModelIndex(), first, last);
+    auto beginIter = m_sensorDataList.begin() + first;
+    while (first < last && beginIter != m_sensorDataList.end()) {
+        beginIter = m_sensorDataList.erase(beginIter);
+        first++;
+    }
     endRemoveRows();
 }
-
 
 bool YBTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -90,5 +92,5 @@ Qt::ItemFlags YBTableModel::flags(const QModelIndex &index) const
     Qt::ItemFlags flags = Qt::ItemFlag::ItemIsEnabled | Qt::ItemFlag::ItemIsSelectable;
     return flags |= Qt::ItemFlag::ItemIsEditable;
 
-//    return QAbstractListModel::flags(index);
+    //    return QAbstractListModel::flags(index);
 }

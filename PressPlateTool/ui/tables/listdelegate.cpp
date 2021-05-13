@@ -20,6 +20,11 @@ QWidget *ListDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
     return m_listItem;
 }
 
+void ListDelegate::destroyEditor(QWidget *editor, const QModelIndex &index) const
+{
+
+}
+
 void ListDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
 

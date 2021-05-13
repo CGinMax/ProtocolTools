@@ -27,8 +27,9 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+
     void append();
-    void clearAllSensor();
+    void deleteSensors(int first, int last);
 
 signals:
 
