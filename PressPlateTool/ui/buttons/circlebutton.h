@@ -63,16 +63,9 @@ protected:
     RippleOverlay* m_rippleOverly;
 
     bool m_hoveEnabled;
-    QStateMachine* m_shadowMachine;
-    QStateMachine* m_hoverMachine;
-    QState* m_unhoverState;
-    QState* m_hoverState;
+    QStateMachine* m_stateMachine;
     QState* m_normalState;
     QState* m_pressedState;
-    QEventTransition* m_hoverTransition;
-    QEventTransition* m_unhoverTransition;
-    QPropertyAnimation* m_hoverAnimation;
-    QPropertyAnimation* m_unhoverAnimation;
     QGraphicsDropShadowEffect* m_effect;
 
 };

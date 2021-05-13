@@ -42,9 +42,9 @@ public:
     void setPenWidth(qreal penWidth);
     qreal penWidth() const;
 
-    QRect thumbRect() const;
+    QRect thumbRect();
 
-    QRect trackRect() const;
+    QRect trackRect();
 
     void setOffStateWidth(int offWidth);
 
@@ -59,6 +59,7 @@ public slots:
 private:
     Q_DECLARE_PRIVATE(SwitchButton)
     const QScopedPointer<SwitchButtonPrivate> d_ptr;
+
 };
 
 #endif // SWITCHBUTTON_H

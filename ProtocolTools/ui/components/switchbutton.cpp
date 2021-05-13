@@ -2,6 +2,8 @@
 #include "switchbutton_p.h"
 #include <QApplication>
 #include <QPainter>
+#include <QEvent>
+#include <QSize>
 #include <QStateMachine>
 #include <QSignalTransition>
 #include <QPropertyAnimation>
@@ -262,19 +264,31 @@ qreal SwitchButton::penWidth() const
     return d->penWidth;
 }
 
-QRect SwitchButton::thumbRect() const
+QRect SwitchButton::thumbRect()
 {
-    Q_D(const SwitchButton);
-    return trackRect().adjusted(d->thumbMargins.left(), d->thumbMargins.top()
-                                , -d->thumbMargins.right(), -d->thumbMargins.bottom());
-//    return trackRect();
+    Q_D(SwitchButton);
+    auto rect = trackRect();
+
+//    int min = qMin(rect.height(), rect.width()) - 1;
+//    rect.setSize(QSize(min, min));
+//    rect.setX(rect.x() - 1);
+//    rect.setY(rect.y() - 1);
+    return rect.adjusted(1, 1, -1 , -1);
+//    return trackRect().adjusted(d->thumbMargins.left(), d->thumbMargins.top()
+//                                , -d->thumbMargins.right(), -d->thumbMargins.bottom());
 }
 
-QRect SwitchButton::trackRect() const
+QRect SwitchButton::trackRect()
 {
-    Q_D(const SwitchButton);
-    return rect().adjusted(d->trackMargins.left(), d->trackMargins.top()
-                           , -d->trackMargins.right(), -d->trackMargins.bottom());
+    Q_D(SwitchButton);
+    int min = qMin(height(), width()) - 8;
+    d->trackRect.setSize(QSize(2 * min, min));
+    d->trackRect.setX((this->width() - d->trackRect.width()) / 2);
+    d->trackRect.setY((this->height() - d->trackRect.height()) / 2);
+
+    return d->trackRect;
+//    return rect().adjusted(d->trackMargins.left(), d->trackMargins.top()
+//                           , -d->trackMargins.right(), -d->trackMargins.bottom());
 }
 
 void SwitchButton::setOffStateWidth(int offWidth)
@@ -308,3 +322,4 @@ void SwitchButton::paintEvent(QPaintEvent *event)
 
     painter.drawRect(rect());
 }
+

@@ -4,6 +4,7 @@
 #include <Qt>
 #include <QColor>
 #include <QMargins>
+#include <QRect>
 class QStateMachine;
 class QState;
 class SwitchButton;
@@ -25,6 +26,7 @@ public:
     SwitchButtonThumb         *thumb;
     SwitchButtonTrack         *track;
     QMargins                   trackMargins;
+    QRect                      trackRect;
     QMargins                   thumbMargins;
     QStateMachine             *stateMachine;
     QState                    *offState;

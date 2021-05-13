@@ -17,8 +17,8 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     if (parent != nullptr) {
         parent->installEventFilter(this);
     }
-    m_menuBtn->setOpacity(0.5);
     m_menuBtn->setHoverEnabled(true);
+    m_menuBtn->setOpacity(0.5);
     m_menuBtn->setCorner(Qt::BottomLeftCorner);
 
     m_distance = static_cast<qreal>(m_menuBtn->diameter()) * 2.5;

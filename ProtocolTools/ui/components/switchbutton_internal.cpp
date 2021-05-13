@@ -59,14 +59,20 @@ void SwitchButtonThumb::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    QBrush brush;
+    brush.setColor(Qt::white);
+    brush.setStyle(Qt::SolidPattern);
 
-    QPen pen(QBrush(QColor(Qt::white)), m_switchBtn->penWidth(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    QPen pen(QBrush(QColor(Qt::gray)), /*m_switchBtn->penWidth()*/1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     painter.setPen(pen);
-    painter.setBrush(Qt::NoBrush);
+    painter.setBrush(brush);
 
     QRectF r;
     if (m_switchBtn->orientation() == Qt::Horizontal) {
-        r = QRectF(m_offset, m_switchBtn->thumbMargins().top(), m_thumbWidth, qMax(static_cast<int>(m_thumbWidth), height() - m_switchBtn->thumbMargins().top() - m_switchBtn->thumbMargins().bottom()));
+        auto thumbRect = m_switchBtn->thumbRect();
+        r = QRectF(m_offset, 0, thumbRect.height(), thumbRect.height());
+//        r = QRectF(m_offset, m_switchBtn->thumbMargins().top(), m_thumbWidth, qMax(static_cast<int>(m_thumbWidth), height() - m_switchBtn->thumbMargins().top() - m_switchBtn->thumbMargins().bottom()));
+
     } else {
 //        r = QRectF(5, 5 + m_offset, width(), m_thumbWidth);
     }
@@ -75,6 +81,7 @@ void SwitchButtonThumb::paintEvent(QPaintEvent *event)
 
     if (!m_switchBtn->isEnabled()) {
         pen.setColor(m_switchBtn->disabledColor());
+        brush.setColor(m_switchBtn->disabledColor());
         painter.setPen(pen);
         painter.drawEllipse(r);
     }
@@ -87,10 +94,10 @@ void SwitchButtonThumb::updateOffset()
                   ? size() : size().transposed());
     auto thumbRect = m_switchBtn->thumbRect();
 
-    m_offset = m_switchBtn->penWidth() / 2 + m_shift * static_cast<qreal>(thumbRect.width() - m_switchBtn->penWidth());
-
-    int circleWidth = m_switchBtn->trackRect().height() / 2;
-    m_switchBtn->setOffStateWidth(circleWidth);
+    m_offset = 0 + m_shift * static_cast<qreal>(m_switchBtn->trackRect().width() - m_switchBtn->trackRect().height() /*- m_switchBtn->penWidth()*/);
+    qDebug() << "offset:" << m_offset;
+//    int circleWidth = m_switchBtn->trackRect().height() / 2;
+//    m_switchBtn->setOffStateWidth(circleWidth);
     update();
 }
 
