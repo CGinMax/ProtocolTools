@@ -2,7 +2,7 @@
 #define YBPROTOCOLCHANNEL_H
 
 #include "protocolchannelbase.h"
-#include "ybprotocol.h"
+#include "../Protocols/YBProtocol/ybprotocol.h"
 
 #include <functional>
 
@@ -41,7 +41,7 @@ public:
 
     ProtocolReply* setSensorNum(uint16_t dstAddr, uint8_t num);
 
-    static void processReply(ProtocolReply *reply, std::function<void()> finishFun, std::function<void()> errorFun);
+    static void processReply(ProtocolReply *reply, std::function<void()>&& finishFun, std::function<void()>&& errorFun);
 
 signals:
     void reportStatus(int addr, uint8_t curStatus, uint8_t confStatus);

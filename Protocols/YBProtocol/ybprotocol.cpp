@@ -1,6 +1,6 @@
 #include "ybprotocol.h"
 #include "content/contentfactory.h"
-
+#include "ybprotocolexception.h"
 YBProtocol::YBProtocol()
 {
 
@@ -24,25 +24,21 @@ void YBProtocol::appendDatas(const std::list<uint8_t> &dataList)
 void YBProtocol::parseRecvData()
 {
     while (!m_recvDataList.empty()) {
-        if (parseToFrame() != eYBParseResult::NoError) {
-            break;
+        try {
+            parseToFrame();
+        } catch (const YBProtocolException& e) {
+            m_recvExceptionQueue.emplace_back(e);
         }
     }
 }
 
-eYBParseResult YBProtocol::parseToFrame()
+void YBProtocol::parseToFrame()
 {
-    std::pair<YBFrame, eYBParseResult> result = YBFrame::parseBytesToFrame(m_recvDataList);
-    if (result.second == eYBParseResult::NoError) {
-        m_recvFrameQueue.emplace_back(result.first);
-        // TODO(shijm): show recv
-    } else if (result.second == eYBParseResult::CrcError) {
-        // TODO(shijm): 显示错误报文
-    }
-    return result.second;
+    YBFrame result = YBFrame::parseBytesToFrame(m_recvDataList);
+    m_recvFrameQueue.push_back(result);
 }
 
-bool YBProtocol::recvFrameEmpty()
+bool YBProtocol::isRecvFrameEmpty()
 {
     return m_recvFrameQueue.empty();
 }
@@ -52,6 +48,13 @@ YBFrame YBProtocol::popRecvFrame()
     auto frame = m_recvFrameQueue.front();
     m_recvFrameQueue.pop_front();
     return frame;
+}
+
+std::deque<YBProtocolException> YBProtocol::popAllException()
+{
+    std::deque<YBProtocolException> results;
+    m_recvExceptionQueue.swap(results);
+    return results;
 }
 
 YBFrame YBProtocol::nakErrorFrame(uint8_t funCode, uint8_t errorCode, uint16_t dstAddr)

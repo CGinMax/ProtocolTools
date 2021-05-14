@@ -3,7 +3,7 @@
 
 #include "icontent.h"
 
-class ContentSettingStatus : public IContent
+class PROTOCOLSSHARED_EXPORT ContentSettingStatus : public IContent
 {
 public:
     explicit ContentSettingStatus(uint8_t data);

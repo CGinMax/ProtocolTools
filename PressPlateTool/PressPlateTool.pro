@@ -39,16 +39,20 @@ DEPENDPATH += $$PWD/../spdlog/include
 INCLUDEPATH += $$PWD/../Communication/
 DEPENDPATH += $$PWD/../Communication/
 
+
+INCLUDEPATH += $$PWD/../Protocols/
+DEPENDPATH += $$PWD/../Protocols/
+
+
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug
-    LIBS += -L$$PWD/../bin/debug -lspdlog
-    LIBS += -L$$PWD/../bin/debug -lCommunication
 }
 else{
     DESTDIR = $$PWD/../bin/release
-    LIBS += -L$$PWD/../bin/release -lspdlog
-    LIBS += -L$$PWD/../bin/release -lCommunication
 }
+    LIBS += -L$${DESTDIR} -lspdlog
+    LIBS += -L$${DESTDIR} -lCommunication
+    LIBS += -L$${DESTDIR} -lProtocols
 
 QMAKE_RPATHDIR += ./
 QMAKE_RPATHDIR += ./lib

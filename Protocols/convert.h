@@ -1,14 +1,13 @@
-#ifndef UTILHELPER_H
-#define UTILHELPER_H
+#ifndef CONVERT_H
+#define CONVERT_H
 
 #include <string>
-
-class UtilHelper
+class Convert
 {
 public:
-    UtilHelper();
+    Convert();
 
     static std::string num2HexString(unsigned int num, unsigned int width = 2);
 };
 
-#endif // UTILHELPER_H
+#endif // CONVERT_H

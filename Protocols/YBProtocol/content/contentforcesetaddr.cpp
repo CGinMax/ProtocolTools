@@ -1,5 +1,5 @@
 #include "contentforcesetaddr.h"
-#include "../utilhelper.h"
+#include "../../convert.h"
 
 ContentForceSetAddr::ContentForceSetAddr(uint8_t low, uint8_t high)
 {
@@ -13,7 +13,7 @@ std::string ContentForceSetAddr::toString(bool isSend)
 {
     (void)isSend;
     std::string result = u8"设定从机地址=";
-    result += UtilHelper::num2HexString(m_addr);
+    result += Convert::num2HexString(m_addr);
     return result;
 }
 

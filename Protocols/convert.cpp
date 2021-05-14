@@ -1,13 +1,13 @@
-#include "utilhelper.h"
+#include "convert.h"
 #include <iostream>
 #include <sstream>
 
-UtilHelper::UtilHelper()
+Convert::Convert()
 {
 
 }
 
-std::string UtilHelper::num2HexString(unsigned int num, unsigned int width)
+std::string Convert::num2HexString(unsigned int num, unsigned int width)
 {
     std::stringstream ioss;     //定义字符串流
     std::string hexStr;         //存放转化后字符

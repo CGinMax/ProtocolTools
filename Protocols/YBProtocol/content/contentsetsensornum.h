@@ -2,7 +2,7 @@
 #define CONTENTSETSENSORNUM_H
 #include "icontent.h"
 
-class ContentSetSensorNum : public IContent
+class PROTOCOLSSHARED_EXPORT ContentSetSensorNum : public IContent
 {
 public:
     explicit ContentSetSensorNum(uint8_t data);

@@ -2,7 +2,8 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     Communication \
-    spdlog \
     ProtocolTools \
+    spdlog \
     test\
-    PressPlateTool
+    PressPlateTool \
+    Protocols

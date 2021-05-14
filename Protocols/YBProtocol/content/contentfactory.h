@@ -2,7 +2,7 @@
 #define CONTENTFACTORY_H
 
 #include "icontent.h"
-class ContentFactory
+class PROTOCOLSSHARED_EXPORT ContentFactory
 {
 public:
     ContentFactory();

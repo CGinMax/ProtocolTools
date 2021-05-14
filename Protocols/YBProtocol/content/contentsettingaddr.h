@@ -3,7 +3,7 @@
 
 #include "icontent.h"
 
-class ContentSettingAddr : public IContent
+class PROTOCOLSSHARED_EXPORT ContentSettingAddr : public IContent
 {
 public:
     explicit ContentSettingAddr(uint8_t dataCode);

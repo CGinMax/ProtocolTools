@@ -1,10 +1,13 @@
 #ifndef YBPROTOCOL_H
 #define YBPROTOCOL_H
 
-#include "iprotocol.h"
+#include "../iprotocols.h"
 #include <deque>
 #include "ybframe.h"
-class YBProtocol : public IProtocol
+
+class YBProtocolException;
+
+class PROTOCOLSSHARED_EXPORT YBProtocol : public IProtocols
 {
 public:
     YBProtocol();
@@ -16,10 +19,12 @@ public:
 
     void parseRecvData();
 
-    eYBParseResult parseToFrame();
+    void parseToFrame();
 
-    bool recvFrameEmpty();
+    bool isRecvFrameEmpty();
     YBFrame popRecvFrame();
+
+    std::deque<YBProtocolException> popAllException();
 
 //    void processFrame(const YBFrame& frame);// 外部处理
 
@@ -45,6 +50,7 @@ public:
 
 private:
     std::deque<YBFrame> m_recvFrameQueue;
+    std::deque<YBProtocolException> m_recvExceptionQueue;
     std::list<uint8_t> m_recvDataList;
 };
 

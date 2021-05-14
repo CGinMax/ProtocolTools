@@ -8,8 +8,8 @@ TEMPLATE = app
 include(../ProtocolTools/common/common.pri)
 #include(../ProtocolTools/network/network.pri)
 #include(../ProtocolTools/protocol/protocol.pri)
-include(../PressPlateTool/protocol/protocol.pri)
 #include(../ProtocolTools/ui/ui.pri)
+include(../PressPlateTool/protocol/protocol.pri)
 
 SOURCES += \
     tst_networktest.cpp \
@@ -18,17 +18,15 @@ SOURCES += \
 HEADERS += \
 
 
+INCLUDEPATH += $$PWD/../Protocols/
+DEPENDPATH += $$PWD/../Protocols/
+
+
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug
 }
 else {
     DESTDIR = $$PWD/../bin/release
 }
+LIBS += -L$${DESTDIR} -lProtocols
 
-#RESOURCES += \
-#    ../CdtTools/resources.qrc
-
-#FORMS += \
-#    ../CdtTools/ui/cdtsettingdlg.ui \
-#    ../CdtTools/ui/cdtworkwidget.ui \
-#    ../CdtTools/ui/tabpage.ui

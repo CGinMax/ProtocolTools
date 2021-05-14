@@ -20,7 +20,7 @@ void YBProtocolChannel::run()
         auto frame = m_sendFrameQueue.front();
         m_sendFrameQueue.pop_front();
 
-        auto ucharVector = frame.packetFrame();
+        auto ucharVector = frame.packetFrameToPureData();
         QByteArray bytearray(reinterpret_cast<char*>(ucharVector.data()), ucharVector.size());
 
         emit write(bytearray);
@@ -92,7 +92,7 @@ ProtocolReply *YBProtocolChannel::setSensorNum(uint16_t dstAddr, uint8_t num)
     return m_curReply;
 }
 
-void YBProtocolChannel::processReply(ProtocolReply *reply, std::function<void ()> finishFun, std::function<void ()> errorFun)
+void YBProtocolChannel::processReply(ProtocolReply *reply, std::function<void ()>&& finishFun, std::function<void ()>&& errorFun)
 {
     connect(reply, &ProtocolReply::finished, [=]{
         finishFun();
@@ -114,7 +114,7 @@ void YBProtocolChannel::onReadyRead()
         m_protocol->parseRecvData();
     }
     // 处理帧
-    while (!m_protocol->recvFrameEmpty()) {
+    while (!m_protocol->isRecvFrameEmpty()) {
         auto frame = m_protocol->popRecvFrame();
         processFrame(frame);
     }

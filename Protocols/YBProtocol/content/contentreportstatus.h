@@ -3,7 +3,7 @@
 
 #include "icontent.h"
 
-class ContentReportStatus : public IContent
+class PROTOCOLSSHARED_EXPORT ContentReportStatus : public IContent
 {
 public:
     explicit ContentReportStatus(uint8_t curCode, uint8_t settingCode);

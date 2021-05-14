@@ -1,11 +1,12 @@
-#ifndef CONTENTFORCESETADDR_H
-#define CONTENTFORCESETADDR_H
+#ifndef CONTENTQUERYADDR_H
+#define CONTENTQUERYADDR_H
+
 #include "icontent.h"
 
-class ContentForceSetAddr : public IContent
+class PROTOCOLSSHARED_EXPORT ContentQueryAddr : public IContent
 {
 public:
-    explicit ContentForceSetAddr(uint8_t low = 0x00, uint8_t high = 0x00);
+    explicit ContentQueryAddr(uint8_t low = 0x00, uint8_t high = 0x00);
 
     std::string toString(bool isSend) override;
 
@@ -18,4 +19,4 @@ private:
     uint16_t m_addr;
 };
 
-#endif // CONTENTFORCESETADDR_H
+#endif // CONTENTQUERYADDR_H

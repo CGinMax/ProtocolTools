@@ -1,5 +1,5 @@
 #include "contentsettingaddr.h"
-#include "../utilhelper.h"
+#include "../../convert.h"
 ContentSettingAddr::ContentSettingAddr(uint8_t dataCode)
     : m_addr(dataCode)
     , m_isSuccess(dataCode != 0)
@@ -12,7 +12,7 @@ std::string ContentSettingAddr::toString(bool isSend)
 {
     std::string result = u8"设定地址";
     if (isSend) {
-        result += "=" + UtilHelper::num2HexString(m_addr);
+        result += "=" + Convert::num2HexString(m_addr);
         return result;
     }
 

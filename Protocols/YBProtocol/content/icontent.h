@@ -4,8 +4,9 @@
 #include <string>
 #include <cstdint>
 #include <vector>
+#include "../../protocols_global.h"
 
-class IContent
+class PROTOCOLSSHARED_EXPORT IContent
 {
 public:
     virtual ~IContent();

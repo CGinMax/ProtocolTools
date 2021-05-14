@@ -2,7 +2,7 @@
 #define CONTENTNAKERROR_H
 
 #include "icontent.h"
-class ContentNAKError : public IContent
+class PROTOCOLSSHARED_EXPORT ContentNAKError : public IContent
 {
 public:
     explicit ContentNAKError(uint8_t errorFunctionCode, uint8_t errorNakCode);

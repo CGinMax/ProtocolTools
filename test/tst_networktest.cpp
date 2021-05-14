@@ -2,6 +2,8 @@
 #include <QCoreApplication>
 
 // add necessary includes here
+#include <iterator>
+#include <iostream>
 #include <QString>
 #include <QSignalSpy>
 #include <QtConcurrent>
@@ -9,7 +11,10 @@
 #include <QTabBar>
 #include <QQueue>
 #include "../ProtocolTools/common/util.h"
-#include "../PressPlateTool/protocol/ybframe.h"
+#include "../Protocols/convert.h"
+#include "../Protocols/YBProtocol/ybframe.h"
+#include "../Protocols/YBProtocol/ybprotocol.h"
+#include "../Protocols/YBProtocol/ybprotocolexception.h"
 
 class networkTest : public QObject
 {
@@ -25,6 +30,8 @@ private slots:
     void test_util();
     void test_crc16();
     void test_ybframe_parse();
+    void test_ybframe_packet();
+    void test_ybprotocol();
 public:
 };
 
@@ -63,54 +70,132 @@ void networkTest::test_crc16()
     auto res = YBFrame::checkCRC16(bodyMsg, 0);
     QCOMPARE(res, 0x29F6);
 
-    std::list<uint8_t> completeMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x02, 0x00, 0x01, 0x01, 0x0a,0x0b};
-    auto completeRes = YBFrame::parseBytesToFrame(completeMsg);
-    QCOMPARE(YBFrame::calcCrc(completeRes.first), 0x4643);
+    try {
+        std::list<uint8_t> completeMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x02, 0x00, 0x01, 0x01, 0x0a,0x0b};
+        auto completeRes = YBFrame::parseBytesToFrame(completeMsg);
+        QCOMPARE(YBFrame::calcCrc(completeRes), 0x4643);
+
+    } catch (const YBProtocolException& e) {
+        QVERIFY(e.result() == eYBParseResult::CrcError);
+    }
 }
 
 void networkTest::test_ybframe_parse()
 {
     // header fine
-    std::list<uint8_t> headerMsg = {0x90, 0x20, 0xEB, 0x90, 0xEB, 0x90, 2, 0, 2, 0x02, 0x00, 0x01, 0x01, 0x0a,0x0b};
-    auto headerRes = YBFrame::parseBytesToFrame(headerMsg);
-    QVERIFY(headerRes.second != eYBParseResult::HeaderError);
+    try {
+        std::list<uint8_t> headerMsg = {0x90, 0x20, 0xEB, 0x90, 0xEB, 0x90, 2, 0, 2, 0x02, 0x00, 0x01, 0x01, 0x0a,0x0b};
+        auto headerRes = YBFrame::parseBytesToFrame(headerMsg);
+    } catch (const YBProtocolException& e) {
+        QVERIFY(e.result() != eYBParseResult::HeaderError);
+    }
 
     // header fine in tail
-    headerMsg = {0x90, 0x20, 2, 0, 2, 0x02, 0xEB, 0x90, 0x01, 0x0a,0x0b, 0xEB, 0x90, 0xEB, 0x90};
-    headerRes = YBFrame::parseBytesToFrame(headerMsg);
-    QVERIFY(headerRes.second != eYBParseResult::HeaderError);
+    try {
+        std::list<uint8_t> headerMsg = {0x90, 0x20, 2, 0, 2, 0x02, 0xEB, 0x90, 0x01, 0x0a,0x0b, 0xEB, 0x90, 0xEB, 0x90};
+        auto headerRes = YBFrame::parseBytesToFrame(headerMsg);
+
+    } catch (const YBProtocolException& e) {
+        QVERIFY(e.result() != eYBParseResult::HeaderError);
+    }
 
     // header error
-    headerMsg = {0x90, 0x20, 2, 0, 2, 0x02, 0xEB, 0x90, 0x90, 0xEB, 0x90, 0xEB, 0x00, 0x90, 0x01, 0x0a,0x0b};
-    headerRes = YBFrame::parseBytesToFrame(headerMsg);
-    QVERIFY(headerRes.second == eYBParseResult::HeaderError);
-    headerMsg = {0x90, 0x20, 2, 0, 2, 0x02, 0xEB, 0x90, 0xEB, 0x10, 0x20, 0x01, 0x0a,0x0b};
-    headerRes = YBFrame::parseBytesToFrame(headerMsg);
-    QVERIFY(headerRes.second == eYBParseResult::HeaderError);
+    try {
+        std::list<uint8_t> headerMsg = {0x90, 0x20, 2, 0, 2, 0x02, 0xEB, 0x90, 0x90, 0xEB, 0x90, 0xEB, 0x00, 0x90, 0x01, 0x0a,0x0b};
+        auto headerRes = YBFrame::parseBytesToFrame(headerMsg);
+    } catch (const YBProtocolException& e) {
+        QVERIFY(e.result() == eYBParseResult::HeaderError);
+    }
+
+    try {
+        std::list<uint8_t> headerMsg = {0x90, 0x20, 2, 0, 2, 0x02, 0xEB, 0x90, 0xEB, 0x10, 0x20, 0x01, 0x0a,0x0b};
+        auto headerRes = YBFrame::parseBytesToFrame(headerMsg);
+
+    } catch (const YBProtocolException& e) {
+        QVERIFY(e.result() == eYBParseResult::HeaderError);
+    }
 
     // not complete
-    std::list<uint8_t> bodyMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, /*0x02, 0x00, 0x01, 0x01, 0x0a, */0x0b};
-    auto bodyMsgRes = YBFrame::parseBytesToFrame(bodyMsg);
-    QVERIFY(bodyMsgRes.second == eYBParseResult::NotComplete);
+    try {
+        std::list<uint8_t> bodyMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, /*0x02, 0x00, 0x01, 0x01, 0x0a, */0x0b};
+        auto bodyMsgRes = YBFrame::parseBytesToFrame(bodyMsg);
+
+    } catch (const YBProtocolException& e) {
+
+        QVERIFY(e.result() == eYBParseResult::NotComplete);
+    }
     // no complete no crc
-    bodyMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x02, 0x00, 0x01, 0x01/*, 0x0a,0x0b*/};
-    bodyMsgRes = YBFrame::parseBytesToFrame(bodyMsg);
-    QVERIFY(bodyMsgRes.second == eYBParseResult::NotComplete);
-    // data length error
-    bodyMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0xaa, 0x00, 0x01, 0x01, 0x0a,0x0b};
-    bodyMsgRes = YBFrame::parseBytesToFrame(bodyMsg);
-    QVERIFY(bodyMsgRes.second == eYBParseResult::DataLengthError);
+    try {
+        std::list<uint8_t> bodyMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x02, 0x00, 0x01, 0x01/*, 0x0a,0x0b*/};
+        auto bodyMsgRes = YBFrame::parseBytesToFrame(bodyMsg);
+
+    } catch (const YBProtocolException& e) {
+
+        QVERIFY(e.result() == eYBParseResult::NotComplete);
+    }
 
     // crc error
-    std::list<uint8_t> crcMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x02, 0x00, 0x01, 0x01, 0x10,0x20};
-    auto crcRes = YBFrame::parseBytesToFrame(crcMsg);
-    QVERIFY(crcRes.second == eYBParseResult::CrcError);
+    try {
+        std::list<uint8_t> crcMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x02, 0x00, 0x01, 0x01, 0x10,0x20};
+        auto crcRes = YBFrame::parseBytesToFrame(crcMsg);
+
+    } catch (const YBProtocolException& e) {
+        QVERIFY(e.result() == eYBParseResult::CrcError);
+    }
 
     // complete
-    std::list<uint8_t> completeMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x02, 0x00, 0x01, 0x01, 0x43,0x46};
-    auto completeRes = YBFrame::parseBytesToFrame(completeMsg);
-    QVERIFY(completeRes.second == eYBParseResult::NoError);
+    try {
+        std::list<uint8_t> completeMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x02, 0x00, 0x01, 0x01, 0x43,0x46};
+        auto completeRes = YBFrame::parseBytesToFrame(completeMsg);
 
+    } catch (const YBProtocolException& e) {
+
+        QVERIFY(e.result() == eYBParseResult::NoError);
+    }
+
+}
+
+void networkTest::test_ybframe_packet()
+{
+    std::list<uint8_t> srcMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x01, 0x00, 0x01, 0x22,0x79};
+    std::list<uint8_t> msg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x01, 0x00, 0x01, 0x22,0x79};
+    auto frame = YBFrame::parseBytesToFrame(msg);
+    std::vector<uint8_t> packetDatas = frame.packetFrameToPureData();
+
+    packetDatas.shrink_to_fit();
+    QCOMPARE(srcMsg.size() , packetDatas.size());
+    auto srcIter = srcMsg.begin();
+    auto dstIter = packetDatas.begin();
+    for (;srcIter != srcMsg.begin() && dstIter != packetDatas.end(); srcIter++, dstIter++) {
+        QVERIFY(*srcIter == *dstIter);
+    }
+}
+
+void networkTest::test_ybprotocol()
+{
+    YBProtocol protocol;
+    std::list<uint8_t> crcErrorMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x01, 0x00, 0x01, 0x22/*,0x79*/, 0};
+    protocol.appendDatas(crcErrorMsg);
+    try {
+        protocol.parseToFrame();
+    } catch (const YBProtocolException& e) {
+        QCOMPARE(e.result(), eYBParseResult::CrcError);
+    }
+    protocol.appendDatas(crcErrorMsg);
+    protocol.parseRecvData();
+    auto exceptions = protocol.popAllException();
+    QCOMPARE(exceptions.size(), 1);
+    QCOMPARE(exceptions.at(0).result(), eYBParseResult::CrcError);
+
+    std::list<uint8_t> successMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x01, 0x00, 0x01, 0x22, 0x79};
+    protocol.appendDatas(successMsg);
+    protocol.parseRecvData();
+    if (!protocol.isRecvFrameEmpty()) {
+        auto frame = protocol.popRecvFrame();
+        QCOMPARE(frame.m_dataLen, 1);
+        QCOMPARE(frame.m_funCode, 0x02);
+
+    }
 }
 
 

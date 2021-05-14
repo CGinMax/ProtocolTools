@@ -1,5 +1,5 @@
 #include "contentnakerror.h"
-#include "../utilhelper.h"
+#include "../../convert.h"
 
 ContentNAKError::ContentNAKError(uint8_t errorFunctionCode, uint8_t errorNakCode)
     : m_errFunCode(errorFunctionCode)
@@ -13,9 +13,9 @@ std::string ContentNAKError::toString(bool isSend)
 {
     (void)isSend;
     std::string result = u8"NAK错误, 错误功能码:";
-    result += UtilHelper::num2HexString(m_errFunCode);//hex
+    result += Convert::num2HexString(m_errFunCode);//hex
     result += u8", NAK错误码:";
-    result += UtilHelper::num2HexString(m_nakFunCode);
+    result += Convert::num2HexString(m_nakFunCode);
     return result;
 }
 

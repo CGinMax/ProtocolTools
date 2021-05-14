@@ -3,7 +3,7 @@
 
 #include "icontent.h"
 #include <array>
-class ContentQueryStatus : public IContent
+class PROTOCOLSSHARED_EXPORT ContentQueryStatus : public IContent
 {
 public:
     explicit ContentQueryStatus(uint8_t curCode = 0x00, uint8_t m_setCode = 0x00);

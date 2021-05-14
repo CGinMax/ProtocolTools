@@ -3,7 +3,7 @@
 
 #include "icontent.h"
 
-class ContentQueryVersion : public IContent
+class PROTOCOLSSHARED_EXPORT ContentQueryVersion : public IContent
 {
 public:
     explicit ContentQueryVersion(const std::vector<uint8_t>& m_datas);
