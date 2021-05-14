@@ -5,18 +5,22 @@
 #include "../Protocols/YBProtocol/ybprotocol.h"
 
 #include <functional>
+#include <QQueue>
 
 class ProtocolReply : public QObject
 {
     Q_OBJECT
 public:
-    ProtocolReply() = default;
+    explicit ProtocolReply(uint8_t funCode)
+        : m_funcode(funCode)
+    {}
 
 signals:
     void finished();
     void error();
 
 public:
+    uint8_t m_funcode;
     std::shared_ptr<IContent> result;
 };
 
@@ -44,15 +48,14 @@ public:
     static void processReply(ProtocolReply *reply, std::function<void()>&& finishFun, std::function<void()>&& errorFun);
 
 signals:
-    void reportStatus(int addr, uint8_t curStatus, uint8_t confStatus);
 
 public slots:
     void onReadyRead() override;
 
 protected:
     YBProtocol* m_protocol;
-    std::deque<YBFrame> m_sendFrameQueue;
-    ProtocolReply* m_curReply;
+    QQueue<YBFrame> m_sendFrameQueue;
+    QQueue<ProtocolReply*> m_replyQueue;
     bool m_waitResponse;
 };
 

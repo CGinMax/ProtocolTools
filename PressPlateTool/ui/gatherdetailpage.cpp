@@ -26,7 +26,7 @@ void GatherDetailPage::onItemChanged(GatherController *controller)
         disconnect(m_gatherData.data(), &GatherData::addrChanged, this, &GatherDetailPage::onAddrChanged);
     }
     if (controller != nullptr) {
-        m_tablePage->setProtocol(controller->protocol());
+        m_tablePage->setGatherController(controller);
         m_gatherData = controller->gatherData();
         ui->txtName->setText(m_gatherData->name());
         ui->txtAddress->setText(QString::number(m_gatherData->addr()));

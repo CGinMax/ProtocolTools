@@ -49,6 +49,10 @@ std::string ContentQueryVersion::toString(bool isSend)
     verHeigh = m_datas.at(3);
     result += u8", 软件版本=" + std::to_string(verHeigh) + "." + std::to_string(verLow);
 
+    if (!m_productDesc.empty()) {
+        result += u8", " + m_productDesc;
+    }
+
     return result;
 }
 

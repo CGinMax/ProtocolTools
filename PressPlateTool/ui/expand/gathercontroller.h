@@ -23,6 +23,7 @@ public:
     void setExpandTile(ExpandTile* tile);
     void setOperWidget(GatherOperWidget* operWidget);
 
+    bool isCommunicationActive();
     YBProtocolChannel* protocol();
 
 signals:
@@ -34,6 +35,8 @@ public slots:
     void onSetGatherAddress(int addr);
     void onResetSensorCount(int count);
 
+private:
+    bool canDoOperate();
 private:
     QSharedPointer<GatherData> m_gatherData;
     ExpandTile* m_tile;

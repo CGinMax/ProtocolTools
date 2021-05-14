@@ -17,28 +17,38 @@ YBProtocolChannel::~YBProtocolChannel()
 void YBProtocolChannel::run()
 {
     if (!m_waitResponse && !m_sendFrameQueue.empty()) {
-        auto frame = m_sendFrameQueue.front();
-        m_sendFrameQueue.pop_front();
 
-        auto ucharVector = frame.packetFrameToPureData();
-        QByteArray bytearray(reinterpret_cast<char*>(ucharVector.data()), ucharVector.size());
+        auto frame = m_sendFrameQueue.dequeue();
 
+        auto srcBytes = frame.packetFrameToPureData();
+        QByteArray bytearray(reinterpret_cast<char*>(srcBytes.data()), static_cast<int>(srcBytes.size()));
         emit write(bytearray);
+
+        showMessage(eMsgType::eMsgSend, frame.parseToString(), srcBytes);
+
     }
 }
 
 void YBProtocolChannel::processFrame(const YBFrame &frame)
 {
-    if (frame.m_funCode == eYBFunCode::ReportStatusCode) {
-        auto bytes = frame.m_dataContent->toByteVector();
-        emit reportStatus(frame.m_dstAddr, bytes.at(0), bytes.at(1));
+
+    if (m_replyQueue.empty()) {
         return ;
     }
 
-    m_curReply->result = frame.m_dataContent;
+    auto iter = std::find_if(m_replyQueue.begin(), m_replyQueue.end(), [&frame](ProtocolReply* reply){
+            return reply->m_funcode == frame.m_funCode;
+    });
+    if (iter == m_replyQueue.end()) {
+        qDebug("unknow frame");
+        return;
+    }
+    auto curReply = *iter;
+    m_replyQueue.removeOne(curReply);
+    curReply->result = frame.m_dataContent;
     switch (frame.m_funCode) {
     case eYBFunCode::NAKCode:
-        emit m_curReply->error();
+        emit curReply->error();
         break;
     case eYBFunCode::SetStatusCode:
     case eYBFunCode::QueryStatusCode:
@@ -46,7 +56,8 @@ void YBProtocolChannel::processFrame(const YBFrame &frame)
     case eYBFunCode::SetAddressCode:
     case eYBFunCode::SetSensorNumCode:
     case eYBFunCode::QueryAddrCode:
-        emit m_curReply->finished();
+        emit curReply->finished();
+        qDebug("finish");
         break;
     default:
         break;
@@ -55,41 +66,47 @@ void YBProtocolChannel::processFrame(const YBFrame &frame)
 
 ProtocolReply *YBProtocolChannel::setAddress(eYBFrameType type, uint8_t addr)
 {
-    m_sendFrameQueue.push_back(m_protocol->settingAddress(type, addr));
+    m_sendFrameQueue.enqueue(YBFrame::settingAddress(type, addr));
 
-    m_curReply = new ProtocolReply();
-    return m_curReply;
+    auto reply = new ProtocolReply(eYBFunCode::SetAddressCode);
+    m_replyQueue.enqueue(reply);
+    return reply;
 }
 
 ProtocolReply *YBProtocolChannel::queryStatus(uint16_t dstAddr)
 {
-    m_sendFrameQueue.push_back(m_protocol->queryStatus(dstAddr));
-    m_curReply = new ProtocolReply();
-    return m_curReply;
+    m_sendFrameQueue.enqueue(YBFrame::queryStatus(dstAddr));
+
+    auto reply = new ProtocolReply(eYBFunCode::QueryStatusCode);
+    m_replyQueue.enqueue(reply);
+    return reply;
 }
 
 ProtocolReply *YBProtocolChannel::queryVersion(eYBFrameType type, uint16_t dstAddr)
 {
-    m_sendFrameQueue.push_back(m_protocol->queryVersion(type, dstAddr));
+    m_sendFrameQueue.enqueue(YBFrame::queryVersion(type, dstAddr));
 
-    m_curReply = new ProtocolReply();
-    return m_curReply;
+    auto reply = new ProtocolReply(eYBFunCode::QueryVersionCode);
+    m_replyQueue.enqueue(reply);
+    return reply;
 }
 
 ProtocolReply *YBProtocolChannel::setStatus(uint8_t status, uint16_t dstAddr)
 {
-    m_sendFrameQueue.push_back(m_protocol->settingStatus(status, dstAddr));
+    m_sendFrameQueue.enqueue(YBFrame::settingStatus(status, dstAddr));
 
-    m_curReply = new ProtocolReply();
-    return m_curReply;
+    auto reply = new ProtocolReply(eYBFunCode::SetStatusCode);
+    m_replyQueue.enqueue(reply);
+    return reply;
 }
 
 ProtocolReply *YBProtocolChannel::setSensorNum(uint16_t dstAddr, uint8_t num)
 {
-    m_sendFrameQueue.push_back(m_protocol->setSensorNum(dstAddr, num));
+    m_sendFrameQueue.enqueue(YBFrame::setSensorNum(dstAddr, num));
 
-    m_curReply = new ProtocolReply();
-    return m_curReply;
+    auto reply = new ProtocolReply(eYBFunCode::SetSensorNumCode);
+    m_replyQueue.enqueue(reply);
+    return reply;
 }
 
 void YBProtocolChannel::processReply(ProtocolReply *reply, std::function<void ()>&& finishFun, std::function<void ()>&& errorFun)
@@ -116,6 +133,7 @@ void YBProtocolChannel::onReadyRead()
     // 处理帧
     while (!m_protocol->isRecvFrameEmpty()) {
         auto frame = m_protocol->popRecvFrame();
+        showMessage(eMsgType::eMsgRecv, frame.parseToString(), frame.packetFrameToPureData());
         processFrame(frame);
     }
 }

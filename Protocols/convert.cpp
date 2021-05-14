@@ -1,6 +1,8 @@
 #include "convert.h"
 #include <iostream>
 #include <sstream>
+#include <cctype>
+#include <algorithm>
 
 Convert::Convert()
 {
@@ -21,5 +23,27 @@ std::string Convert::num2HexString(unsigned int num, unsigned int width)
     }
 
     std::string result = hexStr.substr(hexStr.length() - width, hexStr.length());    //取右width位
+    std::transform(result.begin(), result.end(), result.begin(), toupper);
+    return result;
+}
+
+std::string Convert::bytes2String(const std::vector<uint8_t> &buffer, int splitNum)
+{
+    std::string result;
+
+    for (auto& data : buffer) {
+        result += num2HexString(data >> 4, 1);
+        result += num2HexString(data & 0x0F, 1) + " ";
+    }
+
+    if (splitNum == 0) {
+        return result;
+    }
+
+    auto splitPos = static_cast<size_t>(3 * splitNum);
+    while (result.size() >= splitPos) {
+        result.insert(splitPos, "\n");
+        splitPos += static_cast<size_t>(3 * splitNum + 1);
+    }
     return result;
 }

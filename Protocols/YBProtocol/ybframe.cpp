@@ -48,6 +48,106 @@ YBFrame &YBFrame::operator=(const YBFrame &other)
     return *this;
 }
 
+std::string YBFrame::parseToString()
+{
+    std::list<std::string> strList;
+
+    strList.emplace_back(u8"源类型:");
+    strList.emplace_back(getTypeStringSafe(m_srcType));
+    strList.emplace_back(u8"(" + Convert::num2HexString(m_srcType) + u8")");
+    strList.emplace_back(u8", 目的类型:");
+    strList.emplace_back(getTypeStringSafe(m_dstType));
+    strList.emplace_back(u8"(" + Convert::num2HexString(m_dstType) + u8")");
+
+    strList.emplace_back(u8", 源地址:");
+    strList.emplace_back(std::to_string(m_srcAddr));
+
+    strList.emplace_back(u8", 目的地址:");
+    strList.emplace_back(std::to_string(m_dstAddr));
+
+    strList.emplace_back(u8", 功能码:");
+    strList.emplace_back(std::to_string(m_funCode));
+    strList.emplace_back(u8"(" + Convert::num2HexString(m_funCode) + u8")");
+
+    strList.emplace_back(u8", 数据正文长度:");
+    strList.emplace_back(std::to_string(m_dataLen));
+
+    if (m_dataContent == nullptr) {
+        m_dataContent.reset(ContentFactory::createContent(m_funCode, m_data));
+    }
+    std::string contentStr = m_dataContent->toString(m_isSend);
+    if (!contentStr.empty()) {
+        strList.push_back(contentStr);
+    }
+
+    strList.emplace_back(u8", crc16校验码:");
+    strList.emplace_back(std::to_string(m_crcCode));
+    strList.emplace_back(u8"(" + Convert::num2HexString(m_crcCode & 0xFF) + " " + Convert::num2HexString((m_crcCode >> 8) & 0xFF) + u8")");
+
+    std::string result;
+    for (auto& str : strList) {
+        result += str;
+    }
+    return result;
+}
+
+std::vector<uint8_t> YBFrame::packetFrameToPureData()
+{
+    if (m_dataLen > 0 && m_dataContent != nullptr) {
+        m_data = m_dataContent->toByteVector();
+    }
+    m_crcCode = calcCrc(*this);
+
+    uint pos = 0;
+    std::vector<uint8_t> packetDatas(FRAME_MIN_LEN + m_data.size(), 0);
+    std::copy(HEADER_DATA.begin(), HEADER_DATA.end(), packetDatas.begin());
+    pos += HEADER_DATA.size();
+
+    packetDatas[pos++] = m_srcType;
+    packetDatas[pos++] = m_dstType;
+    packetDatas[pos++] = m_srcAddr & 0xFF;
+    packetDatas[pos++] = (m_srcAddr >> 8) & 0xFF;
+    packetDatas[pos++] = m_dstAddr & 0xFF;
+    packetDatas[pos++] = (m_dstAddr >> 8) & 0xFF;
+    packetDatas[pos++] = m_funCode;
+    packetDatas[pos++] = m_dataLen & 0xFF;
+    packetDatas[pos++] = (m_dataLen >> 8) & 0xFF;
+    std::copy(m_data.begin(), m_data.end(), packetDatas.begin() + pos);
+    pos += m_dataLen;
+    packetDatas[pos++] = m_crcCode & 0xFF;
+    packetDatas[pos++] = (m_crcCode >> 8) & 0xFF;
+    return packetDatas;
+}
+
+std::vector<uint8_t> YBFrame::packetFrameToSeparator(unsigned char separator)
+{
+    if (m_dataLen > 0 && m_dataContent != nullptr) {
+        m_data = m_dataContent->toByteVector();
+    }
+    m_crcCode = calcCrc(*this);
+    auto separatorData = m_dataContent->toByteVector();
+
+    uint pos = 0;
+    std::vector<uint8_t> packetDatas(FRAME_MIN_LEN + m_data.size(), 0);
+    std::copy(HEADER_DATA.begin(), HEADER_DATA.end(), packetDatas.begin());
+    pos += HEADER_DATA.size();
+
+    packetDatas[pos++] = m_srcType;
+    packetDatas[pos++] = m_dstType;
+    packetDatas[pos++] = m_srcAddr & 0xFF;
+    packetDatas[pos++] = (m_srcAddr >> 8) & 0xFF;
+    packetDatas[pos++] = m_dstAddr & 0xFF;
+    packetDatas[pos++] = (m_dstAddr >> 8) & 0xFF;
+    packetDatas[pos++] = m_funCode;
+    packetDatas[pos++] = m_dataLen & 0xFF;
+    packetDatas[pos++] = (m_dataLen >> 8) & 0xFF;
+    std::copy(m_data.begin(), m_data.end(), packetDatas.begin() + pos);
+    pos += m_data.size();
+    packetDatas[pos++] = m_crcCode & 0xFF;
+    packetDatas[pos++] = (m_crcCode >> 8) & 0xFF;
+    return packetDatas;
+}
+
 YBFrame YBFrame::parseBytesToFrame(std::list<uint8_t> &datas)
 {
     YBFrame frame;
@@ -55,6 +155,7 @@ YBFrame YBFrame::parseBytesToFrame(std::list<uint8_t> &datas)
     auto iter = std::search(datas.begin(), datas.end(), HEADER_DATA.begin(), HEADER_DATA.end());
     if (iter == datas.end()) {
         throw YBProtocolException(eYBParseResult::HeaderError, "not found header");
+
     }
 
     std::advance(iter, HEADER_DATA.size());
@@ -129,106 +230,6 @@ uint16_t YBFrame::calcCrc(const YBFrame &frame)
 
 }
 
-std::string YBFrame::parseToString()
-{
-    std::list<std::string> strList;
-
-    strList.emplace_back(u8"源类型:");
-    strList.emplace_back(FRAME_TYPE_MAP.at(m_srcType));
-    strList.emplace_back(u8"(" + Convert::num2HexString(m_srcType) + u8")");
-    strList.emplace_back(u8", 目的类型:");
-    strList.emplace_back(FRAME_TYPE_MAP.at(m_dstType));
-    strList.emplace_back(u8"(" + Convert::num2HexString(m_dstType) + u8")");
-
-    strList.emplace_back(u8", 源地址:");
-    strList.emplace_back(std::to_string(m_srcAddr));
-
-    strList.emplace_back(u8", 目的地址:");
-    strList.emplace_back(std::to_string(m_dstAddr));
-
-    strList.emplace_back(u8", 功能码:");
-    strList.emplace_back(std::to_string(m_funCode));
-    strList.emplace_back(u8"(" + Convert::num2HexString(m_funCode) + u8")");
-
-    strList.emplace_back(u8", 数据正文长度:");
-    strList.emplace_back(std::to_string(m_dataLen));
-
-    if (m_dataContent == nullptr) {
-        m_dataContent.reset(ContentFactory::createContent(m_funCode, m_data));
-    }
-    std::string contentStr = m_dataContent->toString(m_isSend);
-    if (!contentStr.empty()) {
-        strList.push_back(contentStr);
-    }
-
-    strList.emplace_back(u8", crc16校验码:");
-    strList.emplace_back(std::to_string(m_crcCode));
-    strList.emplace_back(u8"(" + Convert::num2HexString(m_crcCode | 0xFF) + " " + Convert::num2HexString((m_crcCode >> 8) | 0xFF) + u8")");
-
-    std::string result;
-    for (auto& str : strList) {
-        result += str;
-    }
-    return result;
-}
-
-std::vector<uint8_t> YBFrame::packetFrameToPureData()
-{
-    if (m_dataLen > 0 && m_dataContent != nullptr) {
-        m_data = m_dataContent->toByteVector();
-    }
-    m_crcCode = calcCrc(*this);
-
-    uint pos = 0;
-    std::vector<uint8_t> packetDatas(FRAME_MIN_LEN + m_data.size(), 0);
-    std::copy(HEADER_DATA.begin(), HEADER_DATA.end(), packetDatas.begin());
-    pos += HEADER_DATA.size();
-
-    packetDatas[pos++] = m_srcType;
-    packetDatas[pos++] = m_dstType;
-    packetDatas[pos++] = m_srcAddr & 0xFF;
-    packetDatas[pos++] = (m_srcAddr >> 8) & 0xFF;
-    packetDatas[pos++] = m_dstAddr & 0xFF;
-    packetDatas[pos++] = (m_dstAddr >> 8) & 0xFF;
-    packetDatas[pos++] = m_funCode;
-    packetDatas[pos++] = m_dataLen & 0xFF;
-    packetDatas[pos++] = (m_dataLen >> 8) & 0xFF;
-    std::copy(m_data.begin(), m_data.end(), packetDatas.begin() + pos);
-    pos += m_dataLen;
-    packetDatas[pos++] = m_crcCode & 0xFF;
-    packetDatas[pos++] = (m_crcCode >> 8) & 0xFF;
-    return packetDatas;
-}
-
-std::vector<uint8_t> YBFrame::packetFrameToSeparator(unsigned char separator)
-{
-    if (m_dataLen > 0 && m_dataContent != nullptr) {
-        m_data = m_dataContent->toByteVector();
-    }
-    m_crcCode = calcCrc(*this);
-    auto separatorData = m_dataContent->toByteVector();
-
-    uint pos = 0;
-    std::vector<uint8_t> packetDatas(FRAME_MIN_LEN + m_data.size(), 0);
-    std::copy(HEADER_DATA.begin(), HEADER_DATA.end(), packetDatas.begin());
-    pos += HEADER_DATA.size();
-
-    packetDatas[pos++] = m_srcType;
-    packetDatas[pos++] = m_dstType;
-    packetDatas[pos++] = m_srcAddr & 0xFF;
-    packetDatas[pos++] = (m_srcAddr >> 8) & 0xFF;
-    packetDatas[pos++] = m_dstAddr & 0xFF;
-    packetDatas[pos++] = (m_dstAddr >> 8) & 0xFF;
-    packetDatas[pos++] = m_funCode;
-    packetDatas[pos++] = m_dataLen & 0xFF;
-    packetDatas[pos++] = (m_dataLen >> 8) & 0xFF;
-    std::copy(m_data.begin(), m_data.end(), packetDatas.begin() + pos);
-    pos += m_data.size();
-    packetDatas[pos++] = m_crcCode & 0xFF;
-    packetDatas[pos++] = (m_crcCode >> 8) & 0xFF;
-    return packetDatas;
-}
-
 uint16_t YBFrame::checkCRC16(std::vector<uint8_t> buff, int offset)
 {
     uint16_t result = 0xffff;
@@ -252,4 +253,139 @@ uint16_t YBFrame::checkCRC16(std::vector<uint8_t> buff, int offset)
         }
     }
     return result;
+}
+
+
+YBFrame YBFrame::nakErrorFrame(uint8_t funCode, uint8_t errorCode, uint16_t dstAddr)
+{
+    YBFrame frame;
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBSensor;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::NAKCode;
+    frame.m_dataLen = 0x02;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, {funCode, errorCode}));
+
+    return frame;
+}
+
+YBFrame YBFrame::settingStatus(uint8_t status, uint16_t dstAddr)
+{
+    YBFrame frame;
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBSensor;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::SetStatusCode;
+    frame.m_dataLen = 0x01;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, {status}));
+
+    return frame;
+}
+
+YBFrame YBFrame::queryStatus(uint16_t dstAddr)
+{
+    YBFrame frame;
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBSensor;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::QueryStatusCode;
+    frame.m_dataLen = 0x00;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode));
+
+
+    return frame;
+}
+
+YBFrame YBFrame::queryVersion(eYBFrameType type, uint16_t dstAddr)
+{
+    YBFrame frame;
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = type;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::QueryVersionCode;
+    frame.m_dataLen = 0x00;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode));
+
+
+    return frame;
+}
+
+YBFrame YBFrame::settingAddress(eYBFrameType type, uint8_t addr)
+{
+    YBFrame frame;
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = type;
+    frame.m_dstAddr = 0x007F;
+    frame.m_funCode = eYBFunCode::SetAddressCode;
+    frame.m_dataLen = 0x01;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, {addr}));
+
+    return frame;
+}
+
+YBFrame YBFrame::setSensorNum(uint16_t dstAddr, uint8_t num)
+{
+    YBFrame frame;
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBGather;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::SetSensorNumCode;
+    frame.m_dataLen = 0x01;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, {num}));
+
+    return frame;
+}
+
+// TODO(shijm): 更改数据格式
+YBFrame YBFrame::upgradeProgram(const std::vector<uint8_t> &contentData)
+{
+    YBFrame frame;
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBGather;
+    frame.m_funCode = eYBFunCode::SetStatusCode;
+    frame.m_dataLen = contentData.size();
+    frame.m_data.clear();
+    frame.m_data.resize(contentData.size());
+    std::copy(contentData.begin(), contentData.end(), frame.m_data.begin());
+
+
+    return frame;
+}
+
+YBFrame YBFrame::forceSettingAddr(uint16_t addr)
+{
+    std::vector<uint8_t> datas;
+    datas.push_back(addr & 0xFF);
+    datas.push_back((addr >> 8) & 0xFF);
+    YBFrame frame;
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBSensor;
+    frame.m_funCode = eYBFunCode::ForceSettingAddrCode;
+    frame.m_dataLen = 0x02;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, datas));
+
+    return frame;
+}
+
+YBFrame YBFrame::queryAddress(eYBFrameType type, uint16_t dstAddr)
+{
+    YBFrame frame;
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = type;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::QueryAddrCode;
+    frame.m_dataLen = 0x00;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode));
+
+
+    return frame;
+}
+
+std::string YBFrame::getTypeStringSafe(int type)
+{
+    if (FRAME_TYPE_MAP.find(type) != FRAME_TYPE_MAP.end()) {
+        return FRAME_TYPE_MAP.at(type);
+    }
+
+    return u8"未知类型";
 }

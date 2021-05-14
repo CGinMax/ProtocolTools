@@ -15,12 +15,7 @@ std::string ContentSetSensorNum::toString(bool isSend)
         return result;
     }
 
-    if (m_isSuccess) {
-        result += u8":失败";
-    } else {
-        result += u8":成功";
-    }
-
+    result += m_isSuccess ? u8":成功" : u8":失败";
     return result;
 }
 

@@ -62,6 +62,11 @@ void GatherController::setOperWidget(GatherOperWidget *operWidget)
     });
 }
 
+bool GatherController::isCommunicationActive()
+{
+    return !m_communication.isNull() && m_communication->isActived();
+}
+
 YBProtocolChannel *GatherController::protocol()
 {
     return static_cast<YBProtocolChannel*>(m_protocol.data());
@@ -69,6 +74,10 @@ YBProtocolChannel *GatherController::protocol()
 
 void GatherController::onQueryVersion()
 {
+    if(!canDoOperate()) {
+        return;
+    }
+
     auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(m_gatherData->addr()));
     YBProtocolChannel::processReply(reply, [=]{
         m_tile->setHardwareVersion(QString::fromStdString(reply->result->hardwareVersion()));
@@ -86,6 +95,10 @@ void GatherController::onTitleChanged(const QString &title)
 
 void GatherController::onSetGatherAddress(int addr)
 {
+    if(!canDoOperate()) {
+        return;
+    }
+
     auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr));
     YBProtocolChannel::processReply(reply, [=]{
         if (reply->result->success()) {
@@ -102,6 +115,10 @@ void GatherController::onSetGatherAddress(int addr)
 
 void GatherController::onResetSensorCount(int count)
 {
+    if(!canDoOperate()) {
+        return;
+    }
+
     auto reply = protocol()->setSensorNum(static_cast<uint16_t>(m_gatherData->addr()), static_cast<uint8_t>(count));
     YBProtocolChannel::processReply(reply, [=]{
         if (reply->result->success()) {
@@ -113,4 +130,13 @@ void GatherController::onResetSensorCount(int count)
     },[=]{
         qDebug("reset count error");
     });
+}
+
+bool GatherController::canDoOperate()
+{
+    bool active = isCommunicationActive();
+    if (!active) {
+        qDebug("Can not opration!");
+    }
+    return active;
 }

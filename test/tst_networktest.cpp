@@ -176,12 +176,6 @@ void networkTest::test_ybprotocol()
     YBProtocol protocol;
     std::list<uint8_t> crcErrorMsg = {0xEB, 0x90, 0xEB, 0x90, 0x20, 0x20, 1, 0, 2, 0, 2, 0x01, 0x00, 0x01, 0x22/*,0x79*/, 0};
     protocol.appendDatas(crcErrorMsg);
-    try {
-        protocol.parseToFrame();
-    } catch (const YBProtocolException& e) {
-        QCOMPARE(e.result(), eYBParseResult::CrcError);
-    }
-    protocol.appendDatas(crcErrorMsg);
     protocol.parseRecvData();
     auto exceptions = protocol.popAllException();
     QCOMPARE(exceptions.size(), 1);

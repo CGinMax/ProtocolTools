@@ -1,13 +1,15 @@
 #include "tablepage.h"
 #include "ui_tablepage.h"
+#include "../expand/gathercontroller.h"
 #include <QScrollArea>
 
 TablePage::TablePage(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::TablePage)
+    , m_textMsg(new QPlainTextEdit(this))
     , m_currentIndex(0)
     , m_currentConfAddr(1)
-    , m_protocol(nullptr)
+    , m_controller(nullptr)
 {
     ui->setupUi(this);
     auto scrollArea = new QScrollArea(this);
@@ -20,6 +22,7 @@ TablePage::TablePage(QWidget *parent)
     ui->editBegin->setRange(0x01, 0x7E);
     ui->editEnd->setRange(0x01, 0x7E);
     ui->mainLayout->addWidget(scrollArea);
+    ui->mainLayout->addWidget(m_textMsg);
 
     connect(ui->btnAddOne, &QAbstractButton::clicked, this, [=]{
         this->m_table->addYBSensor(1);
@@ -42,9 +45,13 @@ TablePage::~TablePage()
     delete ui;
 }
 
-void TablePage::setProtocol(YBProtocolChannel *protocol)
+void TablePage::setGatherController(GatherController *controller)
 {
-    m_protocol = protocol;
+    if (m_controller != nullptr) {
+        disconnect(m_controller->protocol(), &ProtocolChannelBase::showProtocolMsg, this, &TablePage::onShowProtocolMsg);
+    }
+    m_controller = controller;
+    connect(m_controller->protocol(), &ProtocolChannelBase::showProtocolMsg, this, &TablePage::onShowProtocolMsg, Qt::QueuedConnection);
 }
 
 void TablePage::confAddrRecursion()
@@ -54,7 +61,7 @@ void TablePage::confAddrRecursion()
         on_btnQueryAllStatus_clicked();
         return;
     }
-    auto reply = m_protocol->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(m_currentConfAddr));
+    auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(m_currentConfAddr));
     YBProtocolChannel::processReply(reply, [=]{
         if (reply->result->success()) {
             this->m_table->setListItemAddr(this->m_currentIndex, this->m_currentConfAddr);
@@ -73,7 +80,7 @@ void TablePage::queryStatusRecursion()
         qDebug("query status finish");
         return ;
     }
-    auto reply = m_protocol->queryStatus(static_cast<uint16_t>(m_table->getListItemAddr(m_currentIndex)));
+    auto reply = m_controller->protocol()->queryStatus(static_cast<uint16_t>(m_table->getListItemAddr(m_currentIndex)));
     YBProtocolChannel::processReply(reply, [=]{
         this->m_table->setListItemStatus(m_currentIndex, reply->result->currentStatusCode(), reply->result->configedStatusCode());
         this->m_currentIndex++;
@@ -87,7 +94,7 @@ void TablePage::queryVersionRecursion()
         qDebug("query version finish");
         return ;
     }
-    auto reply = m_protocol->queryVersion(eYBFrameType::YBSensor, static_cast<uint8_t>(m_table->getListItemAddr(m_currentIndex)));
+    auto reply = m_controller->protocol()->queryVersion(eYBFrameType::YBSensor, static_cast<uint8_t>(m_table->getListItemAddr(m_currentIndex)));
     YBProtocolChannel::processReply(reply, [=]{
         this->m_table->setListItemVersion(this->m_currentIndex
                                     , QString::fromStdString(reply->result->hardwareVersion())
@@ -98,12 +105,26 @@ void TablePage::queryVersionRecursion()
     }, [=]{qDebug("sensor query version error");});
 }
 
+bool TablePage::canDoOperate()
+{
+    bool active = m_controller->isCommunicationActive();
+    if (!active) {
+        qDebug("not open communication");
+    }
+    return active;
+}
+
 void TablePage::onSetSensorAddr(int index, int addr)
 {
-    auto reply = m_protocol->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr));
+    if (!canDoOperate()) {
+        return;
+    }
+
+    auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr));
     YBProtocolChannel::processReply(reply, [=]{
         if (reply->result->success()) {
             this->m_table->setListItemAddr(index, addr);
+//            this->onQuerySensorStatus(index, addr);
         } else {
             qDebug("set sensor address failed!");
         }
@@ -112,7 +133,11 @@ void TablePage::onSetSensorAddr(int index, int addr)
 
 void TablePage::onQuerySensorStatus(int index, int addr)
 {
-    auto reply = m_protocol->queryStatus(static_cast<uint16_t>(addr));
+    if (!canDoOperate()) {
+        return;
+    }
+
+    auto reply = m_controller->protocol()->queryStatus(static_cast<uint16_t>(addr));
     YBProtocolChannel::processReply(reply, [=]{
         this->m_table->setListItemStatus(index, reply->result->currentStatusCode(), reply->result->configedStatusCode());
     }, [=]{ qDebug("query sensor status error!");});
@@ -120,7 +145,11 @@ void TablePage::onQuerySensorStatus(int index, int addr)
 
 void TablePage::onQuerySensorVersion(int index, int addr)
 {
-    auto reply = m_protocol->queryVersion(eYBFrameType::YBSensor, static_cast<uint16_t>(addr));
+    if (!canDoOperate()) {
+        return;
+    }
+
+    auto reply = m_controller->protocol()->queryVersion(eYBFrameType::YBSensor, static_cast<uint16_t>(addr));
     YBProtocolChannel::processReply(reply, [=]{
         this->m_table->setListItemVersion(index
                                           , QString::fromStdString(reply->result->hardwareVersion())
@@ -131,7 +160,11 @@ void TablePage::onQuerySensorVersion(int index, int addr)
 
 void TablePage::onChangeSensorStatus(int index, int addr, int status)
 {
-    auto reply = m_protocol->setStatus(static_cast<uint8_t>(status & 0xFF), static_cast<uint16_t>(addr));
+    if (!canDoOperate()) {
+        return;
+    }
+
+    auto reply = m_controller->protocol()->setStatus(static_cast<uint8_t>(status & 0xFF), static_cast<uint16_t>(addr));
     YBProtocolChannel::processReply(reply, [=]{
         if (reply->result->success()) {
             this->m_table->setListItemConfigedStatus(index, static_cast<uint8_t>(status & 0xFF));
@@ -141,8 +174,18 @@ void TablePage::onChangeSensorStatus(int index, int addr, int status)
     }, [=]{qDebug("change status error!");});
 }
 
+void TablePage::onShowProtocolMsg(const QString &msg)
+{
+    m_textMsg->appendHtml(msg);
+    m_textMsg->appendHtml("");
+}
+
 void TablePage::on_btnConfAllAddr_clicked()
 {
+    if (!canDoOperate()) {
+        return;
+    }
+
     m_currentIndex = 0;
     m_currentConfAddr = ui->editBegin->value();
     confAddrRecursion();
@@ -150,12 +193,20 @@ void TablePage::on_btnConfAllAddr_clicked()
 
 void TablePage::on_btnQueryAllStatus_clicked()
 {
+    if (!canDoOperate()) {
+        return;
+    }
+
     m_currentIndex = 0;
     queryStatusRecursion();
 }
 
 void TablePage::on_btnQueryAllVer_clicked()
 {
+    if (!canDoOperate()) {
+        return;
+    }
+
     m_currentIndex = 0;
     queryVersionRecursion();
 }

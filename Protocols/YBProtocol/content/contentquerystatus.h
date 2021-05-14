@@ -21,6 +21,8 @@ public:
     uint8_t configedStatusCode() override {
         return m_setCode;
     }
+
+    std::string getStatusSafe(uint8_t status);
 private:
     uint8_t m_currentCode;
     uint8_t m_setCode;

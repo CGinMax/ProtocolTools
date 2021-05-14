@@ -16,17 +16,38 @@
 class PROTOCOLSSHARED_EXPORT YBFrame
 {
 public:
-    static uint16_t checkCRC16(std::vector<uint8_t> buff, int offset);
     YBFrame();
     ~YBFrame();
     YBFrame(const YBFrame& other);
     YBFrame& operator=(const YBFrame& other);
-    static YBFrame parseBytesToFrame(std::list<uint8_t>& datas);
-    static uint16_t calcCrc(const YBFrame& frame);
+
     std::string parseToString();
 
     std::vector<uint8_t> packetFrameToPureData();
     std::vector<uint8_t> packetFrameToSeparator(unsigned char separator);
+
+    static YBFrame parseBytesToFrame(std::list<uint8_t>& datas);
+    static uint16_t calcCrc(const YBFrame& frame);
+    static uint16_t checkCRC16(std::vector<uint8_t> buff, int offset);
+
+    static YBFrame nakErrorFrame(uint8_t funCode, uint8_t errorCode, uint16_t dstAddr);
+
+    static YBFrame settingStatus(uint8_t status, uint16_t dstAddr);
+
+    static YBFrame queryStatus(uint16_t dstAddr);
+
+    static YBFrame queryVersion(eYBFrameType type, uint16_t dstAddr);
+
+    static YBFrame settingAddress(eYBFrameType type, uint8_t addr);
+
+    static YBFrame setSensorNum(uint16_t dstAddr, uint8_t num);
+
+    // 暂时不用
+    static YBFrame upgradeProgram(const std::vector<uint8_t>& contentData);
+
+    static YBFrame forceSettingAddr(uint16_t addr);
+
+    static YBFrame queryAddress(eYBFrameType type, uint16_t dstAddr);
 
     // 报文数据
     static const std::array<uint8_t, 4> HEADER_DATA;
@@ -45,6 +66,8 @@ public:
 
     bool m_isSend;
     std::shared_ptr<IContent> m_dataContent;
+private:
+    std::string getTypeStringSafe(int type);
 };
 
 #endif // YBFRAME_H

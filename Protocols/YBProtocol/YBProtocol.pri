@@ -9,7 +9,6 @@ HEADERS += \
     $$PWD/content/contentqueryaddr.h \
     $$PWD/content/contentquerystatus.h \
     $$PWD/content/contentqueryversion.h \
-    $$PWD/content/contentreportstatus.h \
     $$PWD/content/contentsetsensornum.h \
     $$PWD/content/contentsettingaddr.h \
     $$PWD/content/contentsettingstatus.h \
@@ -26,7 +25,6 @@ SOURCES += \
     $$PWD/content/contentqueryaddr.cpp \
     $$PWD/content/contentquerystatus.cpp \
     $$PWD/content/contentqueryversion.cpp \
-    $$PWD/content/contentreportstatus.cpp \
     $$PWD/content/contentsetsensornum.cpp \
     $$PWD/content/contentsettingaddr.cpp \
     $$PWD/content/contentsettingstatus.cpp \

@@ -24,7 +24,6 @@ enum PROTOCOLSSHARED_EXPORT eYBFunCode
     QueryStatusCode         = 0x03,
     QueryVersionCode        = 0x04,
     SetAddressCode          = 0x05,
-    ReportStatusCode        = 0x06,
     SetSensorNumCode        = 0x0A,
     UpgradeCode             = 0x84,
     ForceSettingAddrCode    = 0x90,
