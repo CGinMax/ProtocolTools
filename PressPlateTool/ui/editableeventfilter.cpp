@@ -22,5 +22,9 @@ bool EditableEventFilter::eventFilter(QObject *watched, QEvent *event)
             lineedit->setReadOnly(false);
         }
     }
+    else if (event->type() == QEvent::Wheel) {
+        event->ignore();
+        return false;
+    }
     return QObject::eventFilter(watched, event);
 }

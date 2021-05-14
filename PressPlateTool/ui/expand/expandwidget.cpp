@@ -6,6 +6,7 @@
 #include "gatheroperwidget.h"
 #include "gathercontroller.h"
 #include <QMetaType>
+#include <QScrollBar>
 ExpandWidget::ExpandWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ExpandWidget)
@@ -13,6 +14,7 @@ ExpandWidget::ExpandWidget(QWidget *parent)
 {
     qRegisterMetaType<QSharedPointer<GatherData> >("const QSharedPointer<GatherData> &");
     ui->setupUi(this);
+
     setStyleSheet("QWidget#scrollAreaWidgetContents{background-color:#F0F3F4;}");
 }
 
@@ -31,6 +33,8 @@ void ExpandWidget::addExpandItem(ExpandWidgetItem *item)
     m_itemList.append(item);
     onNotifySelected(item);
     connect(item, &ExpandWidgetItem::notifySelected, this, &ExpandWidget::onNotifySelected);
+//    ui->scrollArea->ensureWidgetVisible(item);
+//    ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->value()+ item->height());
 }
 
 void ExpandWidget::insertExpandItem(int index, ExpandWidgetItem *item)

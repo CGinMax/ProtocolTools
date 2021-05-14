@@ -48,8 +48,6 @@ void ExpandTile::setSoftwareVersion(const QString &ver)
 void ExpandTile::setProductDescript(const QString &desc)
 {
     ui->txtProductDesc->setText(desc);
-//    QFontMetrics metrics(ui->txtProductDesc->font());
-//    ui->txtProductDesc->setText(metrics.elidedText(desc, Qt::ElideRight, ui->txtProductDesc->width()));
 }
 
 void ExpandTile::setChecked(bool checked)
