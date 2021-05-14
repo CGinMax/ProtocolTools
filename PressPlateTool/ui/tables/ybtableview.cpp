@@ -1,23 +1,26 @@
 #include "ybtableview.h"
-#include "listdelegate.h"
+#include "listviewitem.h"
+#include <QVBoxLayout>
 #include <QDebug>
 
-YBTableView::YBTableView(QWidget *parent) : QListView(parent)
+YBTableView::YBTableView(QWidget *parent) : QWidget(parent)
 {
-    m_model = new YBTableModel({tr("Id"), tr("Current Status"), tr("Set Status"), tr("Version"), tr("Address")}, this);
-    setModel(m_model);
-
-    setStyleSheet("QListView{border: transparent;}");
+    setObjectName("YBListView");
+    m_layout = new QVBoxLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->addSpacerItem(new QSpacerItem(width(), 100, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    setStyleSheet("QWidget#YBListView{border: transparent;background-color:white;}");
 }
 
 YBTableView::~YBTableView()
 {
-
+    qDeleteAll(m_itemList);
+    m_itemList.clear();
 }
 
 int YBTableView::sensorCount() const
 {
-    return m_model->rowCount(QModelIndex());
+    return m_itemList.count();
 }
 
 void YBTableView::setListItemAddr(int index, int addr)
@@ -27,7 +30,6 @@ void YBTableView::setListItemAddr(int index, int addr)
     }
     auto item = m_itemList.at(index);
     item->setAddress(addr);
-
 }
 
 int YBTableView::getListItemAddr(int index)
@@ -72,13 +74,11 @@ void YBTableView::setListItemConfigedStatus(int index, uint8_t status)
 void YBTableView::addYBSensor(int count)
 {
     for (int i = 0; i < count; i++) {
-        m_model->append();
-        int currentRow = m_model->rowCount(QModelIndex()) - 1;
-        auto delegate = new ListDelegate(qobject_cast<QAbstractListModel*>(model()), this);
-        setItemDelegateForRow(currentRow, delegate);
-        this->openPersistentEditor(m_model->index(currentRow));
-        auto item = delegate->getListItem();
+        auto item = new ListViewItem(this);
         m_itemList.append(item);
+
+        m_layout->insertWidget(m_layout->count() -1, item);
+
         connect(item, &ListViewItem::notifySetAddr, this, [=](int addr){
             int index = m_itemList.indexOf(qobject_cast<ListViewItem*>(sender()));
             emit this->setSensorAddr(index, addr);
@@ -104,11 +104,13 @@ void YBTableView::deleteYBSensor(int first, int last)
     int begin = first;
     auto beginIter = m_itemList.begin() + first;
     while (begin < last && beginIter != m_itemList.end()) {
+        ListViewItem* item = *beginIter;
+        m_layout->removeWidget(item);
         beginIter = m_itemList.erase(beginIter);
         begin++;
+        delete item;
     }
 
-    m_model->deleteSensors(first, last);
 }
 
 void YBTableView::deleteAllYBSensor()

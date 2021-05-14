@@ -1,5 +1,6 @@
 #include "tablepage.h"
 #include "ui_tablepage.h"
+#include <QScrollArea>
 
 TablePage::TablePage(QWidget *parent)
     : QWidget(parent)
@@ -9,10 +10,16 @@ TablePage::TablePage(QWidget *parent)
     , m_protocol(nullptr)
 {
     ui->setupUi(this);
+    auto scrollArea = new QScrollArea(this);
+    scrollArea->setObjectName(QString("scrollArea"));
+    scrollArea->setStyleSheet(QLatin1String("QScrollArea#scrollArea{border: transparent; background-color: white;}"));
     m_table = new YBTableView(this);
+    scrollArea->setWidget(m_table);
+    scrollArea->setWidgetResizable(true);
+
     ui->editBegin->setRange(0x01, 0x7E);
     ui->editEnd->setRange(0x01, 0x7E);
-    ui->mainLayout->addWidget(m_table);
+    ui->mainLayout->addWidget(scrollArea);
 
     connect(ui->btnAddOne, &QAbstractButton::clicked, this, [=]{
         this->m_table->addYBSensor(1);

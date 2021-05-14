@@ -11,15 +11,15 @@ public:
     std::vector<uint8_t> toByteVector() override;
 
     uint8_t setStatusCode() override {
-        return status;
+        return m_status;
     }
     bool success() override {
-        return isSuccess;
+        return m_isSuccess;
     }
 
 private:
-    uint8_t status;
-    bool isSuccess;
+    uint8_t m_status;
+    bool m_isSuccess;
 };
 
 #endif // CONTENTSETTINGSTATUS_H

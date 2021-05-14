@@ -13,21 +13,17 @@ YBProtocol::~YBProtocol()
 
 void YBProtocol::appendDatas(uint8_t *buff, int size)
 {
-//    for (int i = 0; i < size; i++) {
-//        recvDataList.push_back(*buff);
-//        buff++;
-//    }
-    std::copy(buff, buff + size, std::back_inserter(recvDataList));
+    std::copy(buff, buff + size, std::back_inserter(m_recvDataList));
 }
 
 void YBProtocol::appendDatas(const std::list<uint8_t> &dataList)
 {
-    std::copy(dataList.begin(), dataList.end(), std::back_inserter(recvDataList));
+    std::copy(dataList.begin(), dataList.end(), std::back_inserter(m_recvDataList));
 }
 
 void YBProtocol::parseRecvData()
 {
-    while (!recvDataList.empty()) {
+    while (!m_recvDataList.empty()) {
         if (parseToFrame() != eYBParseResult::NoError) {
             break;
         }
@@ -36,9 +32,9 @@ void YBProtocol::parseRecvData()
 
 eYBParseResult YBProtocol::parseToFrame()
 {
-    std::pair<YBFrame, eYBParseResult> result = YBFrame::parseBytesToFrame(recvDataList);
+    std::pair<YBFrame, eYBParseResult> result = YBFrame::parseBytesToFrame(m_recvDataList);
     if (result.second == eYBParseResult::NoError) {
-        recvFrameQueue.emplace_back(result.first);
+        m_recvFrameQueue.emplace_back(result.first);
         // TODO(shijm): show recv
     } else if (result.second == eYBParseResult::CrcError) {
         // TODO(shijm): 显示错误报文
@@ -48,25 +44,25 @@ eYBParseResult YBProtocol::parseToFrame()
 
 bool YBProtocol::recvFrameEmpty()
 {
-    return recvFrameQueue.empty();
+    return m_recvFrameQueue.empty();
 }
 
 YBFrame YBProtocol::popRecvFrame()
 {
-    auto frame = recvFrameQueue.front();
-    recvFrameQueue.pop_front();
+    auto frame = m_recvFrameQueue.front();
+    m_recvFrameQueue.pop_front();
     return frame;
 }
 
 YBFrame YBProtocol::nakErrorFrame(uint8_t funCode, uint8_t errorCode, uint16_t dstAddr)
 {
     YBFrame frame;
-    frame.srcType = eYBFrameType::PCSoftware;
-    frame.dstType = eYBFrameType::YBSensor;
-    frame.dstAddr = dstAddr;
-    frame.funCode = eYBFunCode::NAKCode;
-    frame.dataLen = 0x02;
-    frame.dataContent.reset(ContentFactory::createContent(frame.funCode, {funCode, errorCode}));
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBSensor;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::NAKCode;
+    frame.m_dataLen = 0x02;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, {funCode, errorCode}));
 
     return frame;
 }
@@ -74,12 +70,12 @@ YBFrame YBProtocol::nakErrorFrame(uint8_t funCode, uint8_t errorCode, uint16_t d
 YBFrame YBProtocol::settingStatus(uint8_t status, uint16_t dstAddr)
 {
     YBFrame frame;
-    frame.srcType = eYBFrameType::PCSoftware;
-    frame.dstType = eYBFrameType::YBSensor;
-    frame.dstAddr = dstAddr;
-    frame.funCode = eYBFunCode::SetStatusCode;
-    frame.dataLen = 0x01;
-    frame.dataContent.reset(ContentFactory::createContent(frame.funCode, {status}));
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBSensor;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::SetStatusCode;
+    frame.m_dataLen = 0x01;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, {status}));
 
     return frame;
 }
@@ -87,12 +83,12 @@ YBFrame YBProtocol::settingStatus(uint8_t status, uint16_t dstAddr)
 YBFrame YBProtocol::queryStatus(uint16_t dstAddr)
 {
     YBFrame frame;
-    frame.srcType = eYBFrameType::PCSoftware;
-    frame.dstType = eYBFrameType::YBSensor;
-    frame.dstAddr = dstAddr;
-    frame.funCode = eYBFunCode::QueryStatusCode;
-    frame.dataLen = 0x00;
-    frame.dataContent.reset(ContentFactory::createContent(frame.funCode));
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBSensor;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::QueryStatusCode;
+    frame.m_dataLen = 0x00;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode));
 
 
     return frame;
@@ -101,12 +97,12 @@ YBFrame YBProtocol::queryStatus(uint16_t dstAddr)
 YBFrame YBProtocol::queryVersion(eYBFrameType type, uint16_t dstAddr)
 {
     YBFrame frame;
-    frame.srcType = eYBFrameType::PCSoftware;
-    frame.dstType = type;
-    frame.dstAddr = dstAddr;
-    frame.funCode = eYBFunCode::QueryVersionCode;
-    frame.dataLen = 0x00;
-    frame.dataContent.reset(ContentFactory::createContent(frame.funCode));
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = type;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::QueryVersionCode;
+    frame.m_dataLen = 0x00;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode));
 
 
     return frame;
@@ -115,12 +111,12 @@ YBFrame YBProtocol::queryVersion(eYBFrameType type, uint16_t dstAddr)
 YBFrame YBProtocol::settingAddress(eYBFrameType type, uint8_t addr)
 {
     YBFrame frame;
-    frame.srcType = eYBFrameType::PCSoftware;
-    frame.dstType = type;
-    frame.dstAddr = 0x007F;
-    frame.funCode = eYBFunCode::SetAddressCode;
-    frame.dataLen = 0x01;
-    frame.dataContent.reset(ContentFactory::createContent(frame.funCode, {addr}));
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = type;
+    frame.m_dstAddr = 0x007F;
+    frame.m_funCode = eYBFunCode::SetAddressCode;
+    frame.m_dataLen = 0x01;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, {addr}));
 
     return frame;
 }
@@ -128,12 +124,12 @@ YBFrame YBProtocol::settingAddress(eYBFrameType type, uint8_t addr)
 YBFrame YBProtocol::setSensorNum(uint16_t dstAddr, uint8_t num)
 {
     YBFrame frame;
-    frame.srcType = eYBFrameType::PCSoftware;
-    frame.dstType = eYBFrameType::YBGather;
-    frame.dstAddr = dstAddr;
-    frame.funCode = eYBFunCode::SetSensorNumCode;
-    frame.dataLen = 0x01;
-    frame.dataContent.reset(ContentFactory::createContent(frame.funCode, {num}));
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBGather;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::SetSensorNumCode;
+    frame.m_dataLen = 0x01;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, {num}));
 
     return frame;
 }
@@ -142,13 +138,13 @@ YBFrame YBProtocol::setSensorNum(uint16_t dstAddr, uint8_t num)
 YBFrame YBProtocol::upgradeProgram(const std::vector<uint8_t> &contentData)
 {
     YBFrame frame;
-    frame.srcType = eYBFrameType::PCSoftware;
-    frame.dstType = eYBFrameType::YBGather;
-    frame.funCode = eYBFunCode::SetStatusCode;
-    frame.dataLen = contentData.size();
-    frame.data.clear();
-    frame.data.resize(contentData.size());
-    std::copy(contentData.begin(), contentData.end(), frame.data.begin());
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBGather;
+    frame.m_funCode = eYBFunCode::SetStatusCode;
+    frame.m_dataLen = contentData.size();
+    frame.m_data.clear();
+    frame.m_data.resize(contentData.size());
+    std::copy(contentData.begin(), contentData.end(), frame.m_data.begin());
 
 
     return frame;
@@ -160,11 +156,11 @@ YBFrame YBProtocol::forceSettingAddr(uint16_t addr)
     datas.push_back(addr & 0xFF);
     datas.push_back((addr >> 8) & 0xFF);
     YBFrame frame;
-    frame.srcType = eYBFrameType::PCSoftware;
-    frame.dstType = eYBFrameType::YBSensor;
-    frame.funCode = eYBFunCode::ForceSettingAddrCode;
-    frame.dataLen = 0x02;
-    frame.dataContent.reset(ContentFactory::createContent(frame.funCode, datas));
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = eYBFrameType::YBSensor;
+    frame.m_funCode = eYBFunCode::ForceSettingAddrCode;
+    frame.m_dataLen = 0x02;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode, datas));
 
     return frame;
 }
@@ -172,12 +168,12 @@ YBFrame YBProtocol::forceSettingAddr(uint16_t addr)
 YBFrame YBProtocol::queryAddress(eYBFrameType type, uint16_t dstAddr)
 {
     YBFrame frame;
-    frame.srcType = eYBFrameType::PCSoftware;
-    frame.dstType = type;
-    frame.dstAddr = dstAddr;
-    frame.funCode = eYBFunCode::QueryAddrCode;
-    frame.dataLen = 0x00;
-    frame.dataContent.reset(ContentFactory::createContent(frame.funCode));
+    frame.m_srcType = eYBFrameType::PCSoftware;
+    frame.m_dstType = type;
+    frame.m_dstAddr = dstAddr;
+    frame.m_funCode = eYBFunCode::QueryAddrCode;
+    frame.m_dataLen = 0x00;
+    frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode));
 
 
     return frame;

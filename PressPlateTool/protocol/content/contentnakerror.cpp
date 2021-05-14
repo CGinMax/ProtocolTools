@@ -2,10 +2,10 @@
 #include "../utilhelper.h"
 
 ContentNAKError::ContentNAKError(uint8_t errorFunctionCode, uint8_t errorNakCode)
-    : errFunCode(errorFunctionCode)
-    , nakFunCode(errorNakCode)
+    : m_errFunCode(errorFunctionCode)
+    , m_nakFunCode(errorNakCode)
 {
-    funCode = 0x01;
+    m_funCode = 0x01;
 }
 
 
@@ -13,13 +13,13 @@ std::string ContentNAKError::toString(bool isSend)
 {
     (void)isSend;
     std::string result = u8"NAK错误, 错误功能码:";
-    result += UtilHelper::num2HexString(errFunCode);//hex
+    result += UtilHelper::num2HexString(m_errFunCode);//hex
     result += u8", NAK错误码:";
-    result += UtilHelper::num2HexString(nakFunCode);
+    result += UtilHelper::num2HexString(m_nakFunCode);
     return result;
 }
 
 std::vector<uint8_t> ContentNAKError::toByteVector()
 {
-    return {errFunCode, nakFunCode};
+    return {m_errFunCode, m_nakFunCode};
 }

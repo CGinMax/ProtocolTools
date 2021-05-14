@@ -6,7 +6,7 @@
 class ContentQueryStatus : public IContent
 {
 public:
-    explicit ContentQueryStatus(uint8_t curCode = 0x00, uint8_t setCode = 0x00);
+    explicit ContentQueryStatus(uint8_t curCode = 0x00, uint8_t m_setCode = 0x00);
 
     static std::array<std::string, 6> currentStatus;
     std::string toString(bool isSend) override;
@@ -15,15 +15,15 @@ public:
 
 
     uint8_t currentStatusCode() override {
-        return currentCode;
+        return m_currentCode;
     }
 
     uint8_t configedStatusCode() override {
-        return setCode;
+        return m_setCode;
     }
 private:
-    uint8_t currentCode;
-    uint8_t setCode;
+    uint8_t m_currentCode;
+    uint8_t m_setCode;
 
 };
 

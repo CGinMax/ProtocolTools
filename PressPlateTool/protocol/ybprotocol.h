@@ -44,8 +44,8 @@ public:
 
 
 private:
-    std::deque<YBFrame> recvFrameQueue;
-    std::list<uint8_t> recvDataList;
+    std::deque<YBFrame> m_recvFrameQueue;
+    std::list<uint8_t> m_recvDataList;
 };
 
 #endif // YBPROTOCOL_H

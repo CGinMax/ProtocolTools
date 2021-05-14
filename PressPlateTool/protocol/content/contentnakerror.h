@@ -12,15 +12,15 @@ public:
     std::vector<uint8_t> toByteVector() override;
 
     uint8_t errorFunCode() override {
-        return errFunCode;
+        return m_errFunCode;
     }
     uint8_t nakCode() override {
-        return nakFunCode;
+        return m_nakFunCode;
     }
 
 private:
-    uint8_t errFunCode;
-    uint8_t nakFunCode;
+    uint8_t m_errFunCode;
+    uint8_t m_nakFunCode;
 };
 
 #endif // CONTENTNAKERROR_H

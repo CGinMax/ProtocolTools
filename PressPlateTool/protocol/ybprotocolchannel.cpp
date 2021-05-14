@@ -29,14 +29,14 @@ void YBProtocolChannel::run()
 
 void YBProtocolChannel::processFrame(const YBFrame &frame)
 {
-    if (frame.funCode == eYBFunCode::ReportStatusCode) {
-        auto bytes = frame.dataContent->toByteVector();
-        emit reportStatus(frame.dstAddr, bytes.at(0), bytes.at(1));
+    if (frame.m_funCode == eYBFunCode::ReportStatusCode) {
+        auto bytes = frame.m_dataContent->toByteVector();
+        emit reportStatus(frame.m_dstAddr, bytes.at(0), bytes.at(1));
         return ;
     }
 
-    m_curReply->result = frame.dataContent;
-    switch (frame.funCode) {
+    m_curReply->result = frame.m_dataContent;
+    switch (frame.m_funCode) {
     case eYBFunCode::NAKCode:
         emit m_curReply->error();
         break;

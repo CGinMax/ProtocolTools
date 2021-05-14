@@ -6,7 +6,7 @@
 class ContentQueryVersion : public IContent
 {
 public:
-    explicit ContentQueryVersion(const std::vector<uint8_t>& datas);
+    explicit ContentQueryVersion(const std::vector<uint8_t>& m_datas);
 
     std::string toString(bool isSend) override;
 
@@ -16,10 +16,10 @@ public:
     std::string softwareVersion() override;
     std::string productDescript() override;
 private:
-    std::string hardwareVer;
-    std::string softwareVer;
-    std::string productDesc;
-    std::vector<uint8_t> datas;
+    std::string m_hardwareVer;
+    std::string m_softwareVer;
+    std::string m_productDesc;
+    std::vector<uint8_t> m_datas;
 
 };
 

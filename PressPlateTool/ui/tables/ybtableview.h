@@ -2,11 +2,11 @@
 #define YBTABLEVIEW_H
 
 #include <QListView>
-#include "ybtablemodel.h"
 
+class QVBoxLayout;
 class ListViewItem;
 
-class YBTableView : public QListView
+class YBTableView : public QWidget
 {
     Q_OBJECT
 public:
@@ -38,8 +38,8 @@ public slots:
     void onNotifyDelete();
 
 protected:
+    QVBoxLayout* m_layout;
     QList<ListViewItem*> m_itemList;
-    YBTableModel* m_model;
 };
 
 #endif // YBTABLEVIEW_H

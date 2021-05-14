@@ -2,10 +2,10 @@
 #include "contentquerystatus.h"
 
 ContentReportStatus::ContentReportStatus(uint8_t curCode, uint8_t settingCode)
-    : currentCode(curCode)
-    , setCode(settingCode)
+    : m_currentCode(curCode)
+    , m_setCode(settingCode)
 {
-    funCode = 0x06;
+    m_funCode = 0x06;
 }
 
 std::string ContentReportStatus::toString(bool isSend)
@@ -15,9 +15,9 @@ std::string ContentReportStatus::toString(bool isSend)
     }
 
     std::string result = u8"目前状态:";
-    result += ContentQueryStatus::currentStatus[currentCode];
+    result += ContentQueryStatus::currentStatus[m_currentCode];
     result += u8", 已配置的状态:";
-    switch (setCode) {
+    switch (m_setCode) {
     case 0x00:
         result += u8"分";
         break;
@@ -34,5 +34,5 @@ std::string ContentReportStatus::toString(bool isSend)
 
 std::vector<uint8_t> ContentReportStatus::toByteVector()
 {
-    return {currentCode, setCode};
+    return {m_currentCode, m_setCode};
 }

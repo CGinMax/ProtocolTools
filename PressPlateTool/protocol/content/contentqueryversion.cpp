@@ -1,22 +1,22 @@
 #include "contentqueryversion.h"
 
 ContentQueryVersion::ContentQueryVersion(const std::vector<uint8_t> &datas)
-    : hardwareVer(std::string())
-    , softwareVer(std::string())
-    , productDesc(std::string())
-    , datas(datas)
+    : m_hardwareVer(std::string())
+    , m_softwareVer(std::string())
+    , m_productDesc(std::string())
+    , m_datas(datas)
 {
-    funCode = 0x04;
+    m_funCode = 0x04;
     if (datas.empty()) {
         return ;
     }
     auto iter = datas.begin();
     uint8_t verLow = *iter++;
     uint8_t verHeigh = *iter++;
-    hardwareVer = std::to_string(verHeigh) + "." + std::to_string(verLow);
+    m_hardwareVer = std::to_string(verHeigh) + "." + std::to_string(verLow);
     verLow = *iter++;
     verHeigh = *iter++;
-    softwareVer = std::to_string(verHeigh) + "." + std::to_string(verLow);
+    m_softwareVer = std::to_string(verHeigh) + "." + std::to_string(verLow);
     if (iter == datas.end()) {
         return;
     }
@@ -29,24 +29,24 @@ ContentQueryVersion::ContentQueryVersion(const std::vector<uint8_t> &datas)
     iter++;// 6:0x02
     uint8_t flagLen = *iter++;
     while (iter != datas.end()) {
-        productDesc += static_cast<char>(*iter++);
+        m_productDesc += static_cast<char>(*iter++);
     }
 
-    productDesc += desc;
+    m_productDesc += desc;
 }
 
 std::string ContentQueryVersion::toString(bool isSend)
 {
-    if (isSend || datas.empty()) {
+    if (isSend || m_datas.empty()) {
         return std::string();
     }
 
     std::string result;
-    uint8_t verLow = datas.at(0);
-    uint8_t verHeigh = datas.at(1);
+    uint8_t verLow = m_datas.at(0);
+    uint8_t verHeigh = m_datas.at(1);
     result += u8"硬件版本=" + std::to_string(verHeigh) + "." + std::to_string(verLow);
-    verLow = datas.at(2);
-    verHeigh = datas.at(3);
+    verLow = m_datas.at(2);
+    verHeigh = m_datas.at(3);
     result += u8", 软件版本=" + std::to_string(verHeigh) + "." + std::to_string(verLow);
 
     return result;
@@ -55,21 +55,21 @@ std::string ContentQueryVersion::toString(bool isSend)
 std::vector<uint8_t> ContentQueryVersion::toByteVector()
 {
 //    return {};
-    return datas;
+    return m_datas;
 }
 
 
 std::string ContentQueryVersion::hardwareVersion()
 {
-    return hardwareVer;
+    return m_hardwareVer;
 }
 
 std::string ContentQueryVersion::softwareVersion()
 {
-    return softwareVer;
+    return m_softwareVer;
 }
 
 std::string ContentQueryVersion::productDescript()
 {
-    return productDesc;
+    return m_productDesc;
 }

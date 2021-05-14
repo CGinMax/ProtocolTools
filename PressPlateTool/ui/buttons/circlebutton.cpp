@@ -160,7 +160,7 @@ bool CircleButton::event(QEvent *event)
         }
     }
     if (m_hoveEnabled) {
-        if (event->type() == QEvent::HoverEnter || (isCheckable() && isChecked())){
+        if (event->type() == QEvent::HoverEnter){
             setOpacity(1.0);
             m_effect->setEnabled(true);
         } else if (event->type() == QEvent::HoverLeave) {

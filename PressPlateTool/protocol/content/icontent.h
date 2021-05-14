@@ -13,7 +13,7 @@ public:
     virtual std::string toString(bool isSend) = 0;
     virtual std::vector<uint8_t> toByteVector() = 0;
     virtual uint8_t functionCode() {
-        return funCode;
+        return m_funCode;
     }
     virtual uint8_t errorFunCode() {
         return 0;
@@ -59,7 +59,7 @@ public:
     }
 
 protected:
-    uint8_t funCode;
+    uint8_t m_funCode;
 };
 
 #endif // ICONTENT_H

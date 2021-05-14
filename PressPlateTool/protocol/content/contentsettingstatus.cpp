@@ -1,17 +1,17 @@
 #include "contentsettingstatus.h"
 
 ContentSettingStatus::ContentSettingStatus(uint8_t data)
-    : status(data)
-    , isSuccess(data != 0)
+    : m_status(data)
+    , m_isSuccess(data != 0)
 {
-    funCode = 0x02;
+    m_funCode = 0x02;
 }
 
 std::string ContentSettingStatus::toString(bool isSend)
 {
     std::string result;
     if (isSend) {
-        switch (status) {
+        switch (m_status) {
         case 0x00:
             result += u8"应分";
             break;
@@ -31,7 +31,7 @@ std::string ContentSettingStatus::toString(bool isSend)
 
     // 接收
     result = u8"设定地址:";
-    if (isSuccess) {
+    if (m_isSuccess) {
         result += u8"失败";
     } else {
         result += u8"成功";
@@ -42,5 +42,5 @@ std::string ContentSettingStatus::toString(bool isSend)
 
 std::vector<uint8_t> ContentSettingStatus::toByteVector()
 {
-    return {status};
+    return {m_status};
 }

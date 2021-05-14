@@ -58,6 +58,7 @@ void GatherController::setOperWidget(GatherOperWidget *operWidget)
     });
     connect(operWidget, &GatherOperWidget::closeCommunication, this, [=]{
         this->m_communication->close();
+        operWidget->setButtonsOpened(false);
     });
 }
 

@@ -13,10 +13,10 @@ public:
     std::vector<uint8_t> toByteVector() override;
 
     uint16_t testAddress() override {
-        return addr;
+        return m_addr;
     }
 private:
-    uint16_t addr;
+    uint16_t m_addr;
 };
 
 #endif // CONTENTQUERYADDR_H

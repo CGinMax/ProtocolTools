@@ -63,22 +63,22 @@ public:
     std::vector<uint8_t> packetFrame();
 
     // 报文数据
-    static const std::array<uint8_t, 4> header;
-    uint8_t srcType;
-    uint8_t dstType;
-    uint16_t srcAddr;
-    uint16_t dstAddr;
-    uint8_t funCode;
-    uint16_t dataLen;
-    std::vector<uint8_t> data;
-    uint16_t crcCode;
+    static const std::array<uint8_t, 4> HEADER_DATA;
+    uint8_t m_srcType;
+    uint8_t m_dstType;
+    uint16_t m_srcAddr;
+    uint16_t m_dstAddr;
+    uint8_t m_funCode;
+    uint16_t m_dataLen;
+    std::vector<uint8_t> m_data;
+    uint16_t m_crcCode;
 
-    static const uint8_t frameMinLen = 15; // 15
+    static const uint8_t FRAME_MIN_LEN = 15; // 15
 
-    static std::map<int, std::string> frameTypeMap;
+    static const std::map<int, std::string> FRAME_TYPE_MAP;
 
-    bool isSend;
-    std::shared_ptr<IContent> dataContent;
+    bool m_isSend;
+    std::shared_ptr<IContent> m_dataContent;
 };
 
 #endif // YBFRAME_H

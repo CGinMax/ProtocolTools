@@ -13,15 +13,15 @@ public:
     std::vector<uint8_t> toByteVector() override;
 
     uint8_t currentStatusCode() override {
-        return currentCode;
+        return m_currentCode;
     }
 
     uint8_t configedStatusCode() override {
-        return setCode;
+        return m_setCode;
     }
 private:
-    uint8_t currentCode;
-    uint8_t setCode;
+    uint8_t m_currentCode;
+    uint8_t m_setCode;
 };
 
 #endif // CONTENTREPORTSTATUS_H

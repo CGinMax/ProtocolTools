@@ -12,16 +12,16 @@ public:
     std::vector<uint8_t> toByteVector() override;
 
     uint8_t setAddress() override {
-        return addr;
+        return m_addr;
     }
 
     bool success() override {
-        return isSuccess;
+        return m_isSuccess;
     }
 
 private:
-    uint8_t addr;
-    bool isSuccess;
+    uint8_t m_addr;
+    bool m_isSuccess;
 };
 
 #endif // CONTENTSETTINGADDR_H

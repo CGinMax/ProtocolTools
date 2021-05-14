@@ -3,10 +3,10 @@
 std::array<std::string, 6> ContentQueryStatus::currentStatus{u8"分", u8"合", u8"误分", u8"误合", u8"等待分", u8"等待合"};
 
 ContentQueryStatus::ContentQueryStatus(uint8_t curCode, uint8_t setCode)
-    : currentCode(curCode)
-    , setCode(setCode)
+    : m_currentCode(curCode)
+    , m_setCode(setCode)
 {
-    funCode = 0x03;
+    m_funCode = 0x03;
 }
 
 std::string ContentQueryStatus::toString(bool isSend)
@@ -16,9 +16,9 @@ std::string ContentQueryStatus::toString(bool isSend)
     }
 
     std::string result = u8"目前状态=";
-    result += currentStatus[currentCode];
+    result += currentStatus[m_currentCode];
     result += ", 已配置的状态=";
-    switch (setCode) {
+    switch (m_setCode) {
     case 0x00:
         result += u8"分";
         break;
@@ -35,5 +35,5 @@ std::string ContentQueryStatus::toString(bool isSend)
 
 std::vector<uint8_t> ContentQueryStatus::toByteVector()
 {
-    return {currentCode, setCode};
+    return {m_currentCode, m_setCode};
 }

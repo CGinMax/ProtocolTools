@@ -95,7 +95,7 @@ void SwitchButtonThumb::updateOffset()
     auto thumbRect = m_switchBtn->thumbRect();
 
     m_offset = 0 + m_shift * static_cast<qreal>(m_switchBtn->trackRect().width() - m_switchBtn->trackRect().height() /*- m_switchBtn->penWidth()*/);
-    qDebug() << "offset:" << m_offset;
+//    qDebug() << "offset:" << m_offset;
 //    int circleWidth = m_switchBtn->trackRect().height() / 2;
 //    m_switchBtn->setOffStateWidth(circleWidth);
     update();

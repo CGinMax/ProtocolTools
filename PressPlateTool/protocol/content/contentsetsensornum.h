@@ -10,14 +10,14 @@ public:
     std::string toString(bool isSend) override;
     std::vector<uint8_t> toByteVector() override;
     bool success() override {
-        return isSuccess;
+        return m_isSuccess;
     }
     uint8_t sensorNum() override {
-        return num;
+        return m_num;
     }
 private:
-    uint8_t num;
-    bool isSuccess;
+    uint8_t m_num;
+    bool m_isSuccess;
 
 };
 
