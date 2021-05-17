@@ -24,6 +24,8 @@ public:
     void removeExpandItem(ExpandWidgetItem* item);
     int indexOf(ExpandWidgetItem* item);
 
+    //test
+    void scrolldown();
 
     static ExpandWidgetItem* createExpandWidget(const PortParam& portParam, const QString& name = tr("untitled"), int radius = 8);
 signals:
@@ -31,7 +33,7 @@ signals:
 
 public slots:
     void onNotifySelected(ExpandWidgetItem* item);
-
+    void onDeleteItem();
 
 protected:
     Ui::ExpandWidget* ui;

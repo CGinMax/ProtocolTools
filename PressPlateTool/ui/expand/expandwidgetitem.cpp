@@ -59,6 +59,8 @@ ExpandWidgetItem::ExpandWidgetItem(ExpandTile *tile, GatherController *controlle
     m_transitionAimation->addAnimation(new QPropertyAnimation(this, QByteArray("maximumHeight")));
     m_transitionAimation->addAnimation(new QPropertyAnimation(m_contentArea, QByteArray("maximumHeight")));
 
+    connect(tile, &ExpandTile::deleteItem, this, &ExpandWidgetItem::deleteItem);
+
 //    connect(m_tile, &ExpandTile::toggled, this, [this](bool checked){
 //        this->expand(checked);
 //    });
@@ -188,16 +190,7 @@ void ExpandWidgetItem::setIsSelected(bool isSelected)
 
 bool ExpandWidgetItem::event(QEvent *event)
 {
-    // 效率差换painter
-    /*if (event->type() == QEvent::HoverEnter) {
-        auto effect = new QGraphicsDropShadowEffect(this);
-        effect->setBlurRadius(6);
-        effect->setColor(QColor(0, 0, 0, 80));
-        effect->setOffset(QPointF(0, 1));
-        setGraphicsEffect(effect);
-    } else if (event->type() == QEvent::HoverLeave) {
-        setGraphicsEffect(nullptr);
-    } else */if (event->type() == QEvent::MouseButtonPress) {
+    if (event->type() == QEvent::MouseButtonPress) {
         emit notifySelected(this);
     }
     return QWidget::event(event);

@@ -33,8 +33,11 @@ void ExpandWidget::addExpandItem(ExpandWidgetItem *item)
     m_itemList.append(item);
     onNotifySelected(item);
     connect(item, &ExpandWidgetItem::notifySelected, this, &ExpandWidget::onNotifySelected);
+    connect(item, &ExpandWidgetItem::deleteItem, this, &ExpandWidget::onDeleteItem);
 //    ui->scrollArea->ensureWidgetVisible(item);
-//    ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->value()+ item->height());
+    qDebug("height:%d", ui->scrollArea->verticalScrollBar()->value());
+    ui->scrollArea->verticalScrollBar()->setSliderPosition(ui->scrollArea->verticalScrollBar()->sliderPosition() + item->height());
+    ui->scrollArea->update();
 }
 
 void ExpandWidget::insertExpandItem(int index, ExpandWidgetItem *item)
@@ -75,6 +78,13 @@ int ExpandWidget::indexOf(ExpandWidgetItem *item)
     return m_itemList.indexOf(item);
 }
 
+void ExpandWidget::scrolldown()
+{
+    auto v = ui->scrollArea->verticalScrollBar()->value();
+    qDebug("value:%d", v);
+    ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->value() + 480);
+}
+
 ExpandWidgetItem *ExpandWidget::createExpandWidget(const PortParam &portParam, const QString &name, int radius)
 {
     auto data = new GatherData(name);
@@ -87,6 +97,7 @@ ExpandWidgetItem *ExpandWidget::createExpandWidget(const PortParam &portParam, c
     widget->setContentWidget(operWidget);
     controller->setExpandTile(tile);
     controller->setOperWidget(operWidget);
+
     return widget;
 }
 
@@ -102,4 +113,10 @@ void ExpandWidget::onNotifySelected(ExpandWidgetItem *item)
     }
     m_checkItem->setIsSelected(true);
     emit itemChanged(m_checkItem->getController());
+}
+
+void ExpandWidget::onDeleteItem()
+{
+    auto item = qobject_cast<ExpandWidgetItem*>(sender());
+    removeExpandItem(item);
 }

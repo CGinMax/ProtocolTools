@@ -23,6 +23,7 @@ ExpandTile::ExpandTile(const QString &title, QWidget *parent)
 
     setEventFilter(ui->editTitle);
     connect(ui->btnQueryVersion, &QPushButton::clicked, this, &ExpandTile::queryVersion);
+    connect(ui->btnDelete, &QPushButton::clicked, this, &ExpandTile::deleteItem);
 }
 
 ExpandTile::~ExpandTile()

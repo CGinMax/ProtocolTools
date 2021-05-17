@@ -28,6 +28,7 @@ public:
 
 signals:
     void stopProtocolChannel();
+    void deleteItem();
 
 public slots:
     void onQueryVersion();

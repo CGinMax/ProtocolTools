@@ -21,11 +21,15 @@ HEADERS += \
     $$PWD/editableeventfilter.h \
     $$PWD/expand/gathercontroller.h \
     $$PWD/dialogs/serialportdialog.h \
-    $$PWD/buttons/rippleoverlay.h \
     $$PWD/buttons/rippleanimation.h \
     $$PWD/page/tablepage.h \
-    $$PWD/buttons/circlebutton.h \
-    $$PWD/buttons/fabbutton.h
+    $$PWD/buttons/fabbutton.h \
+    $$PWD/notificationbtn.h \
+    $$PWD/buttons/iconbutton.h \
+    $$PWD/buttons/abstractbutton.h \
+    $$PWD/buttons/abstractbutton_p.h \
+    $$PWD/buttons/rippleeffect.h \
+    $$PWD/buttons/style.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -43,11 +47,13 @@ SOURCES += \
     $$PWD/editableeventfilter.cpp \
     $$PWD/expand/gathercontroller.cpp \
     $$PWD/dialogs/serialportdialog.cpp \
-    $$PWD/buttons/rippleoverlay.cpp \
     $$PWD/buttons/rippleanimation.cpp \
     $$PWD/page/tablepage.cpp \
-    $$PWD/buttons/circlebutton.cpp \
-    $$PWD/buttons/fabbutton.cpp
+    $$PWD/buttons/fabbutton.cpp \
+    $$PWD/notificationbtn.cpp \
+    $$PWD/buttons/iconbutton.cpp \
+    $$PWD/buttons/abstractbutton.cpp \
+    $$PWD/buttons/rippleeffect.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \

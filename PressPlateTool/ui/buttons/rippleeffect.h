@@ -1,18 +1,18 @@
-#ifndef RIPPLEOVERLAY_H
-#define RIPPLEOVERLAY_H
+#ifndef RIPPLEEFFECT_H
+#define RIPPLEEFFECT_H
 
 #include <QWidget>
 #include <QLinkedList>
 #include <QPainterPath>
-
+namespace Ui {
 class RippleAnimation;
 
-class RippleOverlay : public QWidget
+class RippleEffect : public QWidget
 {
     Q_OBJECT
 public:
-    explicit RippleOverlay(QWidget *parent = nullptr);
-    ~RippleOverlay() override;
+    explicit RippleEffect(QWidget *parent = nullptr);
+    ~RippleEffect() override;
     void addRipple(RippleAnimation* ripple);
     void addRipple(const QPoint& center, qreal radius);
 
@@ -37,14 +37,16 @@ private:
     QPainterPath m_clipPath;
     QLinkedList<RippleAnimation*> m_ripples;
 };
-inline bool RippleOverlay::hasClipping() const
+inline bool RippleEffect::hasClipping() const
 {
     return m_clip;
 }
 
-inline QLinkedList<RippleAnimation*> RippleOverlay::ripples() const
+inline QLinkedList<RippleAnimation*> RippleEffect::ripples() const
 {
     return m_ripples;
 }
 
-#endif // RIPPLEOVERLAY_H
+} // Ui
+
+#endif // RIPPLEEFFECT_H

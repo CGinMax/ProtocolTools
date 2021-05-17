@@ -1,7 +1,7 @@
 #include "fabbutton.h"
 
 FabButton::FabButton(QWidget *parent)
-    : CircleButton(parent)
+    : IconButton(parent)
     , m_corner(Qt::BottomRightCorner)
     , m_offsetX(8)
     , m_offsetY(8)
@@ -76,7 +76,7 @@ QSize FabButton::offset() const
 bool FabButton::event(QEvent *event)
 {
     if (!parent()) {
-        return CircleButton::event(event);
+        return IconButton::event(event);
     }
     switch (event->type())
     {
@@ -94,7 +94,7 @@ bool FabButton::event(QEvent *event)
     default:
         break;
     }
-    return CircleButton::event(event);
+    return IconButton::event(event);
 }
 
 bool FabButton::eventFilter(QObject *obj, QEvent *event)
@@ -105,7 +105,7 @@ bool FabButton::eventFilter(QObject *obj, QEvent *event)
         updateRippleClipPath();
     }
 
-    return CircleButton::eventFilter(obj, event);
+    return IconButton::eventFilter(obj, event);
 }
 
 QRect FabButton::fabGeometry() const

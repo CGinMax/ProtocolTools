@@ -1,5 +1,5 @@
-#ifndef CIRCLEBUTTON_H
-#define CIRCLEBUTTON_H
+#ifndef ICONBUTTON_H
+#define ICONBUTTON_H
 
 #include <QWidget>
 #include <QAbstractButton>
@@ -9,19 +9,20 @@
 #include <QEventTransition>
 #include <QGraphicsDropShadowEffect>
 
-class RippleOverlay;
+namespace Ui {
 
-class CircleButton : public QAbstractButton
+class RippleOverlay;
+}
+
+class IconButton : public QAbstractButton
 {
     Q_OBJECT
     Q_PROPERTY(qreal opacity WRITE setOpacity READ opacity)
 public:
-    explicit CircleButton(QWidget *parent = nullptr);
-    ~CircleButton() override;
+    explicit IconButton(QWidget *parent = nullptr);
+    ~IconButton() override;
 
     QSize sizeHint() const override;
-
-    void setShadowEnabled(bool enabled);
 
     void setHoverEnabled(bool enabled);
 
@@ -40,16 +41,12 @@ public:
     QColor foregroundColor() const;
     void setForegroundColor(const QColor &foregroundColor);
 
-
-
 protected:
     bool event(QEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
     void updateRippleClipPath();
 
-    void initShadowAnimation();
-    void initHoverAnimation();
 signals:
 
 public slots:
@@ -60,14 +57,10 @@ protected:
     int m_diameter;
     QColor m_backgroundColor;
     QColor m_foregroundColor;
-    RippleOverlay* m_rippleOverly;
+    Ui::RippleOverlay* m_rippleOverly;
 
     bool m_hoveEnabled;
-    QStateMachine* m_stateMachine;
-    QState* m_normalState;
-    QState* m_pressedState;
-    QGraphicsDropShadowEffect* m_effect;
 
 };
 
-#endif // CIRCLEBUTTON_H
+#endif // ICONBUTTON_H

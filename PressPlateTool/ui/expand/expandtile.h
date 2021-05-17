@@ -31,14 +31,16 @@ signals:
     void queryVersion();
     void toggled(bool checked);
     void titleChanged(const QString& name);
+    void deleteItem();
 public slots:
-
 protected:
     void mousePressEvent(QMouseEvent *event) override;
 protected:
     Ui::ExpandTile* ui;
     TileIcon* m_icon;
     bool m_checked;
+private slots:
+
 private:
     EditableEventFilter* m_editFilter;
 };

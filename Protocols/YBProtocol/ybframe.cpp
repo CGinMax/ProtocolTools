@@ -75,10 +75,13 @@ std::string YBFrame::parseToString()
     if (m_dataContent == nullptr) {
         m_dataContent.reset(ContentFactory::createContent(m_funCode, m_data));
     }
-    std::string contentStr = m_dataContent->toString(m_isSend);
-    if (!contentStr.empty()) {
-        strList.push_back(contentStr);
+    if (m_dataContent != nullptr) {
+        std::string contentStr = m_dataContent->toString(m_isSend);
+        if (!contentStr.empty()) {
+            strList.push_back(contentStr);
+        }
     }
+
 
     strList.emplace_back(u8", crc16校验码:");
     strList.emplace_back(std::to_string(m_crcCode));

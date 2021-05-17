@@ -45,6 +45,7 @@ public:
 signals:
     void expandedChanged(bool expanded);
     void notifySelected(ExpandWidgetItem* item);
+    void deleteItem();
 public slots:
     void expand(bool needExpanded);
 

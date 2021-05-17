@@ -5,6 +5,7 @@
 #include "expand/gathercontroller.h"
 #include "../protocol/ybprotocolchannel.h"
 
+
 GatherDetailPage::GatherDetailPage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GatherDetailPage)
@@ -12,6 +13,7 @@ GatherDetailPage::GatherDetailPage(QWidget *parent) :
     ui->setupUi(this);
     m_tablePage = new TablePage(ui->tabWidget);
     ui->tabWidget->addTab(m_tablePage, tr("Sensors"));
+
 }
 
 GatherDetailPage::~GatherDetailPage()

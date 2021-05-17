@@ -1,7 +1,7 @@
 #include "rippleanimation.h"
-#include "rippleoverlay.h"
+#include "rippleeffect.h"
 
-Ui::RippleAnimation::RippleAnimation(const QPoint &center, RippleOverlay *overlay, QObject *parent)
+Ui::RippleAnimation::RippleAnimation(const QPoint &center, RippleEffect *overlay, QObject *parent)
     : QParallelAnimationGroup(parent)
     , m_opacity(0)
     , m_radius(0)
@@ -54,7 +54,7 @@ void Ui::RippleAnimation::setCenter(const QPoint &center)
     m_overlay->update();
 }
 
-void Ui::RippleAnimation::setOverlay(RippleOverlay *overlay)
+void Ui::RippleAnimation::setOverlay(RippleEffect *overlay)
 {
     m_overlay = overlay;
 }

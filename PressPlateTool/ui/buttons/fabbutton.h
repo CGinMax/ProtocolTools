@@ -1,9 +1,9 @@
 #ifndef FABBUTTON_H
 #define FABBUTTON_H
 
-#include "circlebutton.h"
+#include "iconbutton.h"
 
-class FabButton : public CircleButton
+class FabButton : public IconButton
 {
     Q_OBJECT
 public:

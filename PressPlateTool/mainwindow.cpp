@@ -5,7 +5,7 @@
 #include "ui/expand/expandwidgetitem.h"
 #include "ui/expand/expandwidget.h"
 #include "ui/dialogs/serialportdialog.h"
-#include "ui/buttons/circlebutton.h"
+#include "ui/buttons/iconbutton.h"
 
 int MainWindow::createNo = 1;
 
@@ -30,18 +30,16 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     m_fabMenu = new FabCircularMenu(this);
-    auto oneBtn = new CircleButton(this);
+    auto oneBtn = new IconButton(this);
     oneBtn->setIcon(QIcon(":/icons/add-one.png"));
     oneBtn->setIconSize(18);
     oneBtn->setCheckable(false);
     oneBtn->setDiameter(36);
-    oneBtn->setShadowEnabled(false);
-    auto multiBtn = new CircleButton(this);
+    auto multiBtn = new IconButton(this);
     multiBtn->setIcon(QIcon(":/icons/add-multi.png"));
     multiBtn->setIconSize(18);
     multiBtn->setCheckable(false);
     multiBtn->setDiameter(36);
-    multiBtn->setShadowEnabled(false);
 
     m_fabMenu->addButton(oneBtn);
     m_fabMenu->addButton(multiBtn);
@@ -77,4 +75,9 @@ void MainWindow::onNotifyAddMulti()
             ui->expandWidget->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), tr("Gather%1").arg(createNo++), 8));
         }
     }
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    ui->expandWidget->scrolldown();
 }

@@ -38,10 +38,13 @@ void GatherController::setGatherData(const QSharedPointer<GatherData> &gatherDat
 
 void GatherController::setExpandTile(ExpandTile *tile)
 {
+
     m_tile = tile;
 
     connect(tile, &ExpandTile::queryVersion, this, &GatherController::onQueryVersion);
     connect(tile, &ExpandTile::titleChanged, this, &GatherController::onTitleChanged);
+
+    connect(tile, &ExpandTile::deleteItem, this, &GatherController::deleteItem);
 }
 
 void GatherController::setOperWidget(GatherOperWidget *operWidget)
