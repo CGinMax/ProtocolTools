@@ -1,6 +1,7 @@
 #include "fabbutton.h"
 #include "fabbutton_p.h"
 
+#include <QSizePolicy>
 #include <QEvent>
 
 Ui::FabButtonPrivate::FabButtonPrivate(FabButton* q)
@@ -16,8 +17,15 @@ Ui::FabButtonPrivate::~FabButtonPrivate()
 
 void Ui::FabButtonPrivate::init()
 {
+    Q_Q(FabButton);
     m_shadowEffect->setEnabled(true);
     m_enabledHover = true;
+
+    q->setGeometry(q->fabGeometry());
+    q->setCheckable(true);
+    q->setChecked(false);
+    q->setXRadius(q->width())->setYRadius(q->height())->setIconSize(QSize(24, 24));
+    q->resize(q->diameter(), q->diameter());
 }
 
 Ui::FabButton::FabButton(const QIcon& icon, QWidget *parent)
@@ -26,10 +34,7 @@ Ui::FabButton::FabButton(const QIcon& icon, QWidget *parent)
     if (parent != nullptr) {
         parent->installEventFilter(this);
     }
-    setGeometry(fabGeometry());
-    setCheckable(true);
-    setChecked(false);
-    setXRadius(width())->setYRadius(height())->setIconSize(QSize(24, 24));
+    d_func()->init();
 }
 
 

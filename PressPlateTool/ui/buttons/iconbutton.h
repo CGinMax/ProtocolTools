@@ -33,8 +33,6 @@ protected:
     bool event(QEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
-    virtual void updateRippleClipPath();
-
 signals:
 
 public slots:

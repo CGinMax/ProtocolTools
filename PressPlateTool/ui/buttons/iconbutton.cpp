@@ -17,8 +17,13 @@ Ui::IconButtonPrivate::~IconButtonPrivate()
 
 void Ui::IconButtonPrivate::init()
 {
+    Q_Q(IconButton);
     m_shadowEffect->setEnabled(false);
     m_rippleEffect->setClipping(true);
+    auto policy = q->sizePolicy();
+    policy.setWidthForHeight(true);
+    q->setSizePolicy(policy);
+    q->resize(QSize(24, 24));
 }
 
 Ui::IconButton::IconButton(const QIcon &icon, QWidget *parent)
@@ -134,7 +139,7 @@ void Ui::IconButton::paintEvent(QPaintEvent *event)
 
     } else {
         brush.setColor(Qt::transparent);
-        if (!isChecked()) {
+        if (isChecked()) {
             brush.setColor(backgroundColor());
         }
     }
@@ -147,11 +152,3 @@ void Ui::IconButton::paintEvent(QPaintEvent *event)
     drawIcon(&painter, iconGeometry);
 }
 
-void Ui::IconButton::updateRippleClipPath()
-{
-    QPainterPath path;
-    QRect square = QRect(0, 0, width(), height());
-    square.moveCenter(rect().center());
-    path.addRoundedRect(square, xradius(), yradius());
-    setClipPath(path);
-}

@@ -6,6 +6,7 @@
 
 Ui::AbstractButtonPrivate::AbstractButtonPrivate(AbstractButton *q)
     : q_ptr(q)
+    , m_rippleEffect(nullptr)
     , m_bgMode(Qt::OpaqueMode)
     , m_backgroundColor(Theme::instance()->primaryColor())
     , m_foregroundColor(Theme::instance()->textColor())
@@ -175,6 +176,7 @@ Ui::AbstractButton *Ui::AbstractButton::setXRadius(int radius)
     Q_D(AbstractButton);
     d->m_xradius = radius;
     update();
+    updateRippleClipPath();
 
     return this;
 }
@@ -190,6 +192,7 @@ Ui::AbstractButton *Ui::AbstractButton::setYRadius(int radius)
     Q_D(AbstractButton);
     d->m_yradius = radius;
     update();
+    updateRippleClipPath();
 
     return this;
 }
@@ -266,4 +269,19 @@ Ui::AbstractButton::AbstractButton(Ui::AbstractButtonPrivate &d, QWidget *parent
     , m_enabledAdaptiveColor(false)
 {
     d_func()->init();
+}
+
+void Ui::AbstractButton::updateRippleClipPath()
+{
+    Q_D(AbstractButton);
+
+    if (!d->m_rippleEffect->hasClipping() || !d->m_rippleEffect->isEnabled()) {
+        return;
+    }
+
+    QPainterPath path;
+    QRect square = QRect(0, 0, width(), height());
+    square.moveCenter(rect().center());
+    path.addRoundedRect(square, xradius(), yradius());
+    setClipPath(path);
 }

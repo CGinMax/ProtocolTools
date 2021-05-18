@@ -63,9 +63,10 @@ QMAKE_RPATHDIR += $${DESTDIR}/../lib
 TRANSLATIONS += $$PWD/PressPlateTool_en.ts
 TRANSLATIONS += $$PWD/PressPlateTool_zh.ts
 
-include(ui/ui.pri)
-include(protocol/protocol.pri)
-include(common/common.pri)
+include($$PWD/ui/ui.pri)
+include($$PWD/protocol/protocol.pri)
+include($$PWD/common/common.pri)
+include($$PWD/../QtAwesome/QtAwesome/QtAwesome.pri)
 
 RESOURCES += \
     resources/resources.qrc

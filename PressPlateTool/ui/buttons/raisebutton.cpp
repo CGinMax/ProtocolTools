@@ -6,12 +6,15 @@
 
 Ui::RaiseButtonPrivate::RaiseButtonPrivate(Ui::RaiseButton* q)
     : AbstractButtonPrivate(q)
+    , m_shadowEffect(nullptr)
     , m_iconAlign(Ui::IconAlign::AlignLeft)
 {
 }
 
 Ui::RaiseButtonPrivate::~RaiseButtonPrivate()
-{}
+{
+    delete m_shadowEffect;
+}
 
 void Ui::RaiseButtonPrivate::init()
 {

@@ -5,11 +5,13 @@
 #include <QApplication>
 #include <QDebug>
 
+#include "../base/faicon.h"
+
 FabCircularMenu::FabCircularMenu(QWidget *parent)
     : QWidget(parent)
     , m_angle(0.0)
     , m_distance(130)
-    , m_menuBtn(new Ui::FabButton(QIcon(":/icons/fab-menu.png"), parent))
+    , m_menuBtn(new Ui::FabButton(FAIcon::instance()->awesome()->icon("bars"), parent))
     , m_stateMachine(new QStateMachine(this))
     , m_openState(new QState())
     , m_closeState(new QState())
@@ -20,8 +22,6 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     m_menuBtn->setEnabledHover(true);
     m_menuBtn->setOpacity(0.5);
     m_menuBtn->setCorner(Qt::BottomLeftCorner);
-//    m_menuBtn->setDiameter(
-//    m_menuBtn->setShadowEnabled(false);
 
     m_distance = static_cast<qreal>(m_menuBtn->diameter()) * 2.5;
 

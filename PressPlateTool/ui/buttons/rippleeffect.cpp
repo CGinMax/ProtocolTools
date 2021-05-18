@@ -86,9 +86,7 @@ void Ui::RippleEffect::paintEvent(QPaintEvent *event)
         painter.setBrush(ripple->brush());
         painter.drawEllipse(center, radius, radius);
     }
-
 }
-
 
 bool Ui::RippleEffect::event(QEvent *event)
 {

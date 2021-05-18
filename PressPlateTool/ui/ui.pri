@@ -40,7 +40,8 @@ HEADERS += \
     $$PWD/buttons/outlinebutton.h \
     $$PWD/buttons/outlinebutton_p.h \
     $$PWD/buttons/iconbutton_p.h \
-    $$PWD/buttons/fabbutton_p.h
+    $$PWD/buttons/fabbutton_p.h \
+    $$PWD/base/faicon.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -71,7 +72,8 @@ SOURCES += \
     $$PWD/buttons/raisebutton.cpp \
     $$PWD/base/painterhighqualityenabler.cpp \
     $$PWD/buttons/flatbutton.cpp \
-    $$PWD/buttons/outlinebutton.cpp
+    $$PWD/buttons/outlinebutton.cpp \
+    $$PWD/base/faicon.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \

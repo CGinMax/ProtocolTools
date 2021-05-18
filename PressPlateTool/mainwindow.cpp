@@ -6,6 +6,7 @@
 #include "ui/expand/expandwidget.h"
 #include "ui/dialogs/serialportdialog.h"
 #include "ui/buttons/iconbutton.h"
+#include "ui/base/faicon.h"
 
 int MainWindow::createNo = 1;
 
@@ -30,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     m_fabMenu = new FabCircularMenu(this);
-    auto oneBtn = new Ui::IconButton(QIcon(":/icons/add-one.png"), this);
+    auto oneBtn = new Ui::IconButton(FAIcon::instance()->awesome()->icon("plus"), this);
     oneBtn->setIconSize(QSize(16, 16));
     oneBtn->setCheckable(false);
     oneBtn->resize(36, 36);
