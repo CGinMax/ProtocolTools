@@ -24,7 +24,7 @@ Ui::AbstractButtonPrivate::AbstractButtonPrivate(AbstractButton *q)
 
 Ui::AbstractButtonPrivate::~AbstractButtonPrivate()
 {
-
+    delete m_rippleEffect;
 }
 
 void Ui::AbstractButtonPrivate::init()
