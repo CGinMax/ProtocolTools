@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QLinkedList>
 #include <QPainterPath>
+#include "../base/style.h"
+
 namespace Ui {
 class RippleAnimation;
 
@@ -17,6 +19,9 @@ public:
     void addRipple(const QPoint& center, qreal radius);
 
     void removeRipple(RippleAnimation* ripple);
+
+    void setRippleStyle(RippleStyle style);
+    inline RippleStyle rippleStyle() const;
 
     inline bool hasClipping() const;
     void setClipping(bool enabled);
@@ -33,10 +38,16 @@ signals:
 public slots:
 
 private:
+    RippleStyle m_rippleStyle;
     bool m_clip;
     QPainterPath m_clipPath;
     QLinkedList<RippleAnimation*> m_ripples;
 };
+RippleStyle RippleEffect::rippleStyle() const
+{
+    return m_rippleStyle;
+}
+
 inline bool RippleEffect::hasClipping() const
 {
     return m_clip;
@@ -47,6 +58,6 @@ inline QLinkedList<RippleAnimation*> RippleEffect::ripples() const
     return m_ripples;
 }
 
-} // Ui
+}  // namespace Ui
 
 #endif // RIPPLEEFFECT_H

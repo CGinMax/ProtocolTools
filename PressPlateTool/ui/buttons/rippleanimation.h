@@ -9,7 +9,7 @@
 
 namespace Ui {
 
-class RippleOverlay;
+class RippleEffect;
 
 class RippleAnimation : public QParallelAnimationGroup
 {
@@ -18,7 +18,7 @@ class RippleAnimation : public QParallelAnimationGroup
     Q_PROPERTY(qreal opacity WRITE setOpacity READ opacity NOTIFY opacityChanged)
     Q_PROPERTY(qreal radius WRITE setRadius READ radius NOTIFY radiusChanged)
 public:
-    explicit RippleAnimation(const QPoint& center, RippleOverlay* overlay = nullptr, QObject* parent = nullptr);
+    explicit RippleAnimation(const QPoint& center, RippleEffect* overlay = nullptr, QObject* parent = nullptr);
     ~RippleAnimation() override;
 
     inline qreal opacity() const;
@@ -33,7 +33,7 @@ public:
     inline QPoint center() const;
     void setCenter(const QPoint& center);
 
-    void setOverlay(RippleOverlay* overlay);
+    void setOverlay(RippleEffect* overlay);
 
     inline QPropertyAnimation* opacityAnimation() const;
     inline QPropertyAnimation* radiusAnimation() const;
@@ -65,7 +65,7 @@ private:
     qreal m_radius;
     QBrush m_brush;
     QPoint m_center;
-    RippleOverlay* m_overlay;
+    RippleEffect* m_overlay;
     QPropertyAnimation* const m_opacityAnimation;
     QPropertyAnimation* const m_radiusAnimation;
 };

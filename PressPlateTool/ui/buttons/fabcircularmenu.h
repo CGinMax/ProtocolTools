@@ -3,9 +3,11 @@
 
 #include <QWidget>
 #include <QPropertyAnimation>
-#include "fabbutton.h"
 #include <QPushButton>
+#include <QStateMachine>
+#include <QState>
 
+#include "fabbutton.h"
 class FabCircularMenu : public QWidget
 {
     Q_OBJECT
@@ -34,7 +36,7 @@ public slots:
 private:
     qreal m_angle;
     qreal m_distance;
-    FabButton* m_menuBtn;
+    Ui::FabButton* m_menuBtn;
     QStateMachine* m_stateMachine;
     QState* m_openState;
     QState* m_closeState;

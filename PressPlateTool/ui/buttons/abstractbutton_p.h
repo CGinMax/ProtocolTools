@@ -3,7 +3,7 @@
 
 #include <QtGlobal>
 #include <QColor>
-#include "style.h"
+#include "../base/style.h"
 
 namespace Ui {
 class AbstractButton;
@@ -21,7 +21,6 @@ public:
 
     AbstractButton* const q_ptr;
     RippleEffect* m_rippleEffect;
-    Ui::RippleStyle m_rippleStyle;
 
     Qt::BGMode m_bgMode;
     QColor m_backgroundColor;
@@ -29,13 +28,14 @@ public:
     QColor m_disabledColor;
     QColor m_disabledBackgroundColor;
     QColor m_rippleColor;
+    QColor m_borderColor;
 
     qreal m_opacity;
 
-
     int m_xradius;
     int m_yradius;
-
+    bool m_enabledBorder;
+    int m_borderWidth;
 };
 }  // namespace Ui
 

@@ -3,36 +3,42 @@
 
 #include "iconbutton.h"
 
+namespace Ui {
+
+class FabButtonPrivate;
 class FabButton : public IconButton
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(FabButton)
 public:
-    explicit FabButton(QWidget *parent = nullptr);
+    explicit FabButton(const QIcon& icon, QWidget *parent = nullptr);
+    ~FabButton() override;
 
+    FabButton* setDiameter(int diameter);
+    int diameter() const;
 
     Qt::Corner corner() const;
-    void setCorner(Qt::Corner corner);
+    FabButton* setCorner(Qt::Corner corner);
     int offsetX() const;
-    void setOffsetX(int x);
+    FabButton* setOffsetX(int x);
 
     int offsetY() const;
-    void setOffsetY(int y);
+    FabButton* setOffsetY(int y);
 
-    void setOffset(int x, int y);
-    void setOffset(const QSize& size);
+    FabButton* setOffset(int x, int y);
+    FabButton* setOffset(const QSize& size);
     QSize offset() const;
 protected:
     bool event(QEvent *event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
     QRect fabGeometry() const;
+    void updateRippleClipPath() override;
 signals:
 
 public slots:
 
-protected:
-    Qt::Corner m_corner;
-    int m_offsetX;
-    int m_offsetY;
 };
+}  // namespace Ui
+
 
 #endif // FABBUTTON_H

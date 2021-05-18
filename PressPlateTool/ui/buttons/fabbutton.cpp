@@ -1,10 +1,27 @@
 #include "fabbutton.h"
+#include "fabbutton_p.h"
 
-FabButton::FabButton(QWidget *parent)
-    : IconButton(parent)
+#include <QEvent>
+
+Ui::FabButtonPrivate::FabButtonPrivate(FabButton* q)
+    : IconButtonPrivate (q)
+    , m_diameter(56)
     , m_corner(Qt::BottomRightCorner)
-    , m_offsetX(8)
-    , m_offsetY(8)
+    , m_xoffset(8)
+    , m_yoffset(8)
+{}
+
+Ui::FabButtonPrivate::~FabButtonPrivate()
+{}
+
+void Ui::FabButtonPrivate::init()
+{
+    m_shadowEffect->setEnabled(true);
+    m_enabledHover = true;
+}
+
+Ui::FabButton::FabButton(const QIcon& icon, QWidget *parent)
+    : IconButton(*new FabButtonPrivate(this), icon, parent)
 {
     if (parent != nullptr) {
         parent->installEventFilter(this);
@@ -12,68 +29,105 @@ FabButton::FabButton(QWidget *parent)
     setGeometry(fabGeometry());
     setCheckable(true);
     setChecked(false);
+    setXRadius(width())->setYRadius(height())->setIconSize(QSize(24, 24));
 }
 
 
-Qt::Corner FabButton::corner() const
+Ui::FabButton::~FabButton()
 {
-    return m_corner;
+
 }
 
-void FabButton::setCorner(Qt::Corner corner)
+Ui::FabButton *Ui::FabButton::setDiameter(int diameter)
 {
-    if (m_corner == corner) {
-        return;
+    Q_D(FabButton);
+    if (d->m_diameter == diameter) {
+        return this;
     }
-    m_corner = corner;
+
+    d->m_diameter = diameter;
+    update();
+    return this;
+}
+
+int Ui::FabButton::diameter() const
+{
+    Q_D(const FabButton);
+    return d->m_diameter;
+}
+
+
+Qt::Corner Ui::FabButton::corner() const
+{
+    Q_D(const FabButton);
+    return d->m_corner;
+}
+
+Ui::FabButton *Ui::FabButton::setCorner(Qt::Corner corner)
+{
+    Q_D(FabButton);
+    if (d->m_corner == corner) {
+        return this;
+    }
+    d->m_corner = corner;
     setGeometry(fabGeometry());
     update();
+    return this;
 }
 
-int FabButton::offsetX() const
+int Ui::FabButton::offsetX() const
 {
-    return m_offsetX;
+    Q_D(const FabButton);
+    return d->m_xoffset;
 }
 
-void FabButton::setOffsetX(int x)
+Ui::FabButton *Ui::FabButton::setOffsetX(int x)
 {
-    m_offsetX = x;
+    Q_D(FabButton);
+    d->m_xoffset = x;
     setGeometry(fabGeometry());
     update();
+    return this;
 }
 
-int FabButton::offsetY() const
+int Ui::FabButton::offsetY() const
 {
-    return m_offsetY;
+    Q_D(const FabButton);
+    return d->m_yoffset;
 }
 
-void FabButton::setOffsetY(int y)
+Ui::FabButton *Ui::FabButton::setOffsetY(int y)
 {
-    m_offsetY = y;
+    Q_D(FabButton);
+    d->m_yoffset = y;
     setGeometry(fabGeometry());
     update();
+
+    return this;
 }
 
-void FabButton::setOffset(int x, int y)
+Ui::FabButton *Ui::FabButton::setOffset(int x, int y)
 {
-    m_offsetX = x;
-    m_offsetY = y;
+    Q_D(FabButton);
+    d->m_xoffset = x;
+    d->m_yoffset = y;
     setGeometry(fabGeometry());
     update();
+    return this;
 }
 
-void FabButton::setOffset(const QSize &size)
+Ui::FabButton *Ui::FabButton::setOffset(const QSize &size)
 {
     setOffset(size.width(), size.height());
+    return this;
 }
 
-QSize FabButton::offset() const
+QSize Ui::FabButton::offset() const
 {
-    return QSize(m_offsetX, m_offsetY);
+    return {offsetX(), offsetY()};
 }
 
-
-bool FabButton::event(QEvent *event)
+bool Ui::FabButton::event(QEvent *event)
 {
     if (!parent()) {
         return IconButton::event(event);
@@ -97,7 +151,7 @@ bool FabButton::event(QEvent *event)
     return IconButton::event(event);
 }
 
-bool FabButton::eventFilter(QObject *obj, QEvent *event)
+bool Ui::FabButton::eventFilter(QObject *obj, QEvent *event)
 {
     const QEvent::Type type = event->type();
     if (type == QEvent::Move || type == QEvent::Resize) {
@@ -108,7 +162,7 @@ bool FabButton::eventFilter(QObject *obj, QEvent *event)
     return IconButton::eventFilter(obj, event);
 }
 
-QRect FabButton::fabGeometry() const
+QRect Ui::FabButton::fabGeometry() const
 {
     QWidget *parent = parentWidget();
     if (!parent) {
@@ -117,21 +171,30 @@ QRect FabButton::fabGeometry() const
 
     const int s = diameter();
     // Qt::BottomRightCorner
-    QRect rect(parent->width() - (m_offsetX + s), parent->height() - (m_offsetY + s), s, s);
-    switch (m_corner)
+    QRect rect(parent->width() - (offsetX() + s), parent->height() - (offsetY() + s), s, s);
+    switch (corner())
     {
     case Qt::TopLeftCorner:
-        rect = QRect(m_offsetX, m_offsetY, s, s);
+        rect = QRect(offsetX(), offsetY(), s, s);
         break;
     case Qt::TopRightCorner:
-        rect = QRect(parent->width() - (m_offsetX + s), m_offsetY, s, s);
+        rect = QRect(parent->width() - (offsetX() + s), offsetY(), s, s);
         break;
     case Qt::BottomLeftCorner:
-        rect = QRect(m_offsetX, parent->height() - (m_offsetY + s), s, s);
+        rect = QRect(offsetX(), parent->height() - (offsetY() + s), s, s);
         break;
     default:
         break;
     }
     return rect;
 
+}
+
+void Ui::FabButton::updateRippleClipPath()
+{
+    QPainterPath path;
+    QRect square = QRect(0, 0, diameter(), diameter());
+    square.moveCenter(rect().center());
+    path.addEllipse(square);
+    setClipPath(path);
 }

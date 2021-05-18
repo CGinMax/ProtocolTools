@@ -29,7 +29,18 @@ HEADERS += \
     $$PWD/buttons/abstractbutton.h \
     $$PWD/buttons/abstractbutton_p.h \
     $$PWD/buttons/rippleeffect.h \
-    $$PWD/buttons/style.h
+    $$PWD/base/style.h \
+    $$PWD/base/theme.h \
+    $$PWD/effect/shadoweffect.h \
+    $$PWD/buttons/raisebutton.h \
+    $$PWD/buttons/raisebutton_p.h \
+    $$PWD/base/painterhighqualityenabler.h \
+    $$PWD/buttons/flatbutton.h \
+    $$PWD/buttons/flatbutton_p.h \
+    $$PWD/buttons/outlinebutton.h \
+    $$PWD/buttons/outlinebutton_p.h \
+    $$PWD/buttons/iconbutton_p.h \
+    $$PWD/buttons/fabbutton_p.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -53,7 +64,14 @@ SOURCES += \
     $$PWD/notificationbtn.cpp \
     $$PWD/buttons/iconbutton.cpp \
     $$PWD/buttons/abstractbutton.cpp \
-    $$PWD/buttons/rippleeffect.cpp
+    $$PWD/buttons/rippleeffect.cpp \
+    $$PWD/base/style.cpp \
+    $$PWD/base/theme.cpp \
+    $$PWD/effect/shadoweffect.cpp \
+    $$PWD/buttons/raisebutton.cpp \
+    $$PWD/base/painterhighqualityenabler.cpp \
+    $$PWD/buttons/flatbutton.cpp \
+    $$PWD/buttons/outlinebutton.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \

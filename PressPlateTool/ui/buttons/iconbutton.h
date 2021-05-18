@@ -1,66 +1,46 @@
 #ifndef ICONBUTTON_H
 #define ICONBUTTON_H
 
-#include <QWidget>
-#include <QAbstractButton>
-#include <QPropertyAnimation>
-#include <QStateMachine>
-#include <QState>
-#include <QEventTransition>
-#include <QGraphicsDropShadowEffect>
+#include "raisebutton.h"
 
 namespace Ui {
 
-class RippleOverlay;
-}
+class RippleEffect;
+class IconButtonPrivate;
 
-class IconButton : public QAbstractButton
+class IconButton : public RaiseButton
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(IconButton)
     Q_PROPERTY(qreal opacity WRITE setOpacity READ opacity)
 public:
-    explicit IconButton(QWidget *parent = nullptr);
+    explicit IconButton(const QIcon& icon, QWidget *parent = nullptr);
     ~IconButton() override;
 
     QSize sizeHint() const override;
 
-    void setHoverEnabled(bool enabled);
-
+    IconButton* setOpacity(qreal opacity);
     qreal opacity() const;
-    void setOpacity(qreal opacity);
 
-    int iconSize() const;
-    void setIconSize(int iconSize);
+    IconButton* setEnabledHover(bool enabled);
+    bool enabledHover() const;
 
-    int diameter() const;
-    void setDiameter(int diameter);
-
-    QColor backgroundColor() const;
-    void setBackgroundColor(const QColor &backgroundColor);
-
-    QColor foregroundColor() const;
-    void setForegroundColor(const QColor &foregroundColor);
+    IconButton* setBackgroundEnabled(bool enabled);
+    bool backgroundEnabled() const;
 
 protected:
+    IconButton(IconButtonPrivate& d, const QIcon& icon, QWidget* parent = nullptr);
     bool event(QEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
-    void updateRippleClipPath();
+    virtual void updateRippleClipPath();
 
 signals:
 
 public slots:
 
-protected:
-    qreal m_opacity;
-    int m_iconSize;
-    int m_diameter;
-    QColor m_backgroundColor;
-    QColor m_foregroundColor;
-    Ui::RippleOverlay* m_rippleOverly;
-
-    bool m_hoveEnabled;
-
 };
+}
+
 
 #endif // ICONBUTTON_H

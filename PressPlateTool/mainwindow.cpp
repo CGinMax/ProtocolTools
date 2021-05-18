@@ -30,16 +30,16 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     m_fabMenu = new FabCircularMenu(this);
-    auto oneBtn = new IconButton(this);
-    oneBtn->setIcon(QIcon(":/icons/add-one.png"));
-    oneBtn->setIconSize(18);
+    auto oneBtn = new Ui::IconButton(QIcon(":/icons/add-one.png"), this);
+    oneBtn->setIconSize(QSize(16, 16));
     oneBtn->setCheckable(false);
-    oneBtn->setDiameter(36);
-    auto multiBtn = new IconButton(this);
-    multiBtn->setIcon(QIcon(":/icons/add-multi.png"));
-    multiBtn->setIconSize(18);
+    oneBtn->resize(36, 36);
+    oneBtn->setXRadius(oneBtn->width())->setYRadius(oneBtn->height());
+    auto multiBtn = new Ui::IconButton(QIcon(":/icons/add-multi.png"), this);
+    multiBtn->setIconSize(QSize(16, 16));
     multiBtn->setCheckable(false);
-    multiBtn->setDiameter(36);
+    multiBtn->resize(36, 36);
+    multiBtn->setXRadius(multiBtn->width())->setYRadius(multiBtn->height());
 
     m_fabMenu->addButton(oneBtn);
     m_fabMenu->addButton(multiBtn);

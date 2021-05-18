@@ -1,102 +1,103 @@
 #include "iconbutton.h"
-#include "rippleoverlay.h"
+#include "iconbutton_p.h"
+#include "rippleeffect.h"
 #include <QEvent>
 #include <QPainter>
 #include <QPainterPath>
 
-IconButton::IconButton(QWidget *parent)
-    : QAbstractButton(parent)
+Ui::IconButtonPrivate::IconButtonPrivate(Ui::IconButton* q)
+    : RaiseButtonPrivate (q)
+    , m_enabledBackground(true)
     , m_opacity(1.0)
-    , m_iconSize(24)
-    , m_diameter(56)
-    , m_backgroundColor(QColor(Qt::lightGray))
-    , m_foregroundColor(QColor(Qt::white))
-    , m_hoveEnabled(false)
+    , m_enabledHover(false)
+{}
+
+Ui::IconButtonPrivate::~IconButtonPrivate()
+{}
+
+void Ui::IconButtonPrivate::init()
 {
+    m_shadowEffect->setEnabled(false);
+    m_rippleEffect->setClipping(true);
+}
 
-    m_rippleOverly = new Ui::RippleOverlay(this);
-
-    m_rippleOverly->setClipping(true);
+Ui::IconButton::IconButton(const QIcon &icon, QWidget *parent)
+    : RaiseButton(*new IconButtonPrivate(this), icon, parent)
+{
+    d_func()->init();
     updateRippleClipPath();
 }
 
-IconButton::~IconButton()
+Ui::IconButton::~IconButton()
 {
 }
 
-QSize IconButton::sizeHint() const
+QSize Ui::IconButton::sizeHint() const
 {
-    return QSize(diameter() , diameter());
+    return {16 + iconSize().width(), 16 + iconSize().height()};
 }
 
-void IconButton::setHoverEnabled(bool enabled)
+Ui::IconButton *Ui::IconButton::setOpacity(qreal opacity)
 {
-    if (m_hoveEnabled == enabled) {
-        return ;
+    Q_D(IconButton);
+    d->m_opacity = opacity;
+    update();
+    return this;
+}
+
+qreal Ui::IconButton::opacity() const
+{
+    Q_D(const IconButton);
+    return d->m_opacity;
+}
+
+Ui::IconButton *Ui::IconButton::setEnabledHover(bool enabled)
+{
+    Q_D(IconButton);
+    if (d->m_enabledHover == enabled) {
+        return this;
     }
-    m_hoveEnabled = enabled;
-}
 
-qreal IconButton::opacity() const
-{
-    return m_opacity;
-}
-
-void IconButton::setOpacity(qreal opacity)
-{
-    m_opacity = opacity;
+    d->m_enabledHover = enabled;
     update();
+    return this;
 }
 
-int IconButton::iconSize() const
+bool Ui::IconButton::enabledHover() const
 {
-    return m_iconSize;
+    Q_D(const IconButton);
+    return d->m_enabledHover;
 }
 
-void IconButton::setIconSize(int iconSize)
+Ui::IconButton *Ui::IconButton::setBackgroundEnabled(bool enabled)
 {
-    m_iconSize = iconSize;
+    Q_D(IconButton);
+    if (d->m_enabledBackground == enabled) {
+        return this;
+    }
+
+    d->m_enabledBackground = enabled;
     update();
+    return this;
 }
 
-int IconButton::diameter() const
+bool Ui::IconButton::backgroundEnabled() const
 {
-    return m_diameter;
+    Q_D(const IconButton);
+    return d->m_enabledBackground;
 }
 
-void IconButton::setDiameter(int diameter)
+Ui::IconButton::IconButton(Ui::IconButtonPrivate &d, const QIcon &icon, QWidget *parent)
+    : RaiseButton(d, icon, parent)
 {
-    m_diameter = diameter;
-
-    resize(diameter, diameter);
+    d_func()->init();
     updateRippleClipPath();
-    update();
 }
 
-QColor IconButton::backgroundColor() const
+bool Ui::IconButton::event(QEvent *event)
 {
-    return m_backgroundColor;
-}
-
-void IconButton::setBackgroundColor(const QColor &backgroundColor)
-{
-    m_backgroundColor = backgroundColor;
-    update();
-}
-
-QColor IconButton::foregroundColor() const
-{
-    return m_foregroundColor;
-}
-
-void IconButton::setForegroundColor(const QColor &foregroundColor)
-{
-    m_foregroundColor = foregroundColor;
-}
-
-bool IconButton::event(QEvent *event)
-{
-    if (m_hoveEnabled) {
+    Q_D(IconButton);
+    if (d->m_enabledHover) {
         if (event->type() == QEvent::HoverEnter){
             setOpacity(1.0);
         } else if (event->type() == QEvent::HoverLeave && !isChecked()) {
@@ -108,47 +109,49 @@ bool IconButton::event(QEvent *event)
 }
 
 
-void IconButton::paintEvent(QPaintEvent *event)
+void Ui::IconButton::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
-    QRect square = QRect(0, 0, m_diameter, m_diameter);
+    Q_D(IconButton);
+
+    QRect square = QRect(0, 0, width(), height());
     square.moveCenter(rect().center());
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QBrush brush(m_backgroundColor);
-    brush.setStyle(Qt::SolidPattern);
-    if (isEnabled()) {
-        brush.setColor(m_backgroundColor);
-    } else {
-        brush.setColor(QColor(0xE0E0E0));// disable color
-    }
-
-    isChecked() ? painter.setOpacity(1.0): painter.setOpacity(m_opacity);
-
-    painter.setBrush(brush);
     painter.setPen(Qt::NoPen);
-    painter.drawRoundedRect(square, diameter(), diameter());
+    QBrush brush(Qt::SolidPattern);
+    if (d->m_enabledBackground) {
+        brush.setColor(backgroundColor());
+        if (!isEnabled()) {
+            brush.setColor(disabledColor());
+        }
+        if (d->m_enabledHover) {
+            isChecked() ? painter.setOpacity(1.0): painter.setOpacity(opacity());
+        }
 
-    QRect iconGeometry(0, 0, m_iconSize, m_iconSize);
+
+    } else {
+        brush.setColor(Qt::transparent);
+        if (!isChecked()) {
+            brush.setColor(backgroundColor());
+        }
+    }
+    painter.setBrush(brush);
+    painter.drawRoundedRect(square, xradius(), yradius());
+
+
+    QRect iconGeometry({0, 0}, iconSize());
     iconGeometry.moveCenter(square.center());
-
-    QPixmap pixmap = icon().pixmap(QSize(m_iconSize, m_iconSize));
-    QPainter icon(&pixmap);
-    icon.setCompositionMode(QPainter::CompositionMode_SourceIn);
-
-    icon.fillRect(pixmap.rect(), isEnabled() ? foregroundColor()
-                                             : QColor(0xE0E0E0));
-    painter.drawPixmap(iconGeometry, pixmap);
-
+    drawIcon(&painter, iconGeometry);
 }
 
-void IconButton::updateRippleClipPath()
+void Ui::IconButton::updateRippleClipPath()
 {
     QPainterPath path;
-    QRect square = QRect(0, 0, m_diameter, m_diameter);
+    QRect square = QRect(0, 0, width(), height());
     square.moveCenter(rect().center());
-    path.addEllipse(square);
-    m_rippleOverly->setClipPath(path);
+    path.addRoundedRect(square, xradius(), yradius());
+    setClipPath(path);
 }

@@ -9,7 +9,7 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     : QWidget(parent)
     , m_angle(0.0)
     , m_distance(130)
-    , m_menuBtn(new FabButton(parent))
+    , m_menuBtn(new Ui::FabButton(QIcon(":/icons/fab-menu.png"), parent))
     , m_stateMachine(new QStateMachine(this))
     , m_openState(new QState())
     , m_closeState(new QState())
@@ -17,9 +17,10 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     if (parent != nullptr) {
         parent->installEventFilter(this);
     }
-    m_menuBtn->setHoverEnabled(true);
+    m_menuBtn->setEnabledHover(true);
     m_menuBtn->setOpacity(0.5);
     m_menuBtn->setCorner(Qt::BottomLeftCorner);
+//    m_menuBtn->setDiameter(
 //    m_menuBtn->setShadowEnabled(false);
 
     m_distance = static_cast<qreal>(m_menuBtn->diameter()) * 2.5;
