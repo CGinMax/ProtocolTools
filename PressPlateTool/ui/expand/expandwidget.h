@@ -22,6 +22,7 @@ public:
     void addExpandItem(ExpandWidgetItem* item);
     void insertExpandItem(int index, ExpandWidgetItem* item);
     void removeExpandItem(ExpandWidgetItem* item);
+    void removeAllItem();
     int indexOf(ExpandWidgetItem* item);
 
     //test

@@ -11,6 +11,11 @@ QtAwesome *FAIcon::awesome()
     return m_awesomeIcon;
 }
 
+QIcon FAIcon::icon(const QString &name, const QVariantMap &options)
+{
+    return awesome()->icon(name, options);
+}
+
 FAIcon::FAIcon(QObject *parent)
     : QObject(parent)
     , m_awesomeIcon(new QtAwesome(this))

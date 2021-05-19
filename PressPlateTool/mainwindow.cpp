@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->mainSplitter->setStretchFactor(0, 1);
     ui->mainSplitter->setStretchFactor(1, 2);
     ui->mainSplitter->setStyleSheet("QSplitter::handle{background-color:lightgray;}");
-    connect(ui->expandWidget, &ExpandWidget::itemChanged, ui->gatherDetailPage, &GatherDetailPage::onItemChanged);
+    connect(ui->gatherPage, &GatherPage::itemChanged, ui->gatherDetailPage, &GatherDetailPage::onItemChanged);
 
     for (int i = 0; i < 1; i++) {
 //        ui->expandWidget->addExpandItem(ExpandWidget::createExpandWidget(tr("untitled"), 8));
@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     m_fabMenu = new FabCircularMenu(this);
-    auto oneBtn = new Ui::IconButton(FAIcon::instance()->awesome()->icon("plus"), this);
+    auto oneBtn = new Ui::IconButton(FAIcon::instance()->icon("plus"), this);
     oneBtn->setIconSize(QSize(16, 16));
     oneBtn->setCheckable(false);
     oneBtn->resize(36, 36);
@@ -62,7 +62,7 @@ void MainWindow::onNotifyAddOne()
     SerialPortDialog dialog(false, this);
     if(dialog.exec() == QDialog::Accepted) {
         m_fabMenu->setChecked(false);
-        ui->expandWidget->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), tr("Gather%1").arg(createNo++), 8));
+        ui->gatherPage->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), tr("Gather%1").arg(createNo++), 8));
     }
 }
 
@@ -73,12 +73,8 @@ void MainWindow::onNotifyAddMulti()
         int num = dialog.gatherNum();
         for (int i = 0; i < num; i++) {
             m_fabMenu->setChecked(false);
-            ui->expandWidget->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), tr("Gather%1").arg(createNo++), 8));
+            ui->gatherPage->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), tr("Gather%1").arg(createNo++), 8));
         }
     }
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    ui->expandWidget->scrolldown();
-}

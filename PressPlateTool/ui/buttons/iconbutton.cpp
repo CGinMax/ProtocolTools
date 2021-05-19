@@ -92,6 +92,16 @@ bool Ui::IconButton::backgroundEnabled() const
     return d->m_enabledBackground;
 }
 
+Ui::IconButton *Ui::IconButton::setIconColor(const QColor &color)
+{
+    return static_cast<IconButton*>(setForegroundColor(color));
+}
+
+QColor Ui::IconButton::iconColor() const
+{
+    return foregroundColor();
+}
+
 Ui::IconButton::IconButton(Ui::IconButtonPrivate &d, const QIcon &icon, QWidget *parent)
     : RaiseButton(d, icon, parent)
 {

@@ -11,7 +11,7 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     : QWidget(parent)
     , m_angle(0.0)
     , m_distance(130)
-    , m_menuBtn(new Ui::FabButton(FAIcon::instance()->awesome()->icon("bars"), parent))
+    , m_menuBtn(new Ui::FabButton(FAIcon::instance()->icon("bars"), parent))
     , m_stateMachine(new QStateMachine(this))
     , m_openState(new QState())
     , m_closeState(new QState())
@@ -58,9 +58,10 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     m_stateMachine->setInitialState(m_closeState);
     m_stateMachine->start();
 
-    m_menuBtn->setIcon(QIcon(":/icons/fab-menu.png"));
+//    m_menuBtn->setIcon(QIcon(":/icons/fab-menu.png"));
     m_menuBtn->raise();
     updateCircularBtnGeometry();
+    resize(0,0);
 }
 
 FabCircularMenu::~FabCircularMenu()
@@ -116,7 +117,7 @@ void FabCircularMenu::updateCircularBtnGeometry()
         qreal btnx = parentWidget()->rect().x() + m_distance * qCos(m_angle + m_initAngleMap.value(btn));
         qreal btny = parentWidget()->rect().y() + parentWidget()->height() - m_distance * qSin(m_angle + m_initAngleMap.value(btn));
         auto rect = btn->rect();
-        rect.moveCenter(QPoint(btnx, btny));
+        rect.moveCenter(QPoint(static_cast<int>(btnx), static_cast<int>(btny)));
         btn->setGeometry(rect);
     }
 }
@@ -138,7 +139,9 @@ void FabCircularMenu::resetBtnsInitAngle()
 
 bool FabCircularMenu::eventFilter(QObject *watched, QEvent *event)
 {
+    Q_UNUSED(watched)
     if (event->type() == QEvent::Move || event->type() == QEvent::Resize) {
         updateCircularBtnGeometry();
     }
+    return QWidget::eventFilter(watched, event);
 }

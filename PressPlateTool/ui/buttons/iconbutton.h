@@ -28,6 +28,9 @@ public:
     IconButton* setBackgroundEnabled(bool enabled);
     bool backgroundEnabled() const;
 
+    IconButton* setIconColor(const QColor& color);
+    QColor iconColor() const;
+
 protected:
     IconButton(IconButtonPrivate& d, const QIcon& icon, QWidget* parent = nullptr);
     bool event(QEvent *event) override;

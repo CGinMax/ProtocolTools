@@ -57,6 +57,7 @@ void ExpandWidget::removeExpandItem(ExpandWidgetItem* item)
         auto index = indexOf(item);
         if (index == 0 && m_itemList.count() == 1) {
             m_checkItem = nullptr;
+            onNotifySelected(nullptr);
         } else if (index == 0){
             onNotifySelected(m_itemList.at(index + 1));
         } else {
@@ -67,6 +68,17 @@ void ExpandWidget::removeExpandItem(ExpandWidgetItem* item)
     ui->scrollLayout->removeWidget(item);
     m_itemList.removeOne(item);
     delete item;
+}
+
+void ExpandWidget::removeAllItem()
+{
+    m_checkItem = nullptr;
+    for (auto& item : m_itemList) {
+        ui->scrollLayout->removeWidget(item);
+        delete item;
+    }
+    m_itemList.clear();
+    onNotifySelected(nullptr);
 }
 
 int ExpandWidget::indexOf(ExpandWidgetItem *item)

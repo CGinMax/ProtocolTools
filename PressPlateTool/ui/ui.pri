@@ -41,7 +41,12 @@ HEADERS += \
     $$PWD/buttons/outlinebutton_p.h \
     $$PWD/buttons/iconbutton_p.h \
     $$PWD/buttons/fabbutton_p.h \
-    $$PWD/base/faicon.h
+    $$PWD/base/faicon.h \
+    $$PWD/notification/snackbar.h \
+    $$PWD/notification/snackbar_p.h \
+    $$PWD/base/base_type.h \
+    $$PWD/animation/slideanimation.h \
+    $$PWD/page/gatherpage.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -73,7 +78,10 @@ SOURCES += \
     $$PWD/base/painterhighqualityenabler.cpp \
     $$PWD/buttons/flatbutton.cpp \
     $$PWD/buttons/outlinebutton.cpp \
-    $$PWD/base/faicon.cpp
+    $$PWD/base/faicon.cpp \
+    $$PWD/notification/snackbar.cpp \
+    $$PWD/animation/slideanimation.cpp \
+    $$PWD/page/gatherpage.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \
@@ -83,4 +91,5 @@ FORMS += \
     $$PWD/gatherdetailpage.ui \
     $$PWD/tables/listheader.ui \
     $$PWD/dialogs/serialportdialog.ui \
-    $$PWD/page/tablepage.ui
+    $$PWD/page/tablepage.ui \
+    $$PWD/page/gatherpage.ui

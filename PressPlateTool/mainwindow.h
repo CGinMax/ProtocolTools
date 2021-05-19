@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
     static int createNo;
 
@@ -23,7 +23,6 @@ public slots:
     void onNotifyAddMulti();
 
 private slots:
-    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

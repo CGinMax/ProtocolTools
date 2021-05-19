@@ -11,6 +11,8 @@ public:
 
     QtAwesome* awesome();
 
+    QIcon icon(const QString& name, const QVariantMap& options = QVariantMap());
+
     ~FAIcon() override;
 signals:
 protected:

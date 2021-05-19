@@ -1,23 +1,35 @@
 #include "mainwindow.h"
 #include <QApplication>
-
-#include "ui/buttons/raisebutton.h"
-#include "ui/buttons/flatbutton.h"
-#include "ui/buttons/outlinebutton.h"
-#include "ui/buttons/iconbutton.h"
+#include <QEvent>
+#include "ui/notification/snackbar.h"
 
 #include "ui/base/faicon.h"
 class Widget : public QWidget
 {
 public:
     Widget() {
-        auto btn = new Ui::IconButton(FAIcon::instance()->awesome()->icon("plus"), this);
-        btn->move(50, 50);
-        btn->setXRadius(btn->width());
-        btn->setYRadius(btn->height());
-        btn->setBackgroundEnabled(false);
-
+        bar = new Ui::SnackBar(FAIcon::instance()->icon("infocircle"), QString("你好这是开发者"), this);
+        bar->raise();
+        bar->setTextFlag(Qt::TextSingleLine);
+        bar->setAction("Ok", [=](){
+            bar->hideBar();
+        });
+        bar->move((width() - bar->width()) / 2, height() + 2);
+        bar->setSlidePos(QPoint((width() - bar->width()) / 2, height() + 2));
+//        bar->resize(200, 60);
     }
+
+    bool event(QEvent* event) override {
+        if (event->type() == QEvent::Resize || event->type() == QEvent::Move) {
+            bar->move((width() - bar->width()) / 2, height() + 2);
+            bar->setSlidePos(QPoint((width() - bar->width()) / 2, height() + 2));
+        } else if (event->type() == QEvent::MouseButtonPress) {
+            bar->showBar();
+        }
+        return QWidget::event(event);
+    }
+private:
+    Ui::SnackBar* bar;
 };
 
 int main(int argc, char *argv[])
@@ -26,8 +38,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    Widget btn;
-    btn.setGeometry(200, 200, 200, 200);
-    btn.show();
+//    Widget widget;
+//    widget.setGeometry(100, 100, 300, 300);
+//    widget.show();
     return a.exec();
 }
