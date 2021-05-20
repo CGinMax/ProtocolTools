@@ -136,7 +136,6 @@ void FabCircularMenu::resetBtnsInitAngle()
     }
 }
 
-
 bool FabCircularMenu::eventFilter(QObject *watched, QEvent *event)
 {
     Q_UNUSED(watched)

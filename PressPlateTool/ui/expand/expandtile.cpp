@@ -1,29 +1,43 @@
 #include "expandtile.h"
 #include "ui_expandtile.h"
+#include "../buttons/iconbutton.h"
+#include "../base/faicon.h"
+
 #include <QGridLayout>
 #include <QFontMetrics>
 #include <QMouseEvent>
 ExpandTile::ExpandTile(const QString &title, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ExpandTile)
-//    , m_icon(new TileIcon(QPixmap("/home/shijm/Documents/QtProject/ProtocolTools-Solution/PressPlateTool/resources/icons/down-arrow.png"),this))
     , m_checked(false)
     , m_editFilter(new EditableEventFilter(this))
 {
     ui->setupUi(this);
 
-//    m_icon->setAlignment(Qt::AlignRight);
-
+    setLabelStyle(ui->txtSVTile);
+    setLabelStyle(ui->txtHVTitle);
     auto font = ui->editTitle->font();
     font.setBold(true);
-    font.setPixelSize(14);
+    font.setPixelSize(20);
     ui->editTitle->setFont(font);
     ui->editTitle->setText(title);
-//    ui->gridLayout->addWidget(m_icon, 0, 3);
+    auto delBtn = new Ui::IconButton(FAIcon::instance()->icon(QString("trasho")), this);
+    delBtn->setIconSize(QSize(20, 20));
+    delBtn->setBackgroundEnabled(false);
+    delBtn->setMaximumSize(20, 20);
+    delBtn->setXRadius(delBtn->width())->setYRadius(delBtn->height());
+    ui->mainLayout->addWidget(delBtn, 0, 1);
+
+    auto queryVerBtn = new Ui::IconButton(FAIcon::instance()->icon(QString("refresh")), this);
+    queryVerBtn->setIconSize(QSize(20, 20));
+    queryVerBtn->setBackgroundEnabled(false);
+    queryVerBtn->setMaximumSize(20, 20);
+    ui->mainLayout->addWidget(queryVerBtn, 2, 1);
+    ui->mainLayout->setColumnStretch(0, 1);
 
     setEventFilter(ui->editTitle);
-    connect(ui->btnQueryVersion, &QPushButton::clicked, this, &ExpandTile::queryVersion);
-    connect(ui->btnDelete, &QPushButton::clicked, this, &ExpandTile::deleteItem);
+    connect(queryVerBtn, &QAbstractButton::clicked, this, &ExpandTile::queryVersion);
+    connect(delBtn, &QAbstractButton::clicked, this, &ExpandTile::deleteItem);
 }
 
 ExpandTile::~ExpandTile()
@@ -57,7 +71,6 @@ void ExpandTile::setChecked(bool checked)
         return ;
     }
     m_checked = checked;
-//    m_icon->rotateIcon(checked);
     emit toggled(checked);
 }
 
@@ -78,6 +91,11 @@ void ExpandTile::setEventFilter(QLineEdit *edit)
     });
     emit edit->editingFinished();
     edit->installEventFilter(m_editFilter);
+}
+
+void ExpandTile::setLabelStyle(QLabel *label)
+{
+    label->setStyleSheet("color:gray;font: normal 11px");
 }
 
 void ExpandTile::mousePressEvent(QMouseEvent *event)

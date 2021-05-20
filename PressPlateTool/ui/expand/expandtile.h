@@ -27,6 +27,9 @@ public:
     bool checked() const;
 
     void setEventFilter(QLineEdit* edit);
+
+private:
+    void setLabelStyle(QLabel* label);
 signals:
     void queryVersion();
     void toggled(bool checked);

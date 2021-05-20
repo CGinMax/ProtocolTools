@@ -7,9 +7,10 @@
 #include "../animation/slideanimation.h"
 #include <QSize>
 #include <QHBoxLayout>
-#include <QFont>
 #include <QEvent>
+#include <QFont>
 #include <QFontMetrics>
+
 
 #include <QDebug>
 
@@ -22,7 +23,7 @@ Ui::SnackBarPrivate::SnackBarPrivate(Ui::SnackBar *q)
     , m_iconSize(24, 24)
     , m_radius(5)
     , m_clickDismiss(true)
-    , m_textFlag(Qt::TextWordWrap | Qt::AlignCenter)
+    , m_textFlag(Qt::TextSingleLine | Qt::AlignCenter)
     , m_slideAnimation(nullptr)
     , m_animationDuration(300)
     , m_showDuration(2000)
@@ -48,11 +49,15 @@ void Ui::SnackBarPrivate::init(const QIcon &icon, const QString &text)
     m_slideAnimation->setPropertyName(QByteArray("distance"));
     m_slideAnimation->setDuration(300);
     m_slideAnimation->setDirection(QAbstractAnimation::Backward);
-    QObject::connect(m_slideAnimation, &QAbstractAnimation::finished, q, &SnackBar::onShowFinished);
+    QObject::connect(m_slideAnimation, &QAbstractAnimation::finished, q, &SnackBar::onSlideFinished);
 
     m_icon = icon;
     m_text = text;
     m_actionBtn = new FlatButton(QString(""), q);
+    auto font = m_actionBtn->font();
+    font.setBold(true);
+    font.setPixelSize(16);
+    m_actionBtn->setFont(font);
     m_actionBtn->setForegroundColor(Ui::Theme::instance()->color("primary"));
     m_actionBtn->hide();
     m_actionCallback = [](){};
@@ -64,6 +69,7 @@ Ui::SnackBar::SnackBar(const QString &text, QWidget *parent)
     , d_ptr(new SnackBarPrivate(this))
 {
     d_func()->init(QIcon(), text);
+    prepareSlidePos();
 }
 
 Ui::SnackBar::SnackBar(const QIcon &icon, const QString &text, QWidget *parent)
@@ -71,6 +77,7 @@ Ui::SnackBar::SnackBar(const QIcon &icon, const QString &text, QWidget *parent)
     , d_ptr(new SnackBarPrivate(this))
 {
     d_func()->init(icon, text);
+    prepareSlidePos();
 }
 
 Ui::SnackBar::~SnackBar()
@@ -315,6 +322,8 @@ void Ui::SnackBar::showBar(const QPoint& startValue, const QPoint& endValue)
         return ;
     }
 
+    prepareSlidePos();
+
     d->m_slideAnimation->stop();
     QVariant sv = startValue.isNull() ? d->m_slideAnimation->startValue() : startValue;
     QVariant ev = endValue.isNull() ? d->m_slideAnimation->endValue() : endValue;
@@ -364,10 +373,14 @@ void Ui::SnackBar::onActionPressed()
     d->m_actionCallback();
 }
 
-void Ui::SnackBar::onShowFinished()
+void Ui::SnackBar::onSlideFinished()
 {
     Q_D(SnackBar);
-    d->m_timer.start(d->m_showDuration, this);
+    if (d->m_slideAnimation->direction() == QAbstractAnimation::Forward) {
+        d->m_timer.start(d->m_showDuration, this);
+    } else {
+        emit showFinished();
+    }
 }
 
 bool Ui::SnackBar::event(QEvent *event)
@@ -392,13 +405,16 @@ void Ui::SnackBar::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     PainterHighQualityEnabler hm(painter);
 
+    auto backgroundRect = rect();
+    backgroundRect.setSize(sizeHint());
+
     painter.setPen(textColor());
     painter.setBrush(Qt::NoBrush);
 
     painter.save();
     painter.setPen(Qt::NoPen);
     painter.setBrush(backgroundColor());
-    painter.drawRoundedRect(rect(), radius(), radius());
+    painter.drawRoundedRect(backgroundRect, radius(), radius());
     painter.restore();
 
     QSize textSize(fontMetrics().size(textFlags(), text()));
@@ -421,6 +437,28 @@ void Ui::SnackBar::paintEvent(QPaintEvent *event)
         painter.drawPixmap(iconGeometry, iconPixmap);
     }
 
+}
+
+void Ui::SnackBar::prepareSlidePos()
+{
+    QWidget* widget = parentWidget();
+    int topWidth = 1000;
+    int topHeight = 1000;
+    if (parentWidget() != nullptr) {
+        topWidth = parentWidget()->width();
+        topHeight = parentWidget()->height();
+    } else {
+        qDebug("please set parent!");
+        return ;
+    }
+
+    this->setVisible(true);
+    this->resize(sizeHint());
+    this->raise();
+    QPoint startPos = {(topWidth - this->width()) / 2, topHeight + 2};
+    move(startPos.x(), startPos.y());
+    setSlidePos(startPos);
+    qDebug("x:%d.y:%d", this->pos().x(), this->pos().y());
 }
 
 void Ui::SnackBar::updateGeometry()

@@ -3,7 +3,12 @@
 #include "expandtile.h"
 #include "gatheroperwidget.h"
 #include "serialport.h"
+#include "../notification/snackbar.h"
+#include "../../mainwindow.h"
 
+#include <QApplication>
+
+#include <QDebug>
 #include <QMessageBox>
 GatherController::GatherController(GatherData *data, QObject *parent)
     : QObject(parent)
@@ -139,7 +144,7 @@ bool GatherController::canDoOperate()
 {
     bool active = isCommunicationActive();
     if (!active) {
-        qDebug("Can not opration!");
+        MainWindow::showSnackBar(tr("Can not operate!"));
     }
     return active;
 }

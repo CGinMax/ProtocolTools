@@ -46,7 +46,8 @@ HEADERS += \
     $$PWD/notification/snackbar_p.h \
     $$PWD/base/base_type.h \
     $$PWD/animation/slideanimation.h \
-    $$PWD/page/gatherpage.h
+    $$PWD/page/gatherpage.h \
+    $$PWD/dialogs/sensoradddialog.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -81,7 +82,8 @@ SOURCES += \
     $$PWD/base/faicon.cpp \
     $$PWD/notification/snackbar.cpp \
     $$PWD/animation/slideanimation.cpp \
-    $$PWD/page/gatherpage.cpp
+    $$PWD/page/gatherpage.cpp \
+    $$PWD/dialogs/sensoradddialog.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \
@@ -92,4 +94,5 @@ FORMS += \
     $$PWD/tables/listheader.ui \
     $$PWD/dialogs/serialportdialog.ui \
     $$PWD/page/tablepage.ui \
-    $$PWD/page/gatherpage.ui
+    $$PWD/page/gatherpage.ui \
+    $$PWD/dialogs/sensoradddialog.ui

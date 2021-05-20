@@ -10,7 +10,8 @@ class ListViewItem : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ListViewItem(QWidget *parent = nullptr);
+    explicit ListViewItem(const QString& name = QString("Sensor#"), QWidget *parent = nullptr);
+    explicit ListViewItem(int address, QWidget* parent = nullptr);
 
     void setName(const QString& name);
     void setAddress(int addr);
@@ -22,6 +23,8 @@ public:
     void setProductionDescription(const QString& desc);
 protected:
     void paintEvent(QPaintEvent *event) override;
+private:
+    void initWidget();
 signals:
     void notifySetAddr(int addr);
     void notifyQueryStatus(int addr);

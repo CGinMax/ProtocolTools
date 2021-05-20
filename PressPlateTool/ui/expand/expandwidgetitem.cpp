@@ -6,7 +6,6 @@
 #include <QGridLayout>
 #include <QScopedPointer>
 #include <QPropertyAnimation>
-#include <QGraphicsDropShadowEffect>
 #include <QDebug>
 
 ExpandWidgetItemPrivate::ExpandWidgetItemPrivate(ExpandWidgetItem* q)
@@ -36,10 +35,13 @@ ExpandWidgetItem::ExpandWidgetItem(ExpandTile *tile, GatherController *controlle
     , m_tile(tile)
     , m_contentArea(new QWidget(this))
     , m_transitionAimation(new QParallelAnimationGroup(this))
+    , m_shadowEffect(new Ui::ShadowEffect(this))
     , m_controller(controller)
 {
     d_ptr->init();
     m_tile->setParent(this);
+    setGraphicsEffect(m_shadowEffect);
+    m_shadowEffect->setEnabled(false);
 
 //    m_contentArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 //    m_contentArea->setMaximumHeight(0);
@@ -185,6 +187,7 @@ bool ExpandWidgetItem::isSelected() const
 void ExpandWidgetItem::setIsSelected(bool isSelected)
 {
     m_isSelected = isSelected;
+    m_shadowEffect->setEnabled(isSelected);
     update();
 }
 
@@ -205,13 +208,7 @@ void ExpandWidgetItem::paintEvent(QPaintEvent *event)
 
     QBrush brush(d->m_backgroundColor);
     painter.setBrush(brush);
-    if (m_isSelected) {
-        QPen pen(d->m_borderColor);
-        pen.setWidth(2);
-        painter.setPen(pen);
-    } else {
-        painter.setPen(Qt::NoPen);
-    }
+    painter.setPen(Qt::NoPen);
 
     painter.drawRoundedRect(rect(), d->m_borderRadius, d->m_borderRadius);
     QWidget::paintEvent(event);

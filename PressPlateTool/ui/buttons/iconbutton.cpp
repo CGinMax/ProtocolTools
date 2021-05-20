@@ -24,6 +24,7 @@ void Ui::IconButtonPrivate::init()
     policy.setWidthForHeight(true);
     q->setSizePolicy(policy);
     q->resize(QSize(24, 24));
+
 }
 
 Ui::IconButton::IconButton(const QIcon &icon, QWidget *parent)
@@ -120,7 +121,7 @@ bool Ui::IconButton::event(QEvent *event)
         }
     }
 
-    return QAbstractButton::event(event);
+    return RaiseButton::event(event);
 }
 
 

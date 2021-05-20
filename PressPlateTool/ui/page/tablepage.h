@@ -2,7 +2,6 @@
 #define TABLEPAGE_H
 
 #include <QWidget>
-#include <QPlainTextEdit>
 #include "../tables/ybtableview.h"
 
 namespace Ui {
@@ -30,6 +29,8 @@ private:
 
     bool canDoOperate();
 
+    void showErrorSnackBar(const QString& text, const QIcon& icon = QIcon());
+
 public slots:
     void onSetSensorAddr(int index, int addr);
 
@@ -48,12 +49,10 @@ private slots:
 
     void on_btnQueryAllVer_clicked();
 
-    void on_editBegin_valueChanged(int arg1);
+    void on_editBegin_valueChanged(int value);
 
 private:
     Ui::TablePage *ui;
-    QPlainTextEdit* m_textMsg;
-
     int m_currentIndex;
     int m_currentConfAddr;
 

@@ -11,7 +11,7 @@ public:
         bar = new Ui::SnackBar(FAIcon::instance()->icon("infocircle"), QString("你好这是开发者"), this);
         bar->raise();
         bar->setTextFlag(Qt::TextSingleLine);
-        bar->setAction("Ok", [=](){
+        bar->setAction("RETRY", [=](){
             bar->hideBar();
         });
         bar->move((width() - bar->width()) / 2, height() + 2);

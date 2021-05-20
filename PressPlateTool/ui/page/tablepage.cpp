@@ -1,34 +1,43 @@
 #include "tablepage.h"
 #include "ui_tablepage.h"
 #include "../expand/gathercontroller.h"
-#include <QScrollArea>
+#include "../notification/snackbar.h"
+#include "../dialogs/sensoradddialog.h"
+#include <QApplication>
 
 TablePage::TablePage(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::TablePage)
-    , m_textMsg(new QPlainTextEdit(this))
     , m_currentIndex(0)
     , m_currentConfAddr(1)
     , m_controller(nullptr)
 {
     ui->setupUi(this);
-    auto scrollArea = new QScrollArea(this);
-    scrollArea->setObjectName(QString("scrollArea"));
-    scrollArea->setStyleSheet(QLatin1String("QScrollArea#scrollArea{border: transparent; background-color: white;}"));
+
     m_table = new YBTableView(this);
-    scrollArea->setWidget(m_table);
-    scrollArea->setWidgetResizable(true);
+    ui->scrollArea->setWidget(m_table);
+    ui->scrollArea->setWidgetResizable(true);
+    ui->scrollArea->setStyleSheet(QLatin1String("QScrollArea#scrollArea{border: transparent; background-color: white;}"));
+
+    ui->splitter->setStretchFactor(0, 7);
+    ui->splitter->setStretchFactor(1 ,1);
 
     ui->editBegin->setRange(0x01, 0x7E);
     ui->editEnd->setRange(0x01, 0x7E);
-    ui->mainLayout->addWidget(scrollArea);
-    ui->mainLayout->addWidget(m_textMsg);
+
 
     connect(ui->btnAddOne, &QAbstractButton::clicked, this, [=]{
-        this->m_table->addYBSensor(1);
+        this->m_table->addYBSensor();
     });
     connect(ui->btnAddMulti, &QAbstractButton::clicked, this, [=]{
-        this->m_table->addYBSensor(10);
+        SensorAddDialog dlg(this);
+        if (dlg.exec() == QDialog::Accepted) {
+            int inputCount = dlg.getCount();
+            if (inputCount > (100 - this->m_table->sensorCount())) {
+                inputCount = 100 - this->m_table->sensorCount();
+            }
+            this->m_table->addYBSensor(inputCount);
+        }
     });
     connect(ui->btnDeleteAll, &QAbstractButton::clicked, this, [=]{
         this->m_table->deleteAllYBSensor();
@@ -47,11 +56,14 @@ TablePage::~TablePage()
 
 void TablePage::setGatherController(GatherController *controller)
 {
-    if (m_controller != nullptr) {
-        disconnect(m_controller->protocol(), &ProtocolChannelBase::showProtocolMsg, this, &TablePage::onShowProtocolMsg);
+    if (controller != nullptr) {
+        if (m_controller != nullptr) {
+            disconnect(m_controller->protocol(), &ProtocolChannelBase::showProtocolMsg, this, &TablePage::onShowProtocolMsg);
+        }
+        connect(controller->protocol(), &ProtocolChannelBase::showProtocolMsg, this, &TablePage::onShowProtocolMsg, Qt::QueuedConnection);
     }
     m_controller = controller;
-    connect(m_controller->protocol(), &ProtocolChannelBase::showProtocolMsg, this, &TablePage::onShowProtocolMsg, Qt::QueuedConnection);
+
 }
 
 void TablePage::confAddrRecursion()
@@ -109,9 +121,20 @@ bool TablePage::canDoOperate()
 {
     bool active = m_controller->isCommunicationActive();
     if (!active) {
+        showErrorSnackBar(tr("Communication No Open!"));
         qDebug("not open communication");
     }
     return active;
+}
+
+void TablePage::showErrorSnackBar(const QString &text, const QIcon &icon)
+{
+
+    auto bar = new Ui::SnackBar(icon, text, this->window());
+    connect(bar, &Ui::SnackBar::showFinished, this->window(), [=]{
+        delete bar;
+    });
+    bar->showBar();
 }
 
 void TablePage::onSetSensorAddr(int index, int addr)
@@ -176,8 +199,8 @@ void TablePage::onChangeSensorStatus(int index, int addr, int status)
 
 void TablePage::onShowProtocolMsg(const QString &msg)
 {
-    m_textMsg->appendHtml(msg);
-    m_textMsg->appendHtml("");
+    ui->textMsg->appendHtml(msg);
+    ui->textMsg->appendHtml("");
 }
 
 void TablePage::on_btnConfAllAddr_clicked()
@@ -211,7 +234,7 @@ void TablePage::on_btnQueryAllVer_clicked()
     queryVersionRecursion();
 }
 
-void TablePage::on_editBegin_valueChanged(int arg1)
+void TablePage::on_editBegin_valueChanged(int value)
 {
-    ui->editEnd->setRange(arg1, arg1 + m_table->sensorCount());
+    ui->editEnd->setRange(value + 1, value + m_table->sensorCount());
 }

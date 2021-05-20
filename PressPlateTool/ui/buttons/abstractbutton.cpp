@@ -1,6 +1,6 @@
 #include "abstractbutton.h"
 #include "abstractbutton_p.h"
-
+#include <QEvent>
 #include "rippleeffect.h"
 #include "../base/theme.h"
 
@@ -269,6 +269,15 @@ Ui::AbstractButton::AbstractButton(Ui::AbstractButtonPrivate &d, QWidget *parent
     , m_enabledAdaptiveColor(false)
 {
     d_func()->init();
+}
+
+bool Ui::AbstractButton::event(QEvent *event)
+{
+    if (event->type() == QEvent::Resize || event->type() == QEvent::Move) {
+        updateRippleClipPath();
+    }
+
+    return QAbstractButton::event(event);
 }
 
 void Ui::AbstractButton::updateRippleClipPath()

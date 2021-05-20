@@ -2,18 +2,23 @@
 #include "ui_listviewitem.h"
 #include <QPainter>
 #include <climits>
-ListViewItem::ListViewItem(QWidget *parent)
+ListViewItem::ListViewItem(const QString &name, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ListViewItem)
 {
     ui->setupUi(this);
-    ui->cbbChangeStatus->setCurrentIndex(2);
-    ui->editAddr->setRange(0, INT_MAX);
+    ui->txtName->setText(name);
+    initWidget();
+}
 
-    connect(ui->btnSetAddr, &QPushButton::clicked, this, [=]{ emit this->notifySetAddr(ui->editAddr->value()); });
-    connect(ui->btnQueryStatus, &QPushButton::clicked, this, [=]{ emit this->notifyQueryStatus(ui->editAddr->value()); });
-    connect(ui->btnQueryVersion, &QPushButton::clicked, this, [=]{ emit this->notifyQueryVersion(ui->editAddr->value()); });
-    connect(ui->btnDelete, &QPushButton::clicked, this, &ListViewItem::notifyDelete);
+ListViewItem::ListViewItem(int address, QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::ListViewItem)
+{
+    ui->setupUi(this);
+    ui->txtName->setText(tr("Sensor #%1").arg(address));
+    ui->editAddr->setValue(address);
+    initWidget();
 }
 
 void ListViewItem::setName(const QString &name)
@@ -66,6 +71,17 @@ void ListViewItem::paintEvent(QPaintEvent *event)
 //    painter.setPen(QPen(QColor("#F7F7F8")));
 //    painter.drawLine(pos() + QPoint(5, height()), pos() + QPoint(width(), height()));
     painter.drawRoundedRect(rect(), 3, 3);
+}
+
+void ListViewItem::initWidget()
+{
+    ui->cbbChangeStatus->setCurrentIndex(2);
+    ui->editAddr->setRange(0, INT_MAX);
+
+    connect(ui->btnSetAddr, &QPushButton::clicked, this, [=]{ emit this->notifySetAddr(ui->editAddr->value()); });
+    connect(ui->btnQueryStatus, &QPushButton::clicked, this, [=]{ emit this->notifyQueryStatus(ui->editAddr->value()); });
+    connect(ui->btnQueryVersion, &QPushButton::clicked, this, [=]{ emit this->notifyQueryVersion(ui->editAddr->value()); });
+    connect(ui->btnDelete, &QPushButton::clicked, this, &ListViewItem::notifyDelete);
 }
 
 void ListViewItem::on_cbbChangeStatus_currentIndexChanged(int index)

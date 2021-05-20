@@ -26,6 +26,12 @@ void Ui::FabButtonPrivate::init()
     q->setChecked(false);
     q->setXRadius(q->width())->setYRadius(q->height())->setIconSize(QSize(24, 24));
     q->resize(q->diameter(), q->diameter());
+
+    QObject::connect(q, &QAbstractButton::toggled, q, [=](bool checked){
+        if (!checked) {
+            q->setOpacity(0.5);
+        }
+    });
 }
 
 Ui::FabButton::FabButton(const QIcon& icon, QWidget *parent)

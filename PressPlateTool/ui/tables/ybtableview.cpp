@@ -74,7 +74,8 @@ void YBTableView::setListItemConfigedStatus(int index, uint8_t status)
 void YBTableView::addYBSensor(int count)
 {
     for (int i = 0; i < count; i++) {
-        auto item = new ListViewItem(this);
+        const int index = m_itemList.isEmpty() ? 0 : m_itemList.last()->address();
+        auto item = new ListViewItem(index + 1, this);
         m_itemList.append(item);
 
         m_layout->insertWidget(m_layout->count() -1, item);

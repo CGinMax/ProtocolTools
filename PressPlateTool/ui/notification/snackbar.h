@@ -72,15 +72,17 @@ protected:
     bool event(QEvent *event) override;
 
     void paintEvent(QPaintEvent *event) override;
+    void prepareSlidePos();
     void updateGeometry();
     virtual void updateActionGeometry();
 signals:
+    void showFinished();
 
 public slots:
     void onActionPressed();
 
 protected slots:
-    void onShowFinished();
+    void onSlideFinished();
 
 protected:
     QScopedPointer<SnackBarPrivate> d_ptr;

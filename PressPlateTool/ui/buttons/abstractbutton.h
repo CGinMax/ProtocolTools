@@ -60,6 +60,7 @@ public:
 
 protected:
     explicit AbstractButton(AbstractButtonPrivate& d, QWidget* parent = nullptr);
+    bool event(QEvent* event) override;
     virtual void updateRippleClipPath();
 signals:
     void opacityChanged();

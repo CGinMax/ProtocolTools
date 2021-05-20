@@ -34,10 +34,10 @@ void ExpandWidget::addExpandItem(ExpandWidgetItem *item)
     onNotifySelected(item);
     connect(item, &ExpandWidgetItem::notifySelected, this, &ExpandWidget::onNotifySelected);
     connect(item, &ExpandWidgetItem::deleteItem, this, &ExpandWidget::onDeleteItem);
-//    ui->scrollArea->ensureWidgetVisible(item);
-    qDebug("height:%d", ui->scrollArea->verticalScrollBar()->value());
-    ui->scrollArea->verticalScrollBar()->setSliderPosition(ui->scrollArea->verticalScrollBar()->sliderPosition() + item->height());
-    ui->scrollArea->update();
+
+//    ui->scrollAreaWidgetContents->setMinimumWidth(item->sizeHint().width());
+//    ui->scrollArea->verticalScrollBar()->setSliderPosition(ui->scrollArea->verticalScrollBar()->sliderPosition() + item->height());
+//    ui->scrollArea->update();
 }
 
 void ExpandWidget::insertExpandItem(int index, ExpandWidgetItem *item)

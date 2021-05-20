@@ -9,6 +9,8 @@
 #include "expandtile.h"
 #include "gathercontroller.h"
 
+#include "../effect/shadoweffect.h"
+
 class ExpandWidgetItemPrivate;
 
 class ExpandWidgetItem : public QWidget
@@ -58,6 +60,7 @@ protected:
     ExpandTile* m_tile;
     QWidget* m_contentArea;
     QParallelAnimationGroup* m_transitionAimation;
+    Ui::ShadowEffect* m_shadowEffect;
 private:
     QScopedPointer<GatherController> m_controller;
 };

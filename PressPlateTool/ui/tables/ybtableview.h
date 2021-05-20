@@ -24,7 +24,7 @@ public:
 
     void setListItemConfigedStatus(int index, uint8_t status);
 
-    void addYBSensor(int count);
+    void addYBSensor(int count = 1);
 
     void deleteYBSensor(int first, int last);
     void deleteAllYBSensor();
