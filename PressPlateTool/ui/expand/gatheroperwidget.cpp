@@ -2,14 +2,15 @@
 #include "ui_gatheroperwidget.h"
 #include <climits>
 
-GatherOperWidget::GatherOperWidget(QWidget *parent)
+GatherOperWidget::GatherOperWidget(int index, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::GatherOperWidget)
 {
     ui->setupUi(this);
 
-    ui->editAddr->setRange(0, INT_MAX);
-    ui->editYBNum->setRange(0, 100);
+    ui->editAddr->setRange(1, INT_MAX);
+    ui->editYBNum->setRange(1, 100);
+    ui->editAddr->setValue(index);
 
     setButtonsOpened(false);
 

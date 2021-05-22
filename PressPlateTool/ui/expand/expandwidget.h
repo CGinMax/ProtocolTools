@@ -28,7 +28,7 @@ public:
     //test
     void scrolldown();
 
-    static ExpandWidgetItem* createExpandWidget(const PortParam& portParam, const QString& name = tr("untitled"), int radius = 8);
+    static ExpandWidgetItem* createExpandWidget(const PortParam& portParam, int index, int radius = 8);
 signals:
     void itemChanged(GatherController* controller);
 

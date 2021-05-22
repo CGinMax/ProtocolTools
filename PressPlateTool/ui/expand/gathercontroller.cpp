@@ -55,6 +55,7 @@ void GatherController::setExpandTile(ExpandTile *tile)
 void GatherController::setOperWidget(GatherOperWidget *operWidget)
 {
     m_operWidget = operWidget;
+    m_gatherData->setAddr(m_operWidget->getInputAddress());
     connect(operWidget, &GatherOperWidget::setGatherAddress, this, &GatherController::onSetGatherAddress);
     connect(operWidget, &GatherOperWidget::resetSensorCount, this, &GatherController::onResetSensorCount);
     connect(operWidget, &GatherOperWidget::openCommunication, this, [=]{
@@ -87,12 +88,21 @@ void GatherController::onQueryVersion()
     }
 
     auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(m_gatherData->addr()));
-    YBProtocolChannel::processReply(reply, [=]{
-        m_tile->setHardwareVersion(QString::fromStdString(reply->result->hardwareVersion()));
-        m_tile->setSoftwareVersion(QString::fromStdString(reply->result->softwareVersion()));
-        m_tile->setProductDescript(QString::fromStdString(reply->result->productDescript()));
-    },[=]{
-        qDebug("error");
+    reply->subscribe([=](std::shared_ptr<IContent> result){
+        if (result == nullptr) {
+            qDebug("Unknow frame data");
+            return ;
+        }
+        if (result->functionCode() == eYBFunCode::NAKCode) {
+            qDebug("NAK Error");
+            return ;
+        }
+        this->m_tile->setHardwareVersion(QString::fromStdString(result->hardwareVersion()));
+        this->m_tile->setSoftwareVersion(QString::fromStdString(result->softwareVersion()));
+        this->m_tile->setProductDescript(QString::fromStdString(result->productDescript()));
+
+    }, [](){
+        qDebug("gather query version timeout cancel");
     });
 }
 
@@ -108,15 +118,24 @@ void GatherController::onSetGatherAddress(int addr)
     }
 
     auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr));
-    YBProtocolChannel::processReply(reply, [=]{
-        if (reply->result->success()) {
+    reply->subscribe([=](std::shared_ptr<IContent> result){
+        if (result == nullptr) {
+            qDebug("Unknow frame data");
+            return ;
+        }
+        if (result->functionCode() == eYBFunCode::NAKCode) {
+            qDebug("NAK Error");
+            return ;
+        }
+        if (result->success()) {
             m_gatherData->setAddr(m_operWidget->getInputAddress());
         } else {
             //TODO(shijm): 失败处理
             qDebug("address failed");
         }
-    },[=]{
-        qDebug("address error");
+    },
+    []() {
+        qDebug("gather set address timeout cancel");
     });
 
 }
@@ -128,15 +147,24 @@ void GatherController::onResetSensorCount(int count)
     }
 
     auto reply = protocol()->setSensorNum(static_cast<uint16_t>(m_gatherData->addr()), static_cast<uint8_t>(count));
-    YBProtocolChannel::processReply(reply, [=]{
-        if (reply->result->success()) {
+    reply->subscribe([=](std::shared_ptr<IContent> result){
+        if (result == nullptr) {
+            qDebug("Unknow frame data");
+            return ;
+        }
+        if (result->functionCode() == eYBFunCode::NAKCode) {
+            qDebug("NAK Error");
+            return ;
+        }
+        if (result->success()) {
             qDebug("reset count success");
         } else {
             //TODO(shijm): 失败处理
             qDebug("reset count failed");
         }
-    },[=]{
-        qDebug("reset count error");
+    },
+    [](){
+        qDebug("gather set sensor num timeout cancel");
     });
 }
 

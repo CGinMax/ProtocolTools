@@ -3,25 +3,33 @@
 
 #include "protocolchannelbase.h"
 #include "../Protocols/YBProtocol/ybprotocol.h"
+#include "../../asyncfuture/asyncfuture.h"
 
 #include <functional>
 #include <QQueue>
 
-class ProtocolReply : public QObject
+using IContentDeferredPtr = std::shared_ptr<AsyncFuture::Deferred<std::shared_ptr<IContent>>>;
+
+struct ProtocolReply
 {
-    Q_OBJECT
-public:
-    explicit ProtocolReply(uint8_t funCode)
-        : m_funcode(funCode)
-    {}
+    explicit ProtocolReply(int type, int funcode, int msecTimeout = 5000)
+        : m_type(type)
+        , m_funcode(funcode)
+        , m_timer(new QTimer())
+        , m_result(new AsyncFuture::Deferred<std::shared_ptr<IContent>>())
+    {
+        m_timer->setInterval(msecTimeout);
+        auto timeout = AsyncFuture::observe(m_timer.get(), &QTimer::timeout).future();
+        m_timer->start();
+        m_result->cancel(timeout);
+    }
+    ~ProtocolReply(){
+    }
 
-signals:
-    void finished();
-    void error();
-
-public:
-    uint8_t m_funcode;
-    std::shared_ptr<IContent> result;
+    int m_type;
+    int m_funcode;
+    std::shared_ptr<QTimer> m_timer;
+    IContentDeferredPtr m_result;
 };
 
 class YBProtocolChannel : public ProtocolChannelBase
@@ -35,27 +43,29 @@ public:
 
     void processFrame(const YBFrame& frame);
 
-    ProtocolReply* setAddress(eYBFrameType type, uint8_t addr);
+    IContentDeferredPtr setAddress(eYBFrameType type, uint8_t addr, int msecTimeout = 5000);
 
-    ProtocolReply* queryStatus(uint16_t dstAddr);
+    IContentDeferredPtr queryStatus(uint16_t dstAddr, int msecTimeout = 5000);
 
-    ProtocolReply* queryVersion(eYBFrameType type, uint16_t dstAddr);
 
-    ProtocolReply* setStatus(uint8_t status, uint16_t dstAddr);
+    IContentDeferredPtr queryVersion(eYBFrameType type, uint16_t dstAddr, int msecTimeout = 5000);
 
-    ProtocolReply* setSensorNum(uint16_t dstAddr, uint8_t num);
+    IContentDeferredPtr setStatus(uint8_t status, uint16_t dstAddr, int msecTimeout = 5000);
 
-    static void processReply(ProtocolReply *reply, std::function<void()>&& finishFun, std::function<void()>&& errorFun);
+    IContentDeferredPtr setSensorNum(uint16_t dstAddr, uint8_t num, int msecTimeout = 5000);
+
 
 signals:
 
 public slots:
     void onReadyRead() override;
 
+    void onReplyTimeout();
+
 protected:
     YBProtocol* m_protocol;
     QQueue<YBFrame> m_sendFrameQueue;
-    QQueue<ProtocolReply*> m_replyQueue;
+    QList<ProtocolReply> m_replyList;
     bool m_waitResponse;
 };
 

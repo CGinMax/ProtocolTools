@@ -67,6 +67,7 @@ include($$PWD/ui/ui.pri)
 include($$PWD/protocol/protocol.pri)
 include($$PWD/common/common.pri)
 include($$PWD/../QtAwesome/QtAwesome/QtAwesome.pri)
+include($$PWD/../asyncfuture/asyncfuture.pri)
 
 RESOURCES += \
     resources/resources.qrc

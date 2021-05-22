@@ -9,7 +9,7 @@ class GatherOperWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GatherOperWidget(QWidget *parent = nullptr);
+    explicit GatherOperWidget(int index = 1, QWidget *parent = nullptr);
     ~GatherOperWidget() override;
 
     int getInputAddress();

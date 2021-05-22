@@ -97,14 +97,14 @@ void ExpandWidget::scrolldown()
     ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->value() + 480);
 }
 
-ExpandWidgetItem *ExpandWidget::createExpandWidget(const PortParam &portParam, const QString &name, int radius)
+ExpandWidgetItem *ExpandWidget::createExpandWidget(const PortParam &portParam, int index, int radius)
 {
-    auto data = new GatherData(name);
+    auto data = new GatherData(QObject::tr("Gather%1").arg(index));
     data->setPortParam(portParam);
     auto controller = new GatherController(data);
-    auto tile = new ExpandTile(name);
+    auto tile = new ExpandTile(QObject::tr("Gather%1").arg(index));
     auto widget = new ExpandWidgetItem(tile, controller);
-    auto operWidget = new GatherOperWidget(widget);
+    auto operWidget = new GatherOperWidget(index, widget);
     widget->setBorderRadius(radius);
     widget->setContentWidget(operWidget);
     controller->setExpandTile(tile);

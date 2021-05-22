@@ -82,7 +82,7 @@ void MainWindow::onNotifyAddOne()
     SerialPortDialog dialog(false, this);
     if(dialog.exec() == QDialog::Accepted) {
         m_fabMenu->setChecked(false);
-        ui->gatherPage->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), tr("Gather%1").arg(createNo++), 8));
+        ui->gatherPage->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), createNo++, 8));
     }
 }
 
@@ -93,7 +93,7 @@ void MainWindow::onNotifyAddMulti()
         int num = dialog.gatherNum();
         for (int i = 0; i < num; i++) {
             m_fabMenu->setChecked(false);
-            ui->gatherPage->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), tr("Gather%1").arg(createNo++), 8));
+            ui->gatherPage->addExpandItem(ExpandWidget::createExpandWidget(dialog.portParam(), createNo++, 8));
         }
     }
 }
