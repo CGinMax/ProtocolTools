@@ -3,6 +3,8 @@
 #include "../expand/gathercontroller.h"
 #include "../notification/snackbar.h"
 #include "../dialogs/sensoradddialog.h"
+#include "../dialogs/sensoroperationdlg.h"
+#include <QMessageBox>
 #include <QApplication>
 
 TablePage::TablePage(QWidget *parent)
@@ -73,27 +75,63 @@ void TablePage::confAddrRecursion()
         on_btnQueryAllStatus_clicked();
         return;
     }
+    auto dlg = new SensorOperationDlg(tr("Set sensor address dialog"), tr("Set sensor address = %1").arg(m_currentIndex), this);
     auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(m_currentConfAddr));
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
             qDebug("Unknow frame data");
+            dlg->accept();
+            delete dlg;
             return ;
         }
         if (result->functionCode() == eYBFunCode::NAKCode) {
             qDebug("NAK Error");
+            dlg->accept();
+            delete dlg;
             return ;
         }
         if (result->success()) {
-            this->m_table->setListItemAddr(this->m_currentIndex, this->m_currentConfAddr);
-            this->m_currentIndex++;
-            this->m_currentConfAddr++;
-            this->confAddrRecursion();
+//            this->onQuerySensorStatus(this->m_currentIndex, this->m_currentConfAddr);
+            this->queryStatusImple(this->m_currentIndex, this->m_currentConfAddr, [=](std::shared_ptr<IContent> result){
+                dlg->accept();
+                delete dlg;
+
+                if (result == nullptr) {
+                    qDebug("Unknow frame data");
+                    return ;
+                }
+                if (result->functionCode() == eYBFunCode::NAKCode) {
+                    qDebug("NAK Error");
+                    return ;
+                }
+                if (result->success()) {
+                    this->m_table->setListItemAddr(this->m_currentIndex, this->m_currentConfAddr);
+                    this->m_currentIndex++;
+                    this->m_currentConfAddr++;
+                    this->confAddrRecursion();
+                } else {
+                    qDebug("set sensor address failed!");
+                }
+            }, [](){
+                qDebug("set sensor address error!");
+            });
+//            this->m_table->setListItemAddr(this->m_currentIndex, this->m_currentConfAddr);
+//            this->m_currentIndex++;
+//            this->m_currentConfAddr++;
+//            this->confAddrRecursion();
         } else {
+            dlg->accept();
+            delete dlg;
             qDebug("sensor set address failed");
         }
-    },[](){
-        qDebug("sensor set address timeou cancel");
+    },[=](){
+        dlg->reject();
+        delete dlg;
+        QMessageBox::critical(this, tr("Error"), tr("Query sensor address = %1 timeout!").arg(this->m_currentIndex), QMessageBox::Ok);
+        qDebug("sensor set address timeout cancel");
+
     });
+    dlg->exec();
 }
 
 void TablePage::queryStatusRecursion()
@@ -102,6 +140,7 @@ void TablePage::queryStatusRecursion()
         qDebug("query status finish");
         return ;
     }
+    auto dlg = new SensorOperationDlg(tr("Query sensor status dialog"), tr("Query sensor(address = %1) status").arg(m_currentIndex), this);
     auto reply = m_controller->protocol()->queryStatus(static_cast<uint16_t>(m_table->getListItemAddr(m_currentIndex)));
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
@@ -112,13 +151,21 @@ void TablePage::queryStatusRecursion()
             qDebug("NAK Error");
             return ;
         }
+        dlg->accept();
+        delete dlg;
         this->m_table->setListItemStatus(m_currentIndex, result->currentStatusCode(), result->configedStatusCode());
         this->m_currentIndex++;
         this->queryStatusRecursion();
     },
-    [](){
-        qDebug("sensor query status timeout cancel");
+    [=](){
+        dlg->reject();
+        delete dlg;
+        QMessageBox::critical(this, tr("Error"), tr("Query sensor(address = %1) status timeout!").arg(this->m_currentIndex), QMessageBox::Ok);
+        qDebug("sensor %d query status timeout cancel", this->m_currentIndex);
+        this->m_currentIndex++;
+        this->queryStatusRecursion();
     });
+    dlg->exec();
 }
 
 void TablePage::queryVersionRecursion()
@@ -127,6 +174,7 @@ void TablePage::queryVersionRecursion()
         qDebug("query version finish");
         return ;
     }
+    auto dlg = new SensorOperationDlg(tr("Query Sensor Dialog"), tr("Query sensor version, the address=%1").arg(m_currentIndex), this);
     auto reply = m_controller->protocol()->queryVersion(eYBFrameType::YBSensor, static_cast<uint8_t>(m_table->getListItemAddr(m_currentIndex)));
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
@@ -141,12 +189,20 @@ void TablePage::queryVersionRecursion()
                                     , QString::fromStdString(result->hardwareVersion())
                                     , QString::fromStdString(result->softwareVersion())
                                     , QString::fromStdString(result->productDescript()));
+        dlg->accept();
+        delete dlg;
         this->m_currentIndex++;
         this->queryVersionRecursion();
     },
-    [](){
-        qDebug("sensor query version error");
+    [=](){
+        dlg->reject();
+        delete dlg;
+        QMessageBox::critical(this, tr("Error"), tr("Query sensor(address = %1) version timeout!").arg(this->m_currentIndex), QMessageBox::Ok);
+        qDebug("sensor %d query version timeout cancel", this->m_currentIndex);
+        this->m_currentIndex++;
+        this->queryStatusRecursion();
     });
+    dlg->exec();
 }
 
 bool TablePage::canDoOperate()
@@ -167,6 +223,12 @@ void TablePage::showErrorSnackBar(const QString &text, const QIcon &icon)
         delete bar;
     });
     bar->showBar();
+}
+
+void TablePage::queryStatusImple(int index, int addr, Fn<void (std::shared_ptr<IContent>)> success, Fn<void ()> error)
+{
+    auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr));
+    reply->subscribe(success, error);
 }
 
 void TablePage::onSetSensorAddr(int index, int addr)

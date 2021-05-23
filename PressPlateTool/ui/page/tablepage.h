@@ -2,6 +2,8 @@
 #define TABLEPAGE_H
 
 #include <QWidget>
+#include <memory>
+#include "../base/base_type.h"
 #include "../tables/ybtableview.h"
 
 namespace Ui {
@@ -9,6 +11,7 @@ class TablePage;
 }
 
 class GatherController;
+class IContent;
 
 class TablePage : public QWidget
 {
@@ -30,6 +33,8 @@ private:
     bool canDoOperate();
 
     void showErrorSnackBar(const QString& text, const QIcon& icon = QIcon());
+
+    void queryStatusImple(int index, int addr, Fn<void(std::shared_ptr<IContent>)> success, Fn<void()> error);
 
 public slots:
     void onSetSensorAddr(int index, int addr);
