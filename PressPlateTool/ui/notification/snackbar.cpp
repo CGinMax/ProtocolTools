@@ -458,7 +458,6 @@ void Ui::SnackBar::prepareSlidePos()
     QPoint startPos = {(topWidth - this->width()) / 2, topHeight + 2};
     move(startPos.x(), startPos.y());
     setSlidePos(startPos);
-    qDebug("x:%d.y:%d", this->pos().x(), this->pos().y());
 }
 
 void Ui::SnackBar::updateGeometry()

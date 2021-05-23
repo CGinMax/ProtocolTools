@@ -9,6 +9,7 @@
 #include <QApplication>
 
 #include <QDebug>
+#include <QThread>
 #include <QMessageBox>
 GatherController::GatherController(GatherData *data, QObject *parent)
     : QObject(parent)

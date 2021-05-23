@@ -10,26 +10,43 @@
 
 using IContentDeferredPtr = std::shared_ptr<AsyncFuture::Deferred<std::shared_ptr<IContent>>>;
 
-struct ProtocolReply
+class ProtocolReply : public QObject
 {
+    Q_OBJECT
+public:
     explicit ProtocolReply(int type, int funcode, int msecTimeout = 5000)
-        : m_type(type)
+        : m_dirty(false)
+        , m_type(type)
         , m_funcode(funcode)
         , m_timer(new QTimer())
         , m_result(new AsyncFuture::Deferred<std::shared_ptr<IContent>>())
     {
         m_timer->setInterval(msecTimeout);
         auto timeout = AsyncFuture::observe(m_timer.get(), &QTimer::timeout).future();
+        connect(m_timer.get(), &QTimer::timeout, this, &ProtocolReply::onTimeout);
         m_timer->start();
         m_result->cancel(timeout);
     }
     ~ProtocolReply(){
+        m_timer->stop();
     }
 
+    void cancelTimeout() {
+        m_timer->stop();
+        disconnect(m_timer.get(), &QTimer::timeout, this, &ProtocolReply::onTimeout);
+        m_dirty = true;
+    }
+
+    bool m_dirty;
     int m_type;
     int m_funcode;
     std::shared_ptr<QTimer> m_timer;
     IContentDeferredPtr m_result;
+
+public slots:
+    void onTimeout() {
+        m_dirty = true;
+    }
 };
 
 class YBProtocolChannel : public ProtocolChannelBase
@@ -54,18 +71,19 @@ public:
 
     IContentDeferredPtr setSensorNum(uint16_t dstAddr, uint8_t num, int msecTimeout = 5000);
 
-
+private:
+    IContentDeferredPtr buildResultContent(int type, int funcode, int msecTimeout = 5000);
+    void clearDirtyReply();
 signals:
 
 public slots:
     void onReadyRead() override;
 
-    void onReplyTimeout();
 
 protected:
     YBProtocol* m_protocol;
     QQueue<YBFrame> m_sendFrameQueue;
-    QList<ProtocolReply> m_replyList;
+    QList<ProtocolReply*> m_replyList;
     bool m_waitResponse;
 };
 

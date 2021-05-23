@@ -1,7 +1,8 @@
 #include "ybprotocolchannel.h"
 
 #include "../Protocols/YBProtocol/content/contentfactory.h"
-#include <QtDebug>
+#include <QDebug>
+#include <QThread>
 YBProtocolChannel::YBProtocolChannel(const QSharedPointer<CommunicationBase> &communication, QObject *parent)
     : ProtocolChannelBase (communication, parent)
     , m_protocol(new YBProtocol())
@@ -37,16 +38,22 @@ void YBProtocolChannel::processFrame(const YBFrame &frame)
         return ;
     }
 
-    auto iter = std::find_if(m_replyList.begin(), m_replyList.end(), [&frame](const ProtocolReply& reply){
-        return (reply.m_type == frame.m_srcType) && (reply.m_funcode == frame.m_funCode);
+    clearDirtyReply();
+
+    auto iter = std::find_if(m_replyList.begin(), m_replyList.end(), [&frame](ProtocolReply* reply){
+        return (reply->m_type == frame.m_srcType) && (reply->m_funcode == frame.m_funCode);
     });
     if (iter == m_replyList.end()) {
-        qDebug("unknow frame");
+        qDebug("Invalid reply frame");
         return;
     }
 
-    iter->m_result->complete(std::shared_ptr<IContent>(ContentFactory::createContent(frame.m_funCode, frame.m_data)));
+    auto reply = *iter;
+    reply->m_result->complete(std::shared_ptr<IContent>(ContentFactory::createContent(frame.m_funCode, frame.m_data)));
+    reply->cancelTimeout();
     m_replyList.erase(iter);
+    delete reply;
+
     switch (frame.m_funCode) {
     case eYBFunCode::NAKCode:
         qDebug("Nak");
@@ -69,9 +76,7 @@ IContentDeferredPtr YBProtocolChannel::setAddress(eYBFrameType type, uint8_t add
     auto frame = YBFrame::settingAddress(type, addr);
     m_sendFrameQueue.enqueue(frame);
 
-    ProtocolReply reply(frame.m_dstType, frame.m_funCode, msecTimeout);
-    m_replyList.append(reply);
-    return reply.m_result;
+    return buildResultContent(frame.m_dstType, frame.m_funCode, msecTimeout);
 }
 
 IContentDeferredPtr YBProtocolChannel::queryStatus(uint16_t dstAddr, int msecTimeout)
@@ -79,9 +84,7 @@ IContentDeferredPtr YBProtocolChannel::queryStatus(uint16_t dstAddr, int msecTim
     auto frame = YBFrame::queryStatus(dstAddr);
     m_sendFrameQueue.enqueue(frame);
 
-    ProtocolReply reply(frame.m_dstType, frame.m_funCode, msecTimeout);
-    m_replyList.append(reply);
-    return reply.m_result;
+    return buildResultContent(frame.m_dstType, frame.m_funCode, msecTimeout);
 }
 
 IContentDeferredPtr YBProtocolChannel::queryVersion(eYBFrameType type, uint16_t dstAddr, int msecTimeout)
@@ -89,11 +92,7 @@ IContentDeferredPtr YBProtocolChannel::queryVersion(eYBFrameType type, uint16_t 
     auto frame = YBFrame::queryVersion(type, dstAddr);
     m_sendFrameQueue.enqueue(frame);
 
-
-    ProtocolReply reply(frame.m_dstType, frame.m_funCode, msecTimeout);
-    connect(reply.m_timer.get(), &QTimer::timeout, this, &YBProtocolChannel::onReplyTimeout);
-    m_replyList.append(reply);
-    return reply.m_result;
+    return buildResultContent(frame.m_dstType, frame.m_funCode, msecTimeout);
 }
 
 IContentDeferredPtr YBProtocolChannel::setStatus(uint8_t status, uint16_t dstAddr, int msecTimeout)
@@ -101,9 +100,7 @@ IContentDeferredPtr YBProtocolChannel::setStatus(uint8_t status, uint16_t dstAdd
     auto frame = YBFrame::settingStatus(status, dstAddr);
     m_sendFrameQueue.enqueue(frame);
 
-    ProtocolReply reply(frame.m_dstType, frame.m_funCode, msecTimeout);
-    m_replyList.append(reply);
-    return reply.m_result;
+    return buildResultContent(frame.m_dstType, frame.m_funCode, msecTimeout);
 }
 
 IContentDeferredPtr YBProtocolChannel::setSensorNum(uint16_t dstAddr, uint8_t num, int msecTimeout)
@@ -111,11 +108,31 @@ IContentDeferredPtr YBProtocolChannel::setSensorNum(uint16_t dstAddr, uint8_t nu
     auto frame = YBFrame::setSensorNum(dstAddr, num);
     m_sendFrameQueue.enqueue(frame);
 
-    ProtocolReply reply(frame.m_dstType, frame.m_funCode, msecTimeout);
-    m_replyList.append(reply);
-    return reply.m_result;
+    return buildResultContent(frame.m_dstType, frame.m_funCode, msecTimeout);
 }
 
+IContentDeferredPtr YBProtocolChannel::buildResultContent(int type, int funcode, int msecTimeout)
+{
+    auto reply = new ProtocolReply(type, funcode, msecTimeout);
+    reply->m_timer->moveToThread(this->thread());
+    m_replyList.append(reply);
+    return reply->m_result;
+}
+
+void YBProtocolChannel::clearDirtyReply()
+{
+    for (auto iter = m_replyList.begin(); iter != m_replyList.end();) {
+        if ((*iter)->m_dirty) {
+            auto reply = *iter;
+            iter = m_replyList.erase(iter);
+            reply->cancelTimeout();
+            delete reply;
+
+        } else {
+            iter++;
+        }
+    }
+}
 
 void YBProtocolChannel::onReadyRead()
 {
@@ -132,16 +149,4 @@ void YBProtocolChannel::onReadyRead()
         showMessage(eMsgType::eMsgRecv, frame.parseToString(), frame.packetFrameToPureData());
         processFrame(frame);
     }
-}
-
-void YBProtocolChannel::onReplyTimeout()
-{
-    auto timer = qobject_cast<QTimer*>(sender());
-    auto iter = std::find_if(m_replyList.begin(), m_replyList.end(), [=](const ProtocolReply& reply){
-        return reply.m_timer.get() == timer;
-    });
-    if (iter == m_replyList.end()) {
-        qDebug("not found");
-    }
-    m_replyList.erase(iter);
 }
