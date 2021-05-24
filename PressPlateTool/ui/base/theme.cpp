@@ -151,8 +151,8 @@ QColor Ui::Theme::textColor()
 void Ui::Theme::initColorPalette()
 {
     setColor("default", Ui::Color::white);
-    setColor("primary", Ui::Color::cyan500);
-    setColor("primary2", Ui::Color::cyan700);
+    setColor("primary", Ui::Color::blue500);
+    setColor("primary2", Ui::Color::blue700);
     setColor("primary3", Ui::Color::lightBlack);
     setColor("accent1", Ui::Color::pinkA200);
     setColor("accent2", Ui::Color::grey100);

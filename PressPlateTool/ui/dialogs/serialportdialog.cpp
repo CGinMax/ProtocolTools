@@ -68,3 +68,18 @@ void SerialPortDialog::on_btnCancel_clicked()
 {
     reject();
 }
+
+void SerialPortDialog::on_btnRefresh_clicked()
+{
+    const auto oldText = ui->cbbDevList->currentText();
+    ui->cbbDevList->clear();
+    auto devList = QSerialPortInfo::availablePorts();
+    for (auto& devInfo : devList) {
+        ui->cbbDevList->addItem(devInfo.portName(), devInfo.portName());
+    }
+
+    ui->cbbDevList->setCurrentText(oldText);
+//    if (ui->cbbDevList->findText(oldText) < 0) {
+//        ui->cbbDevList->setCurrentIndex(0);
+//    }
+}

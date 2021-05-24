@@ -24,6 +24,8 @@ private slots:
 
     void on_btnCancel_clicked();
 
+    void on_btnRefresh_clicked();
+
 private:
     Ui::SerialPortDialog *ui;
     PortParam m_portParam;

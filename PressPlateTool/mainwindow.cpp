@@ -26,10 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setStyleSheet("QWidget#centralWidget{background-color:#F0F3F4;}");
-    ui->mainSplitter->setStretchFactor(0, 1);
-    ui->mainSplitter->setStretchFactor(1, 2);
+    ui->mainSplitter->setStretchFactor(0, 2);
+    ui->mainSplitter->setStretchFactor(1, 3);
     ui->mainSplitter->setStyleSheet("QSplitter::handle{background-color:lightgray;}");
 
+    ui->mainToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     ui->mainToolBar->addAction(FAIcon::instance()->icon(QString("save")), tr("Save"), this, &MainWindow::onSave);
     ui->mainToolBar->addAction(FAIcon::instance()->icon("folderopen"), tr("Open"), this, &MainWindow::onLoad);
 
@@ -41,11 +42,13 @@ MainWindow::MainWindow(QWidget *parent)
     oneBtn->setCheckable(false);
     oneBtn->resize(36, 36);
     oneBtn->setXRadius(oneBtn->width())->setYRadius(oneBtn->height());
+    oneBtn->setForegroundColor(Qt::white);
     auto multiBtn = new Ui::IconButton(QIcon(":/icons/add-multi.png"), this);
     multiBtn->setIconSize(QSize(16, 16));
     multiBtn->setCheckable(false);
     multiBtn->resize(36, 36);
     multiBtn->setXRadius(multiBtn->width())->setYRadius(multiBtn->height());
+    multiBtn->setForegroundColor(Qt::white);
 
     m_fabMenu->addButton(oneBtn);
     m_fabMenu->addButton(multiBtn);

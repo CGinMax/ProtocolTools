@@ -42,7 +42,7 @@ ExpandWidgetItem::ExpandWidgetItem(ExpandTile *tile, GatherController *controlle
     m_tile->setParent(this);
     setGraphicsEffect(m_shadowEffect);
     m_shadowEffect->setEnabled(false);
-
+    setMaximumWidth(280);
 //    m_contentArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 //    m_contentArea->setMaximumHeight(0);
 //    m_contentArea->setMinimumHeight(0);

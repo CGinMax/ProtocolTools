@@ -48,7 +48,9 @@ HEADERS += \
     $$PWD/animation/slideanimation.h \
     $$PWD/page/gatherpage.h \
     $$PWD/dialogs/sensoradddialog.h \
-    $$PWD/dialogs/sensoroperationdlg.h
+    $$PWD/dialogs/sensoroperationdlg.h \
+    $$PWD/page/serialportpage.h \
+    $$PWD/page/configurationpage.h
 
 SOURCES += \
     $$PWD/expand/expandwidgetitem.cpp \
@@ -85,7 +87,9 @@ SOURCES += \
     $$PWD/animation/slideanimation.cpp \
     $$PWD/page/gatherpage.cpp \
     $$PWD/dialogs/sensoradddialog.cpp \
-    $$PWD/dialogs/sensoroperationdlg.cpp
+    $$PWD/dialogs/sensoroperationdlg.cpp \
+    $$PWD/page/serialportpage.cpp \
+    $$PWD/page/configurationpage.cpp
 
 FORMS += \
     $$PWD/expand/expandwidget.ui \
@@ -98,4 +102,6 @@ FORMS += \
     $$PWD/page/tablepage.ui \
     $$PWD/page/gatherpage.ui \
     $$PWD/dialogs/sensoradddialog.ui \
-    $$PWD/dialogs/sensoroperationdlg.ui
+    $$PWD/dialogs/sensoroperationdlg.ui \
+    $$PWD/page/serialportpage.ui \
+    $$PWD/page/configurationpage.ui

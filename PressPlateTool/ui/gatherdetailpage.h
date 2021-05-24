@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "tables/ybtableview.h"
 #include "page/tablepage.h"
+#include "page/configurationpage.h"
 class GatherData;
 class GatherController;
 class YBProtocolChannel;
@@ -27,10 +28,13 @@ public slots:
 
     void onAddrChanged(int addr);
 
+    void onSave();
 private:
     Ui::GatherDetailPage *ui;
 
     TablePage* m_tablePage;
+
+    ConfigurationPage* m_confPage;
 
     QSharedPointer<GatherData> m_gatherData;
 };

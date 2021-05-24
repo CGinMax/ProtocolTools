@@ -5,6 +5,7 @@
 #include "../dialogs/sensoradddialog.h"
 #include "../dialogs/sensoroperationdlg.h"
 #include <QMessageBox>
+#include <QMenu>
 #include <QApplication>
 
 TablePage::TablePage(QWidget *parent)
@@ -26,6 +27,13 @@ TablePage::TablePage(QWidget *parent)
 
     ui->editBegin->setRange(0x01, 0x7E);
     ui->editEnd->setRange(0x01, 0x7E);
+
+    ui->textMsg->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->textMsg, &QWidget::customContextMenuRequested, this, [=](const QPoint& pos){
+        QMenu menu;
+        menu.addAction(tr("Clear"), this, [=]{ ui->textMsg->clear(); });
+        menu.exec(QCursor::pos());
+    });
 
 
     connect(ui->btnAddOne, &QAbstractButton::clicked, this, [=]{

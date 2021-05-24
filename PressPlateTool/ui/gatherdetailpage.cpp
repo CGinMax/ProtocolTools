@@ -12,13 +12,18 @@ GatherDetailPage::GatherDetailPage(QWidget *parent) :
     ui(new Ui::GatherDetailPage)
 {
     ui->setupUi(this);
-    m_tablePage = new TablePage(ui->tabWidget);
-    ui->tabWidget->addTab(m_tablePage, tr("Sensors"));
-
     auto font = ui->txtName->font();
     font.setBold(true);
     font.setPixelSize(16);
     ui->txtName->setFont(font);
+
+    m_tablePage = new TablePage(ui->tabWidget);
+    m_confPage = new ConfigurationPage(ui->tabWidget);
+    ui->tabWidget->addTab(m_tablePage, tr("Sensors"));
+    ui->tabWidget->addTab(m_confPage, tr("Configuration"));
+
+    connect(m_confPage, &ConfigurationPage::notifySave, this, &GatherDetailPage::onSave);
+
 }
 
 GatherDetailPage::~GatherDetailPage()
@@ -57,4 +62,18 @@ void GatherDetailPage::onNameChanged(const QString &name)
 void GatherDetailPage::onAddrChanged(int addr)
 {
     ui->txtAddress->setText(QString::number(addr));
+}
+
+void GatherDetailPage::onSave()
+{
+    if (m_gatherData.isNull()) {
+        qDebug("error gather controller is empty!");
+        //TODO(shijm): not_null
+        return;
+    }
+
+    const PortParam param = m_confPage->portParam();
+    m_gatherData->setPortParam(param);
+    m_gatherData->setGatherTimeout(m_confPage->gatherTime());
+    m_gatherData->setSensorTimeout(m_confPage->sensorTime());
 }

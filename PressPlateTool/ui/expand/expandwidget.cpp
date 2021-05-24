@@ -35,7 +35,7 @@ void ExpandWidget::addExpandItem(ExpandWidgetItem *item)
     connect(item, &ExpandWidgetItem::notifySelected, this, &ExpandWidget::onNotifySelected);
     connect(item, &ExpandWidgetItem::deleteItem, this, &ExpandWidget::onDeleteItem);
 
-//    ui->scrollAreaWidgetContents->setMinimumWidth(item->sizeHint().width());
+//    ui->scrollAreaWidgetContents->resize(item->size().width(), ui->scrollAreaWidgetContents->height());
 //    ui->scrollArea->verticalScrollBar()->setSliderPosition(ui->scrollArea->verticalScrollBar()->sliderPosition() + item->height());
 //    ui->scrollArea->update();
 }

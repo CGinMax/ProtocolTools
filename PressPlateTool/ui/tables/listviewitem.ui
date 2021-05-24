@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>919</width>
-    <height>247</height>
+    <width>705</width>
+    <height>169</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -37,6 +37,9 @@
      <property name="text">
       <string>Configed Status:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
     </widget>
    </item>
    <item row="2" column="2">
@@ -50,6 +53,9 @@
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Current Status:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -70,7 +76,10 @@
    <item row="3" column="0" colspan="2">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Hardware Version</string>
+      <string>Hardware Version:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -84,7 +93,10 @@
    <item row="3" column="3">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Software Version</string>
+      <string>Software Version:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -105,7 +117,7 @@
    <item row="4" column="0" colspan="2">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Production Description</string>
+      <string>Production Description:</string>
      </property>
     </widget>
    </item>

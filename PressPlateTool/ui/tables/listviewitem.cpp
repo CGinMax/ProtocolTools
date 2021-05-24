@@ -12,6 +12,7 @@ ListViewItem::ListViewItem(int address, YBSensorData *data, QWidget *parent)
     ui->txtName->setText(tr("Sensor #%1").arg(address));
     ui->editAddr->setValue(address);
     initWidget();
+//    setMaximumWidth(650);
 }
 
 void ListViewItem::setSensorData(YBSensorData *data)

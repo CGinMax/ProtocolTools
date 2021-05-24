@@ -22,6 +22,7 @@ FabCircularMenu::FabCircularMenu(QWidget *parent)
     m_menuBtn->setEnabledHover(true);
     m_menuBtn->setOpacity(0.5);
     m_menuBtn->setCorner(Qt::BottomLeftCorner);
+    m_menuBtn->setForegroundColor(Qt::white);
 
     m_distance = static_cast<qreal>(m_menuBtn->diameter()) * 2.5;
 
