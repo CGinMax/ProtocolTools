@@ -42,7 +42,7 @@
    <item row="2" column="2">
     <widget class="QLabel" name="txtSetStatus">
      <property name="text">
-      <string>Set Status</string>
+      <string>None</string>
      </property>
     </widget>
    </item>
@@ -56,7 +56,7 @@
    <item row="2" column="4">
     <widget class="QLabel" name="txtCurStatus">
      <property name="text">
-      <string>CurrentStatus</string>
+      <string>None</string>
      </property>
     </widget>
    </item>
@@ -70,7 +70,7 @@
    <item row="3" column="0" colspan="2">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>TextLabel</string>
+      <string>Hardware Version</string>
      </property>
     </widget>
    </item>
@@ -84,7 +84,7 @@
    <item row="3" column="3">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>TextLabel</string>
+      <string>Software Version</string>
      </property>
     </widget>
    </item>
@@ -112,7 +112,7 @@
    <item row="4" column="2">
     <widget class="QLabel" name="txtProductDesc">
      <property name="text">
-      <string>TextLabel</string>
+      <string>None</string>
      </property>
     </widget>
    </item>

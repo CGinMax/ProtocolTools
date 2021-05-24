@@ -5,6 +5,7 @@
 #include "expand/gathercontroller.h"
 #include "../protocol/ybprotocolchannel.h"
 
+#include <QFont>
 
 GatherDetailPage::GatherDetailPage(QWidget *parent) :
     QWidget(parent),
@@ -14,6 +15,10 @@ GatherDetailPage::GatherDetailPage(QWidget *parent) :
     m_tablePage = new TablePage(ui->tabWidget);
     ui->tabWidget->addTab(m_tablePage, tr("Sensors"));
 
+    auto font = ui->txtName->font();
+    font.setBold(true);
+    font.setPixelSize(16);
+    ui->txtName->setFont(font);
 }
 
 GatherDetailPage::~GatherDetailPage()

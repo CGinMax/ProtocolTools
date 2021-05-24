@@ -11,7 +11,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QMessageBox>
-GatherController::GatherController(GatherData *data, QObject *parent)
+GatherController::GatherController(const QSharedPointer<GatherData> &data, QObject *parent)
     : QObject(parent)
     , m_gatherData(data)
     , m_tile(nullptr)
@@ -40,6 +40,14 @@ QSharedPointer<GatherData> GatherController::gatherData() const
 void GatherController::setGatherData(const QSharedPointer<GatherData> &gatherData)
 {
     m_gatherData = gatherData;
+}
+
+void GatherController::appendSensorData(YBSensorData *data)
+{
+    if (m_gatherData.isNull()) {
+        return;
+    }
+    m_gatherData->appendSensorData(data);
 }
 
 void GatherController::setExpandTile(ExpandTile *tile)
@@ -98,9 +106,9 @@ void GatherController::onQueryVersion()
             qDebug("NAK Error");
             return ;
         }
-        this->m_tile->setHardwareVersion(QString::fromStdString(result->hardwareVersion()));
-        this->m_tile->setSoftwareVersion(QString::fromStdString(result->softwareVersion()));
-        this->m_tile->setProductDescript(QString::fromStdString(result->productDescript()));
+        this->setHardwareVersion(QString::fromStdString(result->hardwareVersion()))
+        ->setSoftwareVersion(QString::fromStdString(result->softwareVersion()))
+        ->setProductDesc(QString::fromStdString(result->productDescript()));
 
     }, [](){
         qDebug("gather query version timeout cancel");
@@ -129,7 +137,7 @@ void GatherController::onSetGatherAddress(int addr)
             return ;
         }
         if (result->success()) {
-            m_gatherData->setAddr(m_operWidget->getInputAddress());
+            this->setAddress(addr);
         } else {
             //TODO(shijm): 失败处理
             qDebug("address failed");
@@ -158,6 +166,7 @@ void GatherController::onResetSensorCount(int count)
             return ;
         }
         if (result->success()) {
+            this->setSensorCount(count);
             qDebug("reset count success");
         } else {
             //TODO(shijm): 失败处理
@@ -176,4 +185,37 @@ bool GatherController::canDoOperate()
         MainWindow::showSnackBar(tr("Can not operate!"));
     }
     return active;
+}
+
+GatherController *GatherController::setAddress(int addr)
+{
+    this->m_gatherData->setAddr(addr);
+    return this;
+}
+
+GatherController *GatherController::setHardwareVersion(const QString &version)
+{
+    this->m_tile->setHardwareVersion(version);
+    this->m_gatherData->setHardwareVerion(version);
+    return this;
+}
+
+GatherController *GatherController::setSoftwareVersion(const QString &version)
+{
+    this->m_tile->setSoftwareVersion(version);
+    this->m_gatherData->setSoftwareVersion(version);
+    return this;
+}
+
+GatherController *GatherController::setProductDesc(const QString &desc)
+{
+    this->m_tile->setProductDescript(desc);
+    this->m_gatherData->setProductDesc(desc);
+    return this;
+}
+
+GatherController *GatherController::setSensorCount(int count)
+{
+    this->m_gatherData->setSensorCount(count);
+    return this;
 }

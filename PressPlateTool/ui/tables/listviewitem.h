@@ -2,6 +2,8 @@
 #define LISTVIEWITEM_H
 
 #include <QWidget>
+#include "../../common/ybsensordata.h"
+
 namespace Ui {
 class ListViewItem;
 }
@@ -10,8 +12,10 @@ class ListViewItem : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ListViewItem(const QString& name = QString("Sensor#"), QWidget *parent = nullptr);
-    explicit ListViewItem(int address, QWidget* parent = nullptr);
+    explicit ListViewItem(int address, YBSensorData* data, QWidget* parent = nullptr);
+
+    void setSensorData(YBSensorData* data);
+    YBSensorData* sensorData();
 
     void setName(const QString& name);
     void setAddress(int addr);
@@ -39,7 +43,7 @@ private slots:
 
 private:
     Ui::ListViewItem* ui;
-
+    YBSensorData* m_data;
 };
 
 #endif // LISTVIEWITEM_H

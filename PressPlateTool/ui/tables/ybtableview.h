@@ -5,6 +5,7 @@
 
 class QVBoxLayout;
 class ListViewItem;
+class YBSensorData;
 
 class YBTableView : public QWidget
 {
@@ -24,10 +25,12 @@ public:
 
     void setListItemConfigedStatus(int index, uint8_t status);
 
-    void addYBSensor(int count = 1);
+    void addYBSensor(YBSensorData* data);
+
+    void resetYBSensors(const QList<YBSensorData*>& dataList);
 
     void deleteYBSensor(int first, int last);
-    void deleteAllYBSensor();
+    void deleteAllYBSensors();
 signals:
     void setSensorAddr(int index, int addr);
     void querySensorStatus(int index, int addr);

@@ -6,7 +6,7 @@
 ListDelegate::ListDelegate(QAbstractListModel *model, QObject *parent)
     : QItemDelegate(parent)
     , m_model(model)
-    , m_listItem(new ListViewItem)
+//    , m_listItem(new ListViewItem)
 {
 }
 

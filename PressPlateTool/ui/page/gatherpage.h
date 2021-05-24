@@ -17,6 +17,9 @@ public:
     ~GatherPage() override;
 
     void addExpandItem(ExpandWidgetItem* item);
+    QList<ExpandWidgetItem*> itemList() const;
+
+    void addExpandItems(const QList<QSharedPointer<GatherData>>& dataList);
 signals:
 
     void itemChanged(GatherController* controller);

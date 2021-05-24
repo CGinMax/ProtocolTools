@@ -3,6 +3,8 @@
 
 #include <QSerialPort>
 #include <QDataStream>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "communication_global.h"
 
 class COMMUNICATIONSHARED_EXPORT PortParam{
@@ -20,6 +22,10 @@ public:
     void save(QDataStream& dataStream);
 
     void load(QDataStream& dataStream);
+
+    QJsonObject saveJson();
+
+    void loadJson(const QJsonObject& root);
 
     // network
     QString m_localIp{QLatin1String("127.0.0.1")};

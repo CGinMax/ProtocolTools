@@ -31,8 +31,18 @@ public:
     uint8_t addr() const;
     void setAddr(const uint8_t &addr);
 
-    QString version() const;
-    void setVersion(const QString &version);
+    QString hardwareVersion() const;
+    void setHardwareVersion(const QString &version);
+
+    QString softwareVersion() const;
+    void setSoftwareVersion(const QString& version);
+
+    QString productDescription() const;
+    void setProductDesc(const QString& desc);
+
+    QJsonObject save();
+
+    void load(const QJsonObject& root);
 
 signals:
 
@@ -42,7 +52,9 @@ private:
     YBStatus m_currentStatus;
     YBStatus m_configedStatus;
     uint8_t m_addr;
-    QString m_version;
+    QString m_hardwareVer;
+    QString m_softwareVer;
+    QString m_productDesc;
 };
 
 #endif // YBSENSORDATA_H

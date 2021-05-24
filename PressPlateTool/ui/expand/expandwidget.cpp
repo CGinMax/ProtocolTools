@@ -90,18 +90,31 @@ int ExpandWidget::indexOf(ExpandWidgetItem *item)
     return m_itemList.indexOf(item);
 }
 
-void ExpandWidget::scrolldown()
+QList<ExpandWidgetItem *> ExpandWidget::itemList() const
 {
-    auto v = ui->scrollArea->verticalScrollBar()->value();
-    qDebug("value:%d", v);
-    ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->value() + 480);
+    return m_itemList;
+}
+
+void ExpandWidget::addExpandItems(const QList<QSharedPointer<GatherData> > &dataList)
+{
+    for (auto& data : dataList) {
+        auto controller = new GatherController(data);
+        auto tile = new ExpandTile(QObject::tr("Gather%1").arg(data->addr()));
+        auto widget = new ExpandWidgetItem(tile, controller);
+        auto operWidget = new GatherOperWidget(data->addr(), widget);
+        widget->setBorderRadius(8);
+        widget->setContentWidget(operWidget);
+        controller->setExpandTile(tile);
+        controller->setOperWidget(operWidget);
+        addExpandItem(widget);
+    }
 }
 
 ExpandWidgetItem *ExpandWidget::createExpandWidget(const PortParam &portParam, int index, int radius)
 {
     auto data = new GatherData(QObject::tr("Gather%1").arg(index));
     data->setPortParam(portParam);
-    auto controller = new GatherController(data);
+    auto controller = new GatherController(QSharedPointer<GatherData>(data));
     auto tile = new ExpandTile(QObject::tr("Gather%1").arg(index));
     auto widget = new ExpandWidgetItem(tile, controller);
     auto operWidget = new GatherOperWidget(index, widget);

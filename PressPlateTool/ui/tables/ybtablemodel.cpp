@@ -30,7 +30,7 @@ QVariant YBTableModel::data(const QModelIndex &index, int role) const
     case RoleAddress:
         return m_sensorDataList.at(index.row()).addr();
     case RoleVersion:
-        return m_sensorDataList.at(index.row()).version();
+        return m_sensorDataList.at(index.row()).hardwareVersion();
     case RoleCurrentStatus:
         return m_sensorDataList.at(index.row()).currentStatus();
     case RoleConfigedStatus:

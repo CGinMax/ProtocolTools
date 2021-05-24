@@ -34,7 +34,7 @@ private:
 
     void showErrorSnackBar(const QString& text, const QIcon& icon = QIcon());
 
-    void queryStatusImple(int index, int addr, Fn<void(std::shared_ptr<IContent>)> success, Fn<void()> error);
+    void queryStatusImpl(int index, int addr, Fn<void(std::shared_ptr<IContent>)> success, Fn<void()> error);
 
 public slots:
     void onSetSensorAddr(int index, int addr);

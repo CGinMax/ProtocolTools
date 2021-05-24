@@ -36,3 +36,13 @@ void GatherPage::addExpandItem(ExpandWidgetItem *item)
 {
     ui->expandWidget->addExpandItem(item);
 }
+
+QList<ExpandWidgetItem *> GatherPage::itemList() const
+{
+    return ui->expandWidget->itemList();
+}
+
+void GatherPage::addExpandItems(const QList<QSharedPointer<GatherData> > &dataList)
+{
+    ui->expandWidget->addExpandItems(dataList);
+}

@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QApplication>
+#include <QStandardPaths>
+#include <functional>
 #include "ui/buttons/fabcircularmenu.h"
 namespace Ui {
 class MainWindow;
@@ -24,7 +27,13 @@ public slots:
 
     void onNotifyAddMulti();
 
-private slots:
+    void onSave();
+
+    void onLoad();
+
+private:
+    QString getSaveFileName();
+    QString getOpenFileName();
 
 private:
     Ui::MainWindow *ui;

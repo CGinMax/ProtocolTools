@@ -15,17 +15,36 @@ public:
     QString name() const;
     void setName(const QString& name);
 
-    int id() const;
-    void setId(int id);
-
     int addr() const;
     void setAddr(int addr);
 
-    QString version() const;
-    void setVersion(const QString &version);
+    QString hardwareVersion() const;
+    void setHardwareVerion(const QString &hardwareVersion);
+
+    QString softwareVersion() const;
+    void setSoftwareVersion(const QString& softwareVersion);
+
+    QString productDescription() const;
+    void setProductDesc(const QString& desc);
+
+    int sensorCount() const;
+    void setSensorCount(int count);
+
+    void appendSensorData(YBSensorData* data);
+    QList<YBSensorData*> sensorDataList() const;
 
     PortParam portParam() const;
     void setPortParam(const PortParam &portParam);
+
+    int gatherTimeout() const;
+    void setGatherTimeout(int msecTimeout);
+
+    int sensorTimeout() const;
+    void setSensorTimeout(int msecTimeout);
+
+    QJsonObject save();
+
+    void load(const QJsonObject& root);
 
 signals:
     void nameChanged(const QString& name);
@@ -36,11 +55,17 @@ public slots:
 
 private:
     QString m_name;
-    int m_id;
     int m_addr;
-    QString m_version;
-    QList<YBSensorData> m_ybDataList;
+    QString m_hardwareVer;
+    QString m_softwareVer;
+    QString m_productDesc;
+    int m_sensorCount;
+    // delete here
+    QList<YBSensorData*> m_ybDataList;
     PortParam m_portParam;
+
+    int m_gatherTimeout;
+    int m_sensorTimeout;
 };
 
 #endif // YBGATHERDATA_H

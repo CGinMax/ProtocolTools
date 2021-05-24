@@ -14,11 +14,13 @@ class GatherController : public QObject
 {
     Q_OBJECT
 public:
-    explicit GatherController(GatherData* data, QObject *parent = nullptr);
+    explicit GatherController(const QSharedPointer<GatherData>& data, QObject *parent = nullptr);
     ~GatherController() override;
 
     QSharedPointer<GatherData> gatherData() const;
     void setGatherData(const QSharedPointer<GatherData> &gatherData);
+
+    void appendSensorData(YBSensorData* data);
 
     void setExpandTile(ExpandTile* tile);
     void setOperWidget(GatherOperWidget* operWidget);
@@ -38,6 +40,12 @@ public slots:
 
 private:
     bool canDoOperate();
+    GatherController* setAddress(int addr);
+    GatherController* setHardwareVersion(const QString& version);
+    GatherController* setSoftwareVersion(const QString& version);
+    GatherController* setProductDesc(const QString& desc);
+    GatherController* setSensorCount(int count);
+
 private:
     QSharedPointer<GatherData> m_gatherData;
     ExpandTile* m_tile;

@@ -71,32 +71,38 @@ void YBTableView::setListItemConfigedStatus(int index, uint8_t status)
     item->setConfigedStatus(status);
 }
 
-void YBTableView::addYBSensor(int count)
+void YBTableView::addYBSensor(YBSensorData* data)
 {
-    for (int i = 0; i < count; i++) {
-        const int index = m_itemList.isEmpty() ? 0 : m_itemList.last()->address();
-        auto item = new ListViewItem(index + 1, this);
-        m_itemList.append(item);
+    const int index = m_itemList.isEmpty() ? 0 : m_itemList.last()->address();
+    auto item = new ListViewItem(index + 1, data, this);
+    m_itemList.append(item);
 
-        m_layout->insertWidget(m_layout->count() -1, item);
+    m_layout->insertWidget(m_layout->count() -1, item);
 
-        connect(item, &ListViewItem::notifySetAddr, this, [=](int addr){
-            int index = m_itemList.indexOf(qobject_cast<ListViewItem*>(sender()));
-            emit this->setSensorAddr(index, addr);
-        });
-        connect(item, &ListViewItem::notifyQueryStatus, this, [=](int addr){
-            int index = m_itemList.indexOf(qobject_cast<ListViewItem*>(sender()));
-            emit this->querySensorStatus(index, addr);
-        });
-        connect(item, &ListViewItem::notifyQueryVersion, this, [=](int addr){
-            int index = m_itemList.indexOf(qobject_cast<ListViewItem*>(sender()));
-            emit this->querySensorVersion(index, addr);
-        });
-        connect(item, &ListViewItem::statusChanged, this, [=](int addr, int status){
-            int index = m_itemList.indexOf(qobject_cast<ListViewItem*>(sender()));
-            emit this->changeSensorStatus(index, addr, status);
-        });
-        connect(item, &ListViewItem::notifyDelete, this, &YBTableView::onNotifyDelete);
+    connect(item, &ListViewItem::notifySetAddr, this, [=](int addr){
+        int index = m_itemList.indexOf(qobject_cast<ListViewItem*>(sender()));
+        emit this->setSensorAddr(index, addr);
+    });
+    connect(item, &ListViewItem::notifyQueryStatus, this, [=](int addr){
+        int index = m_itemList.indexOf(qobject_cast<ListViewItem*>(sender()));
+        emit this->querySensorStatus(index, addr);
+    });
+    connect(item, &ListViewItem::notifyQueryVersion, this, [=](int addr){
+        int index = m_itemList.indexOf(qobject_cast<ListViewItem*>(sender()));
+        emit this->querySensorVersion(index, addr);
+    });
+    connect(item, &ListViewItem::statusChanged, this, [=](int addr, int status){
+        int index = m_itemList.indexOf(qobject_cast<ListViewItem*>(sender()));
+        emit this->changeSensorStatus(index, addr, status);
+    });
+    connect(item, &ListViewItem::notifyDelete, this, &YBTableView::onNotifyDelete);
+}
+
+void YBTableView::resetYBSensors(const QList<YBSensorData *> &dataList)
+{
+    deleteAllYBSensors();
+    for (auto& data : dataList) {
+        addYBSensor(data);
     }
 }
 
@@ -111,10 +117,9 @@ void YBTableView::deleteYBSensor(int first, int last)
         begin++;
         delete item;
     }
-
 }
 
-void YBTableView::deleteAllYBSensor()
+void YBTableView::deleteAllYBSensors()
 {
     deleteYBSensor(0, sensorCount());
 }

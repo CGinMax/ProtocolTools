@@ -25,8 +25,9 @@ public:
     void removeAllItem();
     int indexOf(ExpandWidgetItem* item);
 
-    //test
-    void scrolldown();
+    QList<ExpandWidgetItem*> itemList() const;
+
+    void addExpandItems(const QList<QSharedPointer<GatherData>>& dataList);
 
     static ExpandWidgetItem* createExpandWidget(const PortParam& portParam, int index, int radius = 8);
 signals:
