@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport widgets
+QT       += core gui serialport widgets network
 
 TARGET = PressPlateTool
 TEMPLATE = app
@@ -54,11 +54,6 @@ else{
     LIBS += -L$${DESTDIR} -lCommunication
     LIBS += -L$${DESTDIR} -lProtocols
 
-QMAKE_RPATHDIR += ./
-QMAKE_RPATHDIR += ./lib
-QMAKE_RPATHDIR += $${DESTDIR}
-QMAKE_RPATHDIR += ./../lib
-QMAKE_RPATHDIR += $${DESTDIR}/../lib
 
 TRANSLATIONS += $$PWD/PressPlateTool_en.ts
 TRANSLATIONS += $$PWD/PressPlateTool_zh.ts
@@ -71,3 +66,10 @@ include($$PWD/../asyncfuture/asyncfuture.pri)
 
 RESOURCES += \
     resources/resources.qrc
+
+
+QMAKE_RPATHDIR += ./
+QMAKE_RPATHDIR += ./lib
+QMAKE_RPATHDIR += $${DESTDIR}
+QMAKE_RPATHDIR += ./../lib
+QMAKE_RPATHDIR += $${DESTDIR}/../lib

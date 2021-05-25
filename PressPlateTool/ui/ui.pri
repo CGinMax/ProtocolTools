@@ -1,6 +1,6 @@
 # ui.pri
 
-QT += gui core widgets
+QT += gui core widgets network serialport
 
 CONFIG += c++11
 

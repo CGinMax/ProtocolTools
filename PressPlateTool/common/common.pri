@@ -1,6 +1,6 @@
 #common pri
 
-QT += gui core widgets concurrent
+QT += gui core widgets network serialport concurrent
 
 CONFIG += c++11
 

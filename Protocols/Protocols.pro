@@ -40,3 +40,9 @@ CONFIG(debug, debug|release){
 else {
     DESTDIR = $$PWD/../bin/release
 }
+
+QMAKE_RPATHDIR += ./
+QMAKE_RPATHDIR += ./lib
+QMAKE_RPATHDIR += $${DESTDIR}
+QMAKE_RPATHDIR += ./../lib
+QMAKE_RPATHDIR += $${DESTDIR}/../lib
