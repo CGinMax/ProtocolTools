@@ -366,6 +366,24 @@ void Ui::SnackBar::setSlidePos(const QPoint &pos)
     d->m_slideAnimation->setSourcePos(pos);
 }
 
+void Ui::SnackBar::showSnackBar(QWidget *widget, const QString &text, const QIcon &icon, const QString &actionText, Fn<void ()> &&callback)
+{
+    if (widget == nullptr) {
+        qDebug("No parent!");
+        return;
+    }
+    auto topWidget = widget->window();
+    auto bar = new Ui::SnackBar(icon, text, topWidget);
+    if (!actionText.isEmpty()) {
+        bar->setAction(actionText, std::forward<Fn<void()>>(callback));
+    }
+    connect(bar, &Ui::SnackBar::showFinished, topWidget, [=]{
+        delete bar;
+    });
+    bar->showBar();
+
+}
+
 void Ui::SnackBar::onActionPressed()
 {
     Q_D(SnackBar);

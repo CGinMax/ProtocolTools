@@ -14,7 +14,7 @@
    <item>
     <widget class="QLabel" name="txtInfo">
      <property name="text">
-      <string>TextLabel</string>
+      <string>Infomation</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

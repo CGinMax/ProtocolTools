@@ -86,20 +86,22 @@ void TablePage::setGatherController(GatherController *controller)
 void TablePage::confAddrRecursion()
 {
     if (m_currentConfAddr > ui->editEnd->value()) {
+        Ui::SnackBar::showSnackBar(this, tr("Automatically configure sensor address finished!"));
         qDebug("set address finish");
-        on_btnQueryAllStatus_clicked();
         return;
     }
     auto dlg = new SensorOperationDlg(tr("Set sensor address dialog"), tr("Set sensor address = %1").arg(m_currentConfAddr), this);
-    auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(m_currentConfAddr));
+    auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(m_currentConfAddr), m_controller->gatherData()->sensorTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
+            Ui::SnackBar::showSnackBar(this, tr("Info:Configure sensor address receive unkonw frame response!"));
             qDebug("Unknow frame data");
             dlg->accept();
             delete dlg;
             return ;
         }
         if (result->functionCode() == eYBFunCode::NAKCode) {
+            Ui::SnackBar::showSnackBar(this, tr("Recevie NAK Frame!"));
             qDebug("NAK Error");
             dlg->accept();
             delete dlg;
@@ -127,16 +129,15 @@ void TablePage::confAddrRecursion()
                 } else {
                     qDebug("set sensor address failed!");
                 }
-            }, [](){
-                qDebug("set sensor address error!");
+            }, [=](){
+                Ui::SnackBar::showSnackBar(this, tr("Configure sensor address failed!"));
+                qDebug("set sensor address failed!");
             });
-//            this->m_table->setListItemAddr(this->m_currentIndex, this->m_currentConfAddr);
-//            this->m_currentIndex++;
-//            this->m_currentConfAddr++;
-//            this->confAddrRecursion();
+
         } else {
             dlg->accept();
             delete dlg;
+            Ui::SnackBar::showSnackBar(this, tr("Configure sensor address failed!"));
             qDebug("sensor set address failed");
         }
     },[=](){
@@ -154,14 +155,16 @@ void TablePage::confAddrRecursion()
 void TablePage::queryStatusRecursion()
 {
     if (m_currentIndex >= m_table->sensorCount()) {
+        Ui::SnackBar::showSnackBar(this, tr("Automatically query sensor status finished!"));
         qDebug("query status finish");
         return ;
     }
     const auto addr = static_cast<uint16_t>(m_table->getListItemAddr(m_currentIndex));
     auto dlg = new SensorOperationDlg(tr("Query sensor status dialog"), tr("Query sensor(address = %1) status").arg(addr), this);
-    auto reply = m_controller->protocol()->queryStatus(addr);
+    auto reply = m_controller->protocol()->queryStatus(addr, m_controller->gatherData()->sensorTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
+            Ui::SnackBar::showSnackBar(this, tr("Info:Configure sensor address receive unkonw frame response!"));
             qDebug("Unknow frame data");
             return ;
         }
@@ -189,14 +192,16 @@ void TablePage::queryStatusRecursion()
 void TablePage::queryVersionRecursion()
 {
     if (m_currentIndex >= m_table->sensorCount()) {
+        Ui::SnackBar::showSnackBar(this, tr("Automatically query sensor version finished!"));
         qDebug("query version finish");
         return ;
     }
     const auto addr = static_cast<uint8_t>(m_table->getListItemAddr(m_currentIndex));
     auto dlg = new SensorOperationDlg(tr("Query Sensor Dialog"), tr("Query sensor version, the address=%1").arg(addr), this);
-    auto reply = m_controller->protocol()->queryVersion(eYBFrameType::YBSensor, addr);
+    auto reply = m_controller->protocol()->queryVersion(eYBFrameType::YBSensor, addr, m_controller->gatherData()->sensorTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
+            Ui::SnackBar::showSnackBar(this, tr("Info:Configure sensor address receive unkonw frame response!"));
             qDebug("Unknow frame data");
             return ;
         }
@@ -228,25 +233,15 @@ bool TablePage::canDoOperate()
 {
     bool active = m_controller->isCommunicationActive();
     if (!active) {
-        showErrorSnackBar(tr("Communication No Open!"));
+        Ui::SnackBar::showSnackBar(this, tr("Communication No Open!"));
         qDebug("not open communication");
     }
     return active;
 }
 
-void TablePage::showErrorSnackBar(const QString &text, const QIcon &icon)
-{
-
-    auto bar = new Ui::SnackBar(icon, text, this->window());
-    connect(bar, &Ui::SnackBar::showFinished, this->window(), [=]{
-        delete bar;
-    });
-    bar->showBar();
-}
-
 void TablePage::queryStatusImpl(int index, int addr, Fn<void (std::shared_ptr<IContent>)> success, Fn<void ()> error)
 {
-    auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr));
+    auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr), m_controller->gatherData()->sensorTimeout());
     reply->subscribe(success, error);
 }
 
@@ -256,9 +251,10 @@ void TablePage::onSetSensorAddr(int index, int addr)
         return;
     }
 
-    auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr));
+    auto reply = m_controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr), m_controller->gatherData()->sensorTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
+            Ui::SnackBar::showSnackBar(this, tr("Info:Configure sensor address receive unkonw frame response!"));
             qDebug("Unknow frame data");
             return ;
         }
@@ -268,12 +264,14 @@ void TablePage::onSetSensorAddr(int index, int addr)
         }
         if (result->success()) {
             this->m_table->setListItemAddr(index, addr);
-//            this->onQuerySensorStatus(index, addr);
+            this->onQuerySensorStatus(index, addr);
         } else {
+            Ui::SnackBar::showSnackBar(this, tr("Configure sensor address failed!"));
             qDebug("set sensor address failed!");
         }
-    }, [](){
-        qDebug("set sensor address error!");
+    }, [=](){
+        Ui::SnackBar::showSnackBar(this, tr("Configure sensor address timeout!"));
+        qDebug("set sensor address timeout!");
     });
 }
 
@@ -283,9 +281,11 @@ void TablePage::onQuerySensorStatus(int index, int addr)
         return;
     }
 
-    auto reply = m_controller->protocol()->queryStatus(static_cast<uint16_t>(addr));
+    auto reply = m_controller->protocol()->queryStatus(static_cast<uint16_t>(addr), m_controller->gatherData()->sensorTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
+            Ui::SnackBar::showSnackBar(this, tr("Info:Configure sensor address receive unkonw frame response!"));
+
             qDebug("Unknow frame data");
             return ;
         }
@@ -294,8 +294,9 @@ void TablePage::onQuerySensorStatus(int index, int addr)
             return ;
         }
         this->m_table->setListItemStatus(index, result->currentStatusCode(), result->configedStatusCode());
-    }, [](){
-        qDebug("query sensor status error!");
+    }, [=](){
+        Ui::SnackBar::showSnackBar(this, tr("Query sensor status timeout!"));
+        qDebug("query sensor status timeout!");
     });
 }
 
@@ -305,9 +306,11 @@ void TablePage::onQuerySensorVersion(int index, int addr)
         return;
     }
 
-    auto reply = m_controller->protocol()->queryVersion(eYBFrameType::YBSensor, static_cast<uint16_t>(addr));
+    auto reply = m_controller->protocol()->queryVersion(eYBFrameType::YBSensor, static_cast<uint16_t>(addr), m_controller->gatherData()->sensorTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
+            Ui::SnackBar::showSnackBar(this, tr("Info:Configure sensor address receive unkonw frame response!"));
+
             qDebug("Unknow frame data");
             return ;
         }
@@ -319,8 +322,10 @@ void TablePage::onQuerySensorVersion(int index, int addr)
                                           , QString::fromStdString(result->hardwareVersion())
                                           , QString::fromStdString(result->softwareVersion())
                                           , QString::fromStdString(result->productDescript()));
-    }, [](){
-        qDebug("query sensor version error!");
+    }, [this](){
+
+        Ui::SnackBar::showSnackBar(this, tr("Query sensor version timeout!"));
+        qDebug("query sensor version timeout!");
     });
 }
 
@@ -330,9 +335,11 @@ void TablePage::onChangeSensorStatus(int index, int addr, int status)
         return;
     }
 
-    auto reply = m_controller->protocol()->setStatus(static_cast<uint8_t>(status & 0xFF), static_cast<uint16_t>(addr));
+    auto reply = m_controller->protocol()->setStatus(static_cast<uint8_t>(status & 0xFF), static_cast<uint16_t>(addr), m_controller->gatherData()->sensorTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
+            Ui::SnackBar::showSnackBar(this, tr("Info:Configure sensor address receive unkonw frame response!"));
+
             qDebug("Unknow frame data");
             return ;
         }
@@ -343,10 +350,14 @@ void TablePage::onChangeSensorStatus(int index, int addr, int status)
         if (result->success()) {
             this->m_table->setListItemConfigedStatus(index, static_cast<uint8_t>(status & 0xFF));
         } else {
+            Ui::SnackBar::showSnackBar(this, tr("Failed:Change sensor status failed!"));
+
             qDebug("change status failed!");
         }
-    }, [](){
-        qDebug("change status error!");
+    }, [this](){
+
+        Ui::SnackBar::showSnackBar(this, tr("Change sensor status timeout!"));
+        qDebug("change status timeout!");
     });
 }
 

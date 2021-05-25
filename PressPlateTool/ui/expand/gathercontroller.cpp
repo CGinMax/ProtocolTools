@@ -96,7 +96,7 @@ void GatherController::onQueryVersion()
         return;
     }
 
-    auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(m_gatherData->addr()));
+    auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(m_gatherData->addr()), m_gatherData->gatherTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
             qDebug("Unknow frame data");
@@ -126,7 +126,7 @@ void GatherController::onSetGatherAddress(int addr)
         return;
     }
 
-    auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr));
+    auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr), m_gatherData->gatherTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
             qDebug("Unknow frame data");
@@ -155,7 +155,7 @@ void GatherController::onResetSensorCount(int count)
         return;
     }
 
-    auto reply = protocol()->setSensorNum(static_cast<uint16_t>(m_gatherData->addr()), static_cast<uint8_t>(count));
+    auto reply = protocol()->setSensorNum(static_cast<uint16_t>(m_gatherData->addr()), static_cast<uint8_t>(count), m_gatherData->gatherTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
             qDebug("Unknow frame data");

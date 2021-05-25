@@ -9,7 +9,8 @@ ContentSettingStatus::ContentSettingStatus(uint8_t data)
 
 std::string ContentSettingStatus::toString(bool isSend)
 {
-    std::string result;
+
+    std::string result = u8"设定状态:";
     if (isSend) {
         switch (m_status) {
         case 0x00:
@@ -30,12 +31,7 @@ std::string ContentSettingStatus::toString(bool isSend)
     }
 
     // 接收
-    result = u8"设定地址:";
-    if (m_isSuccess) {
-        result += u8"失败";
-    } else {
-        result += u8"成功";
-    }
+    result += m_isSuccess ? u8":成功" : u8":失败";
     return result;
 }
 

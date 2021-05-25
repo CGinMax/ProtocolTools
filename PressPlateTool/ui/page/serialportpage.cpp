@@ -33,6 +33,9 @@ SerialPortPage::SerialPortPage(QWidget *parent) :
     ui->cbbParityBit->addItem(tr("Mark Parity"), 5);
 
     ui->cbbBaudRate->setCurrentText(QLatin1String("9600"));
+
+    connect(ui->btnOK, &QAbstractButton::clicked, this, &SerialPortPage::okClicked);
+    connect(ui->btnCancel, &QAbstractButton::clicked, this, &SerialPortPage::cancelClicked);
 }
 
 SerialPortPage::~SerialPortPage()
@@ -52,6 +55,11 @@ void SerialPortPage::setBtnGroupHidden(bool isHidden)
     ui->btnCancel->setHidden(isHidden);
 }
 
+int SerialPortPage::getGatherCount() const
+{
+    return ui->editNum->value();
+}
+
 PortParam SerialPortPage::getPortParam() const
 {
     PortParam param;
@@ -62,4 +70,29 @@ PortParam SerialPortPage::getPortParam() const
     param.m_parity = static_cast<QSerialPort::Parity>(ui->cbbParityBit->currentData().toInt());
 
     return param;
+}
+
+void SerialPortPage::setPortParam(const PortParam &param)
+{
+    ui->cbbDevList->setCurrentText(param.m_portName);
+    ui->cbbBaudRate->setCurrentText(QString::number(param.m_baudRate));
+    ui->cbbDataBit->setCurrentText(QString::number(static_cast<int>(param.m_dataBits)));
+    ui->cbbStopBit->setCurrentText(QString::number(static_cast<int>(param.m_stopBits)));
+    ui->cbbParityBit->setCurrentText(QString::number(static_cast<int>(param.m_parity)));
+
+}
+
+void SerialPortPage::on_btnRefresh_clicked()
+{
+    const auto oldText = ui->cbbDevList->currentText();
+    ui->cbbDevList->clear();
+    auto devList = QSerialPortInfo::availablePorts();
+    for (auto& devInfo : devList) {
+        ui->cbbDevList->addItem(devInfo.portName(), devInfo.portName());
+    }
+
+    ui->cbbDevList->setCurrentText(oldText);
+    if (ui->cbbDevList->findText(oldText) < 0) {
+        ui->cbbDevList->setCurrentIndex(0);
+    }
 }

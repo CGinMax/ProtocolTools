@@ -2,11 +2,12 @@
 #define SERIALPORTDIALOG_H
 
 #include <QDialog>
-#include "portparam.h"
 
 namespace Ui {
 class SerialPortDialog;
 }
+
+class PortParam;
 
 class SerialPortDialog : public QDialog
 {
@@ -14,22 +15,14 @@ class SerialPortDialog : public QDialog
 
 public:
     explicit SerialPortDialog(bool isMulti = false, QWidget *parent = nullptr);
-    ~SerialPortDialog();
+    ~SerialPortDialog() override;
 
     PortParam portParam() const;
     int gatherNum() const;
 
-private slots:
-    void on_btnOk_clicked();
-
-    void on_btnCancel_clicked();
-
-    void on_btnRefresh_clicked();
 
 private:
     Ui::SerialPortDialog *ui;
-    PortParam m_portParam;
-    int m_gatherNum;
 };
 
 #endif // SERIALPORTDIALOG_H

@@ -43,6 +43,7 @@ void GatherDetailPage::onItemChanged(GatherController *controller)
         m_gatherData = controller->gatherData();
         ui->txtName->setText(m_gatherData->name());
         ui->txtAddress->setText(QString::number(m_gatherData->addr()));
+        m_confPage->setPortParam(m_gatherData->portParam());
 
         connect(m_gatherData.data(), &GatherData::nameChanged, this, &GatherDetailPage::onNameChanged);
         connect(m_gatherData.data(), &GatherData::addrChanged, this, &GatherDetailPage::onAddrChanged);

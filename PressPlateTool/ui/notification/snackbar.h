@@ -2,6 +2,7 @@
 #define SNACKBAR_H
 
 #include <QWidget>
+#include <QIcon>
 #include <QLabel>
 #include "../base/base_type.h"
 
@@ -68,6 +69,10 @@ public:
     void stopWait();
 
     void setSlidePos(const QPoint& pos);
+
+    static void showSnackBar(QWidget* widget, const QString& text, const QIcon& icon = QIcon(),
+                             const QString& actionText = QString(),
+                             Fn<void()>&& callback = Fn<void()>());
 protected:
     bool event(QEvent *event) override;
 

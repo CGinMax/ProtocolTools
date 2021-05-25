@@ -20,6 +20,7 @@ public:
 
     int sensorTime() const;
 
+    void setPortParam(const PortParam& param);
     PortParam portParam() const;
 
 signals:

@@ -45,14 +45,14 @@
          <item>
           <widget class="QLabel" name="txtName">
            <property name="text">
-            <string>TextLabel</string>
+            <string>Name</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="txtAddress">
            <property name="text">
-            <string>TextLabel</string>
+            <string>#0</string>
            </property>
           </widget>
          </item>

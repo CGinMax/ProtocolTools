@@ -32,6 +32,11 @@ int ConfigurationPage::sensorTime() const
     return ui->editSensorTime->value();
 }
 
+void ConfigurationPage::setPortParam(const PortParam &param)
+{
+    ui->serialportWidget->setPortParam(param);
+}
+
 PortParam ConfigurationPage::portParam() const
 {
     return ui->serialportWidget->getPortParam();

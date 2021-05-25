@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QTranslator>
 #include <QEvent>
 #include "ui/notification/snackbar.h"
 
@@ -35,6 +36,9 @@ private:
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    auto translator = new QTranslator();
+    translator->load(QLatin1String(":/translations/PressPlateTool_zh.qm"));
+    QApplication::installTranslator(translator);
     MainWindow w;
     w.show();
 
