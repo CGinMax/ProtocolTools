@@ -2,8 +2,11 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QEvent>
-#include "ui/notification/snackbar.h"
 
+#include <QQuickStyle>
+#include <QQmlApplicationEngine>
+
+#include "ui/notification/snackbar.h"
 #include "ui/base/faicon.h"
 class Widget : public QWidget
 {
@@ -41,6 +44,11 @@ int main(int argc, char *argv[])
     QApplication::installTranslator(translator);
     MainWindow w;
     w.show();
+
+    QQuickStyle::setStyle("Material");
+    QQmlApplicationEngine engine(QUrl("qrc:/qml/main.qml"));
+//    if (engine.rootObjects().isEmpty())
+//        return -1;
 
 //    Widget widget;
 //    widget.setGeometry(100, 100, 300, 300);
