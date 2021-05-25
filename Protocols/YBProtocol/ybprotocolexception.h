@@ -1,8 +1,9 @@
-#ifndef YBPROTOCOLEXCEPTION_H
+﻿#ifndef YBPROTOCOLEXCEPTION_H
 #define YBPROTOCOLEXCEPTION_H
 #include <stdexcept>
 #include "ybframeenums.h"
-class YBProtocolException : public std::logic_error
+#include "../protocols_global.h"
+class PROTOCOLSSHARED_EXPORT YBProtocolException : public std::logic_error
 {
 public:
     explicit YBProtocolException(eYBParseResult result, const std::string& str);

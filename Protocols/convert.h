@@ -1,10 +1,11 @@
-#ifndef CONVERT_H
+﻿#ifndef CONVERT_H
 #define CONVERT_H
 
 #include <string>
 #include <vector>
+#include "protocols_global.h"
 
-class Convert
+class PROTOCOLSSHARED_EXPORT Convert
 {
 public:
     Convert();
