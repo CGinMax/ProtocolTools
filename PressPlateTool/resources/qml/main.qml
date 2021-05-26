@@ -17,7 +17,18 @@ Window {
     Material.theme: Material.System
     Material.accent: Material.Blue
 
-    GatherConfView {
+    Row {
+        GatherConfView {
 
+        }
+
+        ToolSeparator{}
+        SensorConfView {
+
+        }
     }
+
+
+
+
 }
