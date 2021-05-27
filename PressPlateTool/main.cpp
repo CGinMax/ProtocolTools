@@ -3,6 +3,9 @@
 #include <QTranslator>
 #include <QEvent>
 
+#include <QQuickStyle>
+#include <QQmlApplicationEngine>
+
 #include "ui/notification/snackbar.h"
 #include "ui/base/faicon.h"
 class Widget : public QWidget
@@ -42,6 +45,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
+    QQuickStyle::setStyle("Material");
+    QQmlApplicationEngine engine(QUrl("qrc:/qml/main.qml"));
 //    if (engine.rootObjects().isEmpty())
 //        return -1;
 

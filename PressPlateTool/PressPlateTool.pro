@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui serialport widgets network
+QT       += qml quick quickcontrols2
 TARGET = PressPlateTool
 TEMPLATE = app
 CONFIG += warn_on
