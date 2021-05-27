@@ -2,7 +2,7 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QEvent>
-
+#include <QDebug>
 #include <QQuickStyle>
 #include <QQmlApplicationEngine>
 
@@ -46,7 +46,10 @@ int main(int argc, char *argv[])
     w.show();
 
     QQuickStyle::setStyle("Material");
-    QQmlApplicationEngine engine(QUrl("qrc:/qml/main.qml"));
+    QQmlApplicationEngine engine;
+    qDebug() << QApplication::applicationDirPath();
+    engine.addImportPath(QApplication::applicationDirPath());
+    engine.load(QUrl("qrc:/qml/main.qml"));
 //    if (engine.rootObjects().isEmpty())
 //        return -1;
 

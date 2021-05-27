@@ -2,9 +2,9 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls 2.12
+import Qaterial 1.0 as Qaterial
 
-
-Window {
+Qaterial.ApplicationWindow {
     id: main_window
     visible: true
     width: 960
@@ -14,19 +14,19 @@ Window {
 
     title: qsTr("Press Plate Tool")
 
-    Material.theme: Material.System
-    Material.accent: Material.Blue
+//    Material.theme: Material.System
+//    Material.accent: Material.Blue
 
-    Row {
-        GatherConfView {
+//    Row {
+//        GatherConfView {
 
-        }
+//        }
 
-        ToolSeparator{}
-        SensorConfView {
+//        ToolSeparator{}
+//        SensorConfView {
 
-        }
-    }
+//        }
+//    }
 
 
 
