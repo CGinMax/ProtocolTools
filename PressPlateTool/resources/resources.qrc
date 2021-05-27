@@ -5,9 +5,5 @@
         <file>icons/fab-menu.png</file>
         <file>translations/PressPlateTool_en.qm</file>
         <file>translations/PressPlateTool_zh.qm</file>
-        <file>qml/main.qml</file>
-        <file>qml/qtquickcontrols2.conf</file>
-        <file>qml/GatherConfView.qml</file>
-        <file>qml/SensorConfView.qml</file>
     </qresource>
 </RCC>
