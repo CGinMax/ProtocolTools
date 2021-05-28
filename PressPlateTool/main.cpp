@@ -47,8 +47,6 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
     QQmlApplicationEngine engine;
-    qDebug() << QApplication::applicationDirPath();
-    engine.addImportPath(QApplication::applicationDirPath());
     engine.load(QUrl("qrc:/qml/main.qml"));
 //    if (engine.rootObjects().isEmpty())
 //        return -1;

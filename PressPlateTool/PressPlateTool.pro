@@ -68,7 +68,7 @@ include($$PWD/../asyncfuture/asyncfuture.pri)
 RESOURCES += \
     resources/resources.qrc
 
-QML_IMPORT_PATH += $$DESTDIR
+QML_IMPORT_PATH +=
 
 QML_DESIGNER_IMPORT_PATH =
 
