@@ -14,19 +14,15 @@ Qaterial.ApplicationWindow {
 
     title: qsTr("Press Plate Tool")
 
-    Material.theme: Material.Light
-    Material.accent: Material.Blue
-
-    Row {
-        GatherConfView {
-            width: 100
-            height: 100
-        }
-
-        ToolSeparator{}
-        SensorConfView {
-
-        }
+    Qaterial.Label {
+        id: label
+        text: "Hello Qaterial"
+        anchors.centerIn: parent
+    }
+    Qaterial.Button {
+        text: "Clicked"
+        anchors.left: label.left
+        anchors.top: label.bottom
     }
     Component.onCompleted: {
 
