@@ -9,5 +9,6 @@
         <file>qml/main.qml</file>
         <file>qml/qtquickcontrols2.conf</file>
         <file>qml/SensorConfView.qml</file>
+        <file>qml/gather/GatherItem.qml</file>
     </qresource>
 </RCC>

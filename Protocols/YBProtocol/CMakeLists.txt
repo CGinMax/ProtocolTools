@@ -1,4 +1,5 @@
 
+add_subdirectory(content)
 
 add_library(YBProtocol STATIC
 ybframe.h

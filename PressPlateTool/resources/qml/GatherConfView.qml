@@ -1,49 +1,78 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
+import QtQuick.Layouts 1.12
 import Qaterial 1.0 as Qaterial
+
+//import "gather"
 
 Rectangle {
     id: root
-
+//    color: "#673AB7"
 
     Material.theme: Material.System
     Material.accent: Material.Blue
 
-    Qaterial.TextField {
-        id: search_field
-        title: "search"
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-            leftMargin: 30
-            rightMargin: 20
+    Qaterial.ScrollView {
+        id: sv
+        anchors.fill: parent
+        ColumnLayout {
+            id: cl
+            anchors.fill: parent
+            Qaterial.Card {
+                Layout.fillWidth: true
+                Layout.minimumWidth: 50
+                Layout.preferredWidth: 100
+                Layout.maximumWidth: 300
+                Layout.minimumHeight: 100
+                background: Qaterial.CardBackground {
+                    color: "green"
+                }
+                elevation: 10
+                width: parent.width
+            }
+            Qaterial.Card{
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: 50
+                Layout.preferredWidth: 100
+                Layout.maximumWidth: 300
+                Layout.minimumHeight: 100
+                background: Qaterial.CardBackground {
+                    color: "red"
+                }
+
+                width: parent.width
+            }
+            Qaterial.Card {
+                Layout.fillWidth: true
+                Layout.minimumWidth: 50
+                Layout.preferredWidth: 100
+                Layout.maximumWidth: 300
+                Layout.minimumHeight: 100
+
+                width: parent.width
+            }
+            Qaterial.Card {
+                Layout.fillWidth: true
+                Layout.minimumWidth: 50
+                Layout.preferredWidth: 100
+                Layout.maximumWidth: 300
+                Layout.minimumHeight: 100
+                width: parent.width
+                elevation: 10
+            }
+            Qaterial.Card {
+                Layout.fillWidth: true
+                Layout.minimumWidth: 50
+                Layout.preferredWidth: 100
+                Layout.maximumWidth: 300
+                Layout.minimumHeight: 100
+                width: parent.width
+                elevation: 10
+            }
         }
-    }
 
 
-    Qaterial.FlatButton {
-        id: delete_btn
-        text: "delete"
-        anchors {
-            top: parent.top
-            bottom: search_field.bottom
-            left: search_field.left
-            right: parent.right
-            leftMargin: 20
-        }
-    }
-
-    Rectangle {
-        id: expand_gather
-        color: "blueviolet"
-        anchors {
-            top: search_field.bottom
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-            topMargin: 10
-        }
     }
 }
