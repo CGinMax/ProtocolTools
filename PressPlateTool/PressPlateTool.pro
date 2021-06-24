@@ -22,16 +22,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 CONFIG += c++11
-
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp
+        qmlmain.cpp
+#SOURCES += \
+#        main.cpp \
+#        mainwindow.cpp
 
-HEADERS += \
-        mainwindow.h
-
-FORMS += \
-        mainwindow.ui
+#HEADERS += \
+#        mainwindow.h
 
 
 INCLUDEPATH += $$PWD/../spdlog/include
@@ -45,30 +43,32 @@ INCLUDEPATH += $$PWD/../Protocols/
 DEPENDPATH += $$PWD/../Protocols/
 
 
+INCLUDEPATH += $$PWD/../Qaterial/include
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug
 }
 else{
     DESTDIR = $$PWD/../bin/release
 }
-    LIBS += -L$${DESTDIR} -lspdlog
-    LIBS += -L$${DESTDIR} -lCommunication
-    LIBS += -L$${DESTDIR} -lProtocols
+LIBS += -L$${DESTDIR} -lspdlog
+LIBS += -L$${DESTDIR} -lCommunication
+LIBS += -L$${DESTDIR} -lProtocols
+LIBS += -L$${DESTDIR}/ -lQaterial
 
 
 TRANSLATIONS += $$PWD/PressPlateTool_en.ts
 TRANSLATIONS += $$PWD/PressPlateTool_zh.ts
 
-include($$PWD/ui/ui.pri)
-include($$PWD/protocol/protocol.pri)
-include($$PWD/common/common.pri)
-include($$PWD/../QtAwesome/QtAwesome/QtAwesome.pri)
-include($$PWD/../asyncfuture/asyncfuture.pri)
+#include($$PWD/ui/ui.pri)
+#include($$PWD/protocol/protocol.pri)
+#include($$PWD/common/common.pri)
+#include($$PWD/../QtAwesome/QtAwesome/QtAwesome.pri)
+#include($$PWD/../asyncfuture/asyncfuture.pri)
 
 RESOURCES += \
     resources/resources.qrc
 
-QML_IMPORT_PATH +=
+QML_IMPORT_PATH += $$OUT_PWD/../
 
 QML_DESIGNER_IMPORT_PATH =
 
