@@ -10,5 +10,6 @@
         <file>qml/qtquickcontrols2.conf</file>
         <file>qml/SensorConfView.qml</file>
         <file>qml/gather/GatherItem.qml</file>
+        <file>qml/sensor/SensorConfigurePage.qml</file>
     </qresource>
 </RCC>

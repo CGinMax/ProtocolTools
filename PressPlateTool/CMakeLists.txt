@@ -16,9 +16,9 @@ find_package(Threads)
 find_package(Qt5 COMPONENTS Core Qml Quick QuickControls2 REQUIRED)
 find_package(Qt5QuickCompiler)
 
-#add_de
+include_directories(../Qaterial/include)
 include_directories(../Communication)
-
+set(QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../ CACHE STRING "qml import path")
 
 # Not use qt5_add_resources,
 set(QRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.qrc)

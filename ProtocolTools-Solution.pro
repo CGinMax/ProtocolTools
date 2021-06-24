@@ -1,7 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-#    Qaterial \
+    Qaterial \
     Communication \
     Protocols \
     ProtocolTools \

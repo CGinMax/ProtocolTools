@@ -24,6 +24,7 @@ Qaterial.ApplicationWindow {
             Layout.maximumWidth: 300
             Layout.minimumHeight: parent.height
         }
+//        Qaterial.S
         SensorConfView {
             Layout.fillWidth: true
             Layout.minimumWidth: 100

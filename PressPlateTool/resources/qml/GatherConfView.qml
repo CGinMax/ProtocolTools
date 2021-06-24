@@ -8,68 +8,46 @@ import Qaterial 1.0 as Qaterial
 
 Rectangle {
     id: root
-//    color: "#673AB7"
+    //    color: "#673AB7"
 
     Material.theme: Material.System
     Material.accent: Material.Blue
 
-    Qaterial.ScrollView {
-        id: sv
-        anchors.fill: parent
-        ColumnLayout {
-            id: cl
-            anchors.fill: parent
-            Qaterial.Card {
-                Layout.fillWidth: true
-                Layout.minimumWidth: 50
-                Layout.preferredWidth: 100
-                Layout.maximumWidth: 300
-                Layout.minimumHeight: 100
-                background: Qaterial.CardBackground {
-                    color: "green"
-                }
-                elevation: 10
-                width: parent.width
-            }
-            Qaterial.Card{
+    Qaterial.Button{
+        id: btn_delete_all
+        text: "delete"
+        anchors.right: root.right
+        anchors.top: root.top
+        anchors.topMargin: 3
+    }
 
-                Layout.fillWidth: true
-                Layout.minimumWidth: 50
-                Layout.preferredWidth: 100
-                Layout.maximumWidth: 300
-                Layout.minimumHeight: 100
-                background: Qaterial.CardBackground {
-                    color: "red"
-                }
+    ListView {
+        id: list_gather
+        anchors.top: btn_delete_all.bottom
+        anchors.topMargin: 5
+        anchors.left: root.left
+        anchors.right: root.right
+        anchors.bottom: root.bottom
+        spacing: 10
 
-                width: parent.width
+        delegate: Qaterial.Card {
+            x: 10
+            width: parent.width - 20
+            height: 200
+            backgroundColor: bgColor
+            Text {
+                text: name
+                anchors.centerIn: parent
             }
-            Qaterial.Card {
-                Layout.fillWidth: true
-                Layout.minimumWidth: 50
-                Layout.preferredWidth: 100
-                Layout.maximumWidth: 300
-                Layout.minimumHeight: 100
-
-                width: parent.width
+        }
+        model: ListModel {
+            ListElement{
+                name: "1"
+                bgColor: "red"
             }
-            Qaterial.Card {
-                Layout.fillWidth: true
-                Layout.minimumWidth: 50
-                Layout.preferredWidth: 100
-                Layout.maximumWidth: 300
-                Layout.minimumHeight: 100
-                width: parent.width
-                elevation: 10
-            }
-            Qaterial.Card {
-                Layout.fillWidth: true
-                Layout.minimumWidth: 50
-                Layout.preferredWidth: 100
-                Layout.maximumWidth: 300
-                Layout.minimumHeight: 100
-                width: parent.width
-                elevation: 10
+            ListElement {
+                name: "e"
+                bgColor: "green"
             }
         }
 
