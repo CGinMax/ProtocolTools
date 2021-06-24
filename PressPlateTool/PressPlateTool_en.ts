@@ -67,6 +67,14 @@
     </message>
 </context>
 <context>
+    <name>GatherConfView</name>
+    <message>
+        <location filename="resources/qml/GatherConfView.qml" line="18"/>
+        <source>delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GatherController</name>
     <message>
         <location filename="ui/expand/gathercontroller.cpp" line="73"/>
@@ -87,16 +95,6 @@
 <context>
     <name>GatherDetailPage</name>
     <message>
-        <location filename="ui/gatherdetailpage.cpp" line="22"/>
-        <source>Sensors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/gatherdetailpage.cpp" line="23"/>
-        <source>Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="ui/gatherdetailpage.ui" line="48"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
@@ -104,6 +102,16 @@
     <message>
         <location filename="ui/gatherdetailpage.ui" line="55"/>
         <source>#0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/gatherdetailpage.cpp" line="22"/>
+        <source>Sensors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/gatherdetailpage.cpp" line="23"/>
+        <source>Configuration</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -353,6 +361,20 @@
     </message>
 </context>
 <context>
+    <name>SensorConfView</name>
+    <message>
+        <location filename="resources/qml/SensorConfView.qml" line="14"/>
+        <location filename="resources/qml/SensorConfView.qml" line="37"/>
+        <source>Sensor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/SensorConfView.qml" line="38"/>
+        <source>Configure</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SensorOperationDlg</name>
     <message>
         <location filename="ui/dialogs/sensoroperationdlg.ui" line="17"/>
@@ -596,6 +618,14 @@
     <message>
         <location filename="ui/page/tablepage.cpp" line="359"/>
         <source>Change sensor status timeout!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <location filename="resources/qml/main.qml" line="15"/>
+        <source>Press Plate Tool</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

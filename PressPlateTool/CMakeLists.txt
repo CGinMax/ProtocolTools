@@ -15,9 +15,18 @@ set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 find_package(Threads)
 find_package(Qt5 COMPONENTS Core Qml Quick QuickControls2 REQUIRED)
 find_package(Qt5QuickCompiler)
+find_package(Qt5LinguistTools)
 
 include_directories(../Qaterial/include)
 include_directories(../Communication)
+
+qt5_create_translation(TS_FILES
+    # ${CMAKE_CURRENT_SOURCE_DIR}/resources/qml
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    PressPlateTool_zh.ts
+    PressPlateTool_en.ts
+)
+
 set(QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../ CACHE STRING "qml import path")
 
 # Not use qt5_add_resources,
@@ -31,6 +40,7 @@ add_executable(${PROJECT_NAME}
 qmlmain.cpp
 ${QRC_FILES}
 ${QUICK_QRC_FILES}
+${TS_FILES}
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC

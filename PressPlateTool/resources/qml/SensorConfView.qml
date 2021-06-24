@@ -11,7 +11,7 @@ Rectangle {
         id: text_gather_name
         width: 50
         height: 30
-        text: qsTr("text")
+        text: qsTr("Sensor")
         font.pixelSize: 24
         anchors.left: _root.left
         anchors.leftMargin: 5
@@ -34,8 +34,8 @@ Rectangle {
 
             model: ListModel
             {
-                ListElement { text: "Sensor" }
-                ListElement { text: "Configure" }
+                ListElement { text: qsTr("Sensor") }
+                ListElement { text: qsTr("Configure") }
             }
         }
         Qaterial.SwipeView

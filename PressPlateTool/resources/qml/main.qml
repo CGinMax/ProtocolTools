@@ -1,7 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick.Controls.Material 2.12
+//import QtQuick.Controls.Material 2.12
 import QtQuick.Controls 2.12
+import QtQuick.Controls 1.4 as Old
 import QtQuick.Layouts 1.12
 import Qaterial 1.0 as Qaterial
 
@@ -14,24 +15,29 @@ Qaterial.ApplicationWindow {
 
     title: qsTr("Press Plate Tool")
 
-    RowLayout {
-        spacing: 2
+    Old.SplitView {
         anchors.fill: parent
-        GatherConfView {
-            Layout.fillWidth: true
-            Layout.minimumWidth: 50
-            Layout.preferredWidth: 100
-            Layout.maximumWidth: 300
-            Layout.minimumHeight: parent.height
-        }
-//        Qaterial.S
-        SensorConfView {
-            Layout.fillWidth: true
-            Layout.minimumWidth: 100
-            Layout.preferredWidth: 200
-            Layout.preferredHeight: parent.height
+        GatherConfView{
+//            Layout.fillWidth: true
+//            Layout.minimumWidth: 50
+//            Layout.preferredWidth: 100
+//            Layout.maximumWidth: 300
+            width: 300
         }
 
+        SensorConfView{
+
+            width: 700
+//            Layout.fillWidth: true
+//            Layout.minimumWidth: 700
+//            Layout.preferredWidth: 700
+        }
+
+        handleDelegate: Rectangle {
+            width: 5
+            color: Qaterial.Style.backgroundColor
+
+        }
     }
 
     Component.onCompleted: {

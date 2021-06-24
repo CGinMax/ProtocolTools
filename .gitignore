@@ -3,3 +3,8 @@
 *.o
 moc_*
 Makefile
+build
+bin
+cmake-build
+cmake-bin
+.vscode

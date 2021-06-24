@@ -209,7 +209,6 @@ void CDTWorkWidget::stopCommunication()
 {
     emit stop();
     m_network->close();
-
     m_viewTimer.stop();
 }
 

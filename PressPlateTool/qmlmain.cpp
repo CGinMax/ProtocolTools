@@ -1,11 +1,16 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-
+#include <QTranslator>
 #include "Qaterial/Qaterial.hpp"
 
 int main(int argc, char *argv[])
 {
+
     QGuiApplication a(argc, argv);
+    // auto translator = new QTranslator();
+    // translator->load(QGuiApplication::applicationDirPath() + "/PressPlateTool_zh.qm");
+    // a.installTranslator(translator);
+
     QQmlApplicationEngine engine;
 
     engine.addImportPath(QString("qrc:///"));

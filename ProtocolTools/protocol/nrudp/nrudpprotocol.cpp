@@ -165,6 +165,7 @@ void NrUdpProtocol::ykRequest(int ptId, bool offon)
     frame.setDataBuf();
     send(frame);
 
+    showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控请求帧..."), frame.allFrameBytes);
     emit sendYKMsg(QStringLiteral("发送点%1的遥控%2请求指令").arg(ptId).arg(offon ? QStringLiteral("合") : QStringLiteral("分")));
 }
 
