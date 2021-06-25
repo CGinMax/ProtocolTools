@@ -76,12 +76,11 @@ public:
         return m_settingData->m_ptCfg.data();
     }
 
-
     void uploadDi();
 
     void uploadAi();
 
-
+    void uploadVDi();
 
 signals:
 public slots:
@@ -100,8 +99,6 @@ protected:
     QByteArray m_recvBuffer;
     QQueue<CDTFrame> m_frameQueue;
     bool m_isRunYK;
-    uint m_yxCounter;
-    uint m_ycCounter;
 };
 
 #endif // CDTPROTOCOL_H

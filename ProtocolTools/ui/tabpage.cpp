@@ -91,6 +91,8 @@ void TabPage::initWidget()
     btnGroup->addButton(ui->btnStop);
     btnGroup->setExclusive(true);
 
+    setConfigureWidgetEnabled(true);
+
     ui->pageStackedWidget->addWidget(m_serverPage.data());
     ui->pageStackedWidget->addWidget(m_clientPage.data());
     ui->pageStackedWidget->addWidget(m_udpPage.data());

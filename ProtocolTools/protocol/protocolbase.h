@@ -73,7 +73,9 @@ protected:
     QSharedPointer<SettingData> m_settingData;
     StrategyBase* m_strategy;
     QTimer *m_timer{nullptr};
-
+    uint m_yxSendCounter;
+    uint m_ycSendCounter;
+    uint m_vyxSendCounter;
     int m_portOpenFailedCount;
 };
 

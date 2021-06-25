@@ -81,9 +81,7 @@ protected slots:
 private:
     QByteArray m_recvBuffer;
     QQueue<NrUdpFrame> m_frameQueue;
-    uint m_yxSendCounter;
-    uint m_ycSendCounter;
-    uint m_vyxSendCounter;
+
     bool m_isRunYK;
 };
 

@@ -10,6 +10,9 @@ ProtocolBase::ProtocolBase(const QSharedPointer<CommunicationBase> &network, con
     , m_settingData(settingData)
     , m_strategy(nullptr)
     , m_portOpenFailedCount(0)
+    , m_yxSendCounter(0)
+    , m_ycSendCounter(0)
+    , m_vyxSendCounter(0)
 {
     connect(this, &ProtocolBase::write, network.data(), &CommunicationBase::writeData);
     connect(m_network.data(), &CommunicationBase::readyRead, this, &ProtocolBase::onReadyRead);

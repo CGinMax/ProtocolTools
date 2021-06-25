@@ -66,6 +66,7 @@ void MainWindow::onImportFinish(const QMultiMap<QString, SettingData *> &setting
         auto item = ui->treeWidget->addChannel(iter.key(), iter.value()->m_networkType);
         m_mainTabController->onNotifyAddNewChannel(item, QSharedPointer<SettingData>(iter.value()));
     }
+    ui->treeWidget->autoSelectFirstItem();
 }
 
 void MainWindow::onItemChangeSelect(bool isChild)

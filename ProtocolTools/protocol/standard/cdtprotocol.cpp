@@ -7,8 +7,6 @@
 CDTProtocol::CDTProtocol(const QSharedPointer<CommunicationBase> &network, const QSharedPointer<SettingData> &settingData)
     : ProtocolBase(network, settingData)
     , m_isRunYK(false)
-    , m_yxCounter(0)
-    , m_ycCounter(0)
 {
 
     connect(m_network.data(), &CommunicationBase::disconnected, this, &CDTProtocol::onDisconnected, Qt::BlockingQueuedConnection);
@@ -402,17 +400,25 @@ QByteArray CDTProtocol::buildVYXProtocol(const QSharedPointer<SettingData> &sett
 
 void CDTProtocol::uploadDi()
 {
-    if (m_yxCounter > static_cast<uint>(m_settingData->m_ptCfg->m_yxTime)) {
+    if (m_yxSendCounter > static_cast<uint>(m_settingData->m_ptCfg->m_yxTime)) {
         sendAllDi();
-        m_yxCounter = 0;
+        m_yxSendCounter = 0;
     }
 }
 
 void CDTProtocol::uploadAi()
 {
-    if (m_ycCounter > static_cast<uint>(m_settingData->m_ptCfg->m_ycTime)) {
+    if (m_ycSendCounter > static_cast<uint>(m_settingData->m_ptCfg->m_ycTime)) {
         sendAllAi();
-        m_ycCounter = 0;
+        m_ycSendCounter = 0;
+    }
+}
+
+void CDTProtocol::uploadVDi()
+{
+    if (m_vyxSendCounter > static_cast<uint>(m_settingData->m_ptCfg->m_ycTime)) {
+        sendVirtualYX();
+        m_vyxSendCounter = 0;
     }
 }
 
@@ -454,8 +460,8 @@ void CDTProtocol::onDisconnected()
 
 void CDTProtocol::onTimeout()
 {
-    this->m_yxCounter += 100;
-    this->m_ycCounter += 100;
+    this->m_yxSendCounter += 100;
+    this->m_ycSendCounter += 100;
     ProtocolBase::onTimeout();
 }
 

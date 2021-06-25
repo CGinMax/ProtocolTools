@@ -15,7 +15,7 @@ CDTWFStrategy::~CDTWFStrategy()
 void CDTWFStrategy::uploadTiming()
 {
     if (!m_cdt->isRunYK()) {
-        m_cdt->sendVirtualYX();
+        m_cdt->uploadVDi();
     }
 }
 

@@ -151,10 +151,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<CommunicationBase> &network, c
 
 CDTWorkWidget::~CDTWorkWidget()
 {
-    if (m_protocol != nullptr) {
-        delete m_protocol;
-        m_protocol = nullptr;
-    }
+    clearProtocol();
     m_viewTimer.stop();
 }
 
@@ -210,11 +207,12 @@ void CDTWorkWidget::stopCommunication()
     emit stop();
     m_network->close();
     m_viewTimer.stop();
+    clearProtocol();
 }
 
 bool CDTWorkWidget::isConnection()
 {
-    return m_protocol->isConnection();
+    return m_protocol != nullptr && m_protocol->isConnection();
 }
 
 void CDTWorkWidget::recvProtocolContent(const QString &msg)
@@ -263,4 +261,12 @@ void CDTWorkWidget::onTextBrowserContextMenuRequested(const QPoint &pos)
         this->ui->textBrowser->clear();
     });
     menu.exec(QCursor::pos());
+}
+
+void CDTWorkWidget::clearProtocol()
+{
+    if (m_protocol != nullptr) {
+        delete m_protocol;
+        m_protocol = nullptr;
+    }
 }

@@ -42,7 +42,8 @@ private slots:
     void on_btnExecute_clicked();
     void onPlainTextContextMenuRequested(const QPoint &pos);
     void onTextBrowserContextMenuRequested(const QPoint &pos);
-
+private:
+    void clearProtocol();
 private:
     DiTableModel* m_diModel;
     AiTableModel* m_aiModel;

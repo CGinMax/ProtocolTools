@@ -20,6 +20,8 @@ public:
     QTreeWidgetItem* tcpServerItem();
     QTreeWidgetItem* udpItem();
     QTreeWidgetItem* serialPortItem();
+
+    void autoSelectFirstItem();
 signals:
     void notifyItemSelected(QTreeWidgetItem* item);
     void notifyAddNewChannel(QTreeWidgetItem* item, const QSharedPointer<SettingData>& settingData);

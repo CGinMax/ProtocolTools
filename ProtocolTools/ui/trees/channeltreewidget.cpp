@@ -21,7 +21,7 @@ ChannelTreeWidget::ChannelTreeWidget(QWidget *parent)
     m_networkIcons.append(QIcon(":/icon/resources/udp.png"));
     m_networkIcons.append(QIcon(":/icon/resources/serialport.png"));
 
-    setStyle(QStyleFactory::create(QLatin1String("Windows")));
+//    setStyle(QStyleFactory::create(QLatin1String("Windows")));
     initMenuAction();
     m_tcpClientParent->setText(0, tr("Tcp Client"));
     m_tcpServerParent->setText(0, tr("Tcp Server"));
@@ -124,6 +124,32 @@ QTreeWidgetItem *ChannelTreeWidget::udpItem()
 QTreeWidgetItem *ChannelTreeWidget::serialPortItem()
 {
     return m_serialPortParent;
+}
+
+void ChannelTreeWidget::autoSelectFirstItem()
+{
+    if (tcpClientItem()->childCount() != 0) {
+        onItemClicked(tcpClientItem()->child(0));
+        return ;
+    }
+
+    if (tcpServerItem()->childCount() != 0) {
+        onItemClicked(tcpServerItem()->child(0));
+        return ;
+    }
+
+    if (udpItem()->childCount() != 0) {
+        onItemClicked(udpItem()->child(0));
+        return ;
+    }
+
+    if (serialPortItem()->childCount() != 0) {
+        onItemClicked(serialPortItem()->child(0));
+        return ;
+    }
+
+    // no any child, select tcp client root item
+    onItemClicked(tcpClientItem());
 }
 
 void ChannelTreeWidget::onCurrentItemChanged(QTreeWidgetItem *item)

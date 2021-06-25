@@ -5,9 +5,6 @@
 
 NrUdpProtocol::NrUdpProtocol(const QSharedPointer<CommunicationBase>& network, const QSharedPointer<SettingData>& settingData)
     : ProtocolBase(network, settingData)
-    , m_yxSendCounter(0)
-    , m_ycSendCounter(0)
-    , m_vyxSendCounter(0)
     , m_isRunYK(false)
 {
     connect(m_network.data(), &CommunicationBase::disconnected, this, &NrUdpProtocol::onDisconnected, Qt::BlockingQueuedConnection);
