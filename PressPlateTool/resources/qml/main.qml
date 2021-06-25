@@ -6,6 +6,8 @@ import QtQuick.Controls 1.4 as Old
 import QtQuick.Layouts 1.12
 import Qaterial 1.0 as Qaterial
 
+import "gather"
+import "sensor"
 
 Qaterial.ApplicationWindow {
     id: main_window

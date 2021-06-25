@@ -4,8 +4,6 @@ import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import Qaterial 1.0 as Qaterial
 
-import "./gather"
-
 Rectangle {
     id: root
     //    color: "#673AB7"

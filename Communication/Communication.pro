@@ -15,7 +15,8 @@ SOURCES += \
     $$PWD/tcpclient.cpp \
     $$PWD/udpsocket.cpp \
     $$PWD/serialport.cpp \
-    $$PWD/portparam.cpp
+    $$PWD/portparam.cpp \
+    qmlserialporthelper.cpp
 
 HEADERS += \
     $$PWD/communicationbase.h \
@@ -24,7 +25,8 @@ HEADERS += \
     $$PWD/udpsocket.h \
     $$PWD/serialport.h \
     $$PWD/portparam.h \
-    $$PWD/communication_global.h
+    $$PWD/communication_global.h \
+    qmlserialporthelper.h
 
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug

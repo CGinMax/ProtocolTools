@@ -1,8 +1,10 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
-import QtQuick.Controls.Material 2.12
+
 import Qaterial 1.0 as Qaterial
+
+import "../page"
 
 Rectangle {
     id: _root
@@ -28,7 +30,7 @@ Rectangle {
         clip: true
         header: Qaterial.ClusturedTabBar {
             id: _tabBar
-            currentIndex: _swipeView.currentIndex
+            currentIndex: _swipe_view.currentIndex
             onPrimary: true
             enabled: true
 
@@ -40,35 +42,19 @@ Rectangle {
         }
         Qaterial.SwipeView
         {
-            id: _swipeView
+            id: _swipe_view
             anchors.fill: parent
             currentIndex: _tabBar.currentIndex
             interactive: true
-            Item
-            {
-                width: _swipeView.width
-                height: _swipeView.height
+            SensorConfigurePage {
 
-                Text
-                {
-                    anchors.centerIn: parent
-                    text: "Landscape View"
-                    color: "#FF2196F3"
-                } // Label
-            } // Item
+            } // SensorConfigurePage
 
-            Item
-            {
-                width: _swipeView.width
-                height: _swipeView.height
-
-                Text
-                {
-                    anchors.centerIn: parent
-                    text: "City View"
-                    color: "#FF00BCD4"
-                } // Label
-            } // Item
+            ProjectConfigurePage {
+                id: _page_project_conf
+                width: _swipe_view.width
+                height: _swipe_view.height
+            } // ProjectConfigurePage
 
         } // SwipeView
     }

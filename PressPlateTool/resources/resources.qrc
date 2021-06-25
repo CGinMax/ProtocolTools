@@ -5,12 +5,14 @@
         <file>icons/fab-menu.png</file>
         <file>translations/PressPlateTool_en.qm</file>
         <file>translations/PressPlateTool_zh.qm</file>
-        <file>qml/GatherConfView.qml</file>
         <file>qml/main.qml</file>
-        <file>qml/SensorConfView.qml</file>
         <file>qml/gather/GatherItem.qml</file>
         <file>qml/sensor/SensorConfigurePage.qml</file>
         <file>icons/delete-all.png</file>
         <file>qml/gather/ToolButtonBar.qml</file>
+        <file>qml/gather/GatherConfView.qml</file>
+        <file>qml/sensor/SensorConfView.qml</file>
+        <file>qml/page/ProjectConfigurePage.qml</file>
+        <file>qml/page/SerialPortConfigureView.qml</file>
     </qresource>
 </RCC>

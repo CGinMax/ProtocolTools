@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QTranslator>
+#include "qmlserialporthelper.h"
 #include "Qaterial/Qaterial.hpp"
 
 int main(int argc, char *argv[])
@@ -14,6 +15,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     engine.addImportPath(QString("qrc:///"));
+
+    qmlRegisterType<QmlSerialPortHelper>("PressPlateTools", 1, 0, "QmlSerialPortHelper");
 
     qaterial::Utils::loadResources();
 

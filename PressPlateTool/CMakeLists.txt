@@ -13,7 +13,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 find_package(Threads)
-find_package(Qt5 COMPONENTS Core Qml Quick QuickControls2 REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS Core Qml Quick QuickControls2 SerialPort)
 find_package(Qt5QuickCompiler)
 find_package(Qt5LinguistTools)
 
@@ -44,11 +44,12 @@ ${TS_FILES}
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-Threads::Threads
-Communication
-Qaterial
-Qt5::Core
-Qt5::Qml
-Qt5::Quick
-Qt5::QuickControls2
+    Threads::Threads
+    Communication
+    Qaterial
+    Qt5::Core
+    Qt5::Qml
+    Qt5::Quick
+    Qt5::QuickControls2
+    Qt5::SerialPort
 )
