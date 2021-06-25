@@ -6,4 +6,4 @@
 	url = https://github.com/benlau/asyncfuture.git
 [submodule "Qaterial"]
 	path = Qaterial
-	url = git@github.com:CGinMax/Qaterial.git
+	url = https://github.com/CGinMax/Qaterial.git
