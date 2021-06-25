@@ -1,4 +1,4 @@
-#include "ybframe.h"
+﻿#include "ybframe.h"
 #include <algorithm>
 #include <iterator>
 #include "../convert.h"
@@ -101,7 +101,7 @@ std::vector<uint8_t> YBFrame::packetFrameToPureData()
     }
     m_crcCode = calcCrc(*this);
 
-    uint pos = 0;
+    uint32_t pos = 0;
     std::vector<uint8_t> packetDatas(FRAME_MIN_LEN + m_data.size(), 0);
     std::copy(HEADER_DATA.begin(), HEADER_DATA.end(), packetDatas.begin());
     pos += HEADER_DATA.size();
@@ -130,7 +130,7 @@ std::vector<uint8_t> YBFrame::packetFrameToSeparator(unsigned char separator)
     m_crcCode = calcCrc(*this);
     auto separatorData = m_dataContent->toByteVector();
 
-    uint pos = 0;
+    uint32_t pos = 0;
     std::vector<uint8_t> packetDatas(FRAME_MIN_LEN + m_data.size(), 0);
     std::copy(HEADER_DATA.begin(), HEADER_DATA.end(), packetDatas.begin());
     pos += HEADER_DATA.size();

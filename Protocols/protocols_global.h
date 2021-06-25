@@ -1,4 +1,4 @@
-#ifndef PROTOCOLS_GLOBAL_H
+﻿#ifndef PROTOCOLS_GLOBAL_H
 #define PROTOCOLS_GLOBAL_H
 
 #  ifdef linux
@@ -9,6 +9,10 @@
 #    ifdef _MSC_VER
 #       define Q_DECL_EXPORT     __declspec(dllexport)
 #       define Q_DECL_IMPORT     __declspec(dllimport)
+#    else
+#       define Q_DECL_EXPORT     __attribute__((visibility("default")))
+#       define Q_DECL_IMPORT     __attribute__((visibility("default")))
+#       define Q_DECL_HIDDEN     __attribute__((visibility("hidden")))
 #    endif
 
 #  endif
