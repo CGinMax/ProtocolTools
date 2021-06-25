@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=PressPlateTool
+Exec=AppRun %F
+Icon=PressPlateTool
+Comment=Tools
+Categories=Application;
+Terminal=true

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=ProtocolTools
+Exec=AppRun %F
+Icon=ProtocolTools
+Comment=Tools
+Categories=Application;
+Terminal=true
