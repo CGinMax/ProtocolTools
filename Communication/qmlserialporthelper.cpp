@@ -5,6 +5,11 @@ QmlSerialPortHelper::QmlSerialPortHelper(QObject *parent) : QObject(parent)
 
 }
 
+QmlSerialPortHelper::~QmlSerialPortHelper()
+{
+
+}
+
 QList<QString> QmlSerialPortHelper::availablePorts()
 {
     auto serialports = QSerialPortInfo::availablePorts();

@@ -11,6 +11,8 @@ endif()
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
+set(CMAKE_AUTOMOC ON)
+
 add_definitions(-DCOMMUNICATION_LIBRARY)
 
 find_package(Qt5 COMPONENTS Core Network SerialPort REQUIRED)
@@ -29,7 +31,10 @@ set(NETWORK_SRC
     tcpserver.cpp
     udpsocket.h
     udpsocket.cpp
+    qmlserialporthelper.h
+    qmlserialporthelper.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${NETWORK_SRC})
+#target_
 target_link_libraries(${PROJECT_NAME} PUBLIC Qt5::Core Qt5::Network Qt5::SerialPort)

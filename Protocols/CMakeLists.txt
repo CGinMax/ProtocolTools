@@ -17,11 +17,12 @@ add_definitions(-DPROTOCOLS_LIBRARY)
 add_subdirectory(YBProtocol)
 
 add_library(${PROJECT_NAME}
-protocols_global.h
-iprotocols.h
-convert.h
-iprotocols.cpp
-convert.cpp
+STATIC
+    protocols_global.h
+    iprotocols.h
+    convert.h
+    iprotocols.cpp
+    convert.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC

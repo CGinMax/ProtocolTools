@@ -12,11 +12,16 @@ endif()
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
+
 find_package(Threads)
 find_package(Qt5 REQUIRED COMPONENTS Core Qml Quick QuickControls2 SerialPort)
 find_package(Qt5QuickCompiler)
 find_package(Qt5LinguistTools)
 
+add_subdirectory(common)
+add_subdirectory(protocol)
+add_subdirectory(model)
+add_subdirectory(controller)
 include_directories(../Qaterial/include)
 include_directories(../Communication)
 
@@ -36,17 +41,29 @@ set(QRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.qrc)
 # Add qml to the qtquick compiler
 qtquick_compiler_add_resources(QUICK_QRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.qrc)
 
+set(PressPlateToolSrc
+    qmlmain.cpp
+    qmlexport.h
+    qmlexport.cpp
+)
+
 add_executable(${PROJECT_NAME}
-qmlmain.cpp
-${QRC_FILES}
-${QUICK_QRC_FILES}
-${TS_FILES}
+    ${PressPlateToolSrc}
+    ${QRC_FILES}
+    ${QUICK_QRC_FILES}
+    ${TS_FILES}
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     Threads::Threads
+#    asyncfuture
     Communication
+    Protocols
     Qaterial
+    common
+    model
+    protocol
+    controller
     Qt5::Core
     Qt5::Qml
     Qt5::Quick

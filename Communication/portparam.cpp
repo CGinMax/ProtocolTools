@@ -11,15 +11,35 @@ PortParam::PortParam(const QString& portName, int baudRate, QSerialPort::DataBit
           , QSerialPort::StopBits stopBits, QSerialPort::Parity parity)
     : m_portName(portName)
     , m_baudRate(baudRate)
-    , m_dataBits(dataBits)
-    , m_stopBits(stopBits)
+    , m_dataBit(dataBits)
+    , m_stopBit(stopBits)
     , m_parity(parity)
 {}
+
+PortParam::PortParam(const PortParam &other)
+{
+    *this = other;
+}
+
+PortParam &PortParam::operator=(const PortParam &other)
+{
+    this->m_localIp = other.m_localIp;
+    this->m_localPort = other.m_localPort;
+    this->m_remoteIp = other.m_remoteIp;
+    this->m_remotePort = other.m_remotePort;
+    this->m_udpMode = other.m_udpMode;
+
+    this->m_portName = other.m_portName;
+    this->m_baudRate = other.m_baudRate;
+    this->m_dataBit = other.m_dataBit;
+    this->m_stopBit = other.m_stopBit;
+    this->m_parity = other.m_parity;
+}
 
 void PortParam::save(QDataStream &dataStream)
 {
     dataStream << m_localIp << m_localPort << m_remoteIp << m_remotePort << m_portName << m_baudRate
-               << static_cast<int>(m_dataBits) << static_cast<int>(m_stopBits) << static_cast<int>(m_parity);
+               << static_cast<int>(m_dataBit) << static_cast<int>(m_stopBit) << static_cast<int>(m_parity);
 }
 
 void PortParam::load(QDataStream &dataStream)
@@ -30,8 +50,8 @@ void PortParam::load(QDataStream &dataStream)
     dataStream >> m_localIp >> m_localPort >> m_remoteIp >> m_remotePort >> m_portName >> m_baudRate
                >> dataBit >> stopBit >> parity;
 
-    m_dataBits = QSerialPort::DataBits(dataBit);
-    m_stopBits = QSerialPort::StopBits(stopBit);
+    m_dataBit = QSerialPort::DataBits(dataBit);
+    m_stopBit = QSerialPort::StopBits(stopBit);
     m_parity = QSerialPort::Parity(parity);
 }
 
@@ -44,8 +64,8 @@ QJsonObject PortParam::saveJson()
     root["remotePort"] = m_remotePort;
     root["portName"] = m_portName;
     root["baudRate"] = m_baudRate;
-    root["dataBits"] = m_dataBits;
-    root["stopBits"] = m_stopBits;
+    root["dataBits"] = m_dataBit;
+    root["stopBits"] = m_stopBit;
     root["parity"] = m_parity;
     return root;
 }
@@ -62,7 +82,57 @@ void PortParam::loadJson(const QJsonObject &root)
     int stopBit = root.value(QLatin1String("stopBits")).toInt();
     int parity = root.value(QLatin1String("parity")).toInt();
 
-    m_dataBits = QSerialPort::DataBits(dataBit);
-    m_stopBits = QSerialPort::StopBits(stopBit);
+    m_dataBit = QSerialPort::DataBits(dataBit);
+    m_stopBit = QSerialPort::StopBits(stopBit);
     m_parity = QSerialPort::Parity(parity);
+}
+
+QSerialPort::Parity PortParam::parity() const
+{
+    return m_parity;
+}
+
+void PortParam::setParity(const QSerialPort::Parity &parity)
+{
+    m_parity = parity;
+}
+
+QSerialPort::StopBits PortParam::stopBit() const
+{
+    return m_stopBit;
+}
+
+void PortParam::setStopBit(const QSerialPort::StopBits &stopBits)
+{
+    m_stopBit = stopBits;
+}
+
+QSerialPort::DataBits PortParam::dataBit() const
+{
+    return m_dataBit;
+}
+
+void PortParam::setDataBit(const QSerialPort::DataBits &dataBits)
+{
+    m_dataBit = dataBits;
+}
+
+int PortParam::baudRate() const
+{
+    return m_baudRate;
+}
+
+void PortParam::setBaudRate(int baudRate)
+{
+    m_baudRate = baudRate;
+}
+
+QString PortParam::portName() const
+{
+    return m_portName;
+}
+
+void PortParam::setPortName(const QString &portName)
+{
+    m_portName = portName;
 }

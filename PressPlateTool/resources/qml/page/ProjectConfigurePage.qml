@@ -10,6 +10,7 @@ Rectangle {
         SerialPortConfigureView {
             id: _view_serialport
             isMultiConf: true
+            isInWindow: false
             anchors.fill: parent
     //        width: 400
     //        height: 300

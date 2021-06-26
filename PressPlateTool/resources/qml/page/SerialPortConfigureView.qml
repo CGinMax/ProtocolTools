@@ -9,6 +9,7 @@ import PressPlateTools 1.0
 Rectangle {
     id: _root
     property bool isMultiConf: false
+    property bool isInWindow: true
     signal btnOkClicked()
     signal btnCancelClicked()
 
@@ -118,6 +119,7 @@ Rectangle {
         }
 
         RowLayout {
+            visible: _root.isInWindow
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignCenter
             Qaterial.Button {

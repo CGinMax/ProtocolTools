@@ -86,6 +86,7 @@ Rectangle {
     }
 
 
+    // Window attach property can not use in child item
     function computeDialogX() {
         return (Window.width - _dlg_serialport.width) / 2
     }

@@ -11,7 +11,6 @@ import "sensor"
 
 Qaterial.ApplicationWindow {
     id: main_window
-    visible: true
     width: 960
     height: 720
 
@@ -46,6 +45,7 @@ Qaterial.ApplicationWindow {
         Qaterial.Style.theme = Qaterial.Style.Theme.Light
         main_window.x = (Screen.width - width) / 2
         main_window.y = (Screen.height - height) / 2
+        main_window.visible = true
     }
 
 

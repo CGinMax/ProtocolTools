@@ -67,14 +67,6 @@
     </message>
 </context>
 <context>
-    <name>GatherConfView</name>
-    <message>
-        <location filename="resources/qml/GatherConfView.qml" line="18"/>
-        <source>delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>GatherController</name>
     <message>
         <location filename="ui/expand/gathercontroller.cpp" line="73"/>
@@ -328,6 +320,14 @@
     </message>
 </context>
 <context>
+    <name>ProjectConfigurePage</name>
+    <message>
+        <location filename="resources/qml/page/ProjectConfigurePage.qml" line="23"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <location filename="ui/expand/expandwidget.cpp" line="102"/>
@@ -363,13 +363,13 @@
 <context>
     <name>SensorConfView</name>
     <message>
-        <location filename="resources/qml/SensorConfView.qml" line="14"/>
-        <location filename="resources/qml/SensorConfView.qml" line="37"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="16"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="39"/>
         <source>Sensor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/SensorConfView.qml" line="38"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="40"/>
         <source>Configure</source>
         <translation type="unfinished"></translation>
     </message>
@@ -379,6 +379,54 @@
     <message>
         <location filename="ui/dialogs/sensoroperationdlg.ui" line="17"/>
         <source>Infomation</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SerialPortConfigureView</name>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="24"/>
+        <source>Gather number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="33"/>
+        <source>Device List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="50"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="58"/>
+        <source>Buad rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="76"/>
+        <source>Data bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="90"/>
+        <source>Stop bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="104"/>
+        <source>Parity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="127"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="134"/>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -624,7 +672,7 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="resources/qml/main.qml" line="15"/>
+        <location filename="resources/qml/main.qml" line="17"/>
         <source>Press Plate Tool</source>
         <translation type="unfinished"></translation>
     </message>

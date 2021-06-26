@@ -28,11 +28,11 @@ bool SerialPort::open(const PortParam &param)
         return true;
     }
     m_portParam = param;
-    m_serialPort->setBaudRate(param.m_baudRate);
-    m_serialPort->setDataBits(param.m_dataBits);
-    m_serialPort->setStopBits(param.m_stopBits);
-    m_serialPort->setParity(param.m_parity);
-    m_serialPort->setPortName(param.m_portName);
+    m_serialPort->setPortName(param.portName());
+    m_serialPort->setBaudRate(param.baudRate());
+    m_serialPort->setDataBits(param.dataBit());
+    m_serialPort->setStopBits(param.stopBit());
+    m_serialPort->setParity(param.parity());
 
     return m_serialPort->open(QIODevice::ReadWrite);
 }
@@ -85,7 +85,7 @@ bool SerialPort::isActived()
 QString SerialPort::toString()
 {
     if (isActived()) {
-        return m_portParam.m_portName;
+        return m_portParam.portName();
     }
     return QLatin1String("Unkonw");
 }

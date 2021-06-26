@@ -8,7 +8,7 @@ import "../page"
 
 Rectangle {
     id: _root
-//    color: "#4CAF50"
+
     Text {
         id: text_gather_name
         width: 50
