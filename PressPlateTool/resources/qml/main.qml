@@ -19,24 +19,24 @@ Qaterial.ApplicationWindow {
     Old.SplitView {
         anchors.fill: parent
         GatherConfView{
-//            Layout.fillWidth: true
-//            Layout.minimumWidth: 50
-//            Layout.preferredWidth: 100
-//            Layout.maximumWidth: 300
+            id: view_gather_config
             width: 300
         }
 
-        SensorConfView{
+        StackLayout {
+            currentIndex: view_gather_config.gather_count == 0 ? 0 : 1
+            Rectangle {
+            }
 
-            width: 700
-//            Layout.fillWidth: true
-//            Layout.minimumWidth: 700
-//            Layout.preferredWidth: 700
+            SensorConfView{
+            }
         }
 
+
+
         handleDelegate: Rectangle {
-            width: 5
-            color: Qaterial.Style.backgroundColor
+            width: 2
+            color: "grey"
 
         }
     }

@@ -14,5 +14,7 @@
         <file>qml/sensor/SensorConfView.qml</file>
         <file>qml/page/ProjectConfigurePage.qml</file>
         <file>qml/page/SerialPortConfigureView.qml</file>
+        <file>icons/more-vert.png</file>
+        <file>qml/components/Chip.qml</file>
     </qresource>
 </RCC>

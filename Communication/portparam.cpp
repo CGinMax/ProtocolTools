@@ -16,6 +16,15 @@ PortParam::PortParam(const QString& portName, int baudRate, QSerialPort::DataBit
     , m_parity(parity)
 {}
 
+PortParam::PortParam(const QVariantMap &values)
+{
+    m_portName = values.value(QLatin1String("portName")).toString();
+    m_baudRate = values.value(QLatin1String("baudRate")).toInt();
+    m_dataBit = static_cast<QSerialPort::DataBits>(values.value(QLatin1String("dataBit")).toInt());
+    m_stopBit = static_cast<QSerialPort::StopBits>(values.value(QLatin1String("stopBit")).toInt());
+    m_parity = static_cast<QSerialPort::Parity>(values.value(QLatin1String("parity")).toInt());
+}
+
 PortParam::PortParam(const PortParam &other)
 {
     *this = other;

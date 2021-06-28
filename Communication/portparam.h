@@ -2,6 +2,7 @@
 #define PORTPARAM_H
 
 #include <QSerialPort>
+#include <QVariantMap>
 #include <QDataStream>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -30,6 +31,7 @@ public:
     explicit PortParam(const QString& localIp, int localPort, const QString& remoteIp, int remotePort);
     explicit PortParam(const QString& portName, int baudRate, QSerialPort::DataBits dataBit
               , QSerialPort::StopBits stopBit, QSerialPort::Parity parity);
+    explicit PortParam(const QVariantMap& values);
     PortParam(const PortParam& other);
     PortParam& operator=(const PortParam& other);
 

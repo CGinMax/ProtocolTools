@@ -15,6 +15,8 @@ add_library(${SUBDIR_NAME}
 STATIC
     gathercontroller.h
     gathercontroller.cpp
+    controllermanager.h
+    controllermanager.cpp
 )
 
 target_link_libraries(${SUBDIR_NAME}

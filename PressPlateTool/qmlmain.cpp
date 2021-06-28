@@ -3,8 +3,6 @@
 #include <QTranslator>
 
 #include "qmlexport.h"
-#include "qmlserialporthelper.h"
-#include "controller/gathercontroller.h"
 #include "Qaterial/Qaterial.hpp"
 
 int main(int argc, char *argv[])
@@ -15,15 +13,11 @@ int main(int argc, char *argv[])
     // translator->load(QGuiApplication::applicationDirPath() + "/PressPlateTool_zh.qm");
     // a.installTranslator(translator);
 
-    const char* uri = "PressPlateTools";
-    qmlRegisterType<QmlSerialPortHelper>(uri, 1, 0, "QmlSerialPortHelper");
-    qmlRegisterType<GatherController>(uri, 1, 0, "GatherController");
+
     QQmlApplicationEngine engine;
+    QmlExport::registerPressPlateType();
 
     engine.addImportPath(QString("qrc:///"));
-
-//    qmlRegisterType<QmlSerialPortHelper>("PressPlateTools", 1, 0, "QmlSerialPortHelper");
-//    QmlExport::registerQmlTypes();
 
     qaterial::Utils::loadResources();
 

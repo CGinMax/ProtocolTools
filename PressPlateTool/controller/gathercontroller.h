@@ -4,33 +4,39 @@
 #include <QObject>
 #include <functional>
 #include <QSharedPointer>
-#include "../model/gatherdata.h"
-#include "../protocol/ybprotocolchannel.h"
+#include "gatherdata.h"
+#include "ybprotocolchannel.h"
 
 class GatherController : public QObject
 {
     Q_OBJECT
 public:
-    explicit GatherController(QObject *parent = nullptr);
+    explicit GatherController(const QSharedPointer<GatherData>& data, QObject *parent = nullptr);
     ~GatherController() override;
 
-    QSharedPointer<GatherData> gatherData() const;
-    void setGatherData(const QSharedPointer<GatherData> &gatherData);
+    GatherData* rawGatherData();
+    void setGatherData(const QSharedPointer<GatherData>& gatherData);
+
+    CommunicationBase* rawCommunicationBase();
 
     void appendSensorData(YBSensorData* data);
 
-    bool isCommunicationActive();
+    Q_INVOKABLE bool startCommunication();
+    Q_INVOKABLE void stopCommunication();
+
+    bool isConnected();
     YBProtocolChannel* protocol();
 
+    void queryGatherVersion();
+    void configureGatherAddress(int addr);
+    void configureSensorCount(int count);
 signals:
+    void startPortocolChannel();
     void stopProtocolChannel();
     void deleteItem();
 
 public slots:
-    void onQueryVersion();
     void onTitleChanged(const QString& title);
-    void onSetGatherAddress(int addr);
-    void onResetSensorCount(int count);
 
 private:
     bool canDoOperate();
@@ -40,11 +46,10 @@ private:
     GatherController* setProductDesc(const QString& desc);
     GatherController* setSensorCount(int count);
 
-private:
-    QSharedPointer<GatherData> m_gatherData;
+    QSharedPointer<GatherData> _gatherData;
 
-    QSharedPointer<CommunicationBase> m_communication;
-    QSharedPointer<ProtocolChannelBase> m_protocol;
+    QSharedPointer<CommunicationBase> _communication;
+    QSharedPointer<ProtocolChannelBase> _protocol;
 
 };
 

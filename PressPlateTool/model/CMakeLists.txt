@@ -5,6 +5,8 @@ find_package(Qt5 REQUIRED COMPONENTS
     Core
 )
 
+set(CMAKE_AUTOMOC ON)
+
 include_directories(../../Communication)
 add_library(${SUBDIR_NAME}
 STATIC

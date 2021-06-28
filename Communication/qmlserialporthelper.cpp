@@ -1,5 +1,6 @@
 #include "qmlserialporthelper.h"
 #include <QSerialPortInfo>
+
 QmlSerialPortHelper::QmlSerialPortHelper(QObject *parent) : QObject(parent)
 {
 

@@ -6,7 +6,7 @@
 class QmlExport
 {
 public:
-
+    static void registerPressPlateType();
 };
 
 #endif // QMLEXPORT_H

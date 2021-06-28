@@ -9,6 +9,7 @@ import "../page"
 Rectangle {
     id: _root
 
+    signal addClicked(int count, var portParam)
     signal deleteAll()
 
     implicitWidth: 100
@@ -40,7 +41,7 @@ Rectangle {
             flat: true
             backgroundColor: "transparent"
 
-            onClicked: _dlg_serialport.showDialog(false)
+            onClicked: dlg_serialport.showDialog(false)
 
         }
         Qaterial.Button {
@@ -59,7 +60,7 @@ Rectangle {
             flat: true
             backgroundColor: "transparent"
 
-            onClicked: _dlg_serialport.showDialog(true)
+            onClicked: dlg_serialport.showDialog(true)
         }
 
         Qaterial.Button{
@@ -87,37 +88,54 @@ Rectangle {
 
 
     // Window attach property can not use in child item
-    function computeDialogX() {
-        return (Window.width - _dlg_serialport.width) / 2
+    function computeDialogX(dlg_width) {
+        return (Window.width - dlg_width) / 2
     }
-    function computeDialogY() {
-        return (Window.height - _dlg_serialport.height) / 2
+    function computeDialogY(dlg_height) {
+        return (Window.height - dlg_height) / 2
     }
 
     Qaterial.Dialog {
-        id: _dlg_serialport
+        id: dlg_serialport
         width: 500
         height: 500
         SerialPortConfigureView {
             anchors.fill: parent
-            id: _view_serialport_conf
+            id: view_serialport_conf
 
             onBtnOkClicked: {
-                _dlg_serialport.accept()
+                if (gatherCount <= 0) {
+                    dlg_error.open()
+                    return
+                }
+                dlg_serialport.accept()
+
+                emit: addClicked(gatherCount, getPortParam())
             }
             onBtnCancelClicked: {
-                _dlg_serialport.reject()
+                dlg_serialport.reject()
             }
         }
 
         function showDialog(isMultiple) {
-            _view_serialport_conf.isMultiConf = isMultiple
-            _dlg_serialport.open()
+            view_serialport_conf.isMultiConf = isMultiple
+            dlg_serialport.open()
         }
 
         Component.onCompleted: {
-            x = computeDialogX()
-            y = computeDialogY()
+            x = computeDialogX(dlg_serialport.width)
+            y = computeDialogY(dlg_serialport.height)
+        }
+    }
+
+    Qaterial.AlertDialog {
+        id: dlg_error
+        width: 400
+        height: 100
+        text: qsTr("Input gather count is invalid, please modify it!")
+        Component.onCompleted: {
+            x = computeDialogX(dlg_error.width)
+            y = computeDialogY(dlg_error.height)
         }
     }
 

@@ -24,6 +24,10 @@ add_subdirectory(model)
 add_subdirectory(controller)
 include_directories(../Qaterial/include)
 include_directories(../Communication)
+include_directories(model)
+include_directories(common)
+include_directories(controller)
+include_directories(protocol)
 
 qt5_create_translation(TS_FILES
     # ${CMAKE_CURRENT_SOURCE_DIR}/resources/qml
@@ -56,7 +60,7 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     Threads::Threads
-#    asyncfuture
+    qtasyncfuture
     Communication
     Protocols
     Qaterial

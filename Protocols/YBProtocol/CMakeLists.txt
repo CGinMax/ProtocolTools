@@ -9,6 +9,8 @@ add_library(YBProtocol STATIC
     ybframe.cpp
     ybprotocol.cpp
     ybprotocolexception.cpp
+    ../iprotocols.cpp
+    ../convert.cpp
 )
 
 target_link_libraries(YBProtocol PUBLIC content)

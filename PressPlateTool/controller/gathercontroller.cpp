@@ -2,54 +2,69 @@
 #include "../common/threadpool.h"
 #include "serialport.h"
 
-GatherController::GatherController(QObject *parent)
+GatherController::GatherController(const QSharedPointer<GatherData> &data, QObject *parent)
     : QObject(parent)
+    , _gatherData(data)
+    , _communication(new SerialPort(this))
 {
-
+    ThreadPool::instance()->run([=]{
+        this->_protocol.reset(new YBProtocolChannel(this->_communication));
+        // TODO(shijm): check whether use BlockingQueuedConnection
+        connect(this, &GatherController::startPortocolChannel, this->protocol(), &ProtocolChannelBase::start, Qt::BlockingQueuedConnection);
+        connect(this, &GatherController::stopProtocolChannel, this->protocol(), &ProtocolChannelBase::stop, Qt::BlockingQueuedConnection);
+    });
 }
 
 GatherController::~GatherController()
 {
-    emit stopProtocolChannel();
-    m_communication->close();
+    stopCommunication();
 }
 
-QSharedPointer<GatherData> GatherController::gatherData() const
+GatherData *GatherController::rawGatherData()
 {
-    return m_gatherData;
+    return _gatherData.data();
 }
 
 void GatherController::setGatherData(const QSharedPointer<GatherData> &gatherData)
 {
-    m_gatherData = gatherData;
+    _gatherData = gatherData;
+}
+
+CommunicationBase *GatherController::rawCommunicationBase()
+{
+    return _communication.data();
 }
 
 void GatherController::appendSensorData(YBSensorData *data)
 {
-    if (m_gatherData.isNull()) {
+    if (_gatherData.isNull()) {
         return;
     }
-    m_gatherData->appendSensorData(data);
+    _gatherData->appendSensorData(data);
 }
 
-
-bool GatherController::isCommunicationActive()
+bool GatherController::startCommunication()
 {
-    return !m_communication.isNull() && m_communication->isActived();
+    bool success = rawCommunicationBase()->open(rawGatherData()->portParam());
+    if (success) {
+        emit startPortocolChannel();
+    }
+    return success;
 }
 
-YBProtocolChannel *GatherController::protocol()
+void GatherController::stopCommunication()
 {
-    return static_cast<YBProtocolChannel*>(m_protocol.data());
+    emit stopProtocolChannel();
+    rawCommunicationBase()->close();
 }
 
-void GatherController::onQueryVersion()
+void GatherController::queryGatherVersion()
 {
     if(!canDoOperate()) {
         return;
     }
 
-    auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(m_gatherData->addr()), m_gatherData->gatherTimeout());
+    auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(_gatherData->addr()), _gatherData->gatherTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
             qDebug("Unknow frame data");
@@ -68,18 +83,13 @@ void GatherController::onQueryVersion()
     });
 }
 
-void GatherController::onTitleChanged(const QString &title)
-{
-    m_gatherData->setName(title);
-}
-
-void GatherController::onSetGatherAddress(int addr)
+void GatherController::configureGatherAddress(int addr)
 {
     if(!canDoOperate()) {
         return;
     }
 
-    auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr), m_gatherData->gatherTimeout());
+    auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr), _gatherData->gatherTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
             qDebug("Unknow frame data");
@@ -102,13 +112,13 @@ void GatherController::onSetGatherAddress(int addr)
 
 }
 
-void GatherController::onResetSensorCount(int count)
+void GatherController::configureSensorCount(int count)
 {
     if(!canDoOperate()) {
         return;
     }
 
-    auto reply = protocol()->setSensorNum(static_cast<uint16_t>(m_gatherData->addr()), static_cast<uint8_t>(count), m_gatherData->gatherTimeout());
+    auto reply = protocol()->setSensorNum(static_cast<uint16_t>(_gatherData->addr()), static_cast<uint8_t>(count), _gatherData->gatherTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
             qDebug("Unknow frame data");
@@ -131,38 +141,52 @@ void GatherController::onResetSensorCount(int count)
     });
 }
 
+bool GatherController::isConnected()
+{
+    return !_communication.isNull() && _communication->isActived();
+}
+
+YBProtocolChannel *GatherController::protocol()
+{
+    return static_cast<YBProtocolChannel*>(_protocol.data());
+}
+
+void GatherController::onTitleChanged(const QString &title)
+{
+    _gatherData->setName(title);
+}
 bool GatherController::canDoOperate()
 {
-    bool active = isCommunicationActive();
+    bool active = isConnected();
     return active;
 }
 
 GatherController *GatherController::setAddress(int addr)
 {
-    this->m_gatherData->setAddr(addr);
+    _gatherData->setAddr(addr);
     return this;
 }
 
 GatherController *GatherController::setHardwareVersion(const QString &version)
 {
-    this->m_gatherData->setHardwareVerion(version);
+    _gatherData->setHardwareVerion(version);
     return this;
 }
 
 GatherController *GatherController::setSoftwareVersion(const QString &version)
 {
-    this->m_gatherData->setSoftwareVersion(version);
+    _gatherData->setSoftwareVersion(version);
     return this;
 }
 
 GatherController *GatherController::setProductDesc(const QString &desc)
 {
-    this->m_gatherData->setProductDesc(desc);
+    _gatherData->setProductDesc(desc);
     return this;
 }
 
 GatherController *GatherController::setSensorCount(int count)
 {
-    this->m_gatherData->setSensorCount(count);
+    _gatherData->setSensorCount(count);
     return this;
 }

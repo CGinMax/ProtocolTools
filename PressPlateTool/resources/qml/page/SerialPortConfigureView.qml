@@ -10,6 +10,8 @@ Rectangle {
     id: _root
     property bool isMultiConf: false
     property bool isInWindow: true
+    property int gatherCount: 1
+    property var portParam: undefined
     signal btnOkClicked()
     signal btnCancelClicked()
 
@@ -19,9 +21,18 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
         Qaterial.TextField {
+            id: input_gather_number
             Layout.fillWidth: true
             visible: _root.isMultiConf
             title: qsTr("Gather number")
+            text: gatherCount.toString()
+            onTextChanged: {
+                if (input_gather_number.text === "") {
+                    gatherCount = 0
+                    return;
+                }
+                gatherCount = parseInt(input_gather_number.text)
+            }
         }
 
 
@@ -76,6 +87,7 @@ Rectangle {
                 text: qsTr("Data bit")
             }
             Qaterial.ComboBox {
+                id: cbb_data_bit
                 Layout.fillWidth: true
                 flat: false
                 model: [8, 7, 6, 5]
@@ -90,6 +102,7 @@ Rectangle {
                 text: qsTr("Stop bit")
             }
             Qaterial.ComboBox {
+                id: cbb_stop_bit
                 Layout.fillWidth: true
                 flat: false
                 model: [1, 1.5, 2]
@@ -104,15 +117,15 @@ Rectangle {
                 text: qsTr("Parity")
             }
             Qaterial.ComboBox {
+                id: cbb_parity
                 Layout.fillWidth: true
                 flat: false
-                contentItem: Item{}
                 model: [
-                    "No Parity",
-                    "Even Parity",
-                    "Odd Parity",
-                    "Space Parity",
-                    "Mark Parity"
+                    qsTr("None"),
+                    qsTr("Even Parity"),
+                    qsTr("Odd Parity"),
+                    qsTr("Space Parity"),
+                    qsTr("Mark Parity")
                 ]
             }
 
@@ -138,7 +151,6 @@ Rectangle {
                 }
             }
         }
-
     }
 
     QmlSerialPortHelper{
@@ -147,14 +159,34 @@ Rectangle {
 
     function refreshDevices() {
         model_devices.clear()
-        _serialport_helper.availablePorts().forEach((device) => model_devices.append({text: device}))
+        var ports = _serialport_helper.availablePorts()
+        for (var i = 0; i < ports.length; i++) {
+            model_devices.append({text: ports[i]})
+        }
+
         _cbb_devices.currentIndex = 0
+    }
+
+    function getPortParam() {
+        // TODO(shijm): fix it value
+        var portParam = {
+            portName: _cbb_devices.currentText,
+            baudRate: parseInt(_cbb_baudrate.currentText),
+            dataBit: parseInt(cbb_data_bit.currentText),
+            stopBit: parseInt(cbb_stop_bit.currentText),
+            parity: cbb_parity.currentIndex
+        }
+        return portParam
     }
 
     Component.onCompleted: {
         refreshDevices()
         model_baudrate.clear()
-        _serialport_helper.standardBaudRates().forEach((baudrate) => model_baudrate.append({text: baudrate}))
+        var baudrates = _serialport_helper.standardBaudRates()
+        for (var i = 0; i < baudrates.length; i++) {
+            model_baudrate.append({text: baudrates[i]})
+        }
+
         _cbb_baudrate.currentIndex = _cbb_baudrate.find("9600")
     }
 

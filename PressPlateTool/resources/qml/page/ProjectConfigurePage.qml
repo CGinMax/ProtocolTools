@@ -9,7 +9,7 @@ Rectangle {
         id: _frame_serialport
         SerialPortConfigureView {
             id: _view_serialport
-            isMultiConf: true
+            isMultiConf: false
             isInWindow: false
             anchors.fill: parent
     //        width: 400

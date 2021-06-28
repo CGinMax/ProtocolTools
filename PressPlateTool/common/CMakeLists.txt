@@ -8,10 +8,11 @@ find_package(Qt5 REQUIRED COMPONENTS
     Concurrent
 )
 
+set(CMAKE_AUTOMOC ON)
+
 
 add_library(${SUBDIR_NAME}
-    STATIC
-
+STATIC
     threadpool.h
     threadpool.cpp
     workerthread.h

@@ -108,6 +108,45 @@
     </message>
 </context>
 <context>
+    <name>GatherItem</name>
+    <message>
+        <location filename="resources/qml/gather/GatherItem.qml" line="55"/>
+        <source>Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/gather/GatherItem.qml" line="61"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="76"/>
+        <source>conf</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/gather/GatherItem.qml" line="70"/>
+        <source>Sensor Count:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/gather/GatherItem.qml" line="98"/>
+        <source>query</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/gather/GatherItem.qml" line="114"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/gather/GatherItem.qml" line="114"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/gather/GatherItem.qml" line="134"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GatherOperWidget</name>
     <message>
         <location filename="ui/expand/gatheroperwidget.ui" line="29"/>
@@ -385,47 +424,47 @@
 <context>
     <name>SerialPortConfigureView</name>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="24"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="27"/>
         <source>Gather number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="33"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="44"/>
         <source>Device List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="50"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="61"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="58"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="69"/>
         <source>Buad rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="76"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="87"/>
         <source>Data bit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="90"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="102"/>
         <source>Stop bit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="104"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="117"/>
         <source>Parity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="127"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="141"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="134"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="148"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -666,6 +705,14 @@
     <message>
         <location filename="ui/page/tablepage.cpp" line="359"/>
         <source>Change sensor status timeout!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ToolButtonBar</name>
+    <message>
+        <location filename="resources/qml/gather/ToolButtonBar.qml" line="135"/>
+        <source>Input gather count is invalid, please modify it!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

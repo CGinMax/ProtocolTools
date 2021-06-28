@@ -5,6 +5,8 @@ find_package(Qt5 REQUIRED COMPONENTS
     Core
 )
 
+set(CMAKE_AUTOMOC ON)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../Communication)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../asyncfuture)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../Protocols)
@@ -19,7 +21,7 @@ add_library(${SUBDIR_NAME}
 
 target_link_libraries(${SUBDIR_NAME}
 PUBLIC
-#    asyncfuture
+    qtasyncfuture
     Protocols
     Communication
     Qt5::Core

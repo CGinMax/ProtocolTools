@@ -113,11 +113,11 @@ void TabPage::resetSettingData()
     m_settingData->m_portParam.m_remoteIp = ui->editRemoteIp->text();
     m_settingData->m_portParam.m_remotePort = ui->editReomtePort->text().toInt();
 
-    m_settingData->m_portParam.m_portName = ui->cbbDevList->currentData().toString();
-    m_settingData->m_portParam.m_baudRate = ui->cbbBaudRate->currentData().toInt();
-    m_settingData->m_portParam.m_dataBits = static_cast<QSerialPort::DataBits>(ui->cbbDataBit->currentData().toInt());
-    m_settingData->m_portParam.m_stopBits = static_cast<QSerialPort::StopBits>(ui->cbbStopBit->currentData().toInt());
-    m_settingData->m_portParam.m_parity = static_cast<QSerialPort::Parity>(ui->cbbParityBit->currentData().toInt());
+    m_settingData->m_portParam.setPortName(ui->cbbDevList->currentData().toString());
+    m_settingData->m_portParam.setBaudRate(ui->cbbBaudRate->currentData().toInt());
+    m_settingData->m_portParam.setDataBit(static_cast<QSerialPort::DataBits>(ui->cbbDataBit->currentData().toInt()));
+    m_settingData->m_portParam.setStopBit(static_cast<QSerialPort::StopBits>(ui->cbbStopBit->currentData().toInt()));
+    m_settingData->m_portParam.setParity(static_cast<QSerialPort::Parity>(ui->cbbParityBit->currentData().toInt()));
 
     m_settingData->m_stationType = eStationType(ui->cbbStationType->currentIndex());
 

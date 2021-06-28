@@ -4,12 +4,12 @@ GatherData::GatherData(const QString &name, QObject *parent)
     : QObject(parent)
     , m_name(name)
     , m_addr(-1)
-    , m_hardwareVer(QString())
-    , m_softwareVer(QString())
+    , m_hardwareVer(QString("0.0"))
+    , m_softwareVer(QString("0.0"))
     , m_productDesc(QString())
     , m_sensorCount(0)
-    , m_gatherTimeout(5000)
-    , m_sensorTimeout(5000)
+    , m_gatherTimeout(12000)
+    , m_sensorTimeout(12000)
 {
 
 }
