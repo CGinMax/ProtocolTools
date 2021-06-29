@@ -31,7 +31,8 @@ Qaterial.Card {
         height: 42
         icon.width: 24
         icon.height: 24
-        icon.source: "qrc:/icons/more-vert.png"
+//        icon.source: "qrc:/icons/more-vert.png"
+        icon.source: "image://FAIcon/hand-lizard"
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.rightMargin: -5

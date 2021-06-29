@@ -22,8 +22,10 @@ add_subdirectory(common)
 add_subdirectory(protocol)
 add_subdirectory(model)
 add_subdirectory(controller)
+add_subdirectory(provider)
 include_directories(../Qaterial/include)
 include_directories(../Communication)
+include_directories(../QtAwesome)
 include_directories(model)
 include_directories(common)
 include_directories(controller)
@@ -61,9 +63,11 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} PUBLIC
     Threads::Threads
     qtasyncfuture
+    QtAwesome
     Communication
     Protocols
     Qaterial
+    provider
     common
     model
     protocol

@@ -115,22 +115,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="103"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="104"/>
         <source>Sensor Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="118"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="120"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="118"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="120"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="134"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="136"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
