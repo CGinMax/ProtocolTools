@@ -78,6 +78,7 @@ void GatherController::queryGatherVersion()
         ->setSoftwareVersion(QString::fromStdString(result->softwareVersion()))
         ->setProductDesc(QString::fromStdString(result->productDescript()));
 
+        qDebug("query gather version success");
     }, [](){
         qDebug("gather query version timeout cancel");
     });

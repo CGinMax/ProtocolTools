@@ -18,7 +18,11 @@ ControllerManager::~ControllerManager()
 void ControllerManager::addGatherConfig(int count, const QVariantMap& map)
 {
     PortParam portParam(map);
-    int lastAddr = _gatherModel->gatherDataList().isEmpty() ? -1 : _gatherModel->gatherDataList().last()->addr();
+    int lastAddr = 1;
+    if (!_gatherModel->gatherDataList().isEmpty()) {
+        auto dataList = _gatherModel->gatherDataList();
+        lastAddr = dataList.last()->addr();
+    }
     QList<QSharedPointer<GatherData>> dataList;
     for (int i = 0; i < count; i++, lastAddr++) {
         QSharedPointer<GatherData> data(new GatherData(QString("Gather%1").arg(lastAddr)));
@@ -26,7 +30,7 @@ void ControllerManager::addGatherConfig(int count, const QVariantMap& map)
         data->setPortParam(portParam);
         dataList.append(data);
 
-        QSharedPointer<GatherController> controller = QSharedPointer<GatherController>(new GatherController(data, this));
+        auto controller = QSharedPointer<GatherController>(new GatherController(data, this));
         _controllers.append(controller);
 
     }

@@ -1,8 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import QtQuick.Controls.Material 2.12
-//import QtQuick.Layouts 1.12
-//import Qaterial 1.0 as Qaterial
+
+import Qaterial 1.0 as Qaterial
 
 import PressPlateTools 1.0
 
@@ -36,12 +35,33 @@ Rectangle {
         delegate: GatherItem {
             id: delegate_gather
             onQueryVersionClicked: {
+                if (!controller_manager.isConnected(index)) {
+                    Qaterial.SnackbarManager.show({
+                        text: "Communication not open!Can not operate!"
+                    })
+                    return
+                }
+
                 controller_manager.queryVersion(index)
             }
             onConfigureAddrClicked: function(addr) {
+                if (!controller_manager.isConnected(index)) {
+                    Qaterial.SnackbarManager.show({
+                        text: "Communication not open!Can not operate!"
+                    })
+                    return
+                }
+
                 controller_manager.configureAddress(index, addr)
             }
             onConfigureSensorCounterClicked: function(count) {
+                Qaterial.SnackbarManager.show({
+                    text: "Communication not open!Can not operate!"
+                })
+                if (!controller_manager.isConnected(index)) {
+                    return
+                }
+
                 controller_manager.configureSensorCount(index, count)
             }
             onToggleCommunication: {
@@ -86,5 +106,11 @@ Rectangle {
         gatherModel: list_gather.model
 
     } // ControllerManager
+
+//    Qaterial.SnackbarManager{
+//        id: sb_manager
+//        anchors.fill: parent
+//        anchors.bottomMargin: 20
+//    }
 
 } // Rectangle

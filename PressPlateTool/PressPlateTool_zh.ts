@@ -110,33 +110,22 @@
 <context>
     <name>GatherItem</name>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="55"/>
-        <source>Address:</source>
+        <location filename="resources/qml/gather/GatherItem.qml" line="90"/>
+        <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="61"/>
-        <location filename="resources/qml/gather/GatherItem.qml" line="76"/>
-        <source>conf</source>
+        <location filename="resources/qml/gather/GatherItem.qml" line="103"/>
+        <source>Sensor Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="70"/>
-        <source>Sensor Count:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="98"/>
-        <source>query</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="114"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="118"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="114"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="118"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -459,12 +448,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="141"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="124"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="125"/>
+        <source>Even Parity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="126"/>
+        <source>Odd Parity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="127"/>
+        <source>Space Parity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="128"/>
+        <source>Mark Parity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="140"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="148"/>
+        <location filename="resources/qml/page/SerialPortConfigureView.qml" line="147"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
