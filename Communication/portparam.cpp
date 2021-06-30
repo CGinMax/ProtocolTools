@@ -43,6 +43,7 @@ PortParam &PortParam::operator=(const PortParam &other)
     this->m_dataBit = other.m_dataBit;
     this->m_stopBit = other.m_stopBit;
     this->m_parity = other.m_parity;
+    return *this;
 }
 
 void PortParam::save(QDataStream &dataStream)
