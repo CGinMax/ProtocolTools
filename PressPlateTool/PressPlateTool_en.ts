@@ -110,27 +110,27 @@
 <context>
     <name>GatherItem</name>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="90"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="91"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="104"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="105"/>
         <source>Sensor Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="120"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="121"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="120"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="121"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/GatherItem.qml" line="136"/>
+        <location filename="resources/qml/gather/GatherItem.qml" line="137"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>

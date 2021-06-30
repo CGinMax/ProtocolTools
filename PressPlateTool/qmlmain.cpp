@@ -4,7 +4,8 @@
 
 #include "qmlexport.h"
 #include "Qaterial/Qaterial.hpp"
-#include "provider/faiconprovider.h"
+#include "QtAwesome/faiconprovider.h"
+//#include "provider/faiconprovider.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +18,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     QmlExport::registerPressPlateType();
-    engine.addImageProvider(QString("FAIcon"), reinterpret_cast<QQmlImageProviderBase*>(new FAIconProvider));
+    FAIconProvider::registerProvider(&engine);
+//    engine.addImageProvider(QString("FAIcon"), reinterpret_cast<QQmlImageProviderBase*>(new FAIconProvider));
 
     engine.addImportPath(QString("qrc:///"));
 

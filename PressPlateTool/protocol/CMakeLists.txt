@@ -11,12 +11,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../Communication)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../asyncfuture)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../Protocols)
 
+file(GLOB SUBDIR_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp")
 add_library(${SUBDIR_NAME}
     STATIC
-    protocolchannelbase.h
-    protocolchannelbase.cpp
-    ybprotocolchannel.h
-    ybprotocolchannel.cpp
+    ${SUBDIR_SOURCES}
 )
 
 target_link_libraries(${SUBDIR_NAME}

@@ -8,14 +8,11 @@ find_package(Qt5 REQUIRED COMPONENTS
 set(CMAKE_AUTOMOC ON)
 
 include_directories(../../Communication)
+
+file(GLOB SUBDIR_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp")
 add_library(${SUBDIR_NAME}
 STATIC
-    gatherdata.h
-    gatherdata.cpp
-    ybsensordata.h
-    ybsensordata.cpp
-    gatherconfiguremodel.h
-    gatherconfiguremodel.cpp
+    ${SUBDIR_SOURCES}
 )
 
 

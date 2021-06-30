@@ -22,7 +22,6 @@ add_subdirectory(common)
 add_subdirectory(protocol)
 add_subdirectory(model)
 add_subdirectory(controller)
-add_subdirectory(provider)
 include_directories(../Qaterial/include)
 include_directories(../Communication)
 include_directories(../QtAwesome)
@@ -67,7 +66,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Communication
     Protocols
     Qaterial
-    provider
     common
     model
     protocol

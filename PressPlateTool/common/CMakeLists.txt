@@ -1,4 +1,4 @@
-# PPT: PressPlateTool
+
 set(SUBDIR_NAME common)
 
 find_package(Qt5 REQUIRED COMPONENTS
@@ -10,13 +10,11 @@ find_package(Qt5 REQUIRED COMPONENTS
 
 set(CMAKE_AUTOMOC ON)
 
+file(GLOB SUBDIR_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp")
 
 add_library(${SUBDIR_NAME}
 STATIC
-    threadpool.h
-    threadpool.cpp
-    workerthread.h
-    workerthread.cpp
+    ${SUBDIR_SOURCES}
 )
 
 target_link_libraries(${SUBDIR_NAME} PUBLIC

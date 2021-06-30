@@ -11,12 +11,10 @@ include_directories(../model)
 include_directories(../common)
 include_directories(../protocol)
 
+file(GLOB SUBDIR_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp")
 add_library(${SUBDIR_NAME}
 STATIC
-    gathercontroller.h
-    gathercontroller.cpp
-    controllermanager.h
-    controllermanager.cpp
+    ${SUBDIR_SOURCES}
 )
 
 target_link_libraries(${SUBDIR_NAME}
