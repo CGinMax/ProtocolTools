@@ -1,0 +1,4 @@
+#ifndef QMATERIALICON_H
+#define QMATERIALICON_H
+
+#endif // QMATERIALICON_H

@@ -47,6 +47,12 @@ QVariant GatherConfigureModel::data(const QModelIndex &index, int role) const
         return data->addr();
     case GatherConfigureModel::SensorCount:
         return data->sensorCount();
+    case GatherConfigureModel::QueryVersionState:
+        return data->queryVersionState();
+    case GatherConfigureModel::ConfigureAddrState:
+        return data->configureAddrState();
+    case GatherConfigureModel::SensorCountState:
+        return data->sensorCountState();
     default:
         break;
     }
@@ -64,7 +70,9 @@ QHash<int, QByteArray> GatherConfigureModel::roleNames() const
     roles.insert(GatherConfigureModel::ProductDesc, QByteArrayLiteral("product_description"));
     roles.insert(GatherConfigureModel::Address, QByteArrayLiteral("address"));
     roles.insert(GatherConfigureModel::SensorCount, QByteArrayLiteral("sensor_count"));
-
+    roles.insert(GatherConfigureModel::QueryVersionState, QByteArrayLiteral("query_version_state"));
+    roles.insert(GatherConfigureModel::ConfigureAddrState, QByteArrayLiteral("configure_addr_state"));
+    roles.insert(GatherConfigureModel::SensorCountState, QByteArrayLiteral("sensor_count_state"));
     return roles;
 }
 
@@ -86,4 +94,9 @@ void GatherConfigureModel::removeGather(int index)
 QList<QSharedPointer<GatherData> > GatherConfigureModel::gatherDataList() const
 {
     return _gatherDataList;
+}
+
+void GatherConfigureModel::onUpdateData()
+{
+    emit dataChanged(index(0, 0), index(rowCount(QModelIndex()) - 1, 0));
 }

@@ -31,6 +31,7 @@ void ControllerManager::addGatherConfig(int count, const QVariantMap& map)
         dataList.append(data);
 
         auto controller = QSharedPointer<GatherController>(new GatherController(data, this));
+        connect(controller.data(), &GatherController::updateData, gatherModel(), &GatherConfigureModel::onUpdateData);
         _controllers.append(controller);
 
     }
@@ -75,12 +76,10 @@ bool ControllerManager::toggleCommunication(int index)
         return false;
     }
     if (isConnected(index)) {
-
-//        return emit _controllers.at(index).stopProtocolChannel();
-    } else {
-        return _controllers.at(index)->startCommunication();
+        return _controllers.at(index)->stopCommunication();
     }
 
+    return _controllers.at(index)->startCommunication();
 }
 
 bool ControllerManager::isConnected(int index)

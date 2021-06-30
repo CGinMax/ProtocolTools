@@ -14,6 +14,9 @@ class GatherConfigureModel : public QAbstractListModel
         ProductDesc,
         Address,
         SensorCount,
+        QueryVersionState,
+        ConfigureAddrState,
+        SensorCountState,
     };
 
 public:
@@ -30,6 +33,7 @@ public:
     QList<QSharedPointer<GatherData>> gatherDataList() const;
 signals:
 public slots:
+    void onUpdateData();
 private:
     QList<QSharedPointer<GatherData>> _gatherDataList;
 };

@@ -30,6 +30,7 @@ Rectangle {
         anchors.bottom: _root.bottom
         anchors.bottomMargin: 10
         spacing: 10
+        cacheBuffer: list_gather.count * delegate_gather.height
         clip: true
 
         delegate: GatherItem {

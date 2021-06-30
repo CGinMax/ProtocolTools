@@ -29,10 +29,9 @@ Qaterial.Card {
         icon.color: "black"
         width: 42
         height: 42
-        icon.width: 24
-        icon.height: 24
-//        icon.source: "qrc:/icons/more-vert.png"
-        icon.source: "image://FAIcon/hand-lizard"
+        icon.width: 20
+        icon.height: 20
+        icon.source: "image://faicon/ellipsis-h"
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.rightMargin: -5
@@ -69,15 +68,25 @@ Qaterial.Card {
         anchors.leftMargin: 5
         anchors.top: label_hardware_version.top
     }
-    Qaterial.AppBarButton {
+//    Qaterial.AppBarButton {
+//        id: btn_query_version
+//        icon.source: "image://faicon/search"
+//        icon.width: 18
+//        icon.height: 18
+//        anchors.verticalCenter: label_software_version.verticalCenter
+//        anchors.left: label_software_version.right
+//        onClicked: {emit: _root.queryVersionClicked()}
+//    }
+    LoadingButton {
         id: btn_query_version
-        icon.source: "qrc:/icons/more-vert.png"
-        icon.width: 18
-        icon.height: 18
+        iconSource: "image://faicon/search"
+        iconSize: 18
+        actionState: query_version_state
         anchors.verticalCenter: label_software_version.verticalCenter
         anchors.left: label_software_version.right
-        onClicked: {emit: _root.queryVersionClicked()}
+        onClickStarted: {emit: _root.queryVersionClicked()}
     }
+
     Chip {
         id: label_product_desc
         text: product_description
@@ -94,7 +103,7 @@ Qaterial.Card {
         anchors.top: label_product_desc.bottom
         trailingVisible: focus
         trailingContent: Qaterial.TextFieldIconButton {
-            icon.source: "qrc:/icons/more-vert.png"
+            icon.source: "image://faicon/arrow-alt-circle-left"
             icon.width: 24
             icon.height: 24
         }
@@ -111,7 +120,7 @@ Qaterial.Card {
         trailingContent: Qaterial.TextFieldIconButton {
             icon.width: 24
             icon.height: 24
-            icon.source: "qrc:/icons/more-vert.png"
+            icon.source: "image://faicon/arrow-alt-circle-left"
         }
 
     }

@@ -1,0 +1,1 @@
+#include "../includes/qmaterialicon.h"

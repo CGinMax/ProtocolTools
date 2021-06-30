@@ -34,7 +34,7 @@ Rectangle {
             Layout.minimumWidth: parent._iconWidth
             Layout.minimumHeight: parent._iconHeight
             Layout.maximumWidth: 50
-            icon.source: "qrc:/icons/add-one.png"
+            icon.source: "image://faicon/plus-square"
             icon.color: "black"
             icon.width: parent._iconWidth
             icon.height: parent._iconHeight
@@ -72,7 +72,7 @@ Rectangle {
             Layout.minimumWidth: parent._iconWidth
             Layout.minimumHeight: parent._iconHeight
             Layout.maximumWidth: 50
-            icon.source: "qrc:/icons/delete-all.png"
+            icon.source: "image://faicon/trash"
             icon.color: "red"
             icon.width: parent._iconWidth
             icon.height: parent._iconHeight
@@ -83,6 +83,7 @@ Rectangle {
                 emit: _root.deleteAll()
             }
         }
+
 
     }
 

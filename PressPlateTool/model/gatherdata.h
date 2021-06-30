@@ -42,6 +42,16 @@ public:
     int sensorTimeout() const;
     void setSensorTimeout(int msecTimeout);
 
+    int queryVersionState() const;
+    void setQueryVerionState(int state);
+
+    int configureAddrState() const;
+    void setConfigureAddrState(int state);
+
+    int sensorCountState() const;
+    void setSensorCountState(int state);
+
+
     QJsonObject save();
 
     void load(const QJsonObject& root);
@@ -66,6 +76,12 @@ private:
 
     int m_gatherTimeout;
     int m_sensorTimeout;
+
+    // state data,not save
+    //0:nothing do, 1:loading, 2:success, 3:error
+    int m_queryVersionState;
+    int m_configureAddrState;
+    int m_sensorCountState;
 };
 
 #endif // YBGATHERDATA_H

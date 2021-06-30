@@ -52,10 +52,11 @@ bool GatherController::startCommunication()
     return success;
 }
 
-void GatherController::stopCommunication()
+bool GatherController::stopCommunication()
 {
     emit stopProtocolChannel();
     rawCommunicationBase()->close();
+    return !isConnected();
 }
 
 void GatherController::queryGatherVersion()
@@ -68,18 +69,26 @@ void GatherController::queryGatherVersion()
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result == nullptr) {
             qDebug("Unknow frame data");
+            this->setQueryVersionState(3);
+            emit this->updateData();
             return ;
         }
         if (result->functionCode() == eYBFunCode::NAKCode) {
+            this->setQueryVersionState(3);
+            emit this->updateData();
             qDebug("NAK Error");
             return ;
         }
         this->setHardwareVersion(QString::fromStdString(result->hardwareVersion()))
         ->setSoftwareVersion(QString::fromStdString(result->softwareVersion()))
-        ->setProductDesc(QString::fromStdString(result->productDescript()));
+        ->setProductDesc(QString::fromStdString(result->productDescript()))
+        ->setQueryVersionState(2);
 
+        emit this->updateData();
         qDebug("query gather version success");
-    }, [](){
+    }, [=](){
+        this->setQueryVersionState(3);
+        emit this->updateData();
         qDebug("gather query version timeout cancel");
     });
 }
@@ -189,5 +198,23 @@ GatherController *GatherController::setProductDesc(const QString &desc)
 GatherController *GatherController::setSensorCount(int count)
 {
     _gatherData->setSensorCount(count);
+    return this;
+}
+
+GatherController *GatherController::setQueryVersionState(int state)
+{
+    _gatherData->setQueryVerionState(state);
+    return this;
+}
+
+GatherController *GatherController::setConfigureAddrState(int state)
+{
+    _gatherData->setConfigureAddrState(state);
+    return this;
+}
+
+GatherController *GatherController::setSensorCountState(int state)
+{
+    _gatherData->setSensorCountState(state);
     return this;
 }

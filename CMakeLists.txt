@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(QtAwesome)
+add_subdirectory(QtMaterialIcon)
 add_subdirectory(Qaterial)
 add_subdirectory(Communication)
 add_subdirectory(Protocols)

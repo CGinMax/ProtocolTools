@@ -22,7 +22,7 @@ public:
     void appendSensorData(YBSensorData* data);
 
     Q_INVOKABLE bool startCommunication();
-    Q_INVOKABLE void stopCommunication();
+    Q_INVOKABLE bool stopCommunication();
 
     bool isConnected();
     YBProtocolChannel* protocol();
@@ -34,6 +34,7 @@ signals:
     void startPortocolChannel();
     void stopProtocolChannel();
     void deleteItem();
+    void updateData();
 
 public slots:
     void onTitleChanged(const QString& title);
@@ -45,6 +46,9 @@ private:
     GatherController* setSoftwareVersion(const QString& version);
     GatherController* setProductDesc(const QString& desc);
     GatherController* setSensorCount(int count);
+    GatherController* setQueryVersionState(int state);
+    GatherController* setConfigureAddrState(int state);
+    GatherController* setSensorCountState(int state);
 
     QSharedPointer<GatherData> _gatherData;
 
