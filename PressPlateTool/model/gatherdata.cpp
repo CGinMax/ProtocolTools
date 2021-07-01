@@ -16,7 +16,6 @@ GatherData::GatherData(const QString &name, QObject *parent)
 
 GatherData::~GatherData()
 {
-    qDeleteAll(m_ybDataList);
     m_ybDataList.clear();
 }
 
@@ -53,7 +52,7 @@ QString GatherData::hardwareVersion() const
     return m_hardwareVer;
 }
 
-void GatherData::setHardwareVerion(const QString &version)
+void GatherData::setHardwareVersion(const QString &version)
 {
     m_hardwareVer = version;
 }
@@ -88,14 +87,24 @@ void GatherData::setSensorCount(int count)
     m_sensorCount = count;
 }
 
-void GatherData::appendSensorData(YBSensorData *data)
+void GatherData::appendSensorData(const QSharedPointer<YBSensorData> &data)
 {
     m_ybDataList.append(data);
 }
 
-QList<YBSensorData *> GatherData::sensorDataList() const
+QList<QSharedPointer<YBSensorData> > GatherData::sensorDataList() const
 {
     return m_ybDataList;
+}
+
+void GatherData::removeSensorData(int index)
+{
+    m_ybDataList.removeAt(index);
+}
+
+void GatherData::clearSensorDataList()
+{
+    m_ybDataList.clear();
 }
 
 PortParam GatherData::portParam() const
@@ -139,8 +148,8 @@ QJsonObject GatherData::save()
     root.insert(QLatin1String("sensorCount"), sensorCount());
     root.insert(QLatin1String("portParam"), m_portParam.saveJson());
     QJsonArray sensorArr;
-    for (int i = 0; i < m_ybDataList.count(); i++) {
-        sensorArr.append(m_ybDataList[i]->save());
+    for (auto& data : m_ybDataList){
+        sensorArr.append(data->save());
     }
     root.insert(QLatin1String("YBDatas"), sensorArr);
 
@@ -153,7 +162,7 @@ void GatherData::load(const QJsonObject &root)
 {
     setName(root.value(QLatin1String("name")).toString());
     setAddr(root.value(QLatin1String("address")).toInt());
-    setHardwareVerion(root.value(QLatin1String("hardwareVer")).toString());
+    setHardwareVersion(root.value(QLatin1String("hardwareVer")).toString());
     setSoftwareVersion(root.value(QLatin1String("softwareVer")).toString());
     setProductDesc(root.value(QLatin1String("productDescription")).toString());
     setSensorCount(root.value(QLatin1String("sensorCount")).toInt());
@@ -164,7 +173,7 @@ void GatherData::load(const QJsonObject &root)
     for (int i = 0; i < sensorArr.count(); i++) {
         auto sensorData = new YBSensorData();
         sensorData->load(sensorArr.at(i).toObject());
-        m_ybDataList.append(sensorData);
+        m_ybDataList.append(QSharedPointer<YBSensorData>(sensorData));
     }
 
     m_gatherTimeout = root.value(QLatin1String("gatherTimeout")).toInt();

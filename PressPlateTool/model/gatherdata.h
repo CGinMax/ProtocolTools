@@ -2,6 +2,7 @@
 #define GATHERDATA_H
 
 #include <QObject>
+#include <QSharedPointer>
 #include "ybsensordata.h"
 #include "portparam.h"
 
@@ -19,7 +20,7 @@ public:
     void setAddr(int addr);
 
     QString hardwareVersion() const;
-    void setHardwareVerion(const QString &hardwareVersion);
+    void setHardwareVersion(const QString &hardwareVersion);
 
     QString softwareVersion() const;
     void setSoftwareVersion(const QString& softwareVersion);
@@ -30,8 +31,10 @@ public:
     int sensorCount() const;
     void setSensorCount(int count);
 
-    void appendSensorData(YBSensorData* data);
-    QList<YBSensorData*> sensorDataList() const;
+    void appendSensorData(const QSharedPointer<YBSensorData>& data);
+    QList<QSharedPointer<YBSensorData>> sensorDataList() const;
+    void removeSensorData(int index);
+    void clearSensorDataList();
 
     PortParam portParam() const;
     void setPortParam(const PortParam &portParam);
@@ -61,7 +64,7 @@ private:
     QString m_productDesc;
     int m_sensorCount;
     // delete here
-    QList<YBSensorData*> m_ybDataList;
+    QList<QSharedPointer<YBSensorData>> m_ybDataList;
     PortParam m_portParam;
 
     int m_gatherTimeout;

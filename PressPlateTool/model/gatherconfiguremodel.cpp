@@ -15,7 +15,7 @@ GatherConfigureModel::GatherConfigureModel(QObject *parent)
 
 GatherConfigureModel::~GatherConfigureModel()
 {
-
+    _gatherDataList.clear();
 }
 
 int GatherConfigureModel::rowCount(const QModelIndex &/*parent*/) const
@@ -80,7 +80,7 @@ void GatherConfigureModel::appendGathers(int count, const QVariantMap &map)
     }
     beginInsertRows(QModelIndex(), _gatherDataList.count(), _gatherDataList.count() -1 + count);
     for (int i = 0; i < count; i++, lastAddr++) {
-        QSharedPointer<GatherData> data(new GatherData(QString("Gather%1").arg(lastAddr)));
+        QSharedPointer<GatherData> data(new GatherData(tr("Gather%1").arg(lastAddr)));
         data->setAddr(lastAddr);
         data->setPortParam(portParam);
         _gatherDataList.append(data);
@@ -91,7 +91,7 @@ void GatherConfigureModel::appendGathers(int count, const QVariantMap &map)
 void GatherConfigureModel::removeGather(int index)
 {
     beginRemoveRows(QModelIndex(), index, index);
-    _gatherDataList.erase(_gatherDataList.begin() + index);
+    _gatherDataList.removeAt(index);
     endRemoveRows();
 }
 
@@ -107,7 +107,7 @@ void GatherConfigureModel::updateVersion(int row, const QString &hardware, const
     if (outOfRange(row)) {
         return;
     }
-    _gatherDataList.at(row)->setHardwareVerion(hardware);
+    _gatherDataList.at(row)->setHardwareVersion(hardware);
     _gatherDataList.at(row)->setSoftwareVersion(software);
     _gatherDataList.at(row)->setProductDesc(product);
     emit dataChanged(index(row, 0), index(row, 0), {GatherConfigureModel::HardwareVersion, GatherConfigureModel::SoftwareVersion, GatherConfigureModel::ProductDesc});
@@ -137,6 +137,14 @@ QObject* GatherConfigureModel::portParam(int index)
         return nullptr;
     }
     return new PortParam(_gatherDataList.at(index)->portParam());
+}
+
+GatherData *GatherConfigureModel::gatherData(int index)
+{
+    if (outOfRange(index)) {
+        return nullptr;
+    }
+    return _gatherDataList.at(index).data();
 }
 
 bool GatherConfigureModel::outOfRange(int index)

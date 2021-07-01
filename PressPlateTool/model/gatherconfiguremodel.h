@@ -34,6 +34,7 @@ public:
     Q_INVOKABLE void updateSensorCount(int row, int count);
 
     Q_INVOKABLE QObject* portParam(int index);
+    Q_INVOKABLE GatherData* gatherData(int index);
 signals:
 public slots:
 private:

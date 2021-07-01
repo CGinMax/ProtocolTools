@@ -17,6 +17,62 @@ Qaterial.ApplicationWindow {
 
     title: qsTr("Press Plate Tool")
 
+//    Qaterial.TreeView {
+//        idth: 300
+//        height: parent ? Math.min(contentHeight, parent.height) : contentHeight
+
+//        property QtObject selectedElement
+
+
+//        itemDelegate: Qaterial.ItemDelegate
+//        {
+//            id: control
+
+//            property QtObject model
+//            property int depth
+//            property int index
+
+//            height: 24
+//            leftPadding: depth * 20
+
+//            contentItem: RowLayout
+//            {
+//                Qaterial.ColorIcon
+//                {
+//                    source: Qaterial.Icons.chevronRight
+//                    color: Qaterial.Style.primaryTextColor()
+//                    visible: control.model && control.model.children && control.model.children.count
+//                    Binding on rotation
+//                    {
+//                        when: control.model && control.model.expanded
+//                        value: 90
+//                    }
+//                    Behavior on rotation { NumberAnimation { duration: 200;easing.type: Easing.OutQuart } }
+//                }
+//                Qaterial.Label
+//                {
+//                    Layout.fillWidth: true
+//                    text: control.model ? control.model.text : ""
+//                    elide: Text.ElideRight
+//                    verticalAlignment: Text.AlignVCenter
+//                    Binding on color
+//                    {
+//                        when: model === root.selectedElement
+//                        value: Qaterial.Style.accentColor
+//                    }
+//                }
+//            }
+
+//            onClicked: function()
+//            {
+//                if(model.children.count !== 0)
+//                    model.expanded = !model.expanded
+//                else
+//                    root.selectedElement = model
+//            }
+//        }
+//    }
+
     Old.SplitView {
         anchors.fill: parent
         GatherConfView{
@@ -30,12 +86,15 @@ Qaterial.ApplicationWindow {
                 width = isCollapse ? 300 : 0
                 isCollapse = !isCollapse
             }
+            onItemChanged: function(gatherController, gatherData) {
+                view_sensor_config.setController(gatherController, gatherData)
+            }
 
-//            Behavior on width {
-//                NumberAnimation {
-//                    duration: 200
-//                }
-//            }
+            //            Behavior on width {
+            //                NumberAnimation {
+            //                    duration: 200
+            //                }
+            //            }
         }
 
         StackLayout {
@@ -45,6 +104,8 @@ Qaterial.ApplicationWindow {
             }
 
             SensorConfView{
+                id: view_sensor_config
+
             }
         }
 
@@ -58,8 +119,6 @@ Qaterial.ApplicationWindow {
             main_window.y = (Screen.height - height) / 2
             main_window.visible = true
         }
-
-
 
     }
 }

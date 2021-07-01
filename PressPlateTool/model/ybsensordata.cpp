@@ -1,11 +1,12 @@
 #include "ybsensordata.h"
 #include <QJsonObject>
 
-YBSensorData::YBSensorData(QObject *parent)
+YBSensorData::YBSensorData(const QString &name, QObject *parent)
     : QObject(parent)
+    , m_name(name)
     , m_currentStatus(YBStatus::UnsetStatus)
     , m_configedStatus(YBStatus::UnsetStatus)
-    , m_addr(-1)
+    , m_addr(1)
     , m_hardwareVer(QString())
     , m_softwareVer(QString())
     , m_productDesc(QString())
@@ -20,11 +21,24 @@ YBSensorData::YBSensorData(const YBSensorData &other)
 
 YBSensorData &YBSensorData::operator=(const YBSensorData &other)
 {
+    m_name = other.m_name;
     m_currentStatus = other.m_currentStatus;
     m_configedStatus = other.m_configedStatus;
     m_addr = other.m_addr;
     m_hardwareVer = other.m_hardwareVer;
+    m_softwareVer = other.m_softwareVer;
+    m_productDesc = other.m_productDesc;
     return *this;
+}
+
+QString YBSensorData::name() const
+{
+    return m_name;
+}
+
+void YBSensorData::setName(const QString &name)
+{
+    m_name = name;
 }
 
 YBStatus YBSensorData::currentStatus() const
@@ -90,6 +104,7 @@ void YBSensorData::setProductDesc(const QString &desc)
 QJsonObject YBSensorData::save()
 {
     QJsonObject root;
+    root.insert(QLatin1String("name"), m_name);
     root.insert(QLatin1String("currentStatus"), m_currentStatus);
     root.insert(QLatin1String("configedStatus"), m_configedStatus);
     root.insert(QLatin1String("address"), m_addr);
@@ -101,6 +116,7 @@ QJsonObject YBSensorData::save()
 
 void YBSensorData::load(const QJsonObject &root)
 {
+    m_name = root.value(QLatin1String("name")).toString();
     m_currentStatus = YBStatus(root.value(QLatin1String("currentStatus")).toInt());
     m_configedStatus = YBStatus(root.value(QLatin1String("configedStatus")).toInt());
     m_addr = static_cast<uint8_t>(root.value(QLatin1String("address")).toInt());

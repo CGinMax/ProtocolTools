@@ -39,14 +39,6 @@ public slots:
 
 private:
     bool canDoOperate();
-//    GatherController* setAddress(int addr);
-//    GatherController* setHardwareVersion(const QString& version);
-//    GatherController* setSoftwareVersion(const QString& version);
-//    GatherController* setProductDesc(const QString& desc);
-//    GatherController* setSensorCount(int count);
-//    GatherController* setQueryVersionState(int state);
-//    GatherController* setConfigureAddrState(int state);
-//    GatherController* setSensorCountState(int state);
 
     QSharedPointer<CommunicationBase> _communication;
     QSharedPointer<ProtocolChannelBase> _protocol;

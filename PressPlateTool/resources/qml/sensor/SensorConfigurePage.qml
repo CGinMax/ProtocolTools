@@ -3,71 +3,61 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls 1.4 as Old
 import QtQuick.Layouts 1.12
 
+import PressPlateTools 1.0
 import Qaterial 1.0 as Qaterial
 
 Rectangle {
     id: _root
 
-    Old.SplitView {
-        id: _sv_vertical
-        orientation: Qt.Vertical
+    property alias gatherData: model_sensor_configure.gatherData
+    property alias gatherController: controller_sensor.gatherController
+
+
+
+    ColumnLayout {
+
         anchors.fill: parent
 
-        ColumnLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-
-            ListView {
-                model: ListModel{
-                    ListElement{
-                        titleName: "sensor1"
-                        hardwareVersion: 1
-                        softwareVersion: 0
-                    }
-
-                }
-
-                delegate: Rectangle {
-                    color: "blue"
-                    border.color: "grey"
-                    ColumnLayout {
-    //                    anchors.fill: parent
-                        Layout.alignment: Qt.AlignCenter
-                        Qaterial.Label{
-                            text: titleName
-                        }
-                        Qaterial.Label {
-                            text: hardwareVersion
-                        }
-                        Qaterial.Label {
-                            text: softwareVersion
-                        }
-                    }
-
-
-                }
+        Qaterial.FlatButton {
+            id: btn_add_one_sensor
+            text: "Add one"
+            onClicked: {
+                model_sensor_configure.appendSensors(1)
             }
         }
 
+        ListView {
+            id: listview_sensor
+            property int delegateHeight: 80
+            clip: true
+            cacheBuffer: count * delegateHeight
 
-
-        Qaterial.TextArea {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            model: SensorConfigureModel {
+                id: model_sensor_configure
+                gatherData: null
+            }
 
-            backgroundBorderHeight: 10
-        }
+            delegate: SensorItem{
+                id: delegate_sensor
+                x: 10
+                elevation: 0
+                outlined: true
+                width: listview_sensor.width - 20
+                height: listview_sensor.delegateHeight
 
-        handleDelegate: Rectangle {
-            width: 5
-//            color: Qaterial.Style.backgroundColor
-            color: "black"
+                list_model: model_sensor_configure
+                controller: controller_sensor
+            }
+
+
+            SensorController {
+                id: controller_sensor
+                gatherController: null
+            }
 
         }
     }
-
-
-
 
 }

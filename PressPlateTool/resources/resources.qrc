@@ -18,5 +18,6 @@
         <file>qml/components/Chip.qml</file>
         <file>qml/components/LoadingButton.qml</file>
         <file>qml/components/SplitHandle.qml</file>
+        <file>qml/sensor/SensorItem.qml</file>
     </qresource>
 </RCC>

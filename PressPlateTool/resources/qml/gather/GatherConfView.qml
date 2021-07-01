@@ -7,6 +7,7 @@ import Qaterial 1.0 as Qaterial
 Rectangle {
     id: _root
 
+    signal itemChanged(var controller, var gatherData)
     property alias gather_count: listview_gather.count
 
     ToolButtonBar {
@@ -39,9 +40,23 @@ Rectangle {
 
         delegate: GatherItem {
             id: delegate_gather
+            x: 10
             width: listview_gather.width - 40
             height: listview_gather.delegateHeight
+            elevation: 8.0
+            elevationOnHovered: true
+            outlined: true
             list_model: model_gather_configure
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    console.log("click")
+                    if (!ListView.isCurrentItem) {
+                        console.log("change")
+                        listview_gather.currentIndex = index
+                    }
+                }
+            }
         } // GatherItem
 
         model: GatherConfigureModel {
@@ -59,6 +74,10 @@ Rectangle {
 
         } // ScrollBar
 
+        onCurrentIndexChanged: {
+            console.log("current item change")
+            emit: _root.itemChanged(currentItem.gatherController, model_gather_configure.gatherData(currentIndex))
+        }
 
     } // ListView
 

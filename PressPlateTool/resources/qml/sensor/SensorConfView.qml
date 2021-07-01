@@ -47,7 +47,7 @@ Rectangle {
             currentIndex: _tabBar.currentIndex
             interactive: true
             SensorConfigurePage {
-
+                id: page_sensor_configure
             } // SensorConfigurePage
 
             ProjectConfigurePage {
@@ -57,6 +57,11 @@ Rectangle {
             } // ProjectConfigurePage
 
         } // SwipeView
+    }
+
+    function setController(gatherController, gatherData) {
+        page_sensor_configure.gatherController = gatherController
+        page_sensor_configure.gatherData = gatherData
     }
 
 }

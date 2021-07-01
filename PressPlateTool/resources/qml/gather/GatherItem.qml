@@ -12,11 +12,7 @@ Qaterial.Card {
     property var list_model: undefined
 
     property bool isStarted: false
-
-    x: 10
-    elevation: 8.0
-    elevationOnHovered: true
-    outlined: true
+    property alias gatherController: controller_gather
 
     Qaterial.OutlineButton {
         id: btn_more
@@ -146,6 +142,8 @@ Qaterial.Card {
             }
         }
     }
+
+
 
     function queryVersion() {
         if (!controller_gather.isConnected()) {
