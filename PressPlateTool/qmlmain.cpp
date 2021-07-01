@@ -25,8 +25,9 @@ int main(int argc, char *argv[])
     qaterial::Utils::loadResources();
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-    if (engine.rootObjects().isEmpty())
+    if (engine.rootObjects().isEmpty()) {
         return -1;
+    }
 
     return a.exec();
 }

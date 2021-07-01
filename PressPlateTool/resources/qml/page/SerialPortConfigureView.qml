@@ -12,6 +12,7 @@ Rectangle {
     property bool isInWindow: true
     property int gatherCount: 1
     property var portParam: undefined
+    property int labelWidth: 100
     signal btnOkClicked()
     signal btnCancelClicked()
 
@@ -26,11 +27,8 @@ Rectangle {
             visible: _root.isMultiConf
             title: qsTr("Gather number")
             text: gatherCount.toString()
+            validator: IntValidator{ bottom: 1}
             onTextChanged: {
-                if (input_gather_number.text === "") {
-                    gatherCount = 0
-                    return;
-                }
                 gatherCount = parseInt(input_gather_number.text)
             }
         }
@@ -41,22 +39,21 @@ Rectangle {
 
             Qaterial.Label {
                 Layout.fillWidth: true
+                font.pixelSize: 16
                 text: qsTr("Device List")
             }
 
             Qaterial.ComboBox {
                 id: _cbb_devices
-
                 Layout.fillWidth: true
-
-                flat: false
-                elevation: 6
+                borderColor: "gray"
+//                elevation: 16
                 model: ListModel {
                     id: model_devices
                 }
             }
 
-            Qaterial.Button {
+            Qaterial.FlatButton {
                 Layout.fillWidth: true
                 text: qsTr("Refresh")
                 onClicked: _root.refreshDevices()
@@ -65,15 +62,16 @@ Rectangle {
 
         RowLayout {
             Qaterial.Label{
-                Layout.fillWidth: true
-                text: qsTr("Buad rate")
+                Layout.preferredWidth: _root.labelWidth
+                font.pixelSize: 16
+                text: qsTr("Buad Rate")
             }
             Qaterial.ComboBox {
                 id: _cbb_baudrate
 
                 Layout.fillWidth: true
+                borderColor: "gray"
 
-                flat: false
                 model: ListModel{
                     id: model_baudrate
                 }
@@ -82,44 +80,45 @@ Rectangle {
         }
 
         RowLayout {
-            Layout.fillWidth: true
             Qaterial.Label{
-                text: qsTr("Data bit")
+                Layout.preferredWidth: _root.labelWidth
+                font.pixelSize: 16
+                text: qsTr("Data Bit")
             }
             Qaterial.ComboBox {
                 id: cbb_data_bit
                 Layout.fillWidth: true
-                flat: false
+                borderColor: "gray"
                 model: [8, 7, 6, 5]
             }
 
         }
 
         RowLayout {
-            Layout.fillWidth: true
             Qaterial.Label{
-                Layout.fillWidth: true
-                text: qsTr("Stop bit")
+                Layout.preferredWidth: _root.labelWidth
+                font.pixelSize: 16
+                text: qsTr("Stop Bit")
             }
             Qaterial.ComboBox {
                 id: cbb_stop_bit
                 Layout.fillWidth: true
-                flat: false
+                borderColor: "gray"
                 model: [1, 1.5, 2]
             }
 
         }
 
         RowLayout {
-            Layout.fillWidth: true
             Qaterial.Label{
-                Layout.fillWidth: true
+                Layout.preferredWidth: _root.labelWidth
+                font.pixelSize: 16
                 text: qsTr("Parity")
             }
             Qaterial.ComboBox {
                 id: cbb_parity
                 Layout.fillWidth: true
-                flat: false
+                borderColor: "gray"
                 model: [
                     qsTr("None"),
                     qsTr("Even Parity"),
@@ -142,7 +141,7 @@ Rectangle {
                     emit: _root.btnOkClicked()
                 }
             }
-            Qaterial.Button {
+            Qaterial.FlatButton {
                 id: _btn_cancel
                 text: qsTr("Cancel")
 

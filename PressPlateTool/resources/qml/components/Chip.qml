@@ -5,20 +5,19 @@ import Qaterial 1.0 as Qaterial
 
 Rectangle {
     id: _root
+    property int maxWidth: 1000
     property alias text: _content.text
-
+    visible: _content.text.length != 0
     color: "#EFEFEF"
     radius: height / 2
 
-    width: _content.contentWidth + 10
+    width: _content.contentWidth /*> maxWidth ? maxWidth : _content.contentWidth*/ + 10
     height: _content.contentHeight + 10
 
     Qaterial.Label {
         id: _content
-        maximumLineCount: 30
+        wrapMode: Text.WordWrap
         anchors.fill: parent
-//        anchors.topMargin: 5
-//        anchors.leftMargin: 5
         anchors.margins: 5
     }
 }

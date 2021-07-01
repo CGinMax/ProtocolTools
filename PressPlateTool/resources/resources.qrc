@@ -17,5 +17,6 @@
         <file>icons/more-vert.png</file>
         <file>qml/components/Chip.qml</file>
         <file>qml/components/LoadingButton.qml</file>
+        <file>qml/components/SplitHandle.qml</file>
     </qresource>
 </RCC>

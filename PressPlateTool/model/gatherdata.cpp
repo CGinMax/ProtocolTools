@@ -10,9 +10,6 @@ GatherData::GatherData(const QString &name, QObject *parent)
     , m_sensorCount(0)
     , m_gatherTimeout(12000)
     , m_sensorTimeout(12000)
-    , m_queryVersionState(0)
-    , m_configureAddrState(0)
-    , m_sensorCountState(0)
 {
 
 }
@@ -129,36 +126,6 @@ int GatherData::sensorTimeout() const
 void GatherData::setSensorTimeout(int msecTimeout)
 {
     m_sensorTimeout = msecTimeout;
-}
-
-int GatherData::queryVersionState() const
-{
-    return m_queryVersionState;
-}
-
-void GatherData::setQueryVerionState(int state)
-{
-    m_queryVersionState = state;
-}
-
-int GatherData::configureAddrState() const
-{
-    return m_configureAddrState;
-}
-
-void GatherData::setConfigureAddrState(int state)
-{
-    m_configureAddrState = state;
-}
-
-int GatherData::sensorCountState() const
-{
-    return m_sensorCountState;
-}
-
-void GatherData::setSensorCountState(int state)
-{
-    m_sensorCountState = state;
 }
 
 QJsonObject GatherData::save()

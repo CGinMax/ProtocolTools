@@ -8,7 +8,6 @@ Qaterial.RoundButton {
 
     property url iconSource: undefined
     property alias iconSize: icon_inner.iconSize
-    property int actionState: 0
 
     signal clickStarted()
 
@@ -25,50 +24,30 @@ Qaterial.RoundButton {
 
     }
 
-
     onClicked: {
-        // TODO
-        if (actionState == 1) {
-            actionState = 0
-
-        } else {
-            actionState = 1
-            emit: _root.clickStarted()
-        }
-
+        createBusyLoading()
+        emit: _root.clickStarted()
     }
-
-    onActionStateChanged: {
-        if (actionState == 0) {
-            icon_inner.source = _root.iconSource
-            icon_inner.visible = true
-        } else if (actionState == 1) {
-            createBusyLoading()
-        } else {
-            changeState(actionState == 2)
-            console.log("aaa")
-        }
-    }
-
     function createBusyLoading() {
         icon_inner.visible = false
         loader_state.sourceComponent = Qt.createComponent("qrc:/Qaterial/BusyIndicator.qml");
-
     }
 
     function changeState(success) {
-
+        loader_state.sourceComponent.destroy()
+        loader_state.sourceComponent = null
         if (success) {
-            icon_inner.icon.source = "image://faicon/check-circle"
-            icon_inner.icon.color = "green"
+            icon_inner.source = "image://faicon/check-circle"
+            icon_inner.color = "green"
         } else {
-            icon_inner.icon.source = "image://faicon/times-circle"
-            icon_inner.icon.color = "red"
+            icon_inner.source = "image://faicon/times-circle"
+            icon_inner.color = "red"
         }
         icon_inner.visible = true
 
         delay(2000, function(){
             icon_inner.source = _root.iconSource
+            icon_inner.color = "black"
         })
     }
     function new_timer() {

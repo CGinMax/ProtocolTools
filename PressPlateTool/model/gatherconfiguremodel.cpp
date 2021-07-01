@@ -1,15 +1,16 @@
-#include "gatherconfiguremodel.h"
-#include <QDebug>
+﻿#include "gatherconfiguremodel.h"
+#include "portparam.h"
+
 GatherConfigureModel::GatherConfigureModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    auto data = new GatherData("Gather1");
-    data->setAddr(1);
-    data->setSensorCount(10);
-    data->setHardwareVerion("1.0");
-    data->setSoftwareVersion("1.0");
-    data->setProductDesc("this is a product description");
-    _gatherDataList.append(QSharedPointer<GatherData>(data));
+//    auto data = new GatherData("Gather1");
+//    data->setAddr(1);
+//    data->setSensorCount(10);
+//    data->setHardwareVerion("1.0");
+//    data->setSoftwareVersion("1.0");
+//    data->setProductDesc("this is a product description");
+//    _gatherDataList.append(QSharedPointer<GatherData>(data));
 }
 
 GatherConfigureModel::~GatherConfigureModel()
@@ -47,12 +48,8 @@ QVariant GatherConfigureModel::data(const QModelIndex &index, int role) const
         return data->addr();
     case GatherConfigureModel::SensorCount:
         return data->sensorCount();
-    case GatherConfigureModel::QueryVersionState:
-        return data->queryVersionState();
-    case GatherConfigureModel::ConfigureAddrState:
-        return data->configureAddrState();
-    case GatherConfigureModel::SensorCountState:
-        return data->sensorCountState();
+    case GatherConfigureModel::Timeout:
+        return data->gatherTimeout();
     default:
         break;
     }
@@ -70,19 +67,26 @@ QHash<int, QByteArray> GatherConfigureModel::roleNames() const
     roles.insert(GatherConfigureModel::ProductDesc, QByteArrayLiteral("product_description"));
     roles.insert(GatherConfigureModel::Address, QByteArrayLiteral("address"));
     roles.insert(GatherConfigureModel::SensorCount, QByteArrayLiteral("sensor_count"));
-    roles.insert(GatherConfigureModel::QueryVersionState, QByteArrayLiteral("query_version_state"));
-    roles.insert(GatherConfigureModel::ConfigureAddrState, QByteArrayLiteral("configure_addr_state"));
-    roles.insert(GatherConfigureModel::SensorCountState, QByteArrayLiteral("sensor_count_state"));
+    roles.insert(GatherConfigureModel::Timeout, QByteArrayLiteral("timeout"));
     return roles;
 }
 
-void GatherConfigureModel::appendGatherList(const QList<QSharedPointer<GatherData> > &dataList)
+void GatherConfigureModel::appendGathers(int count, const QVariantMap &map)
 {
-    beginInsertRows(QModelIndex(), _gatherDataList.count(), _gatherDataList.count() -1 + dataList.count());
-    _gatherDataList.append(dataList);
+    PortParam portParam(map);
+    int lastAddr = 1;
+    if (!_gatherDataList.isEmpty()) {
+        lastAddr = _gatherDataList.last()->addr() + 1;
+    }
+    beginInsertRows(QModelIndex(), _gatherDataList.count(), _gatherDataList.count() -1 + count);
+    for (int i = 0; i < count; i++, lastAddr++) {
+        QSharedPointer<GatherData> data(new GatherData(QString("Gather%1").arg(lastAddr)));
+        data->setAddr(lastAddr);
+        data->setPortParam(portParam);
+        _gatherDataList.append(data);
+    }
     endInsertRows();
 }
-
 
 void GatherConfigureModel::removeGather(int index)
 {
@@ -91,12 +95,51 @@ void GatherConfigureModel::removeGather(int index)
     endRemoveRows();
 }
 
-QList<QSharedPointer<GatherData> > GatherConfigureModel::gatherDataList() const
+void GatherConfigureModel::removeAll()
 {
-    return _gatherDataList;
+    beginResetModel();
+    _gatherDataList.clear();
+    endResetModel();
 }
 
-void GatherConfigureModel::onUpdateData()
+void GatherConfigureModel::updateVersion(int row, const QString &hardware, const QString &software, const QString &product)
 {
-    emit dataChanged(index(0, 0), index(rowCount(QModelIndex()) - 1, 0));
+    if (outOfRange(row)) {
+        return;
+    }
+    _gatherDataList.at(row)->setHardwareVerion(hardware);
+    _gatherDataList.at(row)->setSoftwareVersion(software);
+    _gatherDataList.at(row)->setProductDesc(product);
+    emit dataChanged(index(row, 0), index(row, 0), {GatherConfigureModel::HardwareVersion, GatherConfigureModel::SoftwareVersion, GatherConfigureModel::ProductDesc});
+}
+
+void GatherConfigureModel::updateAddress(int row, int addr)
+{
+    if (outOfRange(row)) {
+        return;
+    }
+    _gatherDataList.at(row)->setAddr(addr);
+    emit dataChanged(index(row, 0), index(row, 0), {GatherConfigureModel::Address});
+}
+
+void GatherConfigureModel::updateSensorCount(int row, int count)
+{
+    if (outOfRange(row)) {
+        return;
+    }
+    _gatherDataList.at(row)->setSensorCount(count);
+    emit dataChanged(index(row, 0), index(row, 0), {GatherConfigureModel::SensorCount});
+}
+
+QObject* GatherConfigureModel::portParam(int index)
+{
+    if (outOfRange(index)) {
+        return nullptr;
+    }
+    return new PortParam(_gatherDataList.at(index)->portParam());
+}
+
+bool GatherConfigureModel::outOfRange(int index)
+{
+    return index < 0 || index >= _gatherDataList.count() ;
 }

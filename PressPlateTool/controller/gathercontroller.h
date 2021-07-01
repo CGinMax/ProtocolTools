@@ -4,53 +4,49 @@
 #include <QObject>
 #include <functional>
 #include <QSharedPointer>
-#include "gatherdata.h"
+#include "portparam.h"
 #include "ybprotocolchannel.h"
 
 class GatherController : public QObject
 {
     Q_OBJECT
 public:
-    explicit GatherController(const QSharedPointer<GatherData>& data, QObject *parent = nullptr);
+    explicit GatherController(QObject *parent = nullptr);
     ~GatherController() override;
-
-    GatherData* rawGatherData();
-    void setGatherData(const QSharedPointer<GatherData>& gatherData);
 
     CommunicationBase* rawCommunicationBase();
 
-    void appendSensorData(YBSensorData* data);
-
-    Q_INVOKABLE bool startCommunication();
+//    void appendSensorData(YBSensorData* data);
+    Q_INVOKABLE bool startCommunication(QObject* param);
     Q_INVOKABLE bool stopCommunication();
 
-    bool isConnected();
+    Q_INVOKABLE bool isConnected();
     YBProtocolChannel* protocol();
 
-    void queryGatherVersion();
-    void configureGatherAddress(int addr);
-    void configureSensorCount(int count);
+    Q_INVOKABLE void queryGatherVersion(int addr, int timeout = 12000);
+    Q_INVOKABLE void configureGatherAddress(int addr, int timeout = 12000);
+    Q_INVOKABLE void configureSensorCount(int addr, int count, int timeout);
 signals:
     void startPortocolChannel();
     void stopProtocolChannel();
     void deleteItem();
-    void updateData();
+    void queryVersionCallback(bool success, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString());
+    void configureAddressCallback(bool success, int addr = 0);
+    void configureCountCallback(bool success, int count = 0);
 
 public slots:
-    void onTitleChanged(const QString& title);
+//    void onTitleChanged(const QString& title);
 
 private:
     bool canDoOperate();
-    GatherController* setAddress(int addr);
-    GatherController* setHardwareVersion(const QString& version);
-    GatherController* setSoftwareVersion(const QString& version);
-    GatherController* setProductDesc(const QString& desc);
-    GatherController* setSensorCount(int count);
-    GatherController* setQueryVersionState(int state);
-    GatherController* setConfigureAddrState(int state);
-    GatherController* setSensorCountState(int state);
-
-    QSharedPointer<GatherData> _gatherData;
+//    GatherController* setAddress(int addr);
+//    GatherController* setHardwareVersion(const QString& version);
+//    GatherController* setSoftwareVersion(const QString& version);
+//    GatherController* setProductDesc(const QString& desc);
+//    GatherController* setSensorCount(int count);
+//    GatherController* setQueryVersionState(int state);
+//    GatherController* setConfigureAddrState(int state);
+//    GatherController* setSensorCountState(int state);
 
     QSharedPointer<CommunicationBase> _communication;
     QSharedPointer<ProtocolChannelBase> _protocol;

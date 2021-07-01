@@ -8,6 +8,7 @@ import Qaterial 1.0 as Qaterial
 
 import "gather"
 import "sensor"
+import "components"
 
 Qaterial.ApplicationWindow {
     id: main_window
@@ -20,10 +21,25 @@ Qaterial.ApplicationWindow {
         anchors.fill: parent
         GatherConfView{
             id: view_gather_config
+
+            property bool isCollapse: false
+
             width: 300
+
+            function collapse() {
+                width = isCollapse ? 300 : 0
+                isCollapse = !isCollapse
+            }
+
+//            Behavior on width {
+//                NumberAnimation {
+//                    duration: 200
+//                }
+//            }
         }
 
         StackLayout {
+            id: stacklayout_sensor
             currentIndex: view_gather_config.gather_count == 0 ? 0 : 1
             Rectangle {
             }
@@ -34,20 +50,16 @@ Qaterial.ApplicationWindow {
 
 
 
-        handleDelegate: Rectangle {
-            width: 2
-            color: "grey"
+        handleDelegate: SplitHandle{}
 
+        Component.onCompleted: {
+            Qaterial.Style.theme = Qaterial.Style.Theme.Light
+            main_window.x = (Screen.width - width) / 2
+            main_window.y = (Screen.height - height) / 2
+            main_window.visible = true
         }
+
+
+
     }
-
-    Component.onCompleted: {
-        Qaterial.Style.theme = Qaterial.Style.Theme.Light
-        main_window.x = (Screen.width - width) / 2
-        main_window.y = (Screen.height - height) / 2
-        main_window.visible = true
-    }
-
-
-
 }

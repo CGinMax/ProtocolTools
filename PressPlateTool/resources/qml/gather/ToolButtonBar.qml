@@ -25,7 +25,7 @@ Rectangle {
         anchors.fill: parent
 
 
-        Qaterial.Button {
+        Qaterial.RoundButton {
             id: btn_add_one
 //            Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight
@@ -38,13 +38,12 @@ Rectangle {
             icon.color: "black"
             icon.width: parent._iconWidth
             icon.height: parent._iconHeight
-            flat: true
             backgroundColor: "transparent"
 
             onClicked: dlg_serialport.showDialog(false)
 
         }
-        Qaterial.Button {
+        Qaterial.RoundButton {
             id: btn_add_multiple
 //            Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight
@@ -57,13 +56,12 @@ Rectangle {
             icon.color: "black"
             icon.width: parent._iconWidth
             icon.height: parent._iconHeight
-            flat: true
             backgroundColor: "transparent"
 
             onClicked: dlg_serialport.showDialog(true)
         }
 
-        Qaterial.Button{
+        Qaterial.RoundButton{
             id: btn_delete_all
 //            Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight
@@ -76,7 +74,6 @@ Rectangle {
             icon.color: "red"
             icon.width: parent._iconWidth
             icon.height: parent._iconHeight
-            flat: true
             backgroundColor: "transparent"
 
             onClicked: {
@@ -105,13 +102,9 @@ Rectangle {
             id: view_serialport_conf
 
             onBtnOkClicked: {
-                if (gatherCount <= 0) {
-                    dlg_error.open()
-                    return
-                }
                 dlg_serialport.accept()
 
-                emit: addClicked(gatherCount, getPortParam())
+                emit: addClicked(isMultiConf ? gatherCount : 1, getPortParam())
             }
             onBtnCancelClicked: {
                 dlg_serialport.reject()
@@ -128,16 +121,4 @@ Rectangle {
             y = computeDialogY(dlg_serialport.height)
         }
     }
-
-    Qaterial.AlertDialog {
-        id: dlg_error
-        width: 400
-        height: 100
-        text: qsTr("Input gather count is invalid, please modify it!")
-        Component.onCompleted: {
-            x = computeDialogX(dlg_error.width)
-            y = computeDialogY(dlg_error.height)
-        }
-    }
-
 }
