@@ -1,9 +1,8 @@
 #include "gatherdata.h"
 
-GatherData::GatherData(const QString &name, QObject *parent)
+GatherData::GatherData(QObject *parent)
     : QObject(parent)
-    , m_name(name)
-    , m_addr(-1)
+    , m_addr(1)
     , m_hardwareVer(QString("0.0"))
     , m_softwareVer(QString("0.0"))
     , m_productDesc(QString())
@@ -16,21 +15,6 @@ GatherData::GatherData(const QString &name, QObject *parent)
 
 GatherData::~GatherData()
 {
-    m_ybDataList.clear();
-}
-
-QString GatherData::name() const
-{
-    return m_name;
-}
-
-void GatherData::setName(const QString &name)
-{
-    if (m_name == name) {
-        return ;
-    }
-    m_name = name;
-    emit nameChanged(name);
 }
 
 int GatherData::addr() const
@@ -87,26 +71,6 @@ void GatherData::setSensorCount(int count)
     m_sensorCount = count;
 }
 
-void GatherData::appendSensorData(const QSharedPointer<YBSensorData> &data)
-{
-    m_ybDataList.append(data);
-}
-
-QList<QSharedPointer<YBSensorData> > GatherData::sensorDataList() const
-{
-    return m_ybDataList;
-}
-
-void GatherData::removeSensorData(int index)
-{
-    m_ybDataList.removeAt(index);
-}
-
-void GatherData::clearSensorDataList()
-{
-    m_ybDataList.clear();
-}
-
 PortParam GatherData::portParam() const
 {
     return m_portParam;
@@ -135,47 +99,4 @@ int GatherData::sensorTimeout() const
 void GatherData::setSensorTimeout(int msecTimeout)
 {
     m_sensorTimeout = msecTimeout;
-}
-
-QJsonObject GatherData::save()
-{
-    QJsonObject root;
-    root.insert(QLatin1String("name"), name());
-    root.insert(QLatin1String("address"), addr());
-    root.insert(QLatin1String("hardwareVer"), hardwareVersion());
-    root.insert(QLatin1String("softwareVer"), softwareVersion());
-    root.insert(QLatin1String("productDescription"), productDescription());
-    root.insert(QLatin1String("sensorCount"), sensorCount());
-    root.insert(QLatin1String("portParam"), m_portParam.saveJson());
-    QJsonArray sensorArr;
-    for (auto& data : m_ybDataList){
-        sensorArr.append(data->save());
-    }
-    root.insert(QLatin1String("YBDatas"), sensorArr);
-
-    root.insert(QLatin1String("gatherTimeout"), m_gatherTimeout);
-    root.insert(QLatin1String("sensorTimeout"), m_sensorTimeout);
-    return root;
-}
-
-void GatherData::load(const QJsonObject &root)
-{
-    setName(root.value(QLatin1String("name")).toString());
-    setAddr(root.value(QLatin1String("address")).toInt());
-    setHardwareVersion(root.value(QLatin1String("hardwareVer")).toString());
-    setSoftwareVersion(root.value(QLatin1String("softwareVer")).toString());
-    setProductDesc(root.value(QLatin1String("productDescription")).toString());
-    setSensorCount(root.value(QLatin1String("sensorCount")).toInt());
-    QJsonObject paramObj = root.value(QLatin1String("portParam")).toObject();
-    m_portParam.loadJson(paramObj);
-
-    QJsonArray sensorArr = root.value(QLatin1String("YBDatas")).toArray();
-    for (int i = 0; i < sensorArr.count(); i++) {
-        auto sensorData = new YBSensorData();
-        sensorData->load(sensorArr.at(i).toObject());
-        m_ybDataList.append(QSharedPointer<YBSensorData>(sensorData));
-    }
-
-    m_gatherTimeout = root.value(QLatin1String("gatherTimeout")).toInt();
-    m_sensorTimeout = root.value(QLatin1String("sensorTimeout")).toInt();
 }

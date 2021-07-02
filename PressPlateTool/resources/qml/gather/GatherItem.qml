@@ -6,214 +6,165 @@ import Qaterial 1.0 as Qaterial
 import PressPlateTools 1.0
 import "../components"
 
-Qaterial.Card {
+Qaterial.GroupBox {
     id: _root
-
-    property var list_model: undefined
+    title: qsTr("Gather Configuration")
+    inlineTitle: true
+    Layout.fillWidth: true
+    Layout.preferredWidth: 500
+    Layout.fillHeight: true
 
     property bool isStarted: false
+    property var portParam: null
     property alias gatherController: controller_gather
 
-    Qaterial.OutlineButton {
-        id: btn_more
-        icon.color: "black"
-        width: 42
-        height: 42
-        icon.width: 20
-        icon.height: 20
-        icon.source: "image://faicon/ellipsis-h"
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: -5
-        anchors.topMargin: -5
-        outlined: hovered
-        onClicked: {
-            popup_menu.open()
+    ColumnLayout {
+
+        Qaterial.FlatButton {
+            id: btn_run
+            text: _root.isStarted ? qsTr("Close") : qsTr("Open")
+
         }
-    }
+        Row {
+            Qaterial.TextField {
+                id: input_address
+                title: qsTr("Address")
+                text: "1"
+                validator: IntValidator{ bottom: 1 }
 
-    Text {
-        id: label_name
-        text: gather_name
-        font.pixelSize: 22
-        font.bold: true
-        anchors.left: parent.left
-        anchors.leftMargin: 10
-        anchors.top: parent.top
-        anchors.topMargin: 10
-    } // Label
+            }
+            LoadingButton {
+                id: btn_configure_address
+//                opacity: input_address.focus ? 1.0 : 0.0
+                iconSource: "image://faicon/arrow-alt-circle-left"
+                iconSize: 18
+            }
 
+            Qaterial.TextField {
+                id: input_sensor_count
+                title: qsTr("Sensor Count")
+                text: "0"
+                validator: IntValidator{ bottom: 0 }
 
-    Chip {
-        id: label_hardware_version
-        text: hardware_version
-        anchors.top: label_name.bottom
-        anchors.topMargin: 5
-        anchors.left: label_name.left
-    }
-    Chip {
-        id: label_software_version
-        text: software_version
-        anchors.left: label_hardware_version.right
-        anchors.leftMargin: 5
-        anchors.top: label_hardware_version.top
-    }
-
-    LoadingButton {
-        id: btn_query_version
-        iconSource: "image://faicon/search"
-        iconSize: 18
-        anchors.verticalCenter: label_software_version.verticalCenter
-        anchors.left: label_software_version.right
-        onClickStarted: {
-            _root.queryVersion()
+            }
+            LoadingButton {
+                id: btn_configure_sensor_count
+//                opacity: input_sensor_count.focus ? 1.0 : 0.0
+                iconSource: "image://faicon/arrow-alt-circle-left"
+                iconSize: 18
+            }
         }
-    }
 
-    Chip {
-        id: label_product_desc
-        text: product_description
-        maxWidth: _root.width - 20
-        anchors.top: label_hardware_version.bottom
-        anchors.topMargin: 5
-        anchors.left: label_hardware_version.left
-    }
+        ColumnLayout {
+            Layout.fillWidth: true
+            Row {
+                id: layout_version
 
-    Qaterial.TextField {
-        id: input_address
-        title: qsTr("Address")
-        text: address
-        validator: IntValidator{ bottom: 1 }
-        anchors.left: label_name.left
-        anchors.top: label_product_desc.bottom
-        trailingVisible: focus
-        trailingContent: Qaterial.TextFieldIconButton {
-            icon.source: "image://faicon/arrow-alt-circle-left"
-            icon.width: 24
-            icon.height: 24
-            onClicked: {
-                _root.configureAddress(input_address.text)
+                Layout.fillWidth: true
+                Layout.preferredWidth: 200
+                LabelTile {
+                    id: label_hardware
+                    title: qsTr("Hardware Version")
+                    text: "0.0"
+
+
+                }
+                LabelTile {
+                    id: label_software
+                    title: qsTr("Software Version")
+                    text: "0.0"
+
+                }
+                LoadingButton {
+                    id: btn_query_version
+                    iconSource: "image://faicon/search"
+                    iconSize: 18
+                }
+            }
+            LabelTile {
+                id: label_product
+                title: qsTr("Product Description")
+                text: qsTr("None")
+                Layout.fillWidth: true
             }
         }
     }
-
-    Qaterial.TextField {
-        id: input_sensor_count
-        title: qsTr("Sensor Count")
-        text: sensor_count
-        validator: IntValidator{ bottom: 0 }
-        anchors.left: input_address.right
-        anchors.leftMargin: 5
-        anchors.top: input_address.top
-        trailingVisible: focus
-        trailingContent: LoadingButton {
-            id: btn_configure_sensor_count
-            iconSize: 20
-            iconSource: "image://faicon/arrow-alt-circle-left"
-            onClickStarted: {
-                _root.configureSensorCount(parseInt(input_sensor_count.text))
-            }
-        }
+    function alert() {
+        Qaterial.SnackbarManager.show({text: qsTr("Communication not open!Can not operate!")})
     }
-
-    Qaterial.FlatButton {
-        id: btn_run
-        text: isStarted ? qsTr("Close") : qsTr("Open")
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        onClicked: {
-            toggleCommunication()
-        }
-    }
-
-    Qaterial.Menu {
-        id: popup_menu
-        x: btn_more.x
-        y: btn_more.y + btn_more.height
-        width: 102
-        focus: true
-        closePolicy: Popup.CloseOnPressOutsideParent | Popup.CloseOnEscape
-
-        Qaterial.MenuItem {
-            id: btn_del_one
-            text: qsTr("Delete")
-            onClicked: {
-                deleteItem()
-            }
-        }
-    }
-
-
 
     function queryVersion() {
         if (!controller_gather.isConnected()) {
-            Qaterial.SnackbarManager.show({
-                text: "Communication not open!Can not operate!"
-            })
+            btn_query_version.changeState(false)
+            alert()
             return;
         }
-        controller_gather.queryGatherVersion(address, timeout)
+        controller_gather.queryGatherVersion(parseInt(input_address.text))
     }
 
-    function configureAddress(addr) {
+    function configureAddress() {
         if (!controller_gather.isConnected()) {
-            Qaterial.SnackbarManager.show({
-                text: "Communication not open!Can not operate!"
-            })
+            btn_configure_address.changeState(false)
+            alert()
             return;
         }
-        controller_gather.configureGatherAddress(addr, timeout)
+        controller_gather.configureGatherAddress(parseInt(input_address.text))
+
     }
 
-    function configureSensorCount(count) {
+    function configureSensorCount() {
         if (!controller_gather.isConnected()) {
-            Qaterial.SnackbarManager.show({
-                text: "Communication not open!Can not operate!"
-            })
+            btn_configure_sensor_count.changeState(false)
+            alert()
             return;
         }
-        controller_gather.configureSensorCount(address, count, timeout)
+        controller_gather.configureSensorCount(parseInt(input_address.text), parseInt(input_sensor_count.text))
     }
 
     function toggleCommunication() {
         if (controller_gather.isConnected()) {
             controller_gather.stopCommunication()
             return ;
-        } else if (!controller_gather.startCommunication(list_model.portParam(index))) {
-             console.log('gather ' + index + 'start failed')
-        } else {
-            isStarted = !isStarted
+        } else if (_root.portParam === null) {
+            console.log("portParam is null")
+        } else if (!controller_gather.startCommunication(_root.portParam)) {
+            console.log('gather start failed')
+        }else {
+            _root.isStarted = !_root.isStarted
         }
     }
 
-    function deleteItem() {
-        if (controller_gather.isConnected()) {
-            console.log('delete failed!connected...');
-            return;
-        }
-
-        list_model.removeGather(index)
-    }
 
     GatherController{
         id: controller_gather
         onQueryVersionCallback: function(success, hardware, software, product) {
             if (success) {
-                list_model.updateVersion(index, hardware, software, product)
+                label_hardware.text = hardware
+                label_software.text = software
+                label_product.text = product
+
             }
 
             btn_query_version.changeState(success)
         }
         onConfigureAddressCallback: function(success, addr) {
             if (success) {
-                list_model.updateAddress(index, addr)
+                input_address.text = addr
             }
+            btn_configure_address.changeState(success)
         }
         onConfigureCountCallback: function(success, count) {
             if (success) {
-                list_model.updateSensorCount(index, count)
+                input_sensor_count.text = count
             }
             btn_configure_sensor_count.changeState(success)
         }
     } // GatherController
+
+    Component.onCompleted: {
+        btn_run.clicked.connect(_root.toggleCommunication)
+        btn_configure_address.clicked.connect(_root.configureAddress)
+        btn_configure_sensor_count.clickStarted.connect(_root.configureSensorCount)
+        btn_query_version.clickStarted.connect(_root.queryVersion)
+    }
 }

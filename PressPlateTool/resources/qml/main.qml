@@ -16,109 +16,77 @@ Qaterial.ApplicationWindow {
     height: 720
 
     title: qsTr("Press Plate Tool")
+    Qaterial.Page {
+        anchors.fill: parent
+        clip: true
+        header: Qaterial.ClusturedTabBar {
+            id: _tabBar
+            currentIndex: _swipe_view.currentIndex
+            onPrimary: true
+            enabled: true
 
-//    Qaterial.TreeView {
-//        idth: 300
-//        height: parent ? Math.min(contentHeight, parent.height) : contentHeight
+            model: ListModel {
+                ListElement { text: qsTr("Gather Configure Page") }
+                ListElement { text: qsTr("Sensor configure Page") }
+            }
+        }
+        Qaterial.SwipeView {
+            id: _swipe_view
+            anchors.fill: parent
+            currentIndex: _tabBar.currentIndex
+            interactive: true
 
-//        property QtObject selectedElement
+            GatherConfView {
+                id: view_gather_conf
+            }
+            SensorConfView {
+                gatherController: view_gather_conf.gatherController
+            }
 
+        } // SwipeView
+    }
 
-//        itemDelegate: Qaterial.ItemDelegate
-//        {
-//            id: control
+//    Old.SplitView {
+//        anchors.fill: parent
+//        GatherConfView{
+//            id: view_gather_config
 
-//            property QtObject model
-//            property int depth
-//            property int index
+//            property bool isCollapse: false
 
-//            height: 24
-//            leftPadding: depth * 20
+//            width: 300
 
-//            contentItem: RowLayout
-//            {
-//                Qaterial.ColorIcon
-//                {
-//                    source: Qaterial.Icons.chevronRight
-//                    color: Qaterial.Style.primaryTextColor()
-//                    visible: control.model && control.model.children && control.model.children.count
-//                    Binding on rotation
-//                    {
-//                        when: control.model && control.model.expanded
-//                        value: 90
-//                    }
-//                    Behavior on rotation { NumberAnimation { duration: 200;easing.type: Easing.OutQuart } }
-//                }
-//                Qaterial.Label
-//                {
-//                    Layout.fillWidth: true
-//                    text: control.model ? control.model.text : ""
-//                    elide: Text.ElideRight
-//                    verticalAlignment: Text.AlignVCenter
-//                    Binding on color
-//                    {
-//                        when: model === root.selectedElement
-//                        value: Qaterial.Style.accentColor
-//                    }
-//                }
+//            function collapse() {
+//                width = isCollapse ? 300 : 0
+//                isCollapse = !isCollapse
+//            }
+//            onItemChanged: function(gatherController, gatherData) {
+//                view_sensor_config.setController(gatherController, gatherData)
 //            }
 
-//            onClicked: function()
-//            {
-//                if(model.children.count !== 0)
-//                    model.expanded = !model.expanded
-//                else
-//                    root.selectedElement = model
+//            //            Behavior on width {
+//            //                NumberAnimation {
+//            //                    duration: 200
+//            //                }
+//            //            }
+//        }
+
+//        StackLayout {
+//            id: stacklayout_sensor
+//            currentIndex: view_gather_config.gather_count == 0 ? 0 : 1
+//            Rectangle {
+//            }
+
+//            SensorConfView{
+//                id: view_sensor_config
+
 //            }
 //        }
+//        handleDelegate: SplitHandle{}
 //    }
-
-    Old.SplitView {
-        anchors.fill: parent
-        GatherConfView{
-            id: view_gather_config
-
-            property bool isCollapse: false
-
-            width: 300
-
-            function collapse() {
-                width = isCollapse ? 300 : 0
-                isCollapse = !isCollapse
-            }
-            onItemChanged: function(gatherController, gatherData) {
-                view_sensor_config.setController(gatherController, gatherData)
-            }
-
-            //            Behavior on width {
-            //                NumberAnimation {
-            //                    duration: 200
-            //                }
-            //            }
-        }
-
-        StackLayout {
-            id: stacklayout_sensor
-            currentIndex: view_gather_config.gather_count == 0 ? 0 : 1
-            Rectangle {
-            }
-
-            SensorConfView{
-                id: view_sensor_config
-
-            }
-        }
-
-
-
-        handleDelegate: SplitHandle{}
-
-        Component.onCompleted: {
-            Qaterial.Style.theme = Qaterial.Style.Theme.Light
-            main_window.x = (Screen.width - width) / 2
-            main_window.y = (Screen.height - height) / 2
-            main_window.visible = true
-        }
-
+    Component.onCompleted: {
+        Qaterial.Style.theme = Qaterial.Style.Theme.Light
+        main_window.x = (Screen.width - width) / 2
+        main_window.y = (Screen.height - height) / 2
+        main_window.visible = true
     }
 }

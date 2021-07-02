@@ -2,7 +2,6 @@
 
 SensorConfigureModel::SensorConfigureModel(QObject *parent)
     : QAbstractListModel(parent)
-    , _gatherData(nullptr)
 {
 //    auto data = new YBSensorData("Sensor1");
 //    data->setAddr(1);
@@ -21,10 +20,7 @@ SensorConfigureModel::~SensorConfigureModel()
 
 int SensorConfigureModel::rowCount(const QModelIndex &/*parent*/) const
 {
-    if (_gatherData == nullptr) {
-        return 0;
-    }
-    return _gatherData->sensorDataList().count();
+    return _ybSensorDataList.count();
 }
 
 QVariant SensorConfigureModel::data(const QModelIndex &index, int role) const
@@ -33,15 +29,15 @@ QVariant SensorConfigureModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    if (_gatherData == nullptr) {
+    if (_ybSensorDataList.isEmpty()) {
         return QVariant();
     }
 
-    if (index.row() >= _gatherData->sensorDataList().count()) {
+    if (index.row() >= _ybSensorDataList.count()) {
         return QVariant();
     }
 
-    auto data = _gatherData->sensorDataList().at(index.row());
+    auto data = _ybSensorDataList.at(index.row());
 
     switch (role) {
     case SensorConfigureModel::Name:
@@ -58,8 +54,6 @@ QVariant SensorConfigureModel::data(const QModelIndex &index, int role) const
         return data->currentStatus();
     case SensorConfigureModel::ConfiguredStatus:
         return data->configedStatus();
-    case SensorConfigureModel::Timeout:
-        return _gatherData->sensorTimeout();
     default:
         break;
     }
@@ -83,41 +77,29 @@ QHash<int, QByteArray> SensorConfigureModel::roleNames() const
 
 void SensorConfigureModel::appendSensors(int count)
 {
-    int lastAddr = 1;
-    if (!_gatherData->sensorDataList().isEmpty()) {
-        lastAddr = _gatherData->sensorDataList().last()->addr() + 1;
-    }
-    beginInsertRows(QModelIndex(), _gatherData->sensorDataList().count(), _gatherData->sensorDataList().count() - 1 + count);
-    for (int i = 0; i < count; i++, lastAddr++) {
-        auto sensorData = new YBSensorData(tr("Sensor #%1").arg(lastAddr));
-        sensorData->setAddr(lastAddr);
-        _gatherData->appendSensorData(QSharedPointer<YBSensorData>(sensorData));
-    }
-    endInsertRows();
+//    int lastAddr = 1;
+//    if (!_gatherData->sensorDataList().isEmpty()) {
+//        lastAddr = _gatherData->sensorDataList().last()->addr() + 1;
+//    }
+//    beginInsertRows(QModelIndex(), _gatherData->sensorDataList().count(), _gatherData->sensorDataList().count() - 1 + count);
+//    for (int i = 0; i < count; i++, lastAddr++) {
+//        auto sensorData = new YBSensorData(tr("Sensor #%1").arg(lastAddr));
+//        sensorData->setAddr(lastAddr);
+//        _gatherData->appendSensorData(QSharedPointer<YBSensorData>(sensorData));
+//    }
+//    endInsertRows();
 }
 
 void SensorConfigureModel::removeSensor(int index)
 {
-    beginRemoveRows(QModelIndex(), index, index);
-    _gatherData->removeSensorData(index);
-    endRemoveRows();
+//    beginRemoveRows(QModelIndex(), index, index);
+//    _gatherData->removeSensorData(index);
+//    endRemoveRows();
 }
 
 void SensorConfigureModel::removeAll()
 {
-    beginResetModel();
-    _gatherData->clearSensorDataList();
-    endResetModel();
-}
-
-void SensorConfigureModel::setGatherData(GatherData *data)
-{
-    beginResetModel();
-    _gatherData = data;
-    endResetModel();
-}
-
-GatherData *SensorConfigureModel::gatherData()
-{
-    return _gatherData;
+//    beginResetModel();
+//    _gatherData->clearSensorDataList();
+//    endResetModel();
 }

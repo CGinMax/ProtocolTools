@@ -4,64 +4,115 @@ import QtQuick.Layouts 1.12
 
 import Qaterial 1.0 as Qaterial
 
+import PressPlateTools 1.0
 import "../page"
 
 Rectangle {
     id: _root
 
-    Text {
-        id: text_gather_name
-        width: 50
-        height: 30
-        text: qsTr("Sensor")
-        font.pixelSize: 24
-        anchors.left: _root.left
-        anchors.leftMargin: 5
-        anchors.top: _root.top
-        anchors.topMargin: 5
+    property alias gatherController: controller_sensor.gatherController
+
+    Loader {
+        id: dialogLoader
+        onLoaded: item.open()
     }
+    ColumnLayout {
 
-    Qaterial.Page {
-        anchors.top: text_gather_name.bottom
-        anchors.bottom: _root.bottom
-        anchors.left: _root.left
-        anchors.right: _root.right
-        anchors.topMargin: 5
-        clip: true
-        header: Qaterial.ClusturedTabBar {
-            id: _tabBar
-            currentIndex: _swipe_view.currentIndex
-            onPrimary: true
-            enabled: true
+        anchors.fill: parent
 
-            model: ListModel
-            {
-                ListElement { text: qsTr("Sensor") }
-                ListElement { text: qsTr("Configure") }
+        Row {
+            Qaterial.Button {
+                id: btn_add_one_sensor
+                text: qsTr("Add one")
+                onClicked: model_sensor_configure.appendSensors(1)
+            }
+            Qaterial.Button {
+                id: btn_add_multi
+                text: qsTr("Add Multiple")
+                onClicked: dialogLoader.sourceComponent = _textFieldDialogComponent
+                Component
+                {
+                    id: _textFieldDialogComponent
+                    Qaterial.TextFieldDialog
+                    {
+                        id: _textFieldDialog
+                        title: qsTr("Sensor Number Configuration")
+                        textTitle: qsTr("Sensor Numbers")
+                        text: "1"
+                        validator: IntValidator{ bottom: 1}
+                        inputMethodHints: Qt.ImhSensitiveData
+                        errorText: length ? ("Don't write more than " + maximumLengthCount + " characters") : "Can't be empty"
+                        maximumLengthCount: 16
+                        trailingContent: Qaterial.TextFieldAlertIcon { visible: _textFieldDialog.errorState }
+                        onAccepted: model_sensor_configure.appendSensors(parseInt(text))
+                        onRejected: {}
+                        onClosed: dialogLoader.sourceComponent = undefined
+                    }
+                }
+            }
+            Qaterial.Button {
+                id: btn_query_all_version
+                text: qsTr("Automatic query sensor version")
+                onClicked: dialogLoader.sourceComponent = _queryVersionDialogComponent
+                Component {
+                    id: _queryVersionDialogComponent
+                    Qaterial.ModalDialog {
+                        standardButtons: Dialog.Cancel
+                        contentItem: Rectangle {
+                            ColumnLayout {
+
+                                Text {
+                                    Layout.alignment: Qt.AlignCenter
+                                    id: text_info
+                                    text: qsTr("Query Sensors Version...")
+                                }
+                                BusyIndicator {
+                                    Layout.alignment: Qt.AlignCenter
+                                    Layout.preferredHeight: 30
+                                }
+                            }
+                        }
+                        onClosed: dialogLoader.sourceComponent = undefined
+                    }
+                }
+            }
+            Qaterial.Button {
+                id: btn_query_all_status
+                text: qsTr("Automatic query sensor status")
+                onClicked: {}
             }
         }
-        Qaterial.SwipeView
-        {
-            id: _swipe_view
-            anchors.fill: parent
-            currentIndex: _tabBar.currentIndex
-            interactive: true
-            SensorConfigurePage {
-                id: page_sensor_configure
-            } // SensorConfigurePage
 
-            ProjectConfigurePage {
-                id: _page_project_conf
-                width: _swipe_view.width
-                height: _swipe_view.height
-            } // ProjectConfigurePage
 
-        } // SwipeView
+
+        ListView {
+            id: listview_sensor
+            property int delegateHeight: 80
+            clip: true
+            cacheBuffer: count * delegateHeight
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            model: SensorConfigureModel {
+                id: model_sensor_configure
+            }
+
+            delegate: SensorItem{
+                id: delegate_sensor
+                x: 10
+                elevation: 0
+                outlined: true
+                width: listview_sensor.width - 20
+                height: listview_sensor.delegateHeight
+
+                list_model: model_sensor_configure
+            }
+
+
+            SensorController {
+                id: controller_sensor
+            }
+
+        }
     }
-
-    function setController(gatherController, gatherData) {
-        page_sensor_configure.gatherController = gatherController
-        page_sensor_configure.gatherData = gatherData
-    }
-
 }

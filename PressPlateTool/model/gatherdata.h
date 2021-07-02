@@ -10,11 +10,8 @@ class GatherData : public QObject
 {
     Q_OBJECT
 public:
-    explicit GatherData(const QString& name = QString(), QObject *parent = nullptr);
+    explicit GatherData(QObject *parent = nullptr);
     ~GatherData() override;
-
-    QString name() const;
-    void setName(const QString& name);
 
     int addr() const;
     void setAddr(int addr);
@@ -45,26 +42,18 @@ public:
     int sensorTimeout() const;
     void setSensorTimeout(int msecTimeout);
 
-    QJsonObject save();
-
-    void load(const QJsonObject& root);
-
 signals:
-    void nameChanged(const QString& name);
-
     void addrChanged(int addr);
 
 public slots:
 
 private:
-    QString m_name;
     int m_addr;
     QString m_hardwareVer;
     QString m_softwareVer;
     QString m_productDesc;
     int m_sensorCount;
-    // delete here
-    QList<QSharedPointer<YBSensorData>> m_ybDataList;
+
     PortParam m_portParam;
 
     int m_gatherTimeout;

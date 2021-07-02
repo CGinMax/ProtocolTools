@@ -36,8 +36,6 @@ QVariant GatherConfigureModel::data(const QModelIndex &index, int role) const
     auto data = _gatherDataList.at(index.row());
 
     switch (role) {
-    case GatherConfigureModel::Name:
-        return data->name();
     case GatherConfigureModel::HardwareVersion:
         return data->hardwareVersion();
     case GatherConfigureModel::SoftwareVersion:
@@ -74,18 +72,7 @@ QHash<int, QByteArray> GatherConfigureModel::roleNames() const
 void GatherConfigureModel::appendGathers(int count, const QVariantMap &map)
 {
     PortParam portParam(map);
-    int lastAddr = 1;
-    if (!_gatherDataList.isEmpty()) {
-        lastAddr = _gatherDataList.last()->addr() + 1;
-    }
-    beginInsertRows(QModelIndex(), _gatherDataList.count(), _gatherDataList.count() -1 + count);
-    for (int i = 0; i < count; i++, lastAddr++) {
-        QSharedPointer<GatherData> data(new GatherData(tr("Gather%1").arg(lastAddr)));
-        data->setAddr(lastAddr);
-        data->setPortParam(portParam);
-        _gatherDataList.append(data);
-    }
-    endInsertRows();
+
 }
 
 void GatherConfigureModel::removeGather(int index)

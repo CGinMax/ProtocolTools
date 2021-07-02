@@ -8,30 +8,14 @@ import PressPlateTools 1.0
 
 Rectangle {
     id: _root
-    property bool isMultiConf: false
-    property bool isInWindow: true
-    property int gatherCount: 1
-    property var portParam: undefined
+    property var portParam: null
     property int labelWidth: 100
-    signal btnOkClicked()
-    signal btnCancelClicked()
 
     implicitWidth: 400
     implicitHeight: 400
 
     ColumnLayout {
         anchors.fill: parent
-        Qaterial.TextField {
-            id: input_gather_number
-            Layout.fillWidth: true
-            visible: _root.isMultiConf
-            title: qsTr("Gather number")
-            text: gatherCount.toString()
-            validator: IntValidator{ bottom: 1}
-            onTextChanged: {
-                gatherCount = parseInt(input_gather_number.text)
-            }
-        }
 
 
         RowLayout {
@@ -129,27 +113,6 @@ Rectangle {
             }
 
         }
-
-        RowLayout {
-            visible: _root.isInWindow
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignCenter
-            Qaterial.Button {
-                id: _btn_ok
-                text: qsTr("Ok")
-                onClicked: {
-                    emit: _root.btnOkClicked()
-                }
-            }
-            Qaterial.FlatButton {
-                id: _btn_cancel
-                text: qsTr("Cancel")
-
-                onClicked: {
-                    emit: _root.btnCancelClicked()
-                }
-            }
-        }
     }
 
     QmlSerialPortHelper{
@@ -166,17 +129,23 @@ Rectangle {
         _cbb_devices.currentIndex = 0
     }
 
-    function getPortParam() {
+    function checkPortParam() {
         // TODO(shijm): fix it value
-        var portParam = {
+        if (_cbb_devices.currentText === "") {
+            _root.portParam = null
+            return false
+        }
+
+        _root.portParam = {
             portName: _cbb_devices.currentText,
             baudRate: parseInt(_cbb_baudrate.currentText),
             dataBit: parseInt(cbb_data_bit.currentText),
             stopBit: parseInt(cbb_stop_bit.currentText),
             parity: cbb_parity.currentIndex
         }
-        return portParam
+        return true
     }
+
 
     Component.onCompleted: {
         refreshDevices()

@@ -19,5 +19,6 @@
         <file>qml/components/LoadingButton.qml</file>
         <file>qml/components/SplitHandle.qml</file>
         <file>qml/sensor/SensorItem.qml</file>
+        <file>qml/components/LabelTile.qml</file>
     </qresource>
 </RCC>

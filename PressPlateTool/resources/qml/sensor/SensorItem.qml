@@ -10,7 +10,6 @@ Qaterial.Card {
     id: _root
 
     property var list_model: null
-    property var controller: null
 
     RowLayout {
         anchors.fill: parent
@@ -89,38 +88,38 @@ Qaterial.Card {
         }
     }
 
-    function queryVersion() {
-        if (checkConnected()) {
-            controller.querySensorVersion(address, timeout)
-        }
-    }
+//    function queryVersion() {
+//        if (checkConnected()) {
+//            controller.querySensorVersion(address, timeout)
+//        }
+//    }
 
-    function queryStatus() {
-        if (checkConnected()) {
-            controller.querySensorStatus(address, timeout)
-        }
-    }
+//    function queryStatus() {
+//        if (checkConnected()) {
+//            controller.querySensorStatus(address, timeout)
+//        }
+//    }
 
-    function configureStatus(status) {
-        if (checkConnected()) {
-            controller.configureSensorStatus(address, status, timeout)
-        }
-    }
+//    function configureStatus(status) {
+//        if (checkConnected()) {
+//            controller.configureSensorStatus(address, status, timeout)
+//        }
+//    }
 
-    function configureAddress(addr) {
-        if (checkConnected()) {
-            controller.configureSensorAddress(addr, timeout)
-        }
-    }
+//    function configureAddress(addr) {
+//        if (checkConnected()) {
+//            controller.configureSensorAddress(addr, timeout)
+//        }
+//    }
 
-    function checkConnected() {
-        if (!controller.isConnected()) {
-            Qaterial.SnackbarManager.show({
-                text: "Communication not open!Can not operate!"
-            })
-            return false;
-        }
-        return true;
-    }
+//    function checkConnected() {
+//        if (!controller.isConnected()) {
+//            Qaterial.SnackbarManager.show({
+//                text: "Communication not open!Can not operate!"
+//            })
+//            return false;
+//        }
+//        return true;
+//    }
 
 }

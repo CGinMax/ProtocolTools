@@ -4,6 +4,7 @@
 
 GatherController::GatherController(QObject *parent)
     : QObject(parent)
+    , _gatherData(new GatherData())
     , _communication(new SerialPort(this))
 {
     ThreadPool::instance()->run([=]{
@@ -24,22 +25,9 @@ CommunicationBase *GatherController::rawCommunicationBase()
     return _communication.data();
 }
 
-//void GatherController::appendSensorData(YBSensorData *data)
-//{
-//    if (_gatherData.isNull()) {
-//        return;
-//    }
-//    _gatherData->appendSensorData(data);
-//}
-
-bool GatherController::startCommunication(QObject* param)
+bool GatherController::startCommunication(const QVariantMap& portMap)
 {
-    bool success = false;
-    if (param != nullptr) {
-        auto portParam = static_cast<PortParam*>(param);
-        success = rawCommunicationBase()->open(*portParam);
-        delete portParam;
-    }
+    bool success = rawCommunicationBase()->open(PortParam(portMap));
 
     if (success) {
         emit startPortocolChannel();
@@ -54,13 +42,13 @@ bool GatherController::stopCommunication()
     return !isConnected();
 }
 
-void GatherController::queryGatherVersion(int addr, int timeout)
+void GatherController::queryGatherVersion(int addr)
 {
     if(!canDoOperate()) {
         return;
     }
 
-    auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(addr), timeout);
+    auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(addr), _gatherData->gatherTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
             emit this->queryVersionCallback(
@@ -84,13 +72,13 @@ void GatherController::queryGatherVersion(int addr, int timeout)
     });
 }
 
-void GatherController::configureGatherAddress(int addr, int timeout)
+void GatherController::configureGatherAddress(int addr)
 {
     if(!canDoOperate()) {
         return;
     }
 
-    auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr), timeout);
+    auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr), _gatherData->gatherTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
             emit this->configureAddressCallback(result->success(), addr);
@@ -111,13 +99,13 @@ void GatherController::configureGatherAddress(int addr, int timeout)
 
 }
 
-void GatherController::configureSensorCount(int addr, int count, int timeout)
+void GatherController::configureSensorCount(int addr, int count)
 {
     if(!canDoOperate()) {
         return;
     }
 
-    auto reply = protocol()->setSensorNum(static_cast<uint16_t>(addr), static_cast<uint8_t>(count), timeout);
+    auto reply = protocol()->setSensorNum(static_cast<uint16_t>(addr), static_cast<uint8_t>(count), _gatherData->gatherTimeout());
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
             emit this->configureCountCallback(result->success(), count);
@@ -146,11 +134,6 @@ YBProtocolChannel *GatherController::protocol()
 {
     return static_cast<YBProtocolChannel*>(_protocol.data());
 }
-
-//void GatherController::onTitleChanged(const QString &title)
-//{
-//    _gatherData->setName(title);
-//}
 bool GatherController::canDoOperate()
 {
     bool active = isConnected();

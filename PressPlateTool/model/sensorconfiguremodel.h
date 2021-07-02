@@ -17,7 +17,6 @@ class SensorConfigureModel : public QAbstractListModel
         ConfiguredStatus,
         Timeout,
     };
-    Q_PROPERTY(GatherData* gatherData READ gatherData WRITE setGatherData)
 public:
     explicit SensorConfigureModel(QObject *parent = nullptr);
     ~SensorConfigureModel() override;
@@ -29,15 +28,12 @@ public:
     Q_INVOKABLE void removeSensor(int index);
     Q_INVOKABLE void removeAll();
 
-
-    Q_INVOKABLE void setGatherData(GatherData* data);
-    Q_INVOKABLE GatherData* gatherData();
 signals:
 
 public slots:
 
 private:
-    GatherData* _gatherData;
+    QList<QSharedPointer<YBSensorData>> _ybSensorDataList;
 };
 
 #endif // SENSORCONFIGUREMODEL_H
