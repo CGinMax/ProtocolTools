@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QIcon>
 
-namespace mi {
+/*namespace mi {
 enum common{
     10k	= 0xe951,
     10mp	= 0xe952,
@@ -7470,7 +7470,7 @@ enum twotone{
     zoom_out_map	= 0xe56b,
 
 };
-}
+}*/
 
 class QMaterialIcon : public QObject
 {

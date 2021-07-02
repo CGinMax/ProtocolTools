@@ -24,8 +24,8 @@ set(SOURCES
 
 if(QTMATERIALICON_ENABLE_QML)
 	find_package(Qt5 REQUIRED COMPONENTS Qml Quick)
-	list(APPEND HEADERS materialiconprovider.h)
-        list(APPEND SOURCES materialiconprovider.cpp)
+        list(APPEND HEADERS includes/materialiconprovider.h)
+        list(APPEND SOURCES src/materialiconprovider.cpp)
 endif()
 
 qt5_add_resources(QRC ${CMAKE_CURRENT_SOURCE_DIR}/QMaterialIcon.qrc)
