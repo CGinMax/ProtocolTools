@@ -26,6 +26,7 @@ public:
     Q_INVOKABLE void queryGatherVersion(int addr);
     Q_INVOKABLE void configureGatherAddress(int addr);
     Q_INVOKABLE void configureSensorCount(int addr, int count);
+    bool canDoOperate();
 signals:
     void startPortocolChannel();
     void stopProtocolChannel();
@@ -36,7 +37,6 @@ signals:
 public slots:
 
 private:
-    bool canDoOperate();
     QSharedPointer<GatherData> _gatherData;
     QSharedPointer<CommunicationBase> _communication;
     QSharedPointer<ProtocolChannelBase> _protocol;

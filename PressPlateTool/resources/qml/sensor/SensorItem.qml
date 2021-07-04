@@ -10,6 +10,10 @@ Qaterial.Card {
     id: _root
 
     property var list_model: null
+    signal queryVersion()
+    signal configureAddr(int addr)
+    signal queryState()
+    signal configureState(int state)
 
     RowLayout {
         anchors.fill: parent
@@ -22,36 +26,37 @@ Qaterial.Card {
             Layout.leftMargin: 5
         }
 
-
-        Qaterial.TextField {
-            id: input_address
-            title: qsTr("Address")
-            text: address
-            validator: IntValidator{ bottom: 1 }
-            trailingVisible: focus
-            trailingContent: Qaterial.TextFieldIconButton {
-                icon.source: "image://faicon/arrow-alt-circle-left"
-                icon.width: 24
-                icon.height: 24
-                onClicked: {
-                    _root.configureAddress(input_address.text)
+        Row {
+            Qaterial.TextField {
+                id: input_address
+                title: qsTr("Address")
+                text: address
+                validator: IntValidator{ bottom: 1 }
+            }
+            LoadingButton {
+                id: btn_configure_addr
+                iconSource: "image://faicon/arrow-alt-circle-left"
+                iconSize: 18
+                onClickStarted: {
+                    _root.configureAddr(parseInt(input_address.text))
                 }
             }
         }
 
         Qaterial.FlatButton {
             id: btn_query_status
-            text: "query"
+            text: qsTr("query")
+            radius: 3
             onClicked: {
-                _root.queryStatus()
+                emit: _root.queryState()
             }
         }
 
         Qaterial.FlatButton {
             id: btn_configure_status
-            text: "configure"
+            text: qsTr("configure")
             onClicked: {
-
+                emit: _root.configureState(0x01)
             }
         }
 
@@ -70,7 +75,7 @@ Qaterial.Card {
                 iconSource: "image://faicon/search"
                 iconSize: 18
                 onClickStarted: {
-                    _root.queryVersion()
+                    emit: _root.queryVersion()
                 }
 
             }
@@ -88,29 +93,13 @@ Qaterial.Card {
         }
     }
 
-//    function queryVersion() {
-//        if (checkConnected()) {
-//            controller.querySensorVersion(address, timeout)
-//        }
-//    }
 
-//    function queryStatus() {
-//        if (checkConnected()) {
-//            controller.querySensorStatus(address, timeout)
-//        }
-//    }
-
-//    function configureStatus(status) {
-//        if (checkConnected()) {
-//            controller.configureSensorStatus(address, status, timeout)
-//        }
-//    }
-
-//    function configureAddress(addr) {
-//        if (checkConnected()) {
-//            controller.configureSensorAddress(addr, timeout)
-//        }
-//    }
+    function changeVersionState(success) {
+        btn_query_version.changeState(success)
+    }
+    function changeAddress(success) {
+        btn_configure_addr.changeState(success)
+    }
 
 //    function checkConnected() {
 //        if (!controller.isConnected()) {

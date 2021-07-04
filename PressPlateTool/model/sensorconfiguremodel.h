@@ -28,11 +28,17 @@ public:
     Q_INVOKABLE void removeSensor(int index);
     Q_INVOKABLE void removeAll();
 
+    Q_INVOKABLE void setVersion(int idx, const QString& hardware, const QString& software, const QString& product);
+    Q_INVOKABLE void setState(int idx, int curState, int confState);
+    Q_INVOKABLE void setAddress(int idx, int addr);
+    Q_INVOKABLE void setConfState(int idx, int state);
+
 signals:
 
 public slots:
 
 private:
+    bool outOfRange(int index);
     QList<QSharedPointer<YBSensorData>> _ybSensorDataList;
 };
 

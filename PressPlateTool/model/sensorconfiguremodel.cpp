@@ -3,14 +3,7 @@
 SensorConfigureModel::SensorConfigureModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-//    auto data = new YBSensorData("Sensor1");
-//    data->setAddr(1);
-//    data->setCurrentStatus(YBStatus::OnStatus);
-//    data->setConfigedStatus(YBStatus::OnStatus);
-//    data->setHardwareVersion("1.0");
-//    data->setSoftwareVersion("1.0");
-//    data->setProductDesc("this is a product description");
-//    _gatherData->appendSensorData(QSharedPointer<YBSensorData>(data));
+
 }
 
 SensorConfigureModel::~SensorConfigureModel()
@@ -77,29 +70,73 @@ QHash<int, QByteArray> SensorConfigureModel::roleNames() const
 
 void SensorConfigureModel::appendSensors(int count)
 {
-//    int lastAddr = 1;
-//    if (!_gatherData->sensorDataList().isEmpty()) {
-//        lastAddr = _gatherData->sensorDataList().last()->addr() + 1;
-//    }
-//    beginInsertRows(QModelIndex(), _gatherData->sensorDataList().count(), _gatherData->sensorDataList().count() - 1 + count);
-//    for (int i = 0; i < count; i++, lastAddr++) {
-//        auto sensorData = new YBSensorData(tr("Sensor #%1").arg(lastAddr));
-//        sensorData->setAddr(lastAddr);
-//        _gatherData->appendSensorData(QSharedPointer<YBSensorData>(sensorData));
-//    }
-//    endInsertRows();
+    int lastAddr = 1;
+    if (!_ybSensorDataList.isEmpty()) {
+        lastAddr = _ybSensorDataList.last()->addr() + 1;
+    }
+    beginInsertRows(QModelIndex(), _ybSensorDataList.count(), _ybSensorDataList.count() - 1 + count);
+    for (int i = 0; i < count; i++, lastAddr++) {
+        auto sensorData = new YBSensorData(tr("Sensor #%1").arg(lastAddr));
+        sensorData->setAddr(lastAddr);
+        _ybSensorDataList.append(QSharedPointer<YBSensorData>(sensorData));
+    }
+    endInsertRows();
 }
 
 void SensorConfigureModel::removeSensor(int index)
 {
-//    beginRemoveRows(QModelIndex(), index, index);
-//    _gatherData->removeSensorData(index);
-//    endRemoveRows();
+    beginRemoveRows(QModelIndex(), index, index);
+    _ybSensorDataList.removeAt(index);
+    endRemoveRows();
 }
 
 void SensorConfigureModel::removeAll()
 {
-//    beginResetModel();
-//    _gatherData->clearSensorDataList();
-//    endResetModel();
+    beginResetModel();
+    _ybSensorDataList.clear();
+    endResetModel();
+}
+
+void SensorConfigureModel::setVersion(int idx, const QString &hardware, const QString &software, const QString &product)
+{
+    if (outOfRange(idx)) {
+        return;
+    }
+    _ybSensorDataList.at(idx)->setHardwareVersion(hardware);
+    _ybSensorDataList.at(idx)->setSoftwareVersion(software);
+    _ybSensorDataList.at(idx)->setProductDesc(product);
+    emit dataChanged(index(idx, 0), index(idx, 0));
+}
+
+void SensorConfigureModel::setState(int idx, int curState, int confState)
+{
+    if (outOfRange(idx)) {
+        return;
+    }
+    _ybSensorDataList.at(idx)->setCurrentStatus(YBStatus(curState));
+    _ybSensorDataList.at(idx)->setConfigedStatus(YBStatus(confState));
+    emit dataChanged(index(idx, 0), index(idx, 0));
+}
+
+void SensorConfigureModel::setAddress(int idx, int addr)
+{
+    if (outOfRange(idx)) {
+        return;
+    }
+    _ybSensorDataList.at(idx)->setAddr(addr);
+    emit dataChanged(index(idx, 0), index(idx, 0));
+}
+
+void SensorConfigureModel::setConfState(int idx, int state)
+{
+    if (outOfRange(idx)) {
+        return;
+    }
+    _ybSensorDataList.at(idx)->setConfigedStatus(YBStatus(state));
+    emit dataChanged(index(idx, 0), index(idx, 0));
+}
+
+bool SensorConfigureModel::outOfRange(int index)
+{
+    return index < 0 || index >= _ybSensorDataList.count();
 }

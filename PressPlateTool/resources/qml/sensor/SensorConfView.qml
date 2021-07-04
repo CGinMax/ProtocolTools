@@ -53,33 +53,32 @@ Rectangle {
             Qaterial.Button {
                 id: btn_query_all_version
                 text: qsTr("Automatic query sensor version")
+                enabled: listview_sensor.count !== 0
                 onClicked: dialogLoader.sourceComponent = _queryVersionDialogComponent
                 Component {
                     id: _queryVersionDialogComponent
-                    Qaterial.ModalDialog {
-                        standardButtons: Dialog.Cancel
-                        contentItem: Rectangle {
-                            ColumnLayout {
 
-                                Text {
-                                    Layout.alignment: Qt.AlignCenter
-                                    id: text_info
-                                    text: qsTr("Query Sensors Version...")
-                                }
-                                BusyIndicator {
-                                    Layout.alignment: Qt.AlignCenter
-                                    Layout.preferredHeight: 30
-                                }
-                            }
-                        }
-                        onClosed: dialogLoader.sourceComponent = undefined
+                    AutoConfigureComponent{
+                        width: 500
+                        height: 300
+                        text: qsTr("Query sensor version...")
                     }
+
                 }
             }
             Qaterial.Button {
                 id: btn_query_all_status
                 text: qsTr("Automatic query sensor status")
-                onClicked: {}
+                enabled: listview_sensor.count !== 0
+                onClicked: dialogLoader.sourceComponent = _queryStatusDialogComponent
+                Component {
+                    id: _queryStatusDialogComponent
+                    AutoConfigureComponent {
+                        width: 500
+                        height: 300
+                        text: qsTr("Query sensor status...")
+                    }
+                }
             }
         }
 
@@ -106,11 +105,35 @@ Rectangle {
                 height: listview_sensor.delegateHeight
 
                 list_model: model_sensor_configure
+                onQueryVersion: {
+
+                }
             }
 
 
             SensorController {
                 id: controller_sensor
+                onQueryVersionCallback: function(success, index, hardware, software, product) {
+                    if (success) {
+                        model_sensor_configure.setVersion(index, hardware, software, product)
+                    }
+
+                }
+                onQueryStateCallback: function(success, index, curState, confState) {
+                    if (success) {
+                        model_sensor_configure.setState(index, curState, confState)
+                    }
+                }
+                onConfigureAddressCallback: function(success, index, addr){
+                    if (success) {
+                        model_sensor_configure.setAddress(index, addr)
+                    }
+                }
+                onConfigureStateCallback: function(success, index, state) {
+                    if (success) {
+                        model_sensor_configure.setConfState(index, state)
+                    }
+                }
             }
 
         }
