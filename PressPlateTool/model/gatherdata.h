@@ -36,12 +36,6 @@ public:
     PortParam portParam() const;
     void setPortParam(const PortParam &portParam);
 
-    int gatherTimeout() const;
-    void setGatherTimeout(int msecTimeout);
-
-    int sensorTimeout() const;
-    void setSensorTimeout(int msecTimeout);
-
 signals:
     void addrChanged(int addr);
 
@@ -55,9 +49,6 @@ private:
     int m_sensorCount;
 
     PortParam m_portParam;
-
-    int m_gatherTimeout;
-    int m_sensorTimeout;
 };
 
 #endif // YBGATHERDATA_H

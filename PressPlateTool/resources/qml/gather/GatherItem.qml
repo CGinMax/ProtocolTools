@@ -5,7 +5,7 @@ import Qaterial 1.0 as Qaterial
 
 import PressPlateTools 1.0
 import "../components"
-
+import "../data"
 Qaterial.GroupBox {
     id: _root
     title: qsTr("Gather Configuration")
@@ -15,16 +15,10 @@ Qaterial.GroupBox {
     Layout.fillHeight: true
 
     property bool isStarted: false
-    property var portParam: null
     property alias gatherController: controller_gather
 
     ColumnLayout {
 
-        Qaterial.FlatButton {
-            id: btn_run
-            text: _root.isStarted ? qsTr("Close") : qsTr("Open")
-
-        }
         Row {
             Qaterial.TextField {
                 id: input_address
@@ -89,49 +83,44 @@ Qaterial.GroupBox {
             }
         }
     }
-    function alert() {
-        Qaterial.SnackbarManager.show({text: qsTr("Communication not open!Can not operate!")})
-    }
+
 
     function queryVersion() {
         if (!controller_gather.isConnected()) {
             btn_query_version.changeState(false)
-            alert()
+            controller_gather.alertNotOpen()
             return;
         }
-        controller_gather.queryGatherVersion(parseInt(input_address.text))
+        controller_gather.queryGatherVersion(parseInt(input_address.text), ComConfig.gatherTimeout)
     }
 
     function configureAddress() {
         if (!controller_gather.isConnected()) {
             btn_configure_address.changeState(false)
-            alert()
+            controller_gather.alertNotOpen()
             return;
         }
-        controller_gather.configureGatherAddress(parseInt(input_address.text))
+        controller_gather.configureGatherAddress(parseInt(input_address.text), ComConfig.gatherTimeout)
 
     }
 
     function configureSensorCount() {
         if (!controller_gather.isConnected()) {
             btn_configure_sensor_count.changeState(false)
-            alert()
+            controller_gather.alertNotOpen()
             return;
         }
-        controller_gather.configureSensorCount(parseInt(input_address.text), parseInt(input_sensor_count.text))
+        controller_gather.configureSensorCount(parseInt(input_address.text), parseInt(input_sensor_count.text), ComConfig.gatherTimeout)
     }
 
-    function toggleCommunication() {
+    function toggleCommunication(portParam) {
         if (controller_gather.isConnected()) {
-            controller_gather.stopCommunication()
-            return ;
-        } else if (_root.portParam === null) {
-            console.log("portParam is null")
-        } else if (!controller_gather.startCommunication(_root.portParam)) {
-            console.log('gather start failed')
-        }else {
-            _root.isStarted = !_root.isStarted
+            controller_gather.stopCommunication();
+        } else if (!controller_gather.startCommunication(portParam)) {
+            Qaterial.SnackbarManager.show({text: qsTr("Start communication failed!")});
+            return;
         }
+        _root.isStarted = !_root.isStarted;
     }
 
 
@@ -142,7 +131,6 @@ Qaterial.GroupBox {
                 label_hardware.text = hardware
                 label_software.text = software
                 label_product.text = product
-
             }
 
             btn_query_version.changeState(success)
@@ -159,10 +147,12 @@ Qaterial.GroupBox {
             }
             btn_configure_sensor_count.changeState(success)
         }
+        function alertNotOpen() {
+            Qaterial.SnackbarManager.show({text: qsTr("Communication not open!Can not operate!")})
+        }
     } // GatherController
 
     Component.onCompleted: {
-        btn_run.clicked.connect(_root.toggleCommunication)
         btn_configure_address.clicked.connect(_root.configureAddress)
         btn_configure_sensor_count.clickStarted.connect(_root.configureSensorCount)
         btn_query_version.clickStarted.connect(_root.queryVersion)

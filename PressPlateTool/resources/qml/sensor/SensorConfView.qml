@@ -5,13 +5,13 @@ import QtQuick.Layouts 1.12
 import Qaterial 1.0 as Qaterial
 
 import PressPlateTools 1.0
-import "../page"
+
+import "../data"
 
 Rectangle {
     id: _root
 
-    property alias gatherController: controller_sensor.gatherController
-
+    property var gatherController: null
     Loader {
         id: dialogLoader
         onLoaded: item.open()
@@ -54,35 +54,24 @@ Rectangle {
                 id: btn_query_all_version
                 text: qsTr("Automatic query sensor version")
                 enabled: listview_sensor.count !== 0
-                onClicked: dialogLoader.sourceComponent = _queryVersionDialogComponent
-                Component {
-                    id: _queryVersionDialogComponent
+                onClicked: {
+                    auto_query_dialog.text = qsTr("Query sensor version...");
+                    auto_query_dialog.open();
 
-                    AutoConfigureComponent{
-                        width: 500
-                        height: 300
-                        text: qsTr("Query sensor version...")
-                    }
-
+                    _root.gatherController.querySensorVersion(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
                 }
             }
             Qaterial.Button {
                 id: btn_query_all_status
                 text: qsTr("Automatic query sensor status")
                 enabled: listview_sensor.count !== 0
-                onClicked: dialogLoader.sourceComponent = _queryStatusDialogComponent
-                Component {
-                    id: _queryStatusDialogComponent
-                    AutoConfigureComponent {
-                        width: 500
-                        height: 300
-                        text: qsTr("Query sensor status...")
-                    }
+                onClicked: {
+                    auto_query_dialog.text = qsTr("Query sensor status...");
+                    auto_query_dialog.open();
+                    _root.gatherController.querySensorState(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
                 }
             }
         }
-
-
 
         ListView {
             id: listview_sensor
@@ -103,39 +92,54 @@ Rectangle {
                 outlined: true
                 width: listview_sensor.width - 20
                 height: listview_sensor.delegateHeight
-
+                gatherController: _root.gatherController
                 list_model: model_sensor_configure
-                onQueryVersion: {
 
-                }
+            }
+        }
+    }
+    AutoConfigureComponent{
+        id: auto_query_dialog
+        width: 500
+        height: 300
+    }
+    Connections {
+        target: gatherController
+        onQuerySensorVersionCallback: function(success, index, hardware, software, product) {
+            // stop by click cancel
+            if (!auto_query_dialog.isRun) {
+                return;
             }
 
+            if (success) {
+                model_sensor_configure.setVersion(index, hardware, software, product);
+            }
+            auto_query_dialog.addModelData(success, model_sensor_configure.getName(index));
 
-            SensorController {
-                id: controller_sensor
-                onQueryVersionCallback: function(success, index, hardware, software, product) {
-                    if (success) {
-                        model_sensor_configure.setVersion(index, hardware, software, product)
-                    }
-
-                }
-                onQueryStateCallback: function(success, index, curState, confState) {
-                    if (success) {
-                        model_sensor_configure.setState(index, curState, confState)
-                    }
-                }
-                onConfigureAddressCallback: function(success, index, addr){
-                    if (success) {
-                        model_sensor_configure.setAddress(index, addr)
-                    }
-                }
-                onConfigureStateCallback: function(success, index, state) {
-                    if (success) {
-                        model_sensor_configure.setConfState(index, state)
-                    }
-                }
+            index++;
+            if (index < listview_sensor.count) {
+                _root.gatherController.querySensorVersion(index, model_sensor_configure.getAddr(index), ComConfig.sensorTimeout);
+            } else {
+                auto_query_dialog.finished();
+            }
+        }
+        onQuerySensorStateCallback: function(success, index, curState, configuredState) {
+            // stop by click cancel
+            if (!auto_query_dialog.isRun) {
+                return;
             }
 
+            if (success) {
+                model_sensor_configure.setState(index, curState, configuredState);
+            }
+            auto_query_dialog.addModelData(success, model_sensor_configure.getName(index));
+
+            index++;
+            if (index < listview_sensor.count) {
+                _root.gatherController.querySensorState(index, model_sensor_configure.getAddr(index), ComConfig.sensorTimeout);
+            } else {
+                auto_query_dialog.finished();
+            }
         }
     }
 }

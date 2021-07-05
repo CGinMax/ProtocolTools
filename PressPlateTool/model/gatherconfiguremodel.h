@@ -14,7 +14,6 @@ class GatherConfigureModel : public QAbstractListModel
         ProductDesc,
         Address,
         SensorCount,
-        Timeout,
     };
 
 public:

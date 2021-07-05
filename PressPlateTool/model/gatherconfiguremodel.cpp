@@ -46,8 +46,6 @@ QVariant GatherConfigureModel::data(const QModelIndex &index, int role) const
         return data->addr();
     case GatherConfigureModel::SensorCount:
         return data->sensorCount();
-    case GatherConfigureModel::Timeout:
-        return data->gatherTimeout();
     default:
         break;
     }
@@ -65,7 +63,6 @@ QHash<int, QByteArray> GatherConfigureModel::roleNames() const
     roles.insert(GatherConfigureModel::ProductDesc, QByteArrayLiteral("product_description"));
     roles.insert(GatherConfigureModel::Address, QByteArrayLiteral("address"));
     roles.insert(GatherConfigureModel::SensorCount, QByteArrayLiteral("sensor_count"));
-    roles.insert(GatherConfigureModel::Timeout, QByteArrayLiteral("timeout"));
     return roles;
 }
 

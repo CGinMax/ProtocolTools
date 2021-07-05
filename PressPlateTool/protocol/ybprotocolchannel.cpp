@@ -53,22 +53,6 @@ void YBProtocolChannel::processFrame(const YBFrame &frame)
     reply->cancelTimeout();
     m_replyList.erase(iter);
     delete reply;
-
-//    switch (frame.m_funCode) {
-//    case eYBFunCode::NAKCode:
-//        qDebug("Nak");
-//        break;
-//    case eYBFunCode::SetStatusCode:
-//    case eYBFunCode::QueryStatusCode:
-//    case eYBFunCode::QueryVersionCode:
-//    case eYBFunCode::SetAddressCode:
-//    case eYBFunCode::SetSensorNumCode:
-//    case eYBFunCode::QueryAddrCode:
-//        qDebug("finish");
-//        break;
-//    default:
-//        break;
-//    }
 }
 
 IContentDeferredPtr YBProtocolChannel::setAddress(eYBFrameType type, uint8_t addr, int msecTimeout)

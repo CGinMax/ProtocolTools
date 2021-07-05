@@ -7,8 +7,6 @@ GatherData::GatherData(QObject *parent)
     , m_softwareVer(QString("0.0"))
     , m_productDesc(QString())
     , m_sensorCount(0)
-    , m_gatherTimeout(12000)
-    , m_sensorTimeout(12000)
 {
 
 }
@@ -79,24 +77,4 @@ PortParam GatherData::portParam() const
 void GatherData::setPortParam(const PortParam &portParam)
 {
     m_portParam = portParam;
-}
-
-int GatherData::gatherTimeout() const
-{
-    return m_gatherTimeout;
-}
-
-void GatherData::setGatherTimeout(int msecTimeout)
-{
-    m_gatherTimeout = msecTimeout;
-}
-
-int GatherData::sensorTimeout() const
-{
-    return m_sensorTimeout;
-}
-
-void GatherData::setSensorTimeout(int msecTimeout)
-{
-    m_sensorTimeout = msecTimeout;
 }

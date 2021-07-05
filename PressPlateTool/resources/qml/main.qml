@@ -85,6 +85,8 @@ Qaterial.ApplicationWindow {
 //    }
     Component.onCompleted: {
         Qaterial.Style.theme = Qaterial.Style.Theme.Light
+        Qaterial.Style.primaryColorLight = Qaterial.Style.lightBlue
+        Qaterial.Style.accentColorLight = Qaterial.Style.lightBlue
         main_window.x = (Screen.width - width) / 2
         main_window.y = (Screen.height - height) / 2
         main_window.visible = true

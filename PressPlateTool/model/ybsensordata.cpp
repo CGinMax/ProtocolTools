@@ -4,7 +4,7 @@
 YBSensorData::YBSensorData(const QString &name, QObject *parent)
     : QObject(parent)
     , m_name(name)
-    , m_currentStatus(YBStatus::UnsetStatus)
+    , m_currentStatus(YBStatus::OffStatus)
     , m_configedStatus(YBStatus::UnsetStatus)
     , m_addr(1)
     , m_hardwareVer(QString())

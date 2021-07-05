@@ -15,7 +15,8 @@ class SensorConfigureModel : public QAbstractListModel
         Address,
         CurrentStatus,
         ConfiguredStatus,
-        Timeout,
+        CurrentStatusText,
+        ConfiguredStatusText,
     };
 public:
     explicit SensorConfigureModel(QObject *parent = nullptr);
@@ -32,7 +33,11 @@ public:
     Q_INVOKABLE void setState(int idx, int curState, int confState);
     Q_INVOKABLE void setAddress(int idx, int addr);
     Q_INVOKABLE void setConfState(int idx, int state);
+    Q_INVOKABLE QString getName(int idx);
+    Q_INVOKABLE int getAddr(int idx);
 
+    static QStringList CURSTATUSDESC;
+    static QMap<int, QString> CONFIGSTATUSDESC;
 signals:
 
 public slots:

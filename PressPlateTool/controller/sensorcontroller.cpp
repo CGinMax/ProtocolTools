@@ -22,7 +22,7 @@ bool SensorController::isConnected()
     return _controller->isConnected();
 }
 
-void SensorController::querySensorVersion(int index, int addr, int timeout)
+void SensorController::querySensorVersion(int addr, int timeout)
 {
     if (!canDoOperate()) {
         return;
@@ -32,9 +32,10 @@ void SensorController::querySensorVersion(int index, int addr, int timeout)
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
             emit this->queryVersionCallback(
-                    true, index, QString::fromStdString(result->hardwareVersion())
+                    true, QString::fromStdString(result->hardwareVersion())
                     , QString::fromStdString(result->softwareVersion()) , QString::fromStdString(result->productDescript())
             );
+            return;
         }
         if (result == nullptr) {
             qDebug("Unknow frame data");
@@ -50,7 +51,7 @@ void SensorController::querySensorVersion(int index, int addr, int timeout)
     });
 }
 
-void SensorController::querySensorStatus(int index, int addr, int timeout)
+void SensorController::querySensorStatus(int addr, int timeout)
 {
     if (!canDoOperate()) {
         return;
@@ -59,7 +60,9 @@ void SensorController::querySensorStatus(int index, int addr, int timeout)
     auto reply = _controller->protocol()->queryStatus(static_cast<uint16_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
-            emit this->queryStateCallback(true, index, result->currentStatusCode(), result->configedStatusCode());
+            emit this->queryStateCallback(true, result->currentStatusCode(), result->configedStatusCode());
+            qDebug("curstatus:%d,config:%d", result->currentStatusCode(), result->configedStatusCode());
+            return;
         }
         if (result == nullptr) {
             qDebug("Unknow frame data");
@@ -74,7 +77,7 @@ void SensorController::querySensorStatus(int index, int addr, int timeout)
     });
 }
 
-void SensorController::configureSensorAddress(int index, int addr, int timeout)
+void SensorController::configureSensorAddress(int addr, int timeout)
 {
     if (!canDoOperate()) {
         return;
@@ -84,8 +87,10 @@ void SensorController::configureSensorAddress(int index, int addr, int timeout)
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode
                 && result->success()) {
-            emit this->configureAddressCallback(true, index, addr);
+            emit this->configureAddressCallback(true, addr);
+            return;
         }
+
         if (result == nullptr) {
             qDebug("Unknow frame data");
         }
@@ -100,7 +105,7 @@ void SensorController::configureSensorAddress(int index, int addr, int timeout)
     });
 }
 
-void SensorController::configureSensorStatus(int index, int addr, int status, int timeout)
+void SensorController::configureSensorStatus(int addr, int status, int timeout)
 {
     if (!canDoOperate()) {
         return;
@@ -110,7 +115,9 @@ void SensorController::configureSensorStatus(int index, int addr, int status, in
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode
                 && result->success()) {
-            emit this->configureStateCallback(true, index, status);
+            emit this->configureStateCallback(true, status);
+            qDebug("curstatus:%d", status);
+            return;
         }
         if (result == nullptr) {
             qDebug("Unknow frame data");

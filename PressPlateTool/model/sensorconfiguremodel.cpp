@@ -1,5 +1,8 @@
 #include "sensorconfiguremodel.h"
 
+QStringList SensorConfigureModel::CURSTATUSDESC = {tr("Open"), tr("Close"), tr("Error Open"), tr("Error Close"), tr("Waiting Open"), tr("Waiting Close")};
+QMap<int, QString> SensorConfigureModel::CONFIGSTATUSDESC = {{0, tr("Open")}, {1, tr("Close")}, {0xFF, tr("Unconfigured")}};
+
 SensorConfigureModel::SensorConfigureModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -47,6 +50,10 @@ QVariant SensorConfigureModel::data(const QModelIndex &index, int role) const
         return data->currentStatus();
     case SensorConfigureModel::ConfiguredStatus:
         return data->configedStatus();
+    case SensorConfigureModel::CurrentStatusText:
+        return CURSTATUSDESC.at(data->currentStatus());
+    case SensorConfigureModel::ConfiguredStatusText:
+        return CONFIGSTATUSDESC.value(data->configedStatus(), tr("Unconfigured"));
     default:
         break;
     }
@@ -64,7 +71,9 @@ QHash<int, QByteArray> SensorConfigureModel::roleNames() const
     roles.insert(SensorConfigureModel::Address, QByteArrayLiteral("address"));
     roles.insert(SensorConfigureModel::CurrentStatus, QByteArrayLiteral("current_status"));
     roles.insert(SensorConfigureModel::ConfiguredStatus, QByteArrayLiteral("configured_status"));
-    roles.insert(SensorConfigureModel::Timeout, QByteArrayLiteral("timeout"));
+
+    roles.insert(SensorConfigureModel::CurrentStatusText, QByteArrayLiteral("current_status_text"));
+    roles.insert(SensorConfigureModel::ConfiguredStatusText, QByteArrayLiteral("configured_status_text"));
     return roles;
 }
 
@@ -134,6 +143,22 @@ void SensorConfigureModel::setConfState(int idx, int state)
     }
     _ybSensorDataList.at(idx)->setConfigedStatus(YBStatus(state));
     emit dataChanged(index(idx, 0), index(idx, 0));
+}
+
+QString SensorConfigureModel::getName(int idx)
+{
+    if (outOfRange(idx)) {
+        return QString();
+    }
+    return _ybSensorDataList.at(idx)->name();
+}
+
+int SensorConfigureModel::getAddr(int idx)
+{
+    if (outOfRange(idx)) {
+        return 0;
+    }
+    return _ybSensorDataList.at(idx)->addr();
 }
 
 bool SensorConfigureModel::outOfRange(int index)

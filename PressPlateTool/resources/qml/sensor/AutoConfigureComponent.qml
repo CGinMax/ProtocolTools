@@ -7,11 +7,17 @@ import Qaterial 1.0 as Qaterial
 Qaterial.ModalDialog {
     id: _root
     property string text: ""
+    property bool isFinish: false
+    property bool isRun: visible
+    property color failedBg: "#FFBEC0"
+    property color failedFg: "#E84B55"
+    property color successBg: "#ACF5D2"
+    property color successFg: "#1AB073"
     standardButtons: Dialog.Cancel
     contentItem: Rectangle {
         id: _content_item
-        property bool isFinish: false
         RowLayout {
+            anchors.fill: parent
             spacing: 40
             ColumnLayout {
                 Layout.alignment: Qt.AlignVCenter
@@ -23,9 +29,11 @@ Qaterial.ModalDialog {
                     text: _root.text
                     font.pixelSize: 18
                 }
-                BusyIndicator {
+                Loader {
+                    id: loader_busy
                     Layout.alignment: Qt.AlignCenter
                     Layout.preferredHeight: 50
+
                 }
             }
             ListView {
@@ -33,10 +41,12 @@ Qaterial.ModalDialog {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.preferredWidth: 200
+                clip: true
+                spacing: 5
+                ScrollIndicator.vertical: ScrollIndicator { }
                 delegate: Rectangle {
-//                    color: success ? "green" : "red"
-                    property color foreColor: success ? "green" : "red"
-                    border.color: "black"
+                    color: success ? _root.successBg : _root.failedBg
+                    property color foreColor: success ? _root.successFg : _root.failedFg
                     width: listview_result.width
                     radius: 5
                     height: 30
@@ -64,7 +74,8 @@ Qaterial.ModalDialog {
         }
 
         Rectangle {
-            visible: _content_item.isFinish
+            id: rect_finished
+            visible: _root.isFinish
             anchors.fill: parent
             ColumnLayout {
                 anchors.fill: parent
@@ -82,10 +93,12 @@ Qaterial.ModalDialog {
                     Layout.fillHeight: true
                     Layout.preferredWidth: parent.width
                     Layout.alignment: Qt.AlignCenter
+                    clip: true
+                    spacing: 5
+                    ScrollIndicator.vertical: ScrollIndicator { }
                     delegate: Rectangle {
-    //                    color: success ? "green" : "red"
-                        property color foreColor: success ? "green" : "red"
-                        border.color: "black"
+                        color: success ? _root.successBg : _root.failedBg
+                        property color foreColor: success ? _root.successFg : _root.failedFg
                         width: listview_result.width
                         radius: 5
                         height: 30
@@ -116,9 +129,36 @@ Qaterial.ModalDialog {
         }
 
     }
-    onClosed: dialogLoader.sourceComponent = undefined
+    onClosed: {
+        drop();
+    }
+    onVisibleChanged: {
+        if (_root.visible) {
+            loader_busy.sourceComponent = Qt.createComponent("qrc:/Qaterial/BusyIndicator.qml");
+        } else {
+            loader_busy.sourceComponent.destroy();
+            loader_busy.sourceComponent = null;
+        }
+    }
+
+    function drop() {
+        listmodel_result.clear();
+        listmodel_finish.clear();
+        isFinish = false;
+    }
+
     function addModelData(success, name) {
-        listmodel_result.append({success: success, sensor_name: name})
+        listmodel_result.append({success: success, sensor_name: name});
+    }
+    function finished() {
+        isFinish = true;
+        for (var i = 0; i < listview_result.count; i++) {
+            if (!listmodel_result.get(i).success) {
+                rect_finished.add_finish(listmodel_result.get(i).sensor_name);
+            }
+
+        }
+
     }
 }
 

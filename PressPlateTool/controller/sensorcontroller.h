@@ -16,16 +16,16 @@ public:
 
     Q_INVOKABLE bool isConnected();
 
-    Q_INVOKABLE void querySensorVersion(int index, int addr, int timeout = 12000);
-    Q_INVOKABLE void querySensorStatus(int index, int addr, int timeout);
-    Q_INVOKABLE void configureSensorAddress(int index, int addr, int timeout = 12000);
-    Q_INVOKABLE void configureSensorStatus(int index, int addr, int status, int timeout = 12000);
+    Q_INVOKABLE void querySensorVersion(int addr, int timeout);
+    Q_INVOKABLE void querySensorStatus(int addr, int timeout);
+    Q_INVOKABLE void configureSensorAddress(int addr, int timeout);
+    Q_INVOKABLE void configureSensorStatus(int addr, int status, int timeout);
 
 signals:
-    void queryVersionCallback(bool success, int index = 0, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString());
-    void configureAddressCallback(bool success, int index = 0, int addr = 0);
-    void queryStateCallback(bool success, int index = 0, int curState = 0xFF, int confState = 0xFF);
-    void configureStateCallback(bool success, int index = 0, int state = 0xFF);
+    void queryVersionCallback(bool success, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString());
+    void configureAddressCallback(bool success, int addr = 0);
+    void queryStateCallback(bool success, int curState = 0xFF, int confState = 0xFF);
+    void configureStateCallback(bool success, int state = 0xFF);
 
 public slots:
 

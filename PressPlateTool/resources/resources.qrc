@@ -7,13 +7,9 @@
         <file>translations/PressPlateTool_zh.qm</file>
         <file>qml/main.qml</file>
         <file>qml/gather/GatherItem.qml</file>
-        <file>qml/sensor/SensorConfigurePage.qml</file>
         <file>icons/delete-all.png</file>
-        <file>qml/gather/ToolButtonBar.qml</file>
         <file>qml/gather/GatherConfView.qml</file>
         <file>qml/sensor/SensorConfView.qml</file>
-        <file>qml/page/ProjectConfigurePage.qml</file>
-        <file>qml/page/SerialPortConfigureView.qml</file>
         <file>icons/more-vert.png</file>
         <file>qml/components/Chip.qml</file>
         <file>qml/components/LoadingButton.qml</file>
@@ -21,5 +17,9 @@
         <file>qml/sensor/SensorItem.qml</file>
         <file>qml/components/LabelTile.qml</file>
         <file>qml/sensor/AutoConfigureComponent.qml</file>
+        <file>qml/data/ComConfig.qml</file>
+        <file>qml/gather/ComConfigureView.qml</file>
+        <file>qml/data/qmldir</file>
+        <file>qml/components/StateLabel.qml</file>
     </qresource>
 </RCC>
