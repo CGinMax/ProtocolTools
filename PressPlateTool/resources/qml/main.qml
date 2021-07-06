@@ -1,8 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-//import QtQuick.Controls.Material 2.12
 import QtQuick.Controls 2.12
-import QtQuick.Controls 1.4 as Old
 import QtQuick.Layouts 1.12
 import Qaterial 1.0 as Qaterial
 
@@ -28,6 +26,7 @@ Qaterial.ApplicationWindow {
             model: ListModel {
                 ListElement { text: qsTr("Gather Configure Page") }
                 ListElement { text: qsTr("Sensor configure Page") }
+                ListElement{ text: qsTr("Protocol")}
             }
         }
         Qaterial.SwipeView {
@@ -42,47 +41,12 @@ Qaterial.ApplicationWindow {
             SensorConfView {
                 gatherController: view_gather_conf.gatherController
             }
+            TextEdit {
+                textFormat: TextEdit.RichText
+            }
 
         } // SwipeView
     }
-
-//    Old.SplitView {
-//        anchors.fill: parent
-//        GatherConfView{
-//            id: view_gather_config
-
-//            property bool isCollapse: false
-
-//            width: 300
-
-//            function collapse() {
-//                width = isCollapse ? 300 : 0
-//                isCollapse = !isCollapse
-//            }
-//            onItemChanged: function(gatherController, gatherData) {
-//                view_sensor_config.setController(gatherController, gatherData)
-//            }
-
-//            //            Behavior on width {
-//            //                NumberAnimation {
-//            //                    duration: 200
-//            //                }
-//            //            }
-//        }
-
-//        StackLayout {
-//            id: stacklayout_sensor
-//            currentIndex: view_gather_config.gather_count == 0 ? 0 : 1
-//            Rectangle {
-//            }
-
-//            SensorConfView{
-//                id: view_sensor_config
-
-//            }
-//        }
-//        handleDelegate: SplitHandle{}
-//    }
     Component.onCompleted: {
         Qaterial.Style.theme = Qaterial.Style.Theme.Light
         Qaterial.Style.primaryColorLight = Qaterial.Style.lightBlue

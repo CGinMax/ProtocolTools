@@ -33,15 +33,19 @@ Rectangle {
     }
     onValueChanged: {
         if (value === 0) {
+            // red
             bgColor = "#FFBEC0";
             foreColor = "#E84B55";
         } else if (value === 1) {
+            // green
             bgColor = "#ACF5D2";
             foreColor = "#1AB073";
         } else if (value === 0xFF) {
+            // gray
             bgColor = "#F6F6F6";
             foreColor = "#9E9E9E";
         } else {
+            // yellow
             bgColor = "#EFD360";
             foreColor = "#FFF6D7";
         }

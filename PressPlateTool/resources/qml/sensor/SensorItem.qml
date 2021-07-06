@@ -46,13 +46,11 @@ Qaterial.Card {
                 Layout.preferredWidth: 80
                 Layout.fillHeight: true
                 StateLabel {
-//                    Layout.preferredWidth: 80
                     Layout.preferredHeight: 30
                     value: current_status
                     text: current_status_text
                 }
                 StateLabel {
-//                    Layout.preferredWidth: 80
                     Layout.preferredHeight: 30
                     value: configured_status
                     text: configured_status_text
