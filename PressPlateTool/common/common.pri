@@ -6,12 +6,8 @@ CONFIG += c++11
 
 HEADERS += \
     $$PWD/threadpool.h \
-    $$PWD/workerthread.h \
-    $$PWD/ybsensordata.h \
-    $$PWD/gatherdata.h
+    $$PWD/workerthread.h
 
 SOURCES += \
     $$PWD/threadpool.cpp \
-    $$PWD/workerthread.cpp \
-    $$PWD/ybsensordata.cpp \
-    $$PWD/gatherdata.cpp
+    $$PWD/workerthread.cpp

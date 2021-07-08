@@ -9,13 +9,14 @@ QT       += qml quick quickcontrols2
 TARGET = PressPlateTool
 TEMPLATE = app
 CONFIG += warn_on
+CONFIG += fontAwesomeFree
+CONFIG += QTAWESOME_ENABLE_QML
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
-
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
@@ -23,7 +24,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 SOURCES += \
-        qmlmain.cpp
+        qmlmain.cpp \
+    qmlexport.cpp
+
+HEADERS += \
+    qmlexport.h
 #SOURCES += \
 #        main.cpp \
 #        mainwindow.cpp
@@ -42,8 +47,9 @@ DEPENDPATH += $$PWD/../Communication/
 INCLUDEPATH += $$PWD/../Protocols/
 DEPENDPATH += $$PWD/../Protocols/
 
-
 INCLUDEPATH += $$PWD/../Qaterial/include
+
+INCLUDEPATH += $$PWD/../QtAwesome/
 CONFIG(debug, debug|release){
     DESTDIR = $$PWD/../bin/debug
 }
@@ -60,10 +66,12 @@ TRANSLATIONS += $$PWD/PressPlateTool_en.ts
 TRANSLATIONS += $$PWD/PressPlateTool_zh.ts
 
 #include($$PWD/ui/ui.pri)
-#include($$PWD/protocol/protocol.pri)
-#include($$PWD/common/common.pri)
-#include($$PWD/../QtAwesome/QtAwesome/QtAwesome.pri)
-#include($$PWD/../asyncfuture/asyncfuture.pri)
+include($$PWD/common/common.pri)
+include($$PWD/protocol/protocol.pri)
+include($$PWD/controller/controller.pri)
+include($$PWD/model/model.pri)
+include($$PWD/../QtAwesome/QtAwesome/QtAwesome.pri)
+include($$PWD/../asyncfuture/asyncfuture.pri)
 
 RESOURCES += \
     resources/resources.qrc

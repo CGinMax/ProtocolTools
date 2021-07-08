@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>fonts/MaterialIcons-Regular.ttf</file>
+        <file>fonts/MaterialIconsRound-Regular.otf</file>
+        <file>fonts/MaterialIconsTwoTone-Regular.otf</file>
     </qresource>
 </RCC>
