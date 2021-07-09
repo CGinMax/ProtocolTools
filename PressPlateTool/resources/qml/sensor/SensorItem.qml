@@ -38,6 +38,10 @@ Qaterial.Card {
                 onClickStarted: {
                     _root.configureSensorAddr(parseInt(input_address.text))
                 }
+                ToolTip{
+                    visible: parent.hovered
+                    text: qsTr("Configure sensor address")
+                }
             }
         }
 
@@ -49,11 +53,19 @@ Qaterial.Card {
                     Layout.preferredHeight: 30
                     value: current_status
                     text: current_status_text
+                    ToolTip{
+                        visible: parent.hovered
+                        text: qsTr("Sensor current state")
+                    }
                 }
                 StateLabel {
                     Layout.preferredHeight: 30
                     value: configured_status
                     text: configured_status_text
+                    ToolTip{
+                        visible: parent.hovered
+                        text: qsTr("Sensor configed state")
+                    }
                 }
             }
             LoadingButton {
@@ -62,6 +74,10 @@ Qaterial.Card {
                 iconSize: 18
                 onClickStarted: {
                     emit: _root.querySensorStatus(parseInt(input_address.text))
+                }
+                ToolTip{
+                    visible: parent.hovered
+                    text: qsTr("Query sensor status")
                 }
             }
         }
@@ -72,11 +88,15 @@ Qaterial.Card {
                 model: [qsTr("Open"), qsTr("Close"), qsTr("Unconfigured")]
             }
             LoadingButton {
-                id: btn_configure_status
+                id: btn_configure_state
                 iconSource: "image://faicon/arrow-alt-circle-left"
                 iconSize: 18
                 onClickStarted: {
                     emit: _root.configureSensorStatus(parseInt(input_address.text), cbb_configure_status.currentIndex != 2 ? cbb_configure_status.currentIndex : 0xFF)
+                }
+                ToolTip{
+                    visible: parent.hovered
+                    text: qsTr("Configure sensor state")
                 }
             }
         }
@@ -98,7 +118,10 @@ Qaterial.Card {
                 onClickStarted: {
                     emit: _root.querySensorVersion(parseInt(input_address.text))
                 }
-
+                ToolTip{
+                    visible: parent.hovered
+                    text: qsTr("Query sensor version")
+                }
             }
         }
 
@@ -160,7 +183,7 @@ Qaterial.Card {
     }
 
     function changeConfigureStatusState(success) {
-        btn_configure_status.changeState(success)
+        btn_configure_state.changeState(success)
     }
 
     SensorController {

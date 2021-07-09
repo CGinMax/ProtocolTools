@@ -47,7 +47,7 @@ set(QRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.qrc)
 qtquick_compiler_add_resources(QUICK_QRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.qrc)
 
 set(PressPlateToolSrc
-    qmlmain.cpp
+    main.cpp
     qmlexport.h
     qmlexport.cpp
 )

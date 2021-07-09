@@ -32,6 +32,7 @@ public:
 signals:
     void startPortocolChannel();
     void stopProtocolChannel();
+    void showProtocolMsg(const QString& msg);
     void queryVersionCallback(bool success, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString());
     void configureAddressCallback(bool success, int addr = 0);
     void configureCountCallback(bool success, int count = 0);

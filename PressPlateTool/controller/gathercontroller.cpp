@@ -12,6 +12,7 @@ GatherController::GatherController(QObject *parent)
         // TODO(shijm): check whether use BlockingQueuedConnection
         connect(this, &GatherController::startPortocolChannel, this->protocol(), &ProtocolChannelBase::start, Qt::BlockingQueuedConnection);
         connect(this, &GatherController::stopProtocolChannel, this->protocol(), &ProtocolChannelBase::stop, Qt::BlockingQueuedConnection);
+        connect(this->protocol(), &ProtocolChannelBase::showProtocolMsg, this, &GatherController::showProtocolMsg);
     });
 }
 

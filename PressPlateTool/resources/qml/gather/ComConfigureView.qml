@@ -11,6 +11,7 @@ import "../data"
 Qaterial.GroupBox {
     id: _root
     title: qsTr("Communication configuration")
+    inlineTitle: true
     property int labelWidth: 90
     property bool isStarted: false
 

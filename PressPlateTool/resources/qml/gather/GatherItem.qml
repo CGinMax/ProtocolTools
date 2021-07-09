@@ -29,9 +29,12 @@ Qaterial.GroupBox {
             }
             LoadingButton {
                 id: btn_configure_address
-//                opacity: input_address.focus ? 1.0 : 0.0
                 iconSource: "image://faicon/arrow-alt-circle-left"
                 iconSize: 18
+                ToolTip{
+                    visible: parent.hovered
+                    text: qsTr("Configure gather address")
+                }
             }
 
             Qaterial.TextField {
@@ -43,9 +46,12 @@ Qaterial.GroupBox {
             }
             LoadingButton {
                 id: btn_configure_sensor_count
-//                opacity: input_sensor_count.focus ? 1.0 : 0.0
                 iconSource: "image://faicon/arrow-alt-circle-left"
                 iconSize: 18
+                ToolTip{
+                    visible: parent.hovered
+                    text: qsTr("Configure gather count")
+                }
             }
         }
 
@@ -53,6 +59,7 @@ Qaterial.GroupBox {
             Layout.fillWidth: true
             Row {
                 id: layout_version
+                spacing: 5
 
                 Layout.fillWidth: true
                 Layout.preferredWidth: 200
@@ -73,6 +80,10 @@ Qaterial.GroupBox {
                     id: btn_query_version
                     iconSource: "image://faicon/search"
                     iconSize: 18
+                    ToolTip{
+                        visible: parent.hovered
+                        text: qsTr("Query gather version")
+                    }
                 }
             }
             LabelTile {
