@@ -1,4 +1,4 @@
-#include "cdtprotocol.h"
+﻿#include "cdtprotocol.h"
 #include <QtMath>
 #include <QVector>
 #include "cdtmintorstrategy.h"

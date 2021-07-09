@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15.0 FATAL_ERROR)
+﻿cmake_minimum_required(VERSION 3.15.0 FATAL_ERROR)
 
 project(PressPlateTool)
 
@@ -12,6 +12,7 @@ endif()
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
+set(CMAKE_AUTOMOC ON)
 
 find_package(Threads)
 find_package(Qt5 REQUIRED COMPONENTS Core Qml Quick QuickControls2 SerialPort)

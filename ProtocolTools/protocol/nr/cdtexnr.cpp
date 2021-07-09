@@ -1,4 +1,4 @@
-#include "cdtexnr.h"
+﻿#include "cdtexnr.h"
 #include "nrwfstrategy.h"
 #include "nrmintorstrategy.h"
 

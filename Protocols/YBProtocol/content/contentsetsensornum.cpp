@@ -1,4 +1,4 @@
-#include "contentsetsensornum.h"
+﻿#include "contentsetsensornum.h"
 
 ContentSetSensorNum::ContentSetSensorNum(uint8_t data)
     : m_num(data)
@@ -15,7 +15,7 @@ std::string ContentSetSensorNum::toString(bool isSend)
         return result;
     }
 
-    result += m_isSuccess ? u8":成功" : u8":失败";
+    result += m_isSuccess ? u8"成功" : u8"失败";
     return result;
 }
 

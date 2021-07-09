@@ -1,4 +1,4 @@
-#include "contentquerystatus.h"
+﻿#include "contentquerystatus.h"
 
 std::array<std::string, 6> ContentQueryStatus::currentStatus{u8"分", u8"合", u8"误分", u8"误合", u8"等待分", u8"等待合"};
 

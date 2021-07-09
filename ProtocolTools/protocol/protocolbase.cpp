@@ -1,4 +1,4 @@
-#include "protocolbase.h"
+﻿#include "protocolbase.h"
 #include "../common/util.h"
 #include <QElapsedTimer>
 #include <QDateTime>

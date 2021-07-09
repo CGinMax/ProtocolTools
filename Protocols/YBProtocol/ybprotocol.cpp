@@ -1,6 +1,5 @@
-#include "ybprotocol.h"
+﻿#include "ybprotocol.h"
 #include "content/contentfactory.h"
-#include "ybprotocolexception.h"
 YBProtocol::YBProtocol()
 {
 

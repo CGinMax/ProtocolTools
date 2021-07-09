@@ -1,4 +1,4 @@
-#include "contentsettingstatus.h"
+﻿#include "contentsettingstatus.h"
 
 ContentSettingStatus::ContentSettingStatus(uint8_t data)
     : m_status(data)

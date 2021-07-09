@@ -1,4 +1,4 @@
-#include "cdtinteracte.h"
+﻿#include "cdtinteracte.h"
 #include "interwfstrategy.h"
 #include "intermintorstrategy.h"
 
@@ -39,7 +39,7 @@ void CDTInteracte::ykExecute(uint8_t ctrlCode, uint8_t ptId)
     CDTFrame frame = interactYKFrame(m_settingData->m_ptCfg->m_ykReqType, m_settingData->m_ptCfg->m_ykReqCode, ctrlCode, 0xFF, ptId);
     send(frame);
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("遥控执行"), frame.toAllByteArray());
-    emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控执行指令").arg(ptId).arg(ctrlCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("分")));
+    emit sendYKMsg(QStringLiteral("发送点%1的%2操作遥控执行指令").arg(ptId).arg(ctrlCode == eControlLockCode::CloseValidLock ? QStringLiteral("合"):QStringLiteral("合")));
 }
 
 void CDTInteracte::ykExecuteBack(uint8_t ctrlCode, uint8_t ptId, bool success)

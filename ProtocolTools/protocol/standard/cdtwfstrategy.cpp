@@ -1,4 +1,4 @@
-#include "cdtwfstrategy.h"
+﻿#include "cdtwfstrategy.h"
 #include "cdtprotocol.h"
 
 CDTWFStrategy::CDTWFStrategy(CDTProtocol *cdt, QObject *parent)

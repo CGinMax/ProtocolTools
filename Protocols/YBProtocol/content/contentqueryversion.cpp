@@ -1,4 +1,4 @@
-#include "contentqueryversion.h"
+﻿#include "contentqueryversion.h"
 
 ContentQueryVersion::ContentQueryVersion(const std::vector<uint8_t> &datas)
     : m_hardwareVer(std::string())

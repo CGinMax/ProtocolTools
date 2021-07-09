@@ -1,11 +1,10 @@
-#ifndef YBPROTOCOL_H
+﻿#ifndef YBPROTOCOL_H
 #define YBPROTOCOL_H
 
 #include "../iprotocols.h"
 #include <deque>
 #include "ybframe.h"
-
-class YBProtocolException;
+#include "ybprotocolexception.h"
 
 class PROTOCOLSSHARED_EXPORT YBProtocol : public IProtocols
 {

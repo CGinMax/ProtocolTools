@@ -1,4 +1,4 @@
-import QtQuick 2.12
+﻿import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
@@ -9,7 +9,7 @@ Rectangle {
     property int value: 0xFF
     property color foreColor: "#9E9E9E"
     property color bgColor: "#F6F6F6"
-
+    property bool hovered: false
     color: bgColor
     radius: 4
 
@@ -51,4 +51,11 @@ Rectangle {
         }
     }
 
+    MouseArea {
+        id: mouse_area
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: _root.hovered = true
+        onExited: _root.hovered = false
+    }
 }

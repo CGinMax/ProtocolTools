@@ -1,4 +1,4 @@
-#include "protocolchannelbase.h"
+﻿#include "protocolchannelbase.h"
 #include "../../Protocols/convert.h"
 
 #include <QDateTime>
