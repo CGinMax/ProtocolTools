@@ -5,8 +5,8 @@
     <name>AutoConfigureComponent</name>
     <message>
         <location filename="resources/qml/sensor/AutoConfigureComponent.qml" line="84"/>
-        <source>Automatic query finish!</source>
-        <translation>自动查询成功！</translation>
+        <source>Automatic operation finish!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14,53 +14,53 @@
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="13"/>
         <source>Communication configuration</source>
-        <translation>通讯配置</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="34"/>
         <source>Device List</source>
-        <translation>设备列表</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="48"/>
         <source>Refresh</source>
-        <translation>刷新</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="58"/>
         <source>Buad Rate</source>
-        <translation>波特率</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="74"/>
         <source>Gather Timeout Time</source>
-        <translation>采集器超时时间</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="76"/>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="85"/>
         <source>ms</source>
-        <translation>毫秒</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="83"/>
         <source>Sensor Timeout Time</source>
-        <translation>传感器超时时间</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="94"/>
         <source>Stop</source>
-        <translation>停止</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="94"/>
         <source>Start</source>
-        <translation>启动</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/ComConfigureView.qml" line="116"/>
         <source>Error! Serial Port name is invalid!</source>
-        <translation>错误！串口名称无效！</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -84,7 +84,7 @@
         <location filename="ui/page/configurationpage.ui" line="86"/>
         <location filename="ui/page/configurationpage.ui" line="109"/>
         <source>ms</source>
-        <translation type="unfinished">毫秒</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/page/configurationpage.ui" line="96"/>
@@ -103,13 +103,13 @@
         <location filename="ui/expand/expandtile.ui" line="40"/>
         <location filename="ui/expand/expandtile.ui" line="64"/>
         <source>Software Version</source>
-        <translation type="unfinished">软件版本</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/expand/expandtile.ui" line="47"/>
         <location filename="ui/expand/expandtile.ui" line="54"/>
         <source>Hardware Version</source>
-        <translation type="unfinished">硬件版本</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/expand/expandtile.ui" line="57"/>
@@ -120,7 +120,7 @@
     <message>
         <location filename="ui/expand/expandtile.ui" line="76"/>
         <source>Product Description</source>
-        <translation type="unfinished">产品描述</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/expand/expandtile.ui" line="79"/>
@@ -174,62 +174,62 @@
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="11"/>
         <source>Gather Configuration</source>
-        <translation>采集器配置</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="25"/>
         <source>Address</source>
-        <translation>地址</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="36"/>
         <source>Configure gather address</source>
-        <translation>配置采集器地址</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="42"/>
         <source>Sensor Count</source>
-        <translation>传感器个数</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="53"/>
         <source>Configure gather count</source>
-        <translation>配置采集器个数</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="68"/>
         <source>Hardware Version</source>
-        <translation>硬件版本</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="75"/>
         <source>Software Version</source>
-        <translation>软件版本</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="85"/>
         <source>Query gather version</source>
-        <translation>查询采集器版本</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="91"/>
         <source>Product Description</source>
-        <translation>产品描述</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="92"/>
         <source>None</source>
-        <translation>无</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="131"/>
         <source>Start communication failed!</source>
-        <translation>启动通讯失败！</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/gather/GatherItem.qml" line="162"/>
         <source>Communication not open!Can not operate!</source>
-        <translation>通讯未启动！无法操作！</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -252,12 +252,12 @@
     <message>
         <location filename="ui/expand/gatheroperwidget.ui" line="64"/>
         <source>Open</source>
-        <translation type="unfinished">应分</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/expand/gatheroperwidget.ui" line="71"/>
         <source>Close</source>
-        <translation type="unfinished">应合</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -283,7 +283,7 @@
     <message>
         <location filename="ui/tables/listheader.ui" line="24"/>
         <source>Address</source>
-        <translation type="unfinished">地址</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/tables/listheader.ui" line="31"/>
@@ -323,7 +323,7 @@
         <location filename="ui/tables/listviewitem.ui" line="65"/>
         <location filename="ui/tables/listviewitem.ui" line="127"/>
         <source>None</source>
-        <translation type="unfinished">无</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/tables/listviewitem.ui" line="55"/>
@@ -369,12 +369,12 @@
     <message>
         <location filename="ui/tables/listviewitem.ui" line="158"/>
         <source>Open</source>
-        <translation type="unfinished">应分</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/tables/listviewitem.ui" line="163"/>
         <source>Close</source>
-        <translation type="unfinished">应合</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/tables/listviewitem.ui" line="168"/>
@@ -425,42 +425,91 @@
     <message>
         <location filename="resources/qml/sensor/SensorConfView.qml" line="26"/>
         <source>Add one</source>
-        <translation>添加单个</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/sensor/SensorConfView.qml" line="31"/>
         <source>Add Multiple</source>
-        <translation>添加多个</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/sensor/SensorConfView.qml" line="39"/>
         <source>Sensor Number Configuration</source>
-        <translation>传感器数量配置</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/sensor/SensorConfView.qml" line="40"/>
         <source>Sensor Numbers</source>
-        <translation>传感器数量</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/sensor/SensorConfView.qml" line="55"/>
         <source>Automatic query sensor version</source>
-        <translation>自动查询传感器版本</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/sensor/SensorConfView.qml" line="58"/>
-        <source>Query sensor version...</source>
-        <translation>查询传感器版本...</translation>
+        <source>Querying sensor version.
+Query sensor address is </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="66"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="64"/>
         <source>Automatic query sensor status</source>
-        <translation>自动查询传感器状态</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="69"/>
-        <source>Query sensor status...</source>
-        <translation>查询传感器状态...</translation>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="67"/>
+        <source>Querying sensor state.
+Query sensor address is </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="90"/>
+        <source>Begin Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="96"/>
+        <source>End Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="102"/>
+        <source>Automatic configure sensor address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="104"/>
+        <source>Configuring sensors address.
+Configuration Address is </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="113"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="113"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="113"/>
+        <source>Unconfigured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="121"/>
+        <source>Automatic configure sensor state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="123"/>
+        <source>Configuring sensors state.
+Configuration Sensor Address is </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -469,13 +518,13 @@
         <location filename="model/sensorconfiguremodel.cpp" line="3"/>
         <location filename="model/sensorconfiguremodel.cpp" line="4"/>
         <source>Open</source>
-        <translation type="unfinished">应分</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="model/sensorconfiguremodel.cpp" line="3"/>
         <location filename="model/sensorconfiguremodel.cpp" line="4"/>
         <source>Close</source>
-        <translation type="unfinished">应合</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="model/sensorconfiguremodel.cpp" line="3"/>
@@ -501,7 +550,7 @@
         <location filename="model/sensorconfiguremodel.cpp" line="4"/>
         <location filename="model/sensorconfiguremodel.cpp" line="56"/>
         <source>Unconfigured</source>
-        <translation type="unfinished">未配置</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="model/sensorconfiguremodel.cpp" line="88"/>
@@ -512,54 +561,59 @@
 <context>
     <name>SensorItem</name>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="30"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="33"/>
         <source>Address</source>
-        <translation>地址</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="43"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="50"/>
         <source>Configure sensor address</source>
-        <translation>配置传感器地址</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="58"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="68"/>
         <source>Sensor current state</source>
-        <translation>传感器当前状态</translation>
-    </message>
-    <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="67"/>
-        <source>Sensor configed state</source>
-        <translation>传感器已配置状态</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/sensor/SensorItem.qml" line="80"/>
+        <source>Sensor configed state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="96"/>
         <source>Query sensor status</source>
-        <translation>查询传感器状态</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="88"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="107"/>
         <source>Open</source>
-        <translation>应分</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="88"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="107"/>
         <source>Close</source>
-        <translation>应合</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="88"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="107"/>
         <source>Unconfigured</source>
-        <translation>未配置</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="99"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="125"/>
         <source>Configure sensor state</source>
-        <translation>配置传感器状态</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="123"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="157"/>
         <source>Query sensor version</source>
-        <translation>查询传感器版本</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="164"/>
+        <source>Product Description</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -588,12 +642,12 @@
     <message>
         <location filename="ui/page/serialportpage.ui" line="31"/>
         <source>Device List</source>
-        <translation type="unfinished">设备列表</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/page/serialportpage.ui" line="41"/>
         <source>Refresh</source>
-        <translation type="unfinished">刷新</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/page/serialportpage.ui" line="48"/>
@@ -628,7 +682,7 @@
     <message>
         <location filename="ui/page/serialportpage.cpp" line="29"/>
         <source>None</source>
-        <translation type="unfinished">无</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui/page/serialportpage.cpp" line="30"/>
@@ -814,22 +868,22 @@
     <message>
         <location filename="resources/qml/main.qml" line="17"/>
         <source>Press Plate Tool</source>
-        <translation>压板配置工具</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/main.qml" line="28"/>
         <source>Gather Configure Page</source>
-        <translation>采集配置页</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/main.qml" line="29"/>
         <source>Sensor configure Page</source>
-        <translation>传感器配置页</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="resources/qml/main.qml" line="30"/>
         <source>Protocol</source>
-        <translation>协议报文</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

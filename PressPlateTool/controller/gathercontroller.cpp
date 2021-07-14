@@ -45,10 +45,6 @@ bool GatherController::stopCommunication()
 
 void GatherController::queryGatherVersion(int addr, int timeout)
 {
-    if(!canDoOperate()) {
-        return;
-    }
-
     auto reply = protocol()->queryVersion(eYBFrameType::YBGather, static_cast<uint16_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
@@ -75,23 +71,17 @@ void GatherController::queryGatherVersion(int addr, int timeout)
 
 void GatherController::configureGatherAddress(int addr, int timeout)
 {
-    if(!canDoOperate()) {
-        return;
-    }
-
     auto reply = protocol()->setAddress(eYBFrameType::YBGather, static_cast<uint8_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
-        if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
-            emit this->configureAddressCallback(result->success(), addr);
-            return;
-        }
         if (result == nullptr) {
             qDebug("Unknow frame data");
-        }
-        if (result->functionCode() == eYBFunCode::NAKCode) {
+        } else if (result->functionCode() == eYBFunCode::NAKCode) {
             qDebug("NAK Error");
-        }
-        emit this->configureAddressCallback(false);
+        } /*else {
+            qDebug("configure gather address failed!");
+        }*/
+
+        emit this->configureAddressCallback(result->success(), addr);
     },
     [=]() {
         emit this->configureAddressCallback(false);
@@ -102,23 +92,17 @@ void GatherController::configureGatherAddress(int addr, int timeout)
 
 void GatherController::configureSensorCount(int addr, int count, int timeout)
 {
-    if(!canDoOperate()) {
-        return;
-    }
-
     auto reply = protocol()->setSensorNum(static_cast<uint16_t>(addr), static_cast<uint8_t>(count), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
-        if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
-            emit this->configureCountCallback(result->success(), count);
-            return;
-        }
         if (result == nullptr) {
             qDebug("Unknow frame data");
-        }
-        if (result->functionCode() == eYBFunCode::NAKCode) {
+        } else if (result->functionCode() == eYBFunCode::NAKCode) {
             qDebug("NAK Error");
-        }
-        emit this->configureCountCallback(false);
+        } /*else {
+            qDebug("configure sensor count failed!");
+        }*/
+
+        emit this->configureCountCallback(result->success(), count);
     },
     [=](){
         emit this->configureCountCallback(false);
@@ -126,18 +110,59 @@ void GatherController::configureSensorCount(int addr, int count, int timeout)
     });
 }
 
+void GatherController::configureSensorAddr(int index, int addr, int timeout)
+{
+    auto reply = protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr), timeout);
+    reply->subscribe([=](std::shared_ptr<IContent> result){
+        QString errorMsg = result->success() ? "" : tr("Configure address failed!");
+        QVariantMap map;
+        map.insert(QLatin1String("success"), result->success());
+        map.insert(QLatin1String("addr"), addr);
+        map.insert(QLatin1String("errorMsg"), errorMsg);
+        if (result == nullptr) {
+            qDebug("Unknow frame data");
+        } else if (result->functionCode() == eYBFunCode::NAKCode) {
+            qDebug("NAK Error");
+        }
+
+        emit this->configureSensorAddrCallback(index, map);
+    }, [=](){
+        emit this->configureSensorAddrCallback(index, {{QString("success"), false}, {QString("errorMsg"), tr("Configure address timeout!")}});
+    });
+}
+
+void GatherController::configureSensorState(int index, int addr, int state, int timeout)
+{
+    auto reply = protocol()->setStatus(static_cast<uint8_t>(state & 0xFF), static_cast<uint16_t>(addr), timeout);
+    reply->subscribe([=](std::shared_ptr<IContent> result){
+        QString errorMsg = result->success() ? "" : tr("Configure state failed!");
+        QVariantMap map;
+        map.insert(QLatin1String("success"), result->success());
+        map.insert(QLatin1String("addr"), addr);
+        map.insert(QLatin1String("errorMsg"), errorMsg);
+        if (result == nullptr) {
+            qDebug("Unknow frame data");
+        } else if (result->functionCode() == eYBFunCode::NAKCode) {
+            qDebug("NAK Error");
+        }
+        emit this->configureSensorStateCallback(index, map);
+    }, [=](){
+        emit this->configureSensorStateCallback(index, {{QString("success"), false}, {QString("errorMsg"), tr("Configure state timeout!")}});
+    });
+}
+
 void GatherController::querySensorVersion(int index, int addr, int timeout)
 {
-    if (!canDoOperate()) {
-        return;
-    }
     auto reply = protocol()->queryVersion(eYBFrameType::YBSensor, static_cast<uint16_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
-            emit this->querySensorVersionCallback(
-                    true, index, QString::fromStdString(result->hardwareVersion())
-                    , QString::fromStdString(result->softwareVersion()) , QString::fromStdString(result->productDescript())
-            );
+            QVariantMap map;
+            map.insert(QLatin1String("success"), true);
+            map.insert(QLatin1String("hardware"), QString::fromStdString(result->hardwareVersion()));
+            map.insert(QLatin1String("software"), QString::fromStdString(result->softwareVersion()));
+            map.insert(QLatin1String("product"), QString::fromStdString(result->productDescript()));
+            map.insert(QLatin1String("errorMsg"), QString());
+            emit this->querySensorVersionCallback(index, map);
             return ;
         }
         if (result == nullptr) {
@@ -146,24 +171,24 @@ void GatherController::querySensorVersion(int index, int addr, int timeout)
         if (result->functionCode() == eYBFunCode::NAKCode) {
             qDebug("NAK Error");
         }
-        emit this->querySensorVersionCallback(false, index);
+        emit this->querySensorVersionCallback(index, {{QString("success"), false}, {QString("errorMsg"), tr("Query version failed!")}});
 
     }, [this, index](){
-        emit this->querySensorVersionCallback(false, index);
-        qDebug("query sensor version timeout!");
+        emit this->querySensorVersionCallback(index, {{QString("success"), false}, {QString("errorMsg"), tr("Query version timeout!")}});
     });
 }
 
 void GatherController::querySensorState(int index, int addr, int timeout)
 {
-    if (!canDoOperate()) {
-        return;
-    }
-
     auto reply = protocol()->queryStatus(static_cast<uint16_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
-            emit this->querySensorStateCallback(true, index, result->currentStatusCode(), result->configedStatusCode());
+            QVariantMap map;
+            map.insert(QLatin1String("success"), true);
+            map.insert(QLatin1String("curState"), result->currentStatusCode());
+            map.insert(QLatin1String("confState"), result->configedStatusCode());
+            map.insert(QLatin1String("errorMsg"), QString());
+            emit this->querySensorStateCallback(index, map);
             return ;
         }
         if (result == nullptr) {
@@ -172,10 +197,9 @@ void GatherController::querySensorState(int index, int addr, int timeout)
         if (result->functionCode() == eYBFunCode::NAKCode) {
             qDebug("NAK Error");
         }
-        emit this->querySensorStateCallback(false, index);
+        emit this->querySensorStateCallback(index, {{QString("success"), false}, {QString("errorMsg"), tr("Query state failed!")}});
     }, [this, index](){
-        emit this->querySensorStateCallback(false, index);
-        qDebug("query sensor status timeout!");
+        emit this->querySensorStateCallback(index, {{QString("success"), false}, {QString("errorMsg"), tr("Query state timeout!")}});
     });
 }
 
@@ -190,6 +214,5 @@ YBProtocolChannel *GatherController::protocol()
 }
 bool GatherController::canDoOperate()
 {
-    bool active = isConnected();
-    return active;
+    return isConnected();
 }

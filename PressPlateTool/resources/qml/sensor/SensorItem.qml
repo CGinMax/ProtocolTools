@@ -15,32 +15,66 @@ Qaterial.Card {
 
     RowLayout {
         anchors.fill: parent
+        Loader {
+            id: loader_err_icon
+            asynchronous: true
+            sourceComponent: Qaterial.ColorIcon {
+                id: icon_inner
+                property bool hovered: false
+                visible: error_message !== ""
+                source: "image://faicon/times-circle"
+                color: "red"
+                ToolTip {
+                    visible: parent.hovered
+                    text: error_message
+                }
+            }
+            Layout.leftMargin: 5
+            Layout.preferredWidth: 20
+            Layout.preferredHeight: 20
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered: parent.item.hovered = true
+                onExited: parent.item.hovered = false
+            }
+        }
+
+
+
         Qaterial.Label {
             id: label_name
             text: sensor_name
             font.pixelSize: 18
             font.bold: true
-
-            Layout.leftMargin: 5
+            horizontalAlignment: Text.AlignRight
+            Layout.preferredWidth: 90
         }
 
         Row {
-            Qaterial.TextField {
-                id: input_address
-                title: qsTr("Address")
-                text: address
-                validator: IntValidator{ bottom: 1 }
-            }
-            LoadingButton {
-                id: btn_configure_addr
-                iconSource: "image://faicon/arrow-alt-circle-left"
-                iconSize: 18
-                onClickStarted: {
-                    _root.configureSensorAddr(parseInt(input_address.text))
+            Loader {
+                id: loader_input_address
+                asynchronous: true
+                sourceComponent: Qaterial.TextField {
+                    title: qsTr("Address")
+                    text: address
+                    validator: IntValidator{ bottom: 1 }
                 }
-                ToolTip{
-                    visible: parent.hovered
-                    text: qsTr("Configure sensor address")
+            }
+
+            Loader {
+                id: loader_btn_configure_addr
+                asynchronous: true
+                sourceComponent: LoadingButton {
+                    iconSource: "image://faicon/arrow-alt-circle-left"
+                    iconSize: 18
+                    onClickStarted: {
+                        _root.configureSensorAddr(parseInt(loader_input_address.item.text))
+                    }
+                    ToolTip{
+                        visible: parent.hovered
+                        text: qsTr("Configure sensor address")
+                    }
                 }
             }
         }
@@ -49,92 +83,136 @@ Qaterial.Card {
             ColumnLayout {
                 Layout.preferredWidth: 80
                 Layout.fillHeight: true
-                StateLabel {
+                Loader {
+                    asynchronous: true
                     Layout.preferredHeight: 30
-                    value: current_status
-                    text: current_status_text
-                    ToolTip{
-                        visible: parent.hovered
-                        text: qsTr("Sensor current state")
+                    sourceComponent: StateLabel {
+                        value: current_status
+                        text: current_status_text
+                        ToolTip{
+                            visible: parent.hovered
+                            text: qsTr("Sensor current state")
+                        }
                     }
                 }
-                StateLabel {
+                Loader {
+                    asynchronous: true
                     Layout.preferredHeight: 30
-                    value: configured_status
-                    text: configured_status_text
-                    ToolTip{
-                        visible: parent.hovered
-                        text: qsTr("Sensor configed state")
+                    sourceComponent: StateLabel {
+                        value: configured_status
+                        text: configured_status_text
+                        ToolTip{
+                            visible: parent.hovered
+                            text: qsTr("Sensor configed state")
+                        }
                     }
                 }
             }
-            LoadingButton {
-                id: btn_query_status
-                iconSource: "image://faicon/search"
-                iconSize: 18
-                onClickStarted: {
-                    emit: _root.querySensorStatus(parseInt(input_address.text))
-                }
-                ToolTip{
-                    visible: parent.hovered
-                    text: qsTr("Query sensor status")
+            Loader {
+                id: loader_btn_query_state
+                asynchronous: true
+                sourceComponent: LoadingButton {
+                    iconSource: "image://faicon/search"
+                    iconSize: 18
+                    onClickStarted: {
+                        emit: _root.querySensorStatus(parseInt(loader_input_address.item.text))
+                    }
+                    ToolTip{
+                        visible: parent.hovered
+                        text: qsTr("Query sensor status")
+                    }
                 }
             }
         }
         Row {
-            Qaterial.ComboBox {
-                id: cbb_configure_status
-                borderColor: "gray"
-                model: [qsTr("Open"), qsTr("Close"), qsTr("Unconfigured")]
-            }
-            LoadingButton {
-                id: btn_configure_state
-                iconSource: "image://faicon/arrow-alt-circle-left"
-                iconSize: 18
-                onClickStarted: {
-                    emit: _root.configureSensorStatus(parseInt(input_address.text), cbb_configure_status.currentIndex != 2 ? cbb_configure_status.currentIndex : 0xFF)
+            Loader {
+                id: loader_cbb_configure_state
+                asynchronous: true
+                sourceComponent: Qaterial.ComboBox {
+                    borderColor: "gray"
+                    model: [qsTr("Open"), qsTr("Close"), qsTr("Unconfigured")]
                 }
-                ToolTip{
-                    visible: parent.hovered
-                    text: qsTr("Configure sensor state")
+            }
+
+
+            Loader {
+                id: loader_btn_configure_state
+                asynchronous: true
+                sourceComponent: LoadingButton {
+                    iconSource: "image://faicon/arrow-alt-circle-left"
+                    iconSize: 18
+                    onClickStarted: {
+                        emit: _root.configureSensorStatus(parseInt(loader_input_address.item.text),
+                                                          loader_cbb_configure_state.item.currentIndex !== 2 ?
+                                                          loader_cbb_configure_state.item.currentIndex : 0xFF)
+                    }
+                    ToolTip{
+                        visible: parent.hovered
+                        text: qsTr("Configure sensor state")
+                    }
                 }
             }
         }
 
         RowLayout {
-            Chip {
-                id: chip_hardware_version
-                text: hardware_version
+            Column {
+                RowLayout {
+                    spacing: 10
+                    Chip {
+                        id: chip_hardware_version
+                        text: hardware_version
 
-            }
-            Chip {
-                id: chip_software_version
-                text: software_version
-            }
-            LoadingButton {
-                id: btn_query_version
-                iconSource: "image://faicon/search"
-                iconSize: 18
-                onClickStarted: {
-                    emit: _root.querySensorVersion(parseInt(input_address.text))
+                    }
+                    Chip {
+                        id: chip_software_version
+                        text: software_version
+                    }
+                    Loader {
+                        id: loader_btn_query_version
+                        asynchronous: true
+                        Layout.preferredWidth: 32
+                        Layout.preferredHeight: 32
+                        sourceComponent: LoadingButton {
+                            iconSource: "image://faicon/search"
+                            iconSize: 18
+                            onClickStarted: {
+                                emit: _root.querySensorVersion(parseInt(loader_input_address.item.text))
+                            }
+                            ToolTip{
+                                visible: parent.hovered
+                                text: qsTr("Query sensor version")
+                            }
+                        }
+                    }
                 }
-                ToolTip{
-                    visible: parent.hovered
-                    text: qsTr("Query sensor version")
+
+                Chip {
+                    text: qsTr("Product Description")
+                    ToolTip {
+                        visible: parent.hovered
+                        text: product_description
+                    }
                 }
             }
         }
 
-        Qaterial.RoundButton {
-            id: btn_delete
-            icon.source: "image://faicon/trash"
-            icon.width: 18
-            icon.height: 18
-            icon.color: "red"
-            onClicked: {
-                list_model.removeSensor(index)
+        Loader {
+            id: loader_btn_delete
+            asynchronous: true
+            width: 18
+            height: 18
+            sourceComponent: Qaterial.RoundButton {
+                icon.source: "image://faicon/trash"
+                icon.width: 18
+                icon.height: 18
+//                icon.color: "red"
+                onClicked: {
+                    list_model.removeSensor(index)
+                }
             }
         }
+
+
     }
 
     function querySensorVersion(addr) {
@@ -172,45 +250,46 @@ Qaterial.Card {
     }
 
     function changeVersionState(success) {
-        btn_query_version.changeState(success)
+        loader_btn_query_version.item.changeState(success)
     }
     function changeAddressState(success) {
-        btn_configure_addr.changeState(success)
+        loader_btn_configure_addr.item.changeState(success)
     }
 
     function changeQueryStatusState(success) {
-        btn_query_status.changeState(success)
+        loader_btn_query_state.item.changeState(success)
     }
 
     function changeConfigureStatusState(success) {
-        btn_configure_state.changeState(success)
+        loader_btn_configure_state.item.changeState(success)
     }
 
     SensorController {
         id: controller_sensor
-        onQueryVersionCallback: function(success, hardware, software, product) {
-            if (success) {
-                list_model.setVersion(index, hardware, software, product);
+        onQueryVersionCallback: function(result/* success, hardware, software, product*/) {
+            if (result.success) {
+                list_model.setVersion(index, result.hardware, result.software, result.product);
             }
-            changeVersionState(success);
+            changeVersionState(result.success);
         }
-        onQueryStateCallback: function(success, curState, confState) {
-            if (success) {
-                list_model.setState(index, curState, confState);
+        onQueryStateCallback: function(result/*success, curState, confState*/) {
+            if (result.success) {
+                list_model.setState(index, result.curState, result.confState);
             }
-            changeQueryStatusState(success);
+            changeQueryStatusState(result.success);
         }
-        onConfigureAddressCallback: function(success, addr){
-            if (success) {
-                list_model.setAddress(index, addr);
+        onConfigureAddressCallback: function(result/*success, addr*/){
+            if (result.success) {
+                list_model.setAddress(index, result.addr);
             }
-            changeAddressState(success);
+            changeAddressState(result.success);
+            _root.querySensorStatus(result.addr);
         }
-        onConfigureStateCallback: function(success, state) {
-            if (success) {
-                list_model.setConfState(index, state);
+        onConfigureStateCallback: function(result/*success, state*/) {
+            if (result.success) {
+                list_model.setConfState(index, result.state);
             }
-            changeConfigureStatusState(success);
+            changeConfigureStatusState(result.success);
         }
     }
 }

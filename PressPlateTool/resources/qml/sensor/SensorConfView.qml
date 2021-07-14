@@ -55,9 +55,7 @@ Rectangle {
                 text: qsTr("Automatic query sensor version")
                 enabled: listview_sensor.count !== 0
                 onClicked: {
-                    auto_query_dialog.text = qsTr("Query sensor version...");
-                    auto_query_dialog.open();
-
+                    auto_query_dialog.openDialog(qsTr("Querying sensor version.\nQuery sensor address is "), model_sensor_configure.getAddr(0))
                     _root.gatherController.querySensorVersion(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
                 }
             }
@@ -66,9 +64,64 @@ Rectangle {
                 text: qsTr("Automatic query sensor status")
                 enabled: listview_sensor.count !== 0
                 onClicked: {
-                    auto_query_dialog.text = qsTr("Query sensor status...");
-                    auto_query_dialog.open();
+                    auto_query_dialog.openDialog(qsTr("Querying sensor state.\nQuery sensor address is "), model_sensor_configure.getAddr(0));
                     _root.gatherController.querySensorState(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
+                }
+            }
+
+            Qaterial.RoundButton {
+                id: btn_delete_all
+                enabled: listview_sensor.count !== 0
+                icon.source: "image://faicon/trash"
+                icon.width: 18
+                icon.height: 18
+                icon.color: enabled ? "red" : Qaterial.Style.disabledTextColorLight
+                onClicked: {
+                    model_sensor_configure.removeAll();
+                }
+            }
+        }
+        Row {
+            spacing: 5
+            leftPadding: 10
+            Qaterial.TextField {
+                id: input_begin_addr
+                enabled: listview_sensor.count !== 0
+                title: qsTr("Begin Address")
+                text: "1"
+            }
+            Qaterial.TextField {
+                id: input_end_addr
+                enabled: listview_sensor.count !== 0
+                title: qsTr("End Address")
+                text: "2"
+            }
+            Qaterial.Button {
+                id: btn_configure_all_addr
+                enabled: listview_sensor.count !== 0
+                text: qsTr("Automatic configure sensor address")
+                onClicked: {
+                    auto_query_dialog.openDialog(qsTr("Configuring sensors address.\nConfiguration Address is "), parseInt(input_begin_addr.text));
+                    _root.gatherController.configureSensorAddr(0, parseInt(input_begin_addr.text), ComConfig.sensorTimeout);
+                }
+            }
+
+            Qaterial.ComboBox {
+                id: cbb_configure_state
+                enabled: listview_sensor.count !== 0
+                borderColor: "gray"
+                model: [qsTr("Open"), qsTr("Close"), qsTr("Unconfigured")]
+                function value() {
+                    return (currentIndex < 2 || currentIndex >= 0) ? currentIndex : 0xFF
+                }
+            }
+            Qaterial.Button {
+                id: btn_configure_all_state
+                enabled: listview_sensor.count !== 0
+                text: qsTr("Automatic configure sensor state")
+                onClicked: {
+                    auto_query_dialog.openDialog(qsTr("Configuring sensors state.\nConfiguration Sensor Address is "), model_sensor_configure.getAddr(0));
+                    _root.gatherController.configureSensorState(0, model_sensor_configure.getAddr(0), cbb_configure_state.value(), ComConfig.sensorTimeout);
                 }
             }
         }
@@ -77,7 +130,6 @@ Rectangle {
             id: listview_sensor
             property int delegateHeight: 80
             clip: true
-            cacheBuffer: count * delegateHeight
 
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -105,38 +157,89 @@ Rectangle {
     }
     Connections {
         target: gatherController
-        onQuerySensorVersionCallback: function(success, index, hardware, software, product) {
-            // stop by click cancel
+        onConfigureSensorAddrCallback: function(index, result) {
             if (!auto_query_dialog.isRun) {
                 return;
             }
-
-            if (success) {
-                model_sensor_configure.setVersion(index, hardware, software, product);
+            if (result.success) {
+                model_sensor_configure.setAddress(index, result.addr);
+            } else {
+                model_sensor_configure.setErrorMessage(index, result.errorMsg);
             }
-            auto_query_dialog.addModelData(success, model_sensor_configure.getName(index));
 
+            auto_query_dialog.addModelData(result.success, model_sensor_configure.getName(index));
+            index++;
+            result.addr++;
+            if (index < listview_sensor.count && result.addr <= parseInt(input_end_addr.text)) {
+                _root.gatherController.configureSensorAddr(index, result.addr, ComConfig.sensorTimeout);
+                auto_query_dialog.updateAddress(result.addr);
+            } else {
+                auto_query_dialog.finished();
+                // query state when finish configure all address
+                _root.gatherController.querySensorState(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
+            }
+        }
+
+        onConfigureSensorStateCallback: function(index, result/*success, index, state*/) {
+            if(!auto_query_dialog.isRun){
+                return;
+            }
+            if (result.success){
+                model_sensor_configure.setConfState(index, result.state);
+            } else {
+                model_sensor_configure.setErrorMessage(index, result.errorMsg)
+            }
+
+            auto_query_dialog.addModelData(result.success, model_sensor_configure.getName(index));
             index++;
             if (index < listview_sensor.count) {
-                _root.gatherController.querySensorVersion(index, model_sensor_configure.getAddr(index), ComConfig.sensorTimeout);
+                _root.gatherController.configureSensorState(index, model_sensor_configure.getAddr(index), result.state, ComConfig.sensorTimeout);
+                auto_query_dialog.updateAddress(model_sensor_configure.getAddr(index));
             } else {
                 auto_query_dialog.finished();
             }
         }
-        onQuerySensorStateCallback: function(success, index, curState, configuredState) {
+
+        onQuerySensorVersionCallback: function(index, result/*success, index, hardware, software, product*/) {
             // stop by click cancel
             if (!auto_query_dialog.isRun) {
                 return;
             }
 
-            if (success) {
-                model_sensor_configure.setState(index, curState, configuredState);
+            if (result.success) {
+                model_sensor_configure.setVersion(index, result.hardware, result.software, result.product);
+            } else {
+                model_sensor_configure.setErrorMessage(index, result.errorMsg);
             }
-            auto_query_dialog.addModelData(success, model_sensor_configure.getName(index));
+
+            auto_query_dialog.addModelData(result.success, model_sensor_configure.getName(index));
+
+            index++;
+            if (index < listview_sensor.count) {
+                _root.gatherController.querySensorVersion(index, model_sensor_configure.getAddr(index), ComConfig.sensorTimeout);
+                auto_query_dialog.updateAddress(model_sensor_configure.getAddr(index));
+            } else {
+                auto_query_dialog.finished();
+            }
+        }
+        onQuerySensorStateCallback: function(index, result/*success, index, curState, configuredState*/) {
+            // stop by click cancel
+            if (!auto_query_dialog.isRun) {
+                return;
+            }
+
+            if (result.success) {
+                model_sensor_configure.setState(index, result.curState, result.configuredState);
+            } else {
+                model_sensor_configure.setErrorMessage(index, errorMsg);
+            }
+
+            auto_query_dialog.addModelData(result.success, model_sensor_configure.getName(index));
 
             index++;
             if (index < listview_sensor.count) {
                 _root.gatherController.querySensorState(index, model_sensor_configure.getAddr(index), ComConfig.sensorTimeout);
+                auto_query_dialog.updateAddress(model_sensor_configure.getAddr(index));
             } else {
                 auto_query_dialog.finished();
             }

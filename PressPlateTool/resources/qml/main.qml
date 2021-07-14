@@ -11,7 +11,7 @@ import "components"
 
 Qaterial.ApplicationWindow {
     id: main_window
-    width: 960
+    width: 1024
     height: 720
 
     title: qsTr("Press Plate Tool")

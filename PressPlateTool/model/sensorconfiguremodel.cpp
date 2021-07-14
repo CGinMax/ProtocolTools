@@ -36,6 +36,8 @@ QVariant SensorConfigureModel::data(const QModelIndex &index, int role) const
     auto data = _ybSensorDataList.at(index.row());
 
     switch (role) {
+    case SensorConfigureModel::ErrorMessage:
+        return data->errorMessage();
     case SensorConfigureModel::Name:
         return data->name();
     case SensorConfigureModel::HardwareVersion:
@@ -64,6 +66,7 @@ QVariant SensorConfigureModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> SensorConfigureModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
+    roles.insert(SensorConfigureModel::ErrorMessage, QByteArrayLiteral("error_message"));
     roles.insert(SensorConfigureModel::Name, QByteArrayLiteral("sensor_name"));
     roles.insert(SensorConfigureModel::HardwareVersion, QByteArrayLiteral("hardware_version"));
     roles.insert(SensorConfigureModel::SoftwareVersion, QByteArrayLiteral("software_version"));
@@ -114,6 +117,7 @@ void SensorConfigureModel::setVersion(int idx, const QString &hardware, const QS
     _ybSensorDataList.at(idx)->setHardwareVersion(hardware);
     _ybSensorDataList.at(idx)->setSoftwareVersion(software);
     _ybSensorDataList.at(idx)->setProductDesc(product);
+    _ybSensorDataList.at(idx)->setErrorMessage(QString());
     emit dataChanged(index(idx, 0), index(idx, 0));
 }
 
@@ -124,6 +128,7 @@ void SensorConfigureModel::setState(int idx, int curState, int confState)
     }
     _ybSensorDataList.at(idx)->setCurrentStatus(YBStatus(curState));
     _ybSensorDataList.at(idx)->setConfigedStatus(YBStatus(confState));
+    _ybSensorDataList.at(idx)->setErrorMessage(QString());
     emit dataChanged(index(idx, 0), index(idx, 0));
 }
 
@@ -132,7 +137,8 @@ void SensorConfigureModel::setAddress(int idx, int addr)
     if (outOfRange(idx)) {
         return;
     }
-    _ybSensorDataList.at(idx)->setAddr(addr);
+    _ybSensorDataList.at(idx)->setAddr(static_cast<uint8_t>(addr));
+    _ybSensorDataList.at(idx)->setErrorMessage(QString());
     emit dataChanged(index(idx, 0), index(idx, 0));
 }
 
@@ -142,6 +148,16 @@ void SensorConfigureModel::setConfState(int idx, int state)
         return;
     }
     _ybSensorDataList.at(idx)->setConfigedStatus(YBStatus(state));
+    _ybSensorDataList.at(idx)->setErrorMessage(QString());
+    emit dataChanged(index(idx, 0), index(idx, 0));
+}
+
+void SensorConfigureModel::setErrorMessage(int idx, const QString &msg)
+{
+    if (outOfRange(idx)) {
+        return;
+    }
+    _ybSensorDataList.at(idx)->setErrorMessage(msg);
     emit dataChanged(index(idx, 0), index(idx, 0));
 }
 

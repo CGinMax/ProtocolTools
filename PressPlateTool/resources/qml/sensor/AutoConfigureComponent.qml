@@ -6,9 +6,10 @@ import Qaterial 1.0 as Qaterial
 
 Qaterial.ModalDialog {
     id: _root
-    property string text: ""
+    property string operText: ""
     property bool isFinish: false
     property bool isRun: visible
+    property int curAddr: 0
     property color failedBg: "#FFBEC0"
     property color failedFg: "#E84B55"
     property color successBg: "#ACF5D2"
@@ -18,16 +19,15 @@ Qaterial.ModalDialog {
         id: _content_item
         RowLayout {
             anchors.fill: parent
-            spacing: 40
+            spacing: 20
             ColumnLayout {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Text {
-                    Layout.alignment: Qt.AlignCenter
-                    id: text_info
-                    text: _root.text
-                    font.pixelSize: 18
+                    text:_root.operText + _root.curAddr
+                    font.pixelSize: 16
+                    font.bold: true
                 }
                 Loader {
                     id: loader_busy
@@ -81,7 +81,7 @@ Qaterial.ModalDialog {
                 anchors.fill: parent
                 Text {
                     id: text_finish
-                    text: qsTr("Automatic query finish!")
+                    text: qsTr("Automatic operation finish!")
                     font.pixelSize: 18
                     font.bold: true
                     Layout.fillWidth: true
@@ -141,6 +141,12 @@ Qaterial.ModalDialog {
         }
     }
 
+    function openDialog(text, addr) {
+        _root.operText = text;
+        _root.curAddr = addr;
+        open();
+    }
+
     function drop() {
         listmodel_result.clear();
         listmodel_finish.clear();
@@ -156,9 +162,10 @@ Qaterial.ModalDialog {
             if (!listmodel_result.get(i).success) {
                 rect_finished.add_finish(listmodel_result.get(i).sensor_name);
             }
-
         }
-
+    }
+    function updateAddress(addr) {
+        _root.curAddr = addr;
     }
 }
 

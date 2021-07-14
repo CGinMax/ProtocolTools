@@ -7,7 +7,7 @@ Qaterial.RoundButton {
     id: _root
 
     property url iconSource: undefined
-    property alias iconSize: icon_inner.iconSize
+    property double iconSize: 24
 
     signal clickStarted()
 
@@ -17,11 +17,16 @@ Qaterial.RoundButton {
         anchors.fill: parent
     }
 
-    Qaterial.ColorIcon {
-        id: icon_inner
-        source: _root.iconSource
+    Loader{
+        id: loader_icon_inner
+        asynchronous: true
         anchors.fill: parent
+        sourceComponent: Qaterial.ColorIcon {
+            id: icon_inner
+            source: _root.iconSource
+            iconSize: _root.iconSize
 
+        }
     }
 
     onClicked: {
@@ -29,25 +34,27 @@ Qaterial.RoundButton {
         emit: _root.clickStarted()
     }
     function createBusyLoading() {
-        icon_inner.visible = false
+        loader_icon_inner.item.visible = false
         loader_state.sourceComponent = Qt.createComponent("qrc:/Qaterial/BusyIndicator.qml");
     }
 
     function changeState(success) {
-        loader_state.sourceComponent.destroy()
-        loader_state.sourceComponent = null
-        if (success) {
-            icon_inner.source = "image://faicon/check-circle"
-            icon_inner.color = "green"
-        } else {
-            icon_inner.source = "image://faicon/times-circle"
-            icon_inner.color = "red"
+        if (loader_state.sourceComponent != null) {
+            loader_state.sourceComponent.destroy()
+            loader_state.sourceComponent = null
         }
-        icon_inner.visible = true
+        if (success) {
+            loader_icon_inner.item.source = "image://faicon/check-circle"
+            loader_icon_inner.item.color = "green"
+        } else {
+            loader_icon_inner.item.source = "image://faicon/times-circle"
+            loader_icon_inner.item.color = "red"
+        }
+        loader_icon_inner.item.visible = true
 
         delay(2000, function(){
-            icon_inner.source = _root.iconSource
-            icon_inner.color = "black"
+            loader_icon_inner.item.source = _root.iconSource
+            loader_icon_inner.item.color = "black"
         })
     }
     function new_timer() {

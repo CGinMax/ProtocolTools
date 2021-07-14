@@ -8,7 +8,8 @@ class SensorConfigureModel : public QAbstractListModel
 {
     Q_OBJECT
     enum RoleEnum {
-        Name = Qt::UserRole,
+        ErrorMessage = Qt::UserRole,
+        Name,
         HardwareVersion,
         SoftwareVersion,
         ProductDesc,
@@ -33,6 +34,7 @@ public:
     Q_INVOKABLE void setState(int idx, int curState, int confState);
     Q_INVOKABLE void setAddress(int idx, int addr);
     Q_INVOKABLE void setConfState(int idx, int state);
+    Q_INVOKABLE void setErrorMessage(int idx, const QString& msg);
     Q_INVOKABLE QString getName(int idx);
     Q_INVOKABLE int getAddr(int idx);
 

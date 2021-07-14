@@ -17,5 +17,7 @@
         <file>qml/gather/ComConfigureView.qml</file>
         <file>qml/data/qmldir</file>
         <file>qml/components/StateLabel.qml</file>
+        <file>translations/qt_zh_CN.qm</file>
+        <file>font/OPPOSans-M.ttf</file>
     </qresource>
 </RCC>

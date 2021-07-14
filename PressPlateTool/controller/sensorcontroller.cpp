@@ -24,17 +24,15 @@ bool SensorController::isConnected()
 
 void SensorController::querySensorVersion(int addr, int timeout)
 {
-    if (!canDoOperate()) {
-        return;
-    }
-
     auto reply = _controller->protocol()->queryVersion(eYBFrameType::YBSensor, static_cast<uint16_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
-            emit this->queryVersionCallback(
-                    true, QString::fromStdString(result->hardwareVersion())
-                    , QString::fromStdString(result->softwareVersion()) , QString::fromStdString(result->productDescript())
-            );
+            QVariantMap map;
+            map.insert(QLatin1String("success"), true);
+            map.insert(QLatin1String("hardware"), QString::fromStdString(result->hardwareVersion()));
+            map.insert(QLatin1String("software"), QString::fromStdString(result->softwareVersion()));
+            map.insert(QLatin1String("product"), QString::fromStdString(result->productDescript()));
+            emit this->queryVersionCallback(map);
             return;
         }
         if (result == nullptr) {
@@ -43,25 +41,24 @@ void SensorController::querySensorVersion(int addr, int timeout)
         if (result->functionCode() == eYBFunCode::NAKCode) {
             qDebug("NAK Error");
         }
-        emit this->queryVersionCallback(false);
+
+        emit this->queryVersionCallback({{QString("success"), false}, {QString("errorMsg"), tr("Query version failed!")}});
 
     }, [this](){
-        emit this->queryVersionCallback(false);
-        qDebug("query sensor version timeout!");
+        emit this->queryVersionCallback({{QString("success"), false}, {QString("errorMsg"), tr("Query version timeout!")}});
     });
 }
 
 void SensorController::querySensorStatus(int addr, int timeout)
 {
-    if (!canDoOperate()) {
-        return;
-    }
-
     auto reply = _controller->protocol()->queryStatus(static_cast<uint16_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode) {
-            emit this->queryStateCallback(true, result->currentStatusCode(), result->configedStatusCode());
-            qDebug("curstatus:%d,config:%d", result->currentStatusCode(), result->configedStatusCode());
+            QVariantMap map;
+            map.insert(QLatin1String("success"), true);
+            map.insert(QLatin1String("curState"), result->currentStatusCode());
+            map.insert(QLatin1String("confState"), result->configedStatusCode());
+            emit this->queryStateCallback(map);
             return;
         }
         if (result == nullptr) {
@@ -70,73 +67,50 @@ void SensorController::querySensorStatus(int addr, int timeout)
         if (result->functionCode() == eYBFunCode::NAKCode) {
             qDebug("NAK Error");
         }
-        emit this->queryStateCallback(false);
+        emit this->queryStateCallback({{QString("success"), false}, {QString("errorMsg"), tr("Query state failed!")}});
     }, [this](){
-        emit this->queryStateCallback(false);
-        qDebug("query sensor status timeout!");
+        emit this->queryStateCallback({{QString("success"), false}, {QString("errorMsg"), tr("Query state timeout!")}});
     });
 }
 
 void SensorController::configureSensorAddress(int addr, int timeout)
 {
-    if (!canDoOperate()) {
-        return;
-    }
-
     auto reply = _controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
-        if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode
-                && result->success()) {
-            emit this->configureAddressCallback(true, addr);
-            return;
-        }
-
+        QString errorMsg = result->success() ? "" : tr("Configure address failed!");
+        QVariantMap map;
+        map.insert(QLatin1String("success"), result->success());
+        map.insert(QLatin1String("addr"), addr);
+        map.insert(QLatin1String("errorMsg"), errorMsg);
         if (result == nullptr) {
             qDebug("Unknow frame data");
-        }
-        if (result->functionCode() == eYBFunCode::NAKCode) {
+        } else if (result->functionCode() == eYBFunCode::NAKCode) {
             qDebug("NAK Error");
         }
-        qDebug("set sensor address failed!");
-        emit this->configureAddressCallback(false);
+
+        emit this->configureAddressCallback(map);
     }, [this](){
-        emit this->configureAddressCallback(false);
-        qDebug("set sensor address timeout!");
+        emit this->configureAddressCallback({{QString("success"), false}, {QString("errorMsg"), tr("Configure address timeout!")}});
     });
 }
 
 void SensorController::configureSensorStatus(int addr, int status, int timeout)
 {
-    if (!canDoOperate()) {
-        return;
-    }
-
     auto reply = _controller->protocol()->setStatus(static_cast<uint8_t>(status & 0xFF), static_cast<uint16_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
-        if (result != nullptr && result->functionCode() != eYBFunCode::NAKCode
-                && result->success()) {
-            emit this->configureStateCallback(true, status);
-            qDebug("curstatus:%d", status);
-            return;
-        }
+        QString errorMsg = result->success() ? "" : tr("Configure state failed!");
+        QVariantMap map;
+        map.insert(QLatin1String("success"), result->success());
+        map.insert(QLatin1String("state"), status);
+        map.insert(QLatin1String("errorMsg"), errorMsg);
         if (result == nullptr) {
             qDebug("Unknow frame data");
-
-        }
-        if (result->functionCode() == eYBFunCode::NAKCode) {
+        } else if (result->functionCode() == eYBFunCode::NAKCode) {
             qDebug("NAK Error");
-
         }
 
-        qDebug("change status failed!");
-        emit this->configureStateCallback(false);
+        emit this->configureStateCallback(map);
     }, [this](){
-        emit this->configureStateCallback(false);
-        qDebug("change status timeout!");
+        emit this->configureStateCallback({{QString("success"), false}, {QString("errorMsg"), tr("Configure state timeout!")}});
     });
-}
-
-bool SensorController::canDoOperate()
-{
-    return _controller->canDoOperate();
 }

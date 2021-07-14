@@ -22,15 +22,14 @@ public:
     Q_INVOKABLE void configureSensorStatus(int addr, int status, int timeout);
 
 signals:
-    void queryVersionCallback(bool success, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString());
-    void configureAddressCallback(bool success, int addr = 0);
-    void queryStateCallback(bool success, int curState = 0xFF, int confState = 0xFF);
-    void configureStateCallback(bool success, int state = 0xFF);
+    void queryVersionCallback(const QVariantMap& result/*bool success, const QString& errorMsg = QString(),  const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString()*/);
+    void configureAddressCallback(const QVariantMap& result/*bool success, const QString& errorMsg = QString(), int addr = 0*/);
+    void queryStateCallback(const QVariantMap& result/*bool success, const QString& errorMsg = QString(), int curState = 0xFF, int confState = 0xFF*/);
+    void configureStateCallback(const QVariantMap& result/*bool success, const QString& errorMsg = QString(), int state = 0xFF*/);
 
 public slots:
 
 private:
-    bool canDoOperate();
     // no delete
     GatherController* _controller;
 };
