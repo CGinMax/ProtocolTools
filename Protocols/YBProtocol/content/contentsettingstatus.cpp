@@ -10,7 +10,7 @@ ContentSettingStatus::ContentSettingStatus(uint8_t data)
 std::string ContentSettingStatus::toString(bool isSend)
 {
 
-    std::string result = u8"设定状态:";
+    std::string result = u8",设定状态:";
     if (isSend) {
         switch (m_status) {
         case 0x00:

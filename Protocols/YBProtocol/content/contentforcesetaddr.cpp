@@ -12,7 +12,7 @@ ContentForceSetAddr::ContentForceSetAddr(uint8_t low, uint8_t high)
 std::string ContentForceSetAddr::toString(bool isSend)
 {
     (void)isSend;
-    std::string result = u8"设定从机地址=";
+    std::string result = u8",设定从机地址=";
     result += Convert::num2HexString(m_addr);
     return result;
 }

@@ -13,7 +13,7 @@ std::string ContentQueryAddr::toString(bool isSend)
         return std::string();
     }
 
-    std::string result = u8"查询地址=";
+    std::string result = u8",查询地址=";
     result += std::to_string(m_addr);//hex
     return result;
 }

@@ -12,7 +12,7 @@ ContentNAKError::ContentNAKError(uint8_t errorFunctionCode, uint8_t errorNakCode
 std::string ContentNAKError::toString(bool isSend)
 {
     (void)isSend;
-    std::string result = u8"NAK错误, 错误功能码:";
+    std::string result = u8",NAK错误, 错误功能码:";
     result += Convert::num2HexString(m_errFunCode);//hex
     result += u8", NAK错误码:";
     result += Convert::num2HexString(m_nakFunCode);

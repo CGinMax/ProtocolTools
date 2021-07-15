@@ -9,7 +9,7 @@ ContentSetSensorNum::ContentSetSensorNum(uint8_t data)
 
 std::string ContentSetSensorNum::toString(bool isSend)
 {
-    std::string result = u8"设定传感器数量";
+    std::string result = u8",设定传感器数量";
     if (isSend) {
         result += "=" + std::to_string(m_num);
         return result;

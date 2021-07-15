@@ -127,7 +127,8 @@ void GatherController::configureSensorAddr(int index, int addr, int timeout)
 
         emit this->configureSensorAddrCallback(index, map);
     }, [=](){
-        emit this->configureSensorAddrCallback(index, {{QString("success"), false}, {QString("errorMsg"), tr("Configure address timeout!")}});
+        emit this->configureSensorAddrCallback(index, {{QString("success"), false}, {QString("addr"), addr},
+                                                       {QString("errorMsg"), tr("Configure address timeout!")}});
     });
 }
 
@@ -139,6 +140,7 @@ void GatherController::configureSensorState(int index, int addr, int state, int 
         QVariantMap map;
         map.insert(QLatin1String("success"), result->success());
         map.insert(QLatin1String("addr"), addr);
+        map.insert(QLatin1String("state"), state);
         map.insert(QLatin1String("errorMsg"), errorMsg);
         if (result == nullptr) {
             qDebug("Unknow frame data");
@@ -147,7 +149,8 @@ void GatherController::configureSensorState(int index, int addr, int state, int 
         }
         emit this->configureSensorStateCallback(index, map);
     }, [=](){
-        emit this->configureSensorStateCallback(index, {{QString("success"), false}, {QString("errorMsg"), tr("Configure state timeout!")}});
+        emit this->configureSensorStateCallback(index, {{QString("success"), false}, {QString("state"), state},
+                                                        {QString("errorMsg"), tr("Configure state timeout!")}});
     });
 }
 

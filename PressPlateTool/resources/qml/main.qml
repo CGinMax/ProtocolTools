@@ -15,6 +15,7 @@ Qaterial.ApplicationWindow {
     height: 720
 
     title: qsTr("Press Plate Tool")
+
     Qaterial.Page {
         anchors.fill: parent
         clip: true
@@ -45,7 +46,6 @@ Qaterial.ApplicationWindow {
             Old.TextArea {
                 id: edit_protocol
                 textFormat: TextEdit.RichText
-//                readOnly: true
             }
             Connections {
                 target: view_gather_conf.gatherController

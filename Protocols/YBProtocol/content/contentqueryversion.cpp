@@ -43,7 +43,7 @@ std::string ContentQueryVersion::toString(bool isSend)
     std::string result;
     uint8_t verLow = m_datas.at(0);
     uint8_t verHeigh = m_datas.at(1);
-    result += u8"硬件版本=" + std::to_string(verHeigh) + "." + std::to_string(verLow);
+    result += u8",硬件版本=" + std::to_string(verHeigh) + "." + std::to_string(verLow);
     verLow = m_datas.at(2);
     verHeigh = m_datas.at(3);
     result += u8", 软件版本=" + std::to_string(verHeigh) + "." + std::to_string(verLow);

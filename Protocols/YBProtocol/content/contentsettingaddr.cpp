@@ -10,7 +10,7 @@ ContentSettingAddr::ContentSettingAddr(uint8_t dataCode)
 
 std::string ContentSettingAddr::toString(bool isSend)
 {
-    std::string result = u8"设定地址";
+    std::string result = u8",设定地址";
     if (isSend) {
         result += "=" + Convert::num2HexString(m_addr);
         return result;

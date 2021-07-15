@@ -15,7 +15,7 @@ std::string ContentQueryStatus::toString(bool isSend)
         return std::string();
     }
 
-    std::string result = u8"目前状态=";
+    std::string result = u8",目前状态=";
     result += getStatusSafe(m_currentCode);
     result += ", 已配置的状态=";
     switch (m_setCode) {

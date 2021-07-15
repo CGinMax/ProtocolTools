@@ -25,7 +25,7 @@ Qaterial.Card {
                 source: "image://faicon/times-circle"
                 color: "red"
                 ToolTip {
-                    visible: parent.hovered
+                    visible: parent.hovered && parent.visible
                     text: error_message
                 }
             }
@@ -202,7 +202,7 @@ Qaterial.Card {
             width: 18
             height: 18
             sourceComponent: Qaterial.RoundButton {
-                icon.source: "image://faicon/trash"
+                icon.source: "image://faicon/trash-alt"
                 icon.width: 18
                 icon.height: 18
 //                icon.color: "red"
@@ -211,8 +211,6 @@ Qaterial.Card {
                 }
             }
         }
-
-
     }
 
     function querySensorVersion(addr) {

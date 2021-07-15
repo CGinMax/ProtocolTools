@@ -5,6 +5,20 @@
 #include "content/contentfactory.h"
 #include "ybprotocolexception.h"
 
+namespace FuncodeData {
+std::map<int, std::string> funcodeMap{
+    {eYBFunCode::NAKCode, u8"NAK错误"},
+    {eYBFunCode::SetStatusCode, u8"设定状态"},
+    {eYBFunCode::QueryStatusCode, u8"查询状态"},
+    {eYBFunCode::QueryVersionCode, u8"查询版本"},
+    {eYBFunCode::SetAddressCode, u8"设定地址"},
+    {eYBFunCode::SetSensorNumCode, u8"设定传感器数量"},
+    {eYBFunCode::UpgradeCode, u8"升级固件"},
+    {eYBFunCode::ForceSettingAddrCode, u8"强制设地址"},
+    {eYBFunCode::QueryAddrCode, u8"查询地址"},
+};
+}  // namespace FuncodeData
+
 const std::map<int, std::string> YBFrame::FRAME_TYPE_MAP{{0x02, u8"一匙通PC软件"}, {0x20, u8"压版采集器"}, {0x21, u8"压版传感器"}};
 
 const std::array<uint8_t, 4> YBFrame::HEADER_DATA = {0xEB, 0x90, 0xEB, 0x90};
@@ -66,7 +80,8 @@ std::string YBFrame::parseToString()
     strList.emplace_back(std::to_string(m_dstAddr));
 
     strList.emplace_back(u8", 功能码:");
-    strList.emplace_back(std::to_string(m_funCode));
+//    strList.emplace_back(std::to_string(m_funCode));
+    strList.emplace_back(FuncodeData::funcodeMap.at(m_funCode));
     strList.emplace_back(u8"(" + Convert::num2HexString(m_funCode) + u8")");
 
     strList.emplace_back(u8", 数据正文长度:");

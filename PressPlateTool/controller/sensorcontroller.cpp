@@ -89,8 +89,9 @@ void SensorController::configureSensorAddress(int addr, int timeout)
         }
 
         emit this->configureAddressCallback(map);
-    }, [this](){
-        emit this->configureAddressCallback({{QString("success"), false}, {QString("errorMsg"), tr("Configure address timeout!")}});
+    }, [=](){
+        emit this->configureAddressCallback({{QString("success"), false}, {QString("addr"), addr},
+                                             {QString("errorMsg"), tr("Configure address timeout!")}});
     });
 }
 
