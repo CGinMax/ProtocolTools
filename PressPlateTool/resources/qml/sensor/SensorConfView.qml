@@ -177,6 +177,11 @@ Rectangle {
                 gatherController: _root.gatherController
                 list_model: model_sensor_configure
             }
+             ScrollBar.vertical: ScrollBar {
+                 background: Rectangle{
+                     color: "transparent"
+                 }
+             }
         }
     }
     AutoConfigureComponent{

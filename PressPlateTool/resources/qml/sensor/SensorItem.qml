@@ -189,7 +189,7 @@ Qaterial.Card {
                 Chip {
                     text: qsTr("Product Description")
                     ToolTip {
-                        visible: parent.hovered
+                        visible: parent.hovered && product_description !== ""
                         text: product_description
                     }
                 }
