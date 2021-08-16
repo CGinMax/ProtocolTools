@@ -9,7 +9,7 @@ QT += core
 TARGET = Protocols
 TEMPLATE = lib
 
-CONFIG += c++11
+CONFIG += c++11 staticlib
 
 DEFINES += PROTOCOLS_LIBRARY
 

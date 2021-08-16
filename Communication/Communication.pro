@@ -5,7 +5,7 @@ QT += core network serialport
 TARGET = Communication
 TEMPLATE = lib
 
-CONFIG += c++11
+CONFIG += c++11 staticlib
 
 DEFINES += COMMUNICATION_LIBRARY
 
