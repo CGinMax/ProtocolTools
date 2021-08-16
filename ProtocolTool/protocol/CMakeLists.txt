@@ -1,5 +1,6 @@
+set(SUBDIR_NAME protocoltools_protocol)
 aux_source_directory(. PROTOCOL_SRC_DIR)
-add_library(protocol ${PROTOCOL_SRC_DIR})
+add_library(${SUBDIR_NAME} ${PROTOCOL_SRC_DIR})
 
 # target_sources(protocol
 # PRIVATE
@@ -20,10 +21,9 @@ add_subdirectory(interacte)
 add_subdirectory(nr)
 add_subdirectory(ut)
 
-target_include_directories(protocol PUBLIC ../network)
-target_include_directories(protocol PUBLIC ../ui)
-target_link_libraries(protocol PUBLIC Qt5::Core)
-target_link_libraries(protocol
+target_include_directories(${SUBDIR_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../ui)
+target_link_libraries(${SUBDIR_NAME} PUBLIC Qt5::Core Qt5::SerialPort)
+target_link_libraries(${SUBDIR_NAME}
 PRIVATE
     standard
     cycle

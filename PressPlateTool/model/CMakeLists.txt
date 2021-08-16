@@ -1,5 +1,5 @@
 # PressPlateTool
-set(SUBDIR_NAME model)
+set(SUBDIR_NAME pressplatetool_model)
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core

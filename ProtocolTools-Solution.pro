@@ -6,7 +6,7 @@ SUBDIRS += \
     spdlog \
     Communication \
     Protocols \
-#    ProtocolTools \
+    ProtocolTool \
     test\
     PressPlateTool
 

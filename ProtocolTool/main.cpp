@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     QFont font(fontFamilies.first());
     a.setFont(font);
     auto customTrans = new QTranslator();
-    customTrans->load(QLatin1String(":/translations/ProtocolTools_zh.qm"));
+    customTrans->load(QLatin1String(":/translations/ProtocolTool_zh.qm"));
     a.installTranslator(customTrans);
 
     auto systemTrans = new QTranslator();

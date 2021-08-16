@@ -8,4 +8,5 @@ PUBLIC
     Qt5::Widgets
     Qt5::Gui
     Qt5::Network
+    Qt5::SerialPort
 )

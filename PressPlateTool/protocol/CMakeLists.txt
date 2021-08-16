@@ -1,5 +1,5 @@
 
-set(SUBDIR_NAME protocol)
+set(SUBDIR_NAME pressplatetool_protocol)
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core

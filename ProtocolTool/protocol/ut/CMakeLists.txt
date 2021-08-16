@@ -4,7 +4,7 @@ add_library(ut STATIC ${UT_SRC_DIR})
 target_include_directories(ut PUBLIC ..)
 target_include_directories(ut PUBLIC ../standard)
 
-target_link_libraries(ut PUBLIC Qt5::Core)
+target_link_libraries(ut PUBLIC Qt5::Core Qt5::SerialPort)
 
 # target_sources(ut
 # PRIVATE

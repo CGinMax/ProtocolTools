@@ -61,23 +61,11 @@ LIBS += -L$${DESTDIR} -lCommunication
 LIBS += -L$${DESTDIR} -lProtocols
 LIBS += -L$${DESTDIR} -lQaterial
 
-win32-g++: {
-    PRE_TARGETDEPS += $$DESTDIR/libCommunication.a
-    PRE_TARGETDEPS += $$DESTDIR/libProtocols.a
-} else:win32:!win32-g++: {
-    PRE_TARGETDEPS += $$DESTDIR/libProtocols.a
-    PRE_TARGETDEPS += $$DESTDIR/libCommunication.a
-}
-else:unix:!macx: {
-    PRE_TARGETDEPS += $$DESTDIR/libCommunication.a
-    PRE_TARGETDEPS += $$DESTDIR/libProtocols.a
-}
-
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$DESTDIR/libCommunication.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$DESTDIR/libCommunication.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$DESTDIR/Communication.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$DESTDIR/Communication.lib
-else:unix:!macx: PRE_TARGETDEPS += $$DESTDIR/libCommunication.a
+#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$DESTDIR/libCommunication.a
+#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$DESTDIR/libCommunication.a
+#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$DESTDIR/Communication.lib
+#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$DESTDIR/Communication.lib
+#else:unix:!macx: PRE_TARGETDEPS += $$DESTDIR/libCommunication.a
 
 
 TRANSLATIONS += $$PWD/PressPlateTool_en.ts

@@ -1,4 +1,4 @@
-set(SUBDIR_NAME controller)
+set(SUBDIR_NAME pressplatetool_controller)
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core
@@ -21,8 +21,8 @@ target_link_libraries(${SUBDIR_NAME}
 PUBLIC
     Communication
     Protocols
-    common
-    model
-    protocol
+    pressplatetool_common
+    pressplatetool_model
+    pressplatetool_protocol
     Qt5::Core
 )

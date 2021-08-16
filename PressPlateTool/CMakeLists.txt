@@ -67,10 +67,10 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Communication
     Protocols
     Qaterial
-    common
-    model
-    protocol
-    controller
+    pressplatetool_common
+    pressplatetool_model
+    pressplatetool_protocol
+    pressplatetool_controller
     Qt5::Core
     Qt5::Qml
     Qt5::Quick

@@ -10,7 +10,7 @@
 #include <QTimer>
 #include <QTabBar>
 #include <QQueue>
-#include "../ProtocolTools/common/util.h"
+#include "../ProtocolTool/common/util.h"
 #include "../Protocols/convert.h"
 #include "../Protocols/YBProtocol/ybframe.h"
 #include "../Protocols/YBProtocol/ybprotocol.h"

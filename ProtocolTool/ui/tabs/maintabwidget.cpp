@@ -11,7 +11,7 @@
 #include "maintabbar.h"
 #include "../tabpage.h"
 #include "../dialog/nameddialog.h"
-#include "ui/controller/savecontroller.h"
+#include "../controller/savecontroller.h"
 
 MainTabWidget::MainTabWidget(QWidget *parent)
     : QTabWidget(parent)

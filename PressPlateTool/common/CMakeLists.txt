@@ -1,5 +1,5 @@
 
-set(SUBDIR_NAME common)
+set(SUBDIR_NAME pressplatetool_common)
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core
