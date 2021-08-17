@@ -1,4 +1,4 @@
-#include "cdtmintorstrategy.h"
+﻿#include "cdtmintorstrategy.h"
 #include "cdtprotocol.h"
 
 CDTMintorStrategy::CDTMintorStrategy(CDTProtocol *cdt, QObject *parent)

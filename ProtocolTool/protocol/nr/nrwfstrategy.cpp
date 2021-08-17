@@ -1,4 +1,4 @@
-#include "nrwfstrategy.h"
+﻿#include "nrwfstrategy.h"
 #include "cdtexnr.h"
 
 NrWFStrategy::NrWFStrategy(CDTExNr *cdt, QObject *parent)
@@ -52,6 +52,5 @@ void NrWFStrategy::onListenTimeout()
         return ;
     }
     emit m_cdt->sendYKMsg(QStringLiteral("已接收到点%1的遥信变位指令").arg(m_listenPtId));
-
     m_timer.stop();
 }

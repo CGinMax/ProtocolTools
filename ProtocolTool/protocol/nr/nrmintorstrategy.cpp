@@ -1,4 +1,4 @@
-#include "nrmintorstrategy.h"
+﻿#include "nrmintorstrategy.h"
 #include "cdtexnr.h"
 
 NrMintorStrategy::NrMintorStrategy(CDTExNr *cdt, QObject *parent)

@@ -1,4 +1,4 @@
-#include "cdtstandard.h"
+﻿#include "cdtstandard.h"
 #include "standardwfstrategy.h"
 #include "standardmintorstrategy.h"
 #include <QtMath>
@@ -37,7 +37,7 @@ void CDTStandard::ykUnlock(int ptId)
     frame.infoFields[infoIdx / 4].dataArray[infoIdx % 4] |= postiveNum;
     frame.infoFields[infoIdx / 4].calcCrc();
     showMessageBuffer(eMsgType::eMsgSend, QStringLiteral("发送遥控单点解锁命令"), frame.toAllByteArray());
-    emit sendYKMsg(QStringLiteral("发送点%1的遥控单点解锁指令").arg(ptId));
+    emit sendYKMsg(QStringLiteral("发送点%1的遥控单点解锁命令").arg(ptId));
     send(frame);
 }
 

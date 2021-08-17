@@ -1,4 +1,4 @@
-#include "clientpage.h"
+﻿#include "clientpage.h"
 #include <QVBoxLayout>
 #include <QHostAddress>
 
@@ -27,10 +27,9 @@ bool ClientPage::start()
             return true;
         }
 
-        qInfo("错误，启动失败");
-        return false;
+
     }
-    qInfo("错误，启动失败");
+    qInfo("Error! Client Start Failed!");
     return false;
 }
 

@@ -1,4 +1,4 @@
-#include "nrudpprotocol.h"
+﻿#include "nrudpprotocol.h"
 #include "nrudpwfstrategy.h"
 #include "nrudpmintorstrategy.h"
 #include <algorithm>

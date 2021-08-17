@@ -1,4 +1,4 @@
-#include "serialportpage.h"
+﻿#include "serialportpage.h"
 #include <QVBoxLayout>
 
 SerialPortPage::SerialPortPage(const QSharedPointer<SettingData> &settingData, QWidget *parent)
@@ -24,10 +24,9 @@ bool SerialPortPage::start()
             m_centerWidget->startCommunication(m_settingData);
             return true;
         }
-        qInfo("错误，启动失败");
-        return false;
+
     }
-    qInfo("错误，配置数据为空");
+    qInfo("Error! SerialPort Start Failed!");
     return false;
 }
 

@@ -1,4 +1,4 @@
-#include "cdtworkwidget.h"
+﻿#include "cdtworkwidget.h"
 #include "ui_cdtworkwidget.h"
 #include "tables/ditablemodel.h"
 #include "tables/aitablemodel.h"
@@ -47,7 +47,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<CommunicationBase> &network, c
     ui->viewDi->setEditTriggers(QAbstractItemView::DoubleClicked);
     ui->viewDi->setSelectionBehavior(QAbstractItemView::SelectItems);
     auto diDelegate = new ComboBoxDelegate(ui->viewDi);
-    diDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
+    diDelegate->setItems({tr("Open"), tr("Close")});
     ui->viewDi->setItemDelegateForColumn(2, diDelegate);
     for (int i = 0; i < m_diModel->rowCount(QModelIndex()); i++) {
         ui->viewDi->openPersistentEditor(m_diModel->index(i, 2));
@@ -107,7 +107,7 @@ CDTWorkWidget::CDTWorkWidget(const QSharedPointer<CommunicationBase> &network, c
     ui->viewVDi->setEditTriggers(QAbstractItemView::DoubleClicked);
     ui->viewVDi->setSelectionBehavior(QAbstractItemView::SelectItems);
     auto vyxDelegate = new ComboBoxDelegate(ui->viewVDi);
-    vyxDelegate->setItems({QStringLiteral("分"), QStringLiteral("合")});
+    vyxDelegate->setItems({tr("Open"), tr("Close")});
     ui->viewVDi->setItemDelegateForColumn(2, vyxDelegate);
     for (int i = 0; i < m_vdiModel->rowCount(QModelIndex()); i++) {
         ui->viewVDi->openPersistentEditor(m_vdiModel->index(i, 2));

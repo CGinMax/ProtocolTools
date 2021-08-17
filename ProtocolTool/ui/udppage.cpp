@@ -1,4 +1,4 @@
-#include "udppage.h"
+﻿#include "udppage.h"
 
 UdpPage::UdpPage(const QSharedPointer<SettingData> &ptCfg, QWidget *parent)
     : QWidget(parent)
@@ -22,7 +22,7 @@ bool UdpPage::start()
         return start(m_settingData->m_portParam);
     }
 
-    qInfo("错误，设置数据为空");
+    qInfo("Error! Udp Start Failed!");
     return false;
 }
 

@@ -1,4 +1,4 @@
-#include "serverpage.h"
+﻿#include "serverpage.h"
 #include <QVBoxLayout>
 #include <QTextBrowser>
 #include <QMessageBox>
@@ -46,7 +46,7 @@ bool ServerPage::start()
         return start(m_settingData->m_portParam);
     }
 
-    qInfo("Failed:setting data empty");
+    qInfo("Error! Server Start Failed:setting data empty!");
     return false;
 }
 
@@ -132,7 +132,7 @@ void ServerPage::onTabCloseRequested(int index)
 {
     auto widget = qobject_cast<CDTWorkWidget*>(m_tabClients->widget(index));
     if (widget->isConnection()) {
-        auto ret = QMessageBox::warning(widget, QStringLiteral("提示"), QStringLiteral("通讯正在进行，是否断开？"), QMessageBox::Ok, QMessageBox::Cancel);
+        auto ret = QMessageBox::warning(widget, tr("Information"), tr("Communication is running, do you want to disconnected?"), QMessageBox::Ok, QMessageBox::Cancel);
 
         if (ret != QMessageBox::Ok) {
             return ;

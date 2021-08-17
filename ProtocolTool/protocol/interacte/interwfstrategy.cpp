@@ -1,4 +1,4 @@
-#include "interwfstrategy.h"
+﻿#include "interwfstrategy.h"
 #include "cdtinteracte.h"
 
 InterWFStrategy::InterWFStrategy(CDTInteracte *cdt, QObject *parent)

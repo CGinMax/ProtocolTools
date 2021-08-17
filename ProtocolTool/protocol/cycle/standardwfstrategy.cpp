@@ -1,4 +1,4 @@
-#include "standardwfstrategy.h"
+﻿#include "standardwfstrategy.h"
 #include "cdtstandard.h"
 
 StandardWFStrategy::StandardWFStrategy(CDTStandard *cdt, QObject *parent)
@@ -52,6 +52,7 @@ void StandardWFStrategy::onListenTimeout()
     if (di->value() == m_oldStatus) {
         return ;
     }
+    // todo
     emit m_cdt->sendYKMsg(QStringLiteral("已接收到点%1的遥信变位指令").arg(m_listenPtId));
     m_cdt->ykLock(m_listenPtId);
     m_timer.stop();

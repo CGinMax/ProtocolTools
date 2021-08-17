@@ -1,4 +1,4 @@
-#include "standardmintorstrategy.h"
+﻿#include "standardmintorstrategy.h"
 #include "cdtstandard.h"
 
 StandardMintorStrategy::StandardMintorStrategy(CDTStandard* cdt, QObject *parent)
@@ -35,7 +35,8 @@ void StandardMintorStrategy::ykResponse(CDTFrame &frame)
 
         // 闭锁或全闭锁
         if (allowIndex == -1) {
-            emit m_cdt->sendYKMsg(QStringLiteral("接收到遥控闭锁指令"));
+            emit m_cdt->sendYKMsg(QStringLiteral("接收到遥控闭锁指令!"));
+
             return;
         }
 

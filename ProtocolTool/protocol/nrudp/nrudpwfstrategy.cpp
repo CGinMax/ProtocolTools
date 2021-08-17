@@ -1,4 +1,4 @@
-#include "nrudpwfstrategy.h"
+﻿#include "nrudpwfstrategy.h"
 #include "nrudpprotocol.h"
 
 NrUdpWFStrategy::NrUdpWFStrategy(NrUdpProtocol* nrudp)

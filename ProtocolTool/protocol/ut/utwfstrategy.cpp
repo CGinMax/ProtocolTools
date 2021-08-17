@@ -1,4 +1,4 @@
-#include "utwfstrategy.h"
+﻿#include "utwfstrategy.h"
 #include "cdtexut.h"
 
 UtWFStrategy::UtWFStrategy(CDTExUt *cdt, QObject *parent)
@@ -26,7 +26,6 @@ void UtWFStrategy::ykResponse(CDTFrame &frame)
         return ;
 
     if (funCode == m_cdt->getPtCfg()->m_ykReqCode) {
-
         emit m_cdt->sendYKMsg(QStringLiteral("接收到请求五防解锁，点%1遥控%2操作").arg(ykAddr).arg(status ? QStringLiteral("分->合") : QStringLiteral("合->分")));
         m_cdt->setRunYK(true);
         emit m_cdt->notifyYK(ykAddr);
