@@ -8,7 +8,7 @@ QT       += core gui network concurrent serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ProtocolTools
+TARGET = ProtocolTool
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
