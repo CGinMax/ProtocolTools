@@ -1,20 +1,26 @@
-set(SUBDIR_NAME protocoltools_ui)
-aux_source_directory(. UI_SRC_DIR)
-message("UI SRC DIR:${UI_SRC_DIR}")
-aux_source_directory(./dialog UI_SRC_DIR)
+set(SUBDIR_NAME protocoltool_ui)
+set(CMAKE_AUTOUIC ON)
 
-add_library(${SUBDIR_NAME} STATIC ${UI_SRC_DIR})
+file(GLOB_RECURSE SOURCE_GLOB_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp" "*.h")
+file(GLOB_RECURSE UI_GLOB_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.ui")
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Communication
+    ${CMAKE_CURRENT_SOURCE_DIR}/../common
+    ${CMAKE_CURRENT_SOURCE_DIR}/../protocol
+)
 
-# add_subdirectory(dialog)
-add_subdirectory(tables)
-add_subdirectory(tabs)
+add_library(${SUBDIR_NAME}
+STATIC
+    ${SOURCE_GLOB_FILES}
+    ${UI_GLOB_FILES}
+)
 
-target_include_directories(${SUBDIR_NAME} PUBLIC tables )
 target_link_libraries(${SUBDIR_NAME}
 PUBLIC
-    # dialog
-    tables
-    tabs
+    Communication
+    protocoltool_common
+    protocoltool_protocol
     Qt5::Core
     Qt5::Widgets
     Qt5::Network

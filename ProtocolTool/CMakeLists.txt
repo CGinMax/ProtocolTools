@@ -42,16 +42,16 @@ qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
 target_link_libraries(${PROJECT_NAME} Threads::Threads)
 target_link_libraries(${PROJECT_NAME}
+    Communication
+    protocoltool_common
+    protocoltool_protocol
+    protocoltool_ui
     Qt5::Core
     Qt5::Widgets
     Qt5::Gui
     Qt5::Network
     Qt5::Concurrent
     Qt5::SerialPort
-    Communication
-    protocoltools_common
-    protocoltools_protocol
-    protocoltools_ui
 )
 
 

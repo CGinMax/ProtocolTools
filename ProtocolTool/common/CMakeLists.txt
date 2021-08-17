@@ -1,13 +1,16 @@
+set(SUBDIR_NAME protocoltool_common)
 
-set(SUBDIR_NAME protocoltools_common)
-set(COMMON_SRC
-    workerthread.h
-    workerthread.cpp
-    threadpool.h
-    threadpool.cpp
-    util.h
-    util.cpp
+file(GLOB_RECURSE SOURCE_GLOB_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp" "*.h")
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Communication
 )
+add_library(${SUBDIR_NAME} STATIC ${SOURCE_GLOB_FILES})
 
-add_library(${SUBDIR_NAME} STATIC ${COMMON_SRC})
-target_link_libraries(${SUBDIR_NAME} PUBLIC Qt5::Core Qt5::SerialPort Qt5::Concurrent)
+target_link_libraries(${SUBDIR_NAME}
+PUBLIC
+    Communication
+    Qt5::Core
+    Qt5::SerialPort
+    Qt5::Concurrent
+)

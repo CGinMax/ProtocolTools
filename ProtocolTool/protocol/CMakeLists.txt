@@ -1,33 +1,22 @@
-set(SUBDIR_NAME protocoltools_protocol)
-aux_source_directory(. PROTOCOL_SRC_DIR)
-add_library(${SUBDIR_NAME} ${PROTOCOL_SRC_DIR})
+set(SUBDIR_NAME protocoltool_protocol)
 
-# target_sources(protocol
-# PRIVATE
-#     cdtframe.cpp
-#     checkhelper.cpp
-#     protocolbase.cpp
-#     strategybase.cpp
-# PUBLIC
-#     ${CMAKE_CURRENT_LIST_DIR}/cdtframe.h
-#     ${CMAKE_CURRENT_LIST_DIR}/checkhelper.h
-#     ${CMAKE_CURRENT_LIST_DIR}/protocolbase.h
-#     ${CMAKE_CURRENT_LIST_DIR}/strategybase.h
-# )
-# target_include_directories(protocol PUBLIC ${CMAKE_CURRENT_LIST_DIR})
-add_subdirectory(standard)
-add_subdirectory(cycle)
-add_subdirectory(interacte)
-add_subdirectory(nr)
-add_subdirectory(ut)
+file(GLOB_RECURSE SOURCE_GLOB_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp" "*.h")
 
-target_include_directories(${SUBDIR_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../ui)
-target_link_libraries(${SUBDIR_NAME} PUBLIC Qt5::Core Qt5::SerialPort)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Communication
+    ${CMAKE_CURRENT_SOURCE_DIR}/../ui
+)
+
+add_library(${SUBDIR_NAME}
+STATIC
+    ${SOURCE_GLOB_FILES}
+)
+
 target_link_libraries(${SUBDIR_NAME}
-PRIVATE
-    standard
-    cycle
-    interacte
-    nr
-    ut
+PUBLIC
+    Communication
+    Qt5::Core
+    Qt5::Network
+    Qt5::SerialPort
 )
