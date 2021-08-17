@@ -6,8 +6,10 @@ TARGET = Communication
 TEMPLATE = lib
 
 CONFIG += c++11
+CONFIG += staticlib
 
-DEFINES += COMMUNICATION_LIBRARY
+DEFINES += COMMUNICATION_STATIC
+#DEFINES += COMMUNICATION_LIBRARY
 
 SOURCES += \
     $$PWD/communicationbase.cpp \
