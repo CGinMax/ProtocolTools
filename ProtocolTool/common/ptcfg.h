@@ -7,7 +7,7 @@
 #include "enums.h"
 #include "aidata.h"
 #include "didata.h"
-#include "../../Communication/portparam.h"
+#include "portparam.h"
 
 class PtCfg
 {

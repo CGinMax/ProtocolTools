@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QTimer>
-#include "../../Communication/communicationbase.h"
-#include "../common/ptcfg.h"
+#include "communicationbase.h"
+#include "ptcfg.h"
 #include "strategybase.h"
 
 class  ProtocolBase : public QObject

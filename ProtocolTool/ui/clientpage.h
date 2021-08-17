@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "../protocol/protocolbase.h"
-#include "../../Communication/tcpclient.h"
+#include "tcpclient.h"
 #include "cdtworkwidget.h"
 
 class QVBoxLayout;

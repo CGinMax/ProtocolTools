@@ -1,5 +1,5 @@
 ﻿#include "protocolbase.h"
-#include "../common/util.h"
+#include "util.h"
 #include <QElapsedTimer>
 #include <QDateTime>
 #include <QThread>

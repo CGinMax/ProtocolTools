@@ -30,6 +30,10 @@ add_subdirectory(common)
 add_subdirectory(protocol)
 add_subdirectory(ui)
 
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Communication
+)
+
 add_executable(${PROJECT_NAME}
     main.cpp
     mainwindow.h

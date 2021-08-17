@@ -6,6 +6,7 @@
 #include "tables/delegates/digitlimitedelegate.h"
 #include "tables/diheaderview.h"
 #include "tables/aiheaderview.h"
+#include "dialog/ykdialog.h"
 #include "../protocol/standard/cdtprotocol.h"
 #include "../protocol/interacte/cdtinteracte.h"
 #include "../protocol/cycle/cdtstandard.h"
@@ -14,7 +15,6 @@
 #include "../protocol/nrudp/nrudpprotocol.h"
 #include "../common/threadpool.h"
 #include "../common/util.h"
-#include "dialog/ykdialog.h"
 #include <QDebug>
 #include <QMenu>
 #include <QThread>
