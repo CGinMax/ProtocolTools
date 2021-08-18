@@ -65,8 +65,8 @@ QMAKE_RPATHDIR += $${DESTDIR}
 QMAKE_RPATHDIR += ./../lib
 QMAKE_RPATHDIR += $${DESTDIR}/../lib
 
-TRANSLATIONS += $$PWD/ProtocolTools_en.ts
-TRANSLATIONS += $$PWD/ProtocolTools_zh.ts
+TRANSLATIONS += $$PWD/ProtocolTool_en.ts
+TRANSLATIONS += $$PWD/ProtocolTool_zh.ts
 
 RESOURCES += \
     resources.qrc

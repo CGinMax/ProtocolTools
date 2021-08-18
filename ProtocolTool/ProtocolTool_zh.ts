@@ -2,240 +2,232 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>AiHeaderView</name>
+    <message>
+        <location filename="ui/tables/aiheaderview.cpp" line="7"/>
+        <source>Is Random</source>
+        <translation>是否随机</translation>
+    </message>
+</context>
+<context>
     <name>CDTSettingDlg</name>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="22"/>
-        <source>协议类型</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="30"/>
-        <source>标准CDT</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="35"/>
-        <source>共创交互式CDT</source>
-        <translation></translation>
-    </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="14"/>
         <source>Setting Dialog</source>
         <translation>设置对话框</translation>
     </message>
     <message>
+        <location filename="ui/cdtsettingdlg.ui" line="22"/>
+        <source>Protocol Type:</source>
+        <translation>协议类型：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="30"/>
+        <source>Standard CDT</source>
+        <translation>标准CDT</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="35"/>
+        <source>GC Interace CDT</source>
+        <translation>共创交互式CDT</translation>
+    </message>
+    <message>
         <location filename="ui/cdtsettingdlg.ui" line="40"/>
-        <source>优特CDT</source>
-        <translation></translation>
+        <source>UT CDT</source>
+        <oldsource>优特CDT</oldsource>
+        <translation>优特CDT</translation>
     </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="45"/>
-        <source>南瑞CDT</source>
-        <translation></translation>
+        <source>NR CDT</source>
+        <oldsource>南瑞CDT</oldsource>
+        <translation>南瑞CDT</translation>
     </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="50"/>
-        <source>南瑞UDP</source>
-        <translation></translation>
+        <source>NR UDP</source>
+        <oldsource>南瑞UDP</oldsource>
+        <translation>南瑞UDP</translation>
     </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="58"/>
-        <source>控制字节</source>
-        <translation></translation>
+        <source>Control Byte:</source>
+        <translation>控制字节：</translation>
     </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="81"/>
-        <source>恢复默认设置</source>
-        <translation></translation>
+        <source>Restore Default Settings</source>
+        <translation>恢复默认设置</translation>
     </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="90"/>
-        <source>遥信</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="153"/>
-        <location filename="ui/cdtsettingdlg.ui" line="243"/>
-        <location filename="ui/cdtsettingdlg.ui" line="297"/>
-        <source>帧类别</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="133"/>
-        <location filename="ui/cdtsettingdlg.ui" line="207"/>
-        <location filename="ui/cdtsettingdlg.ui" line="311"/>
-        <source>功能码</source>
-        <translation></translation>
+        <source>YX</source>
+        <translation>遥信</translation>
     </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="112"/>
-        <source>遥信个数</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="146"/>
-        <location filename="ui/cdtsettingdlg.ui" line="253"/>
-        <location filename="ui/cdtsettingdlg.ui" line="340"/>
-        <source>10</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="126"/>
-        <location filename="ui/cdtsettingdlg.ui" line="193"/>
-        <location filename="ui/cdtsettingdlg.ui" line="283"/>
-        <source>起始IO地址</source>
-        <translation></translation>
+        <source>YX Number:</source>
+        <translation>遥信个数：</translation>
     </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="119"/>
         <location filename="ui/cdtsettingdlg.ui" line="200"/>
+        <location filename="ui/cdtsettingdlg.ui" line="297"/>
+        <source>Cycle Send Time:</source>
+        <translation>循环发送时间：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="126"/>
+        <location filename="ui/cdtsettingdlg.ui" line="193"/>
+        <location filename="ui/cdtsettingdlg.ui" line="276"/>
+        <source>Start IO:</source>
+        <translation>起始IO地址：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="133"/>
+        <location filename="ui/cdtsettingdlg.ui" line="207"/>
         <location filename="ui/cdtsettingdlg.ui" line="304"/>
-        <source>循环发送时间</source>
-        <translation></translation>
+        <source>Func Code:</source>
+        <translation>功能码：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="153"/>
+        <location filename="ui/cdtsettingdlg.ui" line="236"/>
+        <location filename="ui/cdtsettingdlg.ui" line="290"/>
+        <source>Frame Type:</source>
+        <translation>帧类型：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="170"/>
+        <source>Import YX Point File</source>
+        <translation>导入遥信点表</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="180"/>
+        <source>YC</source>
+        <translation>遥测</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="186"/>
+        <source>YC Number:</source>
+        <translation>遥测个数：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="260"/>
+        <source>Import YC Point File</source>
+        <translation>导入遥测点表</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="270"/>
+        <source>Virtual YX</source>
+        <translation>虚遥信</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="283"/>
+        <source>Virtual YX Number:</source>
+        <translation>虚遥信个数：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="350"/>
+        <source>Import Virtual YX Point File</source>
+        <translation>导入虚遥信点表</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="360"/>
+        <source>YK</source>
+        <translation>遥控</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="369"/>
+        <source>Control Close:</source>
+        <translation>遥控分：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="379"/>
+        <source>Locked:</source>
+        <translation>闭锁：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="386"/>
+        <source>Control Open:</source>
+        <translation>遥控合：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="402"/>
+        <source>UnLocked:</source>
+        <translation>开锁：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="409"/>
+        <source>Request Func Code:</source>
+        <translation>请求功能码：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="416"/>
+        <source>Request Frame Type:</source>
+        <translation>请求帧类型：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="423"/>
+        <source>Response Frame Type:</source>
+        <translation>回应帧类型：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="439"/>
+        <source>Exe Func Code:</source>
+        <translation>执行功能码：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="446"/>
+        <source>Response Func Code:</source>
+        <translation>回应功能码：</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="474"/>
+        <source>Ok</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="ui/cdtsettingdlg.ui" line="481"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="ui/cdtsettingdlg.ui" line="102"/>
-        <location filename="ui/cdtsettingdlg.ui" line="227"/>
-        <location filename="ui/cdtsettingdlg.ui" line="324"/>
+        <location filename="ui/cdtsettingdlg.ui" line="220"/>
+        <location filename="ui/cdtsettingdlg.ui" line="317"/>
         <source>ms</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ui/cdtsettingdlg.ui" line="163"/>
-        <location filename="ui/cdtsettingdlg.ui" line="260"/>
-        <location filename="ui/cdtsettingdlg.ui" line="350"/>
-        <source>TextLabel</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="170"/>
-        <source>导入遥信点表</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="180"/>
-        <source>遥测</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="186"/>
-        <source>遥测个数</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="214"/>
-        <source>生成随机数</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="267"/>
-        <source>导入遥测点表</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="277"/>
-        <source>虚遥信</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="290"/>
-        <source>虚遥信个数</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="357"/>
-        <source>导入虚遥信点表</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="367"/>
-        <source>遥控</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="376"/>
-        <source>遥控分</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="386"/>
-        <source>闭锁</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="393"/>
-        <source>遥控合</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="409"/>
-        <source>解锁</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="416"/>
-        <source>请求功能码</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="423"/>
-        <source>请求帧类别</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="430"/>
-        <source>应答帧类别</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="446"/>
-        <source>执行功能码</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="453"/>
-        <source>应答功能码</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="481"/>
-        <source>确定</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.ui" line="488"/>
-        <source>取消</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtsettingdlg.cpp" line="123"/>
-        <location filename="ui/cdtsettingdlg.cpp" line="136"/>
-        <location filename="ui/cdtsettingdlg.cpp" line="148"/>
+        <location filename="ui/cdtsettingdlg.cpp" line="122"/>
+        <location filename="ui/cdtsettingdlg.cpp" line="134"/>
+        <location filename="ui/cdtsettingdlg.cpp" line="146"/>
         <source>Point %1</source>
         <translation>点 %1</translation>
     </message>
     <message>
-        <location filename="ui/cdtsettingdlg.cpp" line="268"/>
+        <location filename="ui/cdtsettingdlg.cpp" line="266"/>
         <source>Import success:</source>
         <translation>导入成功：</translation>
     </message>
     <message>
-        <location filename="ui/cdtsettingdlg.cpp" line="270"/>
+        <location filename="ui/cdtsettingdlg.cpp" line="268"/>
         <source>Error:</source>
         <translation>错误：</translation>
     </message>
     <message>
-        <location filename="ui/cdtsettingdlg.cpp" line="279"/>
+        <location filename="ui/cdtsettingdlg.cpp" line="277"/>
         <source>Import Sheet</source>
         <translation>导入点表</translation>
     </message>
     <message>
-        <location filename="ui/cdtsettingdlg.cpp" line="289"/>
+        <location filename="ui/cdtsettingdlg.cpp" line="287"/>
         <source>Open file failed! </source>
         <translation>打开文件失败! </translation>
     </message>
     <message>
-        <location filename="ui/cdtsettingdlg.cpp" line="294"/>
+        <location filename="ui/cdtsettingdlg.cpp" line="292"/>
         <source>File %1 is empty!</source>
         <translation>文件 %1 为空！</translation>
     </message>
@@ -243,81 +235,78 @@
 <context>
     <name>CDTWorkWidget</name>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="ui/cdtworkwidget.ui" line="37"/>
+        <location filename="ui/cdtworkwidget.ui" line="34"/>
         <source>Di</source>
         <translation>遥信</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="65"/>
+        <location filename="ui/cdtworkwidget.ui" line="62"/>
         <source>Ai</source>
         <translation>遥测</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="93"/>
+        <location filename="ui/cdtworkwidget.ui" line="90"/>
         <source>Virtual Di</source>
         <translation>虚遥信</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="121"/>
+        <location filename="ui/cdtworkwidget.ui" line="118"/>
         <source>YK</source>
         <translation>遥控</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="148"/>
+        <location filename="ui/cdtworkwidget.ui" line="145"/>
         <source>Lock</source>
         <translation>闭锁</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="155"/>
+        <location filename="ui/cdtworkwidget.ui" line="152"/>
         <source>UnLock</source>
         <translation>解锁</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="170"/>
+        <location filename="ui/cdtworkwidget.ui" line="167"/>
+        <location filename="ui/cdtworkwidget.cpp" line="50"/>
+        <location filename="ui/cdtworkwidget.cpp" line="110"/>
         <source>Off</source>
         <translation>分</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="175"/>
+        <location filename="ui/cdtworkwidget.ui" line="172"/>
+        <location filename="ui/cdtworkwidget.cpp" line="50"/>
+        <location filename="ui/cdtworkwidget.cpp" line="110"/>
         <source>On</source>
         <translation>合</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.ui" line="183"/>
+        <location filename="ui/cdtworkwidget.ui" line="180"/>
         <source>Execute</source>
         <translation>执行</translation>
     </message>
     <message>
-        <source>clear</source>
-        <translation type="vanished">清除</translation>
-    </message>
-    <message>
+        <location filename="ui/cdtworkwidget.cpp" line="250"/>
+        <location filename="ui/cdtworkwidget.cpp" line="260"/>
         <source>Clear</source>
-        <translation type="vanished">清空</translation>
+        <translation>清空</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.cpp" line="35"/>
-        <location filename="ui/cdtworkwidget.cpp" line="65"/>
-        <location filename="ui/cdtworkwidget.cpp" line="90"/>
+        <location filename="ui/cdtworkwidget.cpp" line="36"/>
+        <location filename="ui/cdtworkwidget.cpp" line="68"/>
+        <location filename="ui/cdtworkwidget.cpp" line="98"/>
         <source>IO</source>
         <translation>IO地址</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.cpp" line="35"/>
-        <location filename="ui/cdtworkwidget.cpp" line="65"/>
-        <location filename="ui/cdtworkwidget.cpp" line="90"/>
+        <location filename="ui/cdtworkwidget.cpp" line="36"/>
+        <location filename="ui/cdtworkwidget.cpp" line="68"/>
+        <location filename="ui/cdtworkwidget.cpp" line="98"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="ui/cdtworkwidget.cpp" line="35"/>
-        <location filename="ui/cdtworkwidget.cpp" line="65"/>
-        <location filename="ui/cdtworkwidget.cpp" line="90"/>
+        <location filename="ui/cdtworkwidget.cpp" line="36"/>
+        <location filename="ui/cdtworkwidget.cpp" line="68"/>
+        <location filename="ui/cdtworkwidget.cpp" line="98"/>
         <source>Value</source>
         <translation>实时值</translation>
     </message>
@@ -343,10 +332,6 @@
         <location filename="ui/trees/channeltreewidget.cpp" line="29"/>
         <source>Serial Port</source>
         <translation>串口</translation>
-    </message>
-    <message>
-        <source>Channel</source>
-        <translation type="vanished">通道</translation>
     </message>
     <message>
         <location filename="ui/trees/channeltreewidget.cpp" line="56"/>
@@ -393,71 +378,29 @@
     </message>
 </context>
 <context>
-    <name>MainTabWidget</name>
-    <message>
-        <source>Close Tab</source>
-        <translation type="vanished">关闭标签页</translation>
-    </message>
-    <message>
-        <source>Change Name</source>
-        <translation type="vanished">更改名称</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">保存</translation>
-    </message>
-    <message>
-        <source>Split</source>
-        <translation type="vanished">分离成窗口</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">关闭</translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <location filename="mainwindow.ui" line="14"/>
-        <source>CDT Test Tool</source>
-        <translation>CDT测试工具</translation>
+        <source>Protocol Tool</source>
+        <oldsource>CDT Test Tool</oldsource>
+        <translation>协议测试工具</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="88"/>
+        <location filename="mainwindow.ui" line="91"/>
         <source>Menu</source>
         <translation>菜单</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="106"/>
+        <location filename="mainwindow.ui" line="112"/>
         <location filename="mainwindow.cpp" line="26"/>
         <source>Import</source>
         <translation>导入通道</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="111"/>
+        <location filename="mainwindow.ui" line="117"/>
         <location filename="mainwindow.cpp" line="25"/>
         <source>Save</source>
         <translation>保存所有通道</translation>
-    </message>
-    <message>
-        <source>Default Page</source>
-        <translation type="vanished">默认页</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">提示信息</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">打开</translation>
-    </message>
-    <message>
-        <source>Save %1 Success!</source>
-        <translation type="vanished">保存 %1 成功！</translation>
-    </message>
-    <message>
-        <source>Save %1 Failed!</source>
-        <translation type="vanished">保存 %1 失败！</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="24"/>
@@ -552,9 +495,19 @@
 <context>
     <name>ServerPage</name>
     <message>
-        <location filename="ui/serverpage.cpp" line="38"/>
+        <location filename="ui/serverpage.cpp" line="37"/>
         <source>Close disconnected tab</source>
         <translation>关闭已断开标签</translation>
+    </message>
+    <message>
+        <location filename="ui/serverpage.cpp" line="135"/>
+        <source>Information</source>
+        <translation>提示信息</translation>
+    </message>
+    <message>
+        <location filename="ui/serverpage.cpp" line="135"/>
+        <source>Communication is running, do you want to disconnected?</source>
+        <translation>通讯正在运行，确定要断开连接？</translation>
     </message>
 </context>
 <context>
@@ -625,12 +578,19 @@
         <translation>五防</translation>
     </message>
     <message>
-        <source>Tcp Server</source>
-        <translation type="vanished">Tcp服务端</translation>
+        <location filename="ui/tabpage.ui" line="224"/>
+        <source>Single</source>
+        <translation>单播</translation>
     </message>
     <message>
-        <source>Tcp Client</source>
-        <translation type="vanished">Tcp客户端</translation>
+        <location filename="ui/tabpage.ui" line="229"/>
+        <source>Broadcast</source>
+        <translation>广播</translation>
+    </message>
+    <message>
+        <location filename="ui/tabpage.ui" line="234"/>
+        <source>Multicast Group</source>
+        <translation>多播</translation>
     </message>
     <message>
         <location filename="ui/tabpage.ui" line="196"/>
@@ -641,14 +601,6 @@
         <location filename="ui/tabpage.ui" line="203"/>
         <source>Stop</source>
         <translation>停止</translation>
-    </message>
-    <message>
-        <source>错误</source>
-        <translation type="vanished">错误</translation>
-    </message>
-    <message>
-        <source>打开通讯端口失败</source>
-        <translation type="vanished">打开通讯端口失败</translation>
     </message>
     <message>
         <location filename="ui/tabpage.h" line="18"/>
@@ -681,12 +633,12 @@
         <translation>标记校验</translation>
     </message>
     <message>
-        <location filename="ui/tabpage.cpp" line="177"/>
+        <location filename="ui/tabpage.cpp" line="180"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="ui/tabpage.cpp" line="177"/>
+        <location filename="ui/tabpage.cpp" line="180"/>
         <source>Open Communication Failed!</source>
         <translation>打开通讯失败！</translation>
     </message>

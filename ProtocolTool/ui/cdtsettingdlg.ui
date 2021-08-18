@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>665</width>
+    <width>728</width>
     <height>693</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="txtProtocolType">
        <property name="text">
-        <string>协议类型</string>
+        <string>Protocol Type:</string>
        </property>
       </widget>
      </item>
@@ -27,27 +27,27 @@
       <widget class="QComboBox" name="cbbProtocol">
        <item>
         <property name="text">
-         <string>标准CDT</string>
+         <string>Standard CDT</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>共创交互式CDT</string>
+         <string>GC Interace CDT</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>优特CDT</string>
+         <string>UT CDT</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>南瑞CDT</string>
+         <string>NR CDT</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>南瑞UDP</string>
+         <string>NR UDP</string>
         </property>
        </item>
       </widget>
@@ -55,7 +55,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>控制字节</string>
+        <string>Control Byte:</string>
        </property>
       </widget>
      </item>
@@ -78,7 +78,7 @@
      <item>
       <widget class="QPushButton" name="btnReset">
        <property name="text">
-        <string>恢复默认设置</string>
+        <string>Restore Default Settings</string>
        </property>
       </widget>
      </item>
@@ -87,7 +87,7 @@
    <item>
     <widget class="QGroupBox" name="groupBoxYx">
      <property name="title">
-      <string>遥信</string>
+      <string>YX</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="1" column="3">
@@ -109,28 +109,28 @@
       <item row="0" column="4">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>遥信个数</string>
+         <string>YX Number:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
        <widget class="QLabel" name="label_19">
         <property name="text">
-         <string>循环发送时间</string>
+         <string>Cycle Send Time:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>起始IO地址</string>
+         <string>Start IO:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>功能码</string>
+         <string>Func Code:</string>
         </property>
        </widget>
       </item>
@@ -143,14 +143,14 @@
       <item row="0" column="5">
        <widget class="QLineEdit" name="edYxNum">
         <property name="text">
-         <string>10</string>
+         <string notr="true">10</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>帧类别</string>
+         <string>Frame Type:</string>
         </property>
        </widget>
       </item>
@@ -160,14 +160,14 @@
       <item row="2" column="1" colspan="5">
        <widget class="QLabel" name="txtYxSheetInfo">
         <property name="text">
-         <string>TextLabel</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QPushButton" name="btnYxImportSheet">
         <property name="text">
-         <string>导入遥信点表</string>
+         <string>Import YX Point File</string>
         </property>
        </widget>
       </item>
@@ -177,34 +177,34 @@
    <item>
     <widget class="QGroupBox" name="groupBoxYc">
      <property name="title">
-      <string>遥测</string>
+      <string>YC</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="4">
        <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>遥测个数</string>
+         <string>YC Number:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>起始IO地址</string>
+         <string>Start IO:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
        <widget class="QLabel" name="label_20">
         <property name="text">
-         <string>循环发送时间</string>
+         <string>Cycle Send Time:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>功能码</string>
+         <string>Func Code:</string>
         </property>
        </widget>
       </item>
@@ -233,7 +233,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>帧类别</string>
+         <string>Frame Type:</string>
         </property>
        </widget>
       </item>
@@ -243,21 +243,21 @@
       <item row="0" column="5">
        <widget class="QLineEdit" name="edYcNum">
         <property name="text">
-         <string>10</string>
+         <string notr="true">10</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1" colspan="5">
        <widget class="QLabel" name="txtYcSheetInfo">
         <property name="text">
-         <string>TextLabel</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QPushButton" name="btnYcImportSheet">
         <property name="text">
-         <string>导入遥测点表</string>
+         <string>Import YC Point File</string>
         </property>
        </widget>
       </item>
@@ -267,41 +267,41 @@
    <item>
     <widget class="QGroupBox" name="groupBoxVYx">
      <property name="title">
-      <string>虚遥信</string>
+      <string>Virtual YX</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="1" column="0">
        <widget class="QLabel" name="label_18">
         <property name="text">
-         <string>起始IO地址</string>
+         <string>Start IO:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="4">
        <widget class="QLabel" name="label_17">
         <property name="text">
-         <string>虚遥信个数</string>
+         <string>Virtual YX Number:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_15">
         <property name="text">
-         <string>帧类别</string>
+         <string>Frame Type:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
        <widget class="QLabel" name="label_21">
         <property name="text">
-         <string>循环发送时间</string>
+         <string>Cycle Send Time:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
        <widget class="QLabel" name="label_16">
         <property name="text">
-         <string>功能码</string>
+         <string>Func Code:</string>
         </property>
        </widget>
       </item>
@@ -330,7 +330,7 @@
       <item row="0" column="5">
        <widget class="QLineEdit" name="edVYxNum">
         <property name="text">
-         <string>10</string>
+         <string notr="true">10</string>
         </property>
        </widget>
       </item>
@@ -340,14 +340,14 @@
       <item row="2" column="1" colspan="5">
        <widget class="QLabel" name="txtVYxSheetInfo">
         <property name="text">
-         <string>TextLabel</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QPushButton" name="btnVYxImportSheet">
         <property name="text">
-         <string>导入虚遥信点表</string>
+         <string>Import Virtual YX Point File</string>
         </property>
        </widget>
       </item>
@@ -357,7 +357,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>遥控</string>
+      <string>YK</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="2">
@@ -366,7 +366,7 @@
       <item row="2" column="3">
        <widget class="QLabel" name="label_12">
         <property name="text">
-         <string>遥控分</string>
+         <string>Control Close:</string>
         </property>
        </widget>
       </item>
@@ -376,14 +376,14 @@
       <item row="3" column="3">
        <widget class="QLabel" name="label_14">
         <property name="text">
-         <string>闭锁</string>
+         <string>Locked:</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_11">
         <property name="text">
-         <string>遥控合</string>
+         <string>Control Open:</string>
         </property>
        </widget>
       </item>
@@ -399,28 +399,28 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_13">
         <property name="text">
-         <string>解锁</string>
+         <string>UnLocked:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_23">
         <property name="text">
-         <string>请求功能码</string>
+         <string>Request Func Code:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_10">
         <property name="text">
-         <string>请求帧类别</string>
+         <string>Request Frame Type:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="3">
        <widget class="QLabel" name="label_22">
         <property name="text">
-         <string>应答帧类别</string>
+         <string>Response Frame Type:</string>
         </property>
        </widget>
       </item>
@@ -436,14 +436,14 @@
       <item row="1" column="5">
        <widget class="QLabel" name="label_25">
         <property name="text">
-         <string>执行功能码</string>
+         <string>Exe Func Code:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="3">
        <widget class="QLabel" name="label_24">
         <property name="text">
-         <string>应答功能码</string>
+         <string>Response Func Code:</string>
         </property>
        </widget>
       </item>
@@ -471,14 +471,14 @@
      <item>
       <widget class="QPushButton" name="btnOk">
        <property name="text">
-        <string>确定</string>
+        <string>Ok</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnCancel">
        <property name="text">
-        <string>取消</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
