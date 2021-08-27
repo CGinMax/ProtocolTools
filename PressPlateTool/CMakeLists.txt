@@ -34,8 +34,8 @@ include_directories(protocol)
 qt5_create_translation(TS_FILES
     # ${CMAKE_CURRENT_SOURCE_DIR}/resources/qml
     ${CMAKE_CURRENT_SOURCE_DIR}
-    PressPlateTool_zh.ts
-    PressPlateTool_en.ts
+    PressPlateTool-cmake_zh.ts
+    PressPlateTool-cmake_en.ts
 )
 
 set(QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../ CACHE STRING "qml import path")

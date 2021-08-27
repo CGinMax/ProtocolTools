@@ -23,7 +23,7 @@ endif()
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
-set(TS_FILES ProtocolTool_zh.ts ProtocolTool_en.ts)
+set(TS_FILES ProtocolTool-cmake_zh.ts ProtocolTool-cmake_en.ts)
 set(QRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources.qrc)
 
 add_subdirectory(common)
