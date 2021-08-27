@@ -170,6 +170,86 @@
     </message>
 </context>
 <context>
+    <name>QualityTestView</name>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="22"/>
+        <source>Sensor Address</source>
+        <translation>传感器地址</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="30"/>
+        <source>Stop</source>
+        <translation>停止</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="30"/>
+        <source>Start</source>
+        <translation>启动</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="52"/>
+        <source>Open</source>
+        <translation>应分</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="52"/>
+        <source>Close</source>
+        <translation>应合</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="52"/>
+        <source>Unconfigured</source>
+        <translation>未配置</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="67"/>
+        <source>Configure sensor state</source>
+        <translation>设定传感器状态</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="115"/>
+        <source>Hardware version: </source>
+        <oldsource>Hardware version</oldsource>
+        <translation>硬件版本： </translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="116"/>
+        <source>Software version: </source>
+        <oldsource>Software version:</oldsource>
+        <translation>软件版本： </translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="117"/>
+        <source>Product: </source>
+        <translation>产品： </translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="118"/>
+        <source>Query version success</source>
+        <translation>查询版本成功</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="123"/>
+        <source>current status:</source>
+        <translation>当前状态：</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="123"/>
+        <source>configure status:</source>
+        <translation>配置状态：</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="124"/>
+        <source>Query status success</source>
+        <translation>查询状态成功</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="129"/>
+        <source>Configure status success</source>
+        <translation>配置状态成功</translation>
+    </message>
+</context>
+<context>
     <name>SensorConfView</name>
     <message>
         <location filename="resources/qml/sensor/SensorConfView.qml" line="26"/>
@@ -425,24 +505,29 @@ Configuration Sensor Address is </source>
 <context>
     <name>main</name>
     <message>
-        <location filename="resources/qml/main.qml" line="17"/>
+        <location filename="resources/qml/main.qml" line="18"/>
         <source>Press Plate Tool</source>
         <translation>压板配置工具</translation>
     </message>
     <message>
-        <location filename="resources/qml/main.qml" line="29"/>
+        <location filename="resources/qml/main.qml" line="30"/>
         <source>Gather Configure Page</source>
         <translation>采集器配置</translation>
     </message>
     <message>
-        <location filename="resources/qml/main.qml" line="30"/>
+        <location filename="resources/qml/main.qml" line="31"/>
         <source>Sensor configure Page</source>
         <translation>传感器配置</translation>
     </message>
     <message>
-        <location filename="resources/qml/main.qml" line="31"/>
+        <location filename="resources/qml/main.qml" line="32"/>
         <source>Protocol</source>
         <translation>协议报文</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/main.qml" line="33"/>
+        <source>Quality Test Page</source>
+        <translation>质量检测</translation>
     </message>
 </context>
 </TS>

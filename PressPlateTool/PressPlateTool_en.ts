@@ -170,6 +170,86 @@
     </message>
 </context>
 <context>
+    <name>QualityTestView</name>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="22"/>
+        <source>Sensor Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="30"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="30"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="52"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="52"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="52"/>
+        <source>Unconfigured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="67"/>
+        <source>Configure sensor state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="115"/>
+        <source>Hardware version: </source>
+        <oldsource>Hardware version</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="116"/>
+        <source>Software version: </source>
+        <oldsource>Software version:</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="117"/>
+        <source>Product: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="118"/>
+        <source>Query version success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="123"/>
+        <source>current status:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="123"/>
+        <source>configure status:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="124"/>
+        <source>Query status success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/quality/QualityTestView.qml" line="129"/>
+        <source>Configure status success</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SensorConfView</name>
     <message>
         <location filename="resources/qml/sensor/SensorConfView.qml" line="26"/>
@@ -421,23 +501,28 @@ Configuration Sensor Address is </source>
 <context>
     <name>main</name>
     <message>
-        <location filename="resources/qml/main.qml" line="17"/>
+        <location filename="resources/qml/main.qml" line="18"/>
         <source>Press Plate Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/main.qml" line="29"/>
+        <location filename="resources/qml/main.qml" line="30"/>
         <source>Gather Configure Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/main.qml" line="30"/>
+        <location filename="resources/qml/main.qml" line="31"/>
         <source>Sensor configure Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/main.qml" line="31"/>
+        <location filename="resources/qml/main.qml" line="32"/>
         <source>Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/main.qml" line="33"/>
+        <source>Quality Test Page</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

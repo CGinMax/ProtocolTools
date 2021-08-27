@@ -8,6 +8,7 @@ import Qaterial 1.0 as Qaterial
 import "gather"
 import "sensor"
 import "components"
+import "quality"
 
 Qaterial.ApplicationWindow {
     id: main_window
@@ -28,7 +29,8 @@ Qaterial.ApplicationWindow {
             model: ListModel {
                 ListElement { text: qsTr("Gather Configure Page") }
                 ListElement { text: qsTr("Sensor configure Page") }
-                ListElement{ text: qsTr("Protocol")}
+                ListElement { text: qsTr("Protocol")}
+                ListElement {text: qsTr("Quality Test Page") }
             }
         }
         Qaterial.SwipeView {
@@ -47,6 +49,11 @@ Qaterial.ApplicationWindow {
                 id: edit_protocol
                 textFormat: TextEdit.RichText
             }
+            QualityTestView {
+                id: view_quality_test
+                gatherController: view_gather_conf.gatherController
+            }
+
             Connections {
                 target: view_gather_conf.gatherController
                 onShowProtocolMsg: function(msg) {
