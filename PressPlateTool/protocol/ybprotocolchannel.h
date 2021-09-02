@@ -64,12 +64,13 @@ public:
 
     IContentDeferredPtr queryStatus(uint16_t dstAddr, int msecTimeout = 5000);
 
-
     IContentDeferredPtr queryVersion(eYBFrameType type, uint16_t dstAddr, int msecTimeout = 5000);
 
     IContentDeferredPtr setStatus(uint8_t status, uint16_t dstAddr, int msecTimeout = 5000);
 
     IContentDeferredPtr setSensorNum(uint16_t dstAddr, uint8_t num, int msecTimeout = 5000);
+
+    IContentDeferredPtr querySensorAddr(int msecTimeout = 5000);
 
 private:
     IContentDeferredPtr buildResultContent(int type, int funcode, int msecTimeout = 5000);

@@ -31,17 +31,19 @@ public:
     Q_INVOKABLE void querySensorVersion(int index, int addr, int timeout);
     Q_INVOKABLE void querySensorState(int index, int addr, int timeout);
     bool canDoOperate();
+
+    bool error(const std::shared_ptr<IContent>& result, const std::function<void(const QVariantMap&)>& callback);
 signals:
     void startPortocolChannel();
     void stopProtocolChannel();
     void showProtocolMsg(const QString& msg);
-    void queryVersionCallback(bool success, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString());
-    void configureAddressCallback(bool success, int addr = 0);
-    void configureCountCallback(bool success, int count = 0);
-    void configureSensorAddrCallback(int index, const QVariantMap& result/*bool success, int addr = 0*/);
-    void configureSensorStateCallback(int index, const QVariantMap& result/*bool success, int state = 0*/);
-    void querySensorVersionCallback(int index, const QVariantMap& result/*bool success, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString()*/);
-    void querySensorStateCallback(int index, const QVariantMap& result/*bool success, int curState = 0xFF, int confState = 0xFF*/);
+    void queryVersionCallback(const QVariantMap& result/* bool success, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString()*/);
+    void configureAddressCallback(const QVariantMap& result/* bool success, int addr = 0*/);
+    void configureCountCallback(const QVariantMap& result /*bool success, int count = 0*/);
+    void configureSensorAddrCallback(const QVariantMap& result/*int index, bool success, int addr = 0*/);
+    void configureSensorStateCallback(const QVariantMap& result/*int index, bool success, int state = 0*/);
+    void querySensorVersionCallback(const QVariantMap& result/*int index, bool success, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString()*/);
+    void querySensorStateCallback(const QVariantMap& result/*int index, bool success, int curState = 0xFF, int confState = 0xFF*/);
 
 public slots:
 

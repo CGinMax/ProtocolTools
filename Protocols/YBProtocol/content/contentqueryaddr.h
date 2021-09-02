@@ -12,7 +12,7 @@ public:
 
     std::vector<uint8_t> toByteVector() override;
 
-    uint16_t testAddress() override {
+    uint16_t responseAddr() override {
         return m_addr;
     }
 private:

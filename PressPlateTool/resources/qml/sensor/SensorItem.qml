@@ -77,6 +77,22 @@ Qaterial.Card {
                     }
                 }
             }
+
+            Loader {
+                id: loader_btn_query_addr
+                asynchronous: true
+                sourceComponent: LoadingButton {
+                    iconSource: "image://faicon/search"
+                    iconSize: 18
+                    onClickStarted: {
+                        _root.querySensorAddr()
+                    }
+                    ToolTip {
+                        visible: parent.hovered
+                        text: qsTr("Query sensor address")
+                    }
+                }
+            }
         }
 
         RowLayout {
@@ -230,6 +246,16 @@ Qaterial.Card {
         }
         controller_sensor.configureSensorAddress(addr, ComConfig.sensorTimeout);
     }
+
+    function querySensorAddr() {
+        if (!_root.gatherController.isConnected()) {
+            changeQueryAddrState(false);
+            _root.gatherController.alertNotOpen();
+            return ;
+        }
+        controller_sensor.querySensorAddr(ComConfig.sensorTimeout);
+    }
+
     function querySensorStatus(addr){
         if (!_root.gatherController.isConnected()) {
             changeQueryStatusState(false)
@@ -254,6 +280,10 @@ Qaterial.Card {
         loader_btn_configure_addr.item.changeState(success)
     }
 
+    function changeQueryAddrState(success) {
+        loader_btn_query_addr.item.changeState(success)
+    }
+
     function changeQueryStatusState(success) {
         loader_btn_query_state.item.changeState(success)
     }
@@ -276,6 +306,13 @@ Qaterial.Card {
             }
             changeQueryStatusState(result.success);
         }
+        onQueryAddrCallback: function(result/*success, addr*/) {
+            if (result.success) {
+                list_model.setAddress(index, result.addr);
+            }
+            changeQueryAddrState(result.success);
+        }
+
         onConfigureAddressCallback: function(result/*success, addr*/){
             if (result.success) {
                 list_model.setAddress(index, result.addr);

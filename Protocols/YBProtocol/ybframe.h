@@ -42,12 +42,11 @@ public:
 
     static YBFrame setSensorNum(uint16_t dstAddr, uint8_t num);
 
-    // 暂时不用
     static YBFrame upgradeProgram(const std::vector<uint8_t>& contentData);
 
     static YBFrame forceSettingAddr(uint16_t addr);
 
-    static YBFrame queryAddress(eYBFrameType type, uint16_t dstAddr);
+    static YBFrame queryAddress();
 
     // 报文数据
     static const std::array<uint8_t, 4> HEADER_DATA;

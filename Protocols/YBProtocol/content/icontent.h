@@ -41,7 +41,7 @@ public:
         return 0;
     }
 
-    virtual uint16_t testAddress() {
+    virtual uint16_t responseAddr() {
         return 0;
     }
 

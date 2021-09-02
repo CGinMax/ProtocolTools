@@ -137,26 +137,26 @@ Qaterial.GroupBox {
 
     GatherController{
         id: controller_gather
-        onQueryVersionCallback: function(success, hardware, software, product) {
-            if (success) {
-                label_hardware.text = hardware
-                label_software.text = software
-                label_product.text = product
+        onQueryVersionCallback: function(result/*success, hardware, software, product*/) {
+            if (result.success) {
+                label_hardware.text = result.hardware
+                label_software.text = result.software
+                label_product.text = result.product
             }
 
-            btn_query_version.changeState(success)
+            btn_query_version.changeState(result.success)
         }
-        onConfigureAddressCallback: function(success, addr) {
-            if (success) {
-                input_address.text = addr
+        onConfigureAddressCallback: function(result /*success, addr*/) {
+            if (result.success) {
+                input_address.text = result.addr
             }
-            btn_configure_address.changeState(success)
+            btn_configure_address.changeState(result.success)
         }
-        onConfigureCountCallback: function(success, count) {
-            if (success) {
-                input_sensor_count.text = count
+        onConfigureCountCallback: function(result /*success, count*/) {
+            if (result.success) {
+                input_sensor_count.text = result.count
             }
-            btn_configure_sensor_count.changeState(success)
+            btn_configure_sensor_count.changeState(result.success)
         }
         function alertNotOpen() {
             Qaterial.SnackbarManager.show({text: qsTr("Communication not open!Can not operate!")})

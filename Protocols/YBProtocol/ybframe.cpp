@@ -385,12 +385,12 @@ YBFrame YBFrame::forceSettingAddr(uint16_t addr)
     return frame;
 }
 
-YBFrame YBFrame::queryAddress(eYBFrameType type, uint16_t dstAddr)
+YBFrame YBFrame::queryAddress()
 {
     YBFrame frame;
     frame.m_srcType = eYBFrameType::PCSoftware;
-    frame.m_dstType = type;
-    frame.m_dstAddr = dstAddr;
+    frame.m_dstType = eYBFrameType::YBSensor;
+    frame.m_dstAddr = 0x00;
     frame.m_funCode = eYBFunCode::QueryAddrCode;
     frame.m_dataLen = 0x00;
     frame.m_dataContent.reset(ContentFactory::createContent(frame.m_funCode));

@@ -95,6 +95,14 @@ IContentDeferredPtr YBProtocolChannel::setSensorNum(uint16_t dstAddr, uint8_t nu
     return buildResultContent(frame.m_dstType, frame.m_funCode, msecTimeout);
 }
 
+IContentDeferredPtr YBProtocolChannel::querySensorAddr(int msecTimeout)
+{
+    auto frame = YBFrame::queryAddress();
+    m_sendFrameQueue.enqueue(frame);
+
+    return buildResultContent(frame.m_dstType, frame.m_funCode, msecTimeout);
+}
+
 IContentDeferredPtr YBProtocolChannel::buildResultContent(int type, int funcode, int msecTimeout)
 {
     auto reply = new ProtocolReply(type, funcode, msecTimeout);
