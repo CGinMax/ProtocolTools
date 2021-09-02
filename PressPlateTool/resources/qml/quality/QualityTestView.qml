@@ -97,7 +97,7 @@ Rectangle {
         interval: 2000
         repeat: true
         onTriggered: {
-            的的_controller.querySensorVersion(parseInt(text_address.text), 2000)
+            _controller.querySensorVersion(parseInt(text_address.text), 2000)
         }
     }
     Timer {
