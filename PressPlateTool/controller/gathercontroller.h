@@ -30,6 +30,8 @@ public:
     Q_INVOKABLE void configureSensorState(int index, int addr, int state, int timeout);
     Q_INVOKABLE void querySensorVersion(int index, int addr, int timeout);
     Q_INVOKABLE void querySensorState(int index, int addr, int timeout);
+    // 用于自动查询地址后，随便发送查状态，不做数据应答
+    Q_INVOKABLE void exitConfigureState(int addr, int timeout);
     bool canDoOperate();
 
     bool error(const std::shared_ptr<IContent>& result, const std::function<void(const QVariantMap&)>& callback);

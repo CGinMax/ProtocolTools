@@ -208,7 +208,7 @@ Rectangle {
             } else {
                 auto_query_dialog.finished();
                 // query state when finish configure all address
-                _root.gatherController.querySensorState(0, model_sensor_configure.getAddr(0), 1000);
+                _root.gatherController.exitConfigureState(0, 1000);
             }
         }
 

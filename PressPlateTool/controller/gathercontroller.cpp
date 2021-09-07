@@ -198,6 +198,12 @@ void GatherController::querySensorState(int index, int addr, int timeout)
     });
 }
 
+void GatherController::exitConfigureState(int addr, int timeout)
+{
+    auto reply = protocol()->queryStatus(static_cast<uint16_t>(addr), timeout);
+    reply->subscribe([=](std::shared_ptr<IContent> result){}, [](){});
+}
+
 bool GatherController::isConnected()
 {
     return !_communication.isNull() && _communication->isActived();
