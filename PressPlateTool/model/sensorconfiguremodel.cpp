@@ -95,6 +95,19 @@ void SensorConfigureModel::appendSensors(int count)
     endInsertRows();
 }
 
+void SensorConfigureModel::appendSensors(int beginNum, int count)
+{
+
+    beginInsertRows(QModelIndex(), _ybSensorDataList.count(), _ybSensorDataList.count() - 1 + count);
+    for (int i = 0; i < count; i++, beginNum++) {
+        auto sensorData = new YBSensorData(tr("Sensor #%1").arg(beginNum));
+        sensorData->setAddr(beginNum);
+        _ybSensorDataList.append(QSharedPointer<YBSensorData>(sensorData));
+    }
+    endInsertRows();
+
+}
+
 void SensorConfigureModel::removeSensor(int index)
 {
     beginRemoveRows(QModelIndex(), index, index);

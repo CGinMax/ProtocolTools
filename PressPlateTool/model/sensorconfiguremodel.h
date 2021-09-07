@@ -27,6 +27,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void appendSensors(int count);
+    Q_INVOKABLE void appendSensors(int beginNum, int count);
     Q_INVOKABLE void removeSensor(int index);
     Q_INVOKABLE void removeAll();
 

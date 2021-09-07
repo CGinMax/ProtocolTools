@@ -15,32 +15,30 @@ Qaterial.Card {
 
     RowLayout {
         anchors.fill: parent
-        Loader {
-            id: loader_err_icon
-            asynchronous: true
-            sourceComponent: Qaterial.ColorIcon {
-                id: icon_inner
-                property bool hovered: false
-                visible: error_message !== ""
-                source: "image://faicon/times-circle"
-                color: "red"
-                ToolTip {
-                    visible: parent.hovered && parent.visible
-                    text: error_message
-                }
-            }
-            Layout.leftMargin: 5
-            Layout.preferredWidth: 20
-            Layout.preferredHeight: 20
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: parent.item.hovered = true
-                onExited: parent.item.hovered = false
-            }
-        }
-
-
+//        Loader {
+//            id: loader_err_icon
+//            asynchronous: true
+//            sourceComponent: Qaterial.ColorIcon {
+//                id: icon_inner
+//                property bool hovered: false
+//                visible: error_message !== ""
+//                source: "image://faicon/times-circle"
+//                color: "red"
+//                ToolTip {
+//                    visible: parent.hovered && parent.visible
+//                    text: error_message
+//                }
+//            }
+//            Layout.leftMargin: 5
+//            Layout.preferredWidth: 20
+//            Layout.preferredHeight: 20
+//            MouseArea {
+//                anchors.fill: parent
+//                hoverEnabled: true
+//                onEntered: parent.item.hovered = true
+//                onExited: parent.item.hovered = false
+//            }
+//        }
 
         Qaterial.Label {
             id: label_name
@@ -69,7 +67,7 @@ Qaterial.Card {
                     iconSource: "image://faicon/arrow-alt-circle-left"
                     iconSize: 18
                     onClickStarted: {
-                        _root.configureSensorAddr(parseInt(loader_input_address.item.text))
+                        _root.configureSensorAddr(address, parseInt(loader_input_address.item.text))
                     }
                     ToolTip{
                         visible: parent.hovered
@@ -131,7 +129,7 @@ Qaterial.Card {
                     iconSource: "image://faicon/search"
                     iconSize: 18
                     onClickStarted: {
-                        emit: _root.querySensorStatus(parseInt(loader_input_address.item.text))
+                        emit: _root.querySensorStatus(address)
                     }
                     ToolTip{
                         visible: parent.hovered
@@ -158,7 +156,7 @@ Qaterial.Card {
                     iconSource: "image://faicon/arrow-alt-circle-left"
                     iconSize: 18
                     onClickStarted: {
-                        emit: _root.configureSensorStatus(parseInt(loader_input_address.item.text),
+                        emit: _root.configureSensorStatus(address,
                                                           loader_cbb_configure_state.item.currentIndex !== 2 ?
                                                           loader_cbb_configure_state.item.currentIndex : 0xFF)
                     }
@@ -192,7 +190,7 @@ Qaterial.Card {
                             iconSource: "image://faicon/search"
                             iconSize: 18
                             onClickStarted: {
-                                emit: _root.querySensorVersion(parseInt(loader_input_address.item.text))
+                                emit: _root.querySensorVersion(address)
                             }
                             ToolTip{
                                 visible: parent.hovered
@@ -221,7 +219,6 @@ Qaterial.Card {
                 icon.source: "image://faicon/trash-alt"
                 icon.width: 18
                 icon.height: 18
-//                icon.color: "red"
                 onClicked: {
                     list_model.removeSensor(index)
                 }
@@ -238,13 +235,13 @@ Qaterial.Card {
         controller_sensor.querySensorVersion(addr, ComConfig.sensorTimeout);
     }
 
-    function configureSensorAddr(addr){
+    function configureSensorAddr(oldAddr, newAddr){
         if (!_root.gatherController.isConnected()) {
             changeAddressState(false);
             _root.gatherController.alertNotOpen();
             return;
         }
-        controller_sensor.configureSensorAddress(addr, ComConfig.sensorTimeout);
+        controller_sensor.configureSensorAddress(oldAddr, newAddr, ComConfig.sensorTimeout);
     }
 
     function querySensorAddr() {
@@ -313,12 +310,17 @@ Qaterial.Card {
             changeQueryAddrState(result.success);
         }
 
-        onConfigureAddressCallback: function(result/*success, addr*/){
+        onConfigureAddressCallback: function(result/*success, oldAddr, newAddr*/){
             if (result.success) {
-                list_model.setAddress(index, result.addr);
+                list_model.setAddress(index, result.newAddr);
+                _root.querySensorStatus(result.newAddr);
             }
+            else {
+                loader_input_address.item.text = result.oldAddr;
+                _root.querySensorStatus(result.oldAddr);
+            }
+
             changeAddressState(result.success);
-            _root.querySensorStatus(result.addr);
         }
         onConfigureStateCallback: function(result/*success, state*/) {
             if (result.success) {

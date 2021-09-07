@@ -20,5 +20,6 @@
         <file>translations/qt_zh_CN.qm</file>
         <file>font/OPPOSans-M.ttf</file>
         <file>qml/quality/QualityTestView.qml</file>
+        <file>qml/dialog/AddMultiDialog.qml</file>
     </qresource>
 </RCC>

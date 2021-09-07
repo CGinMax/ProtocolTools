@@ -7,6 +7,7 @@ import Qaterial 1.0 as Qaterial
 import PressPlateTools 1.0
 
 import "../data"
+import "../dialog"
 
 Rectangle {
     id: _root
@@ -35,19 +36,30 @@ Rectangle {
                 onClicked: dialogLoader.sourceComponent = _textFieldDialogComponent
                 Component {
                     id: _textFieldDialogComponent
-                    Qaterial.TextFieldDialog {
-                        id: _textFieldDialog
-                        title: qsTr("Sensor Number Configuration")
-                        textTitle: qsTr("Sensor Numbers")
-                        text: "1"
-                        validator: IntValidator{ bottom: 1}
+                    AddMultiDialog {
+                        id: _addMultiDialog
                         onAccepted: {
-                            model_sensor_configure.appendSensors(parseInt(text))
-                            input_end_addr.text = parseInt(input_begin_addr.text) + listview_sensor.count - 1
+                            model_sensor_configure.appendSensors(beginNum, count);
+                            input_begin_addr.text = beginNum;
+                            input_end_addr.text = parseInt(beginNum) + parseInt(count);
                         }
                         onRejected: {}
                         onClosed: dialogLoader.sourceComponent = undefined
                     }
+
+//                    Qaterial.TextFieldDialog {
+//                        id: _textFieldDialog
+//                        title: qsTr("Sensor Number Configuration")
+//                        textTitle: qsTr("Sensor Numbers")
+//                        text: "1"
+//                        validator: IntValidator{ bottom: 1}
+//                        onAccepted: {
+//                            model_sensor_configure.appendSensors(parseInt(text))
+//                            input_end_addr.text = parseInt(input_begin_addr.text) + listview_sensor.count - 1
+//                        }
+//                        onRejected: {}
+//                        onClosed: dialogLoader.sourceComponent = undefined
+//                    }
                 }
             }
             Qaterial.Button {

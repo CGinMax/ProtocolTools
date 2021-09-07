@@ -27,7 +27,7 @@ public:
         m_timer->start();
         m_result->cancel(timeout);
     }
-    ~ProtocolReply(){
+    ~ProtocolReply() override{
         m_timer->stop();
     }
 

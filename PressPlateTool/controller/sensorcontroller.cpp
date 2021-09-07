@@ -60,9 +60,9 @@ void SensorController::querySensorStatus(int addr, int timeout)
     });
 }
 
-void SensorController::configureSensorAddress(int addr, int timeout)
+void SensorController::configureSensorAddress(int oldAddr, int newAddr, int timeout)
 {
-    auto reply = _controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(addr), timeout);
+    auto reply = _controller->protocol()->setAddress(eYBFrameType::YBSensor, static_cast<uint8_t>(newAddr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){
         if (!this->error(result, std::bind(&SensorController::configureAddressCallback, this, _1))) {
             return ;
@@ -71,12 +71,15 @@ void SensorController::configureSensorAddress(int addr, int timeout)
         QString errorMsg = result->success() ? "" : tr("Configure sensor address failed!");
         QVariantMap map;
         map.insert(QLatin1String("success"), result->success());
-        map.insert(QLatin1String("addr"), addr);
+        map.insert(QLatin1String("oldAddr"), oldAddr);
+        map.insert(QLatin1String("newAddr"), newAddr);
         map.insert(QLatin1String("errorMsg"), errorMsg);
 
         emit this->configureAddressCallback(map);
     }, [=](){
         emit this->configureAddressCallback({{QString("success"), false},
+                                             {QString("oldAddr"), oldAddr},
+                                             {QString("newAddr"), newAddr},
                                              {QString("errorMsg"), tr("Configure sensor address timeout!")}});
     });
 }

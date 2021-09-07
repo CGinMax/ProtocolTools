@@ -19,7 +19,7 @@ public:
 
     Q_INVOKABLE void querySensorVersion(int addr, int timeout);
     Q_INVOKABLE void querySensorStatus(int addr, int timeout);
-    Q_INVOKABLE void configureSensorAddress(int addr, int timeout);
+    Q_INVOKABLE void configureSensorAddress(int oldAddr, int newAddr, int timeout);
     Q_INVOKABLE void configureSensorStatus(int addr, int status, int timeout);
     Q_INVOKABLE void querySensorAddr(int timeout);
 

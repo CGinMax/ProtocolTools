@@ -66,43 +66,68 @@
 <context>
     <name>GatherController</name>
     <message>
-        <location filename="controller/gathercontroller.cpp" line="117"/>
-        <source>Configure address failed!</source>
+        <location filename="controller/gathercontroller.cpp" line="64"/>
+        <source>Query gather version timeout!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/gathercontroller.cpp" line="131"/>
-        <source>Configure address timeout!</source>
+        <location filename="controller/gathercontroller.cpp" line="76"/>
+        <source>Configure gather address failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/gathercontroller.cpp" line="139"/>
-        <source>Configure state failed!</source>
+        <location filename="controller/gathercontroller.cpp" line="85"/>
+        <source>Configure gather addr timeout!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/gathercontroller.cpp" line="153"/>
-        <source>Configure state timeout!</source>
+        <location filename="controller/gathercontroller.cpp" line="98"/>
+        <source>Configure gather&apos;s sensor count failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/gathercontroller.cpp" line="177"/>
-        <source>Query version failed!</source>
+        <location filename="controller/gathercontroller.cpp" line="106"/>
+        <source>Configure gather&apos;s sensor count timeout!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/gathercontroller.cpp" line="180"/>
-        <source>Query version timeout!</source>
+        <location filename="controller/gathercontroller.cpp" line="118"/>
+        <source>Configure sensor address failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/gathercontroller.cpp" line="203"/>
-        <source>Query state failed!</source>
+        <location filename="controller/gathercontroller.cpp" line="130"/>
+        <source>Configure sensor address timeout!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/gathercontroller.cpp" line="205"/>
+        <location filename="controller/gathercontroller.cpp" line="141"/>
+        <source>Configure sensor state failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="controller/gathercontroller.cpp" line="154"/>
+        <source>Configure sensor state timeout!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="controller/gathercontroller.cpp" line="176"/>
+        <source>Query sensor version timeout!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="controller/gathercontroller.cpp" line="197"/>
         <source>Query state timeout!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="controller/gathercontroller.cpp" line="219"/>
+        <source>Unknow frame data!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="controller/gathercontroller.cpp" line="224"/>
+        <source>NAK frame error!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -398,43 +423,39 @@ Configuration Sensor Address is </source>
 <context>
     <name>SensorController</name>
     <message>
-        <location filename="controller/sensorcontroller.cpp" line="45"/>
-        <source>Query version failed!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="controller/sensorcontroller.cpp" line="48"/>
+        <location filename="controller/sensorcontroller.cpp" line="40"/>
         <source>Query version timeout!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/sensorcontroller.cpp" line="70"/>
-        <source>Query state failed!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="controller/sensorcontroller.cpp" line="72"/>
+        <location filename="controller/sensorcontroller.cpp" line="59"/>
         <source>Query state timeout!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="controller/sensorcontroller.cpp" line="71"/>
+        <source>Configure sensor address failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="controller/sensorcontroller.cpp" line="80"/>
-        <source>Configure address failed!</source>
+        <source>Configure sensor address timeout!</source>
+        <oldsource>Configure address failed!</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/sensorcontroller.cpp" line="94"/>
-        <source>Configure address timeout!</source>
+        <location filename="controller/sensorcontroller.cpp" line="101"/>
+        <source>Configure sensor state timeout!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="controller/sensorcontroller.cpp" line="102"/>
+        <location filename="controller/sensorcontroller.cpp" line="117"/>
+        <source>Query sensor addr timeout!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="controller/sensorcontroller.cpp" line="92"/>
         <source>Configure state failed!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="controller/sensorcontroller.cpp" line="115"/>
-        <source>Configure state timeout!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -451,47 +472,52 @@ Configuration Sensor Address is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="94"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="92"/>
+        <source>Query sensor address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="110"/>
         <source>Sensor current state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="106"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="122"/>
         <source>Sensor configed state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="122"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="138"/>
         <source>Query sensor status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="133"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="149"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="133"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="149"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="133"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="149"/>
         <source>Unconfigured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="151"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="167"/>
         <source>Configure sensor state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="183"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="199"/>
         <source>Query sensor version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="190"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="206"/>
         <source>Product Description</source>
         <translation type="unfinished"></translation>
     </message>
