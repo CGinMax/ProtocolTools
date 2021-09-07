@@ -13,6 +13,7 @@ Rectangle {
     id: _root
 
     property var gatherController: null
+    property int mescOfDay: 86400000 // 1000 * 60 * 60 * 24
     Loader {
         id: dialogLoader
         onLoaded: item.open()
@@ -58,6 +59,7 @@ Rectangle {
                         return;
                     }
                     auto_query_dialog.openDialog(qsTr("Querying sensor version.\nQuery sensor address is "), model_sensor_configure.getAddr(0))
+                    auto_query_dialog.closeCallback = null;
                     _root.gatherController.querySensorVersion(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
                 }
             }
@@ -71,6 +73,7 @@ Rectangle {
                         return;
                     }
                     auto_query_dialog.openDialog(qsTr("Querying sensor state.\nQuery sensor address is "), model_sensor_configure.getAddr(0));
+                    auto_query_dialog.closeCallback = null;
                     _root.gatherController.querySensorState(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
                 }
             }
@@ -126,7 +129,12 @@ Rectangle {
                         return;
                     }
                     auto_query_dialog.openDialog(qsTr("Configuring sensors address.\nConfiguration Address is "), parseInt(input_begin_addr.text));
-                    _root.gatherController.configureSensorAddr(0, parseInt(input_begin_addr.text), ComConfig.sensorTimeout);
+                    auto_query_dialog.closeCallback = function() {
+                        _root.gatherController.cancelLongConfigAddr();
+                    }
+
+                    const beginAddr = parseInt(input_begin_addr.text);
+                    _root.gatherController.configureSensorAddr(model_sensor_configure.getIndexByAddr(beginAddr), beginAddr, _root.mescOfDay);
                 }
             }
 
@@ -148,7 +156,8 @@ Rectangle {
                         _root.gatherController.alertNotOpen()
                         return;
                     }
-                    auto_query_dialog.openDialog(qsTr("Configuring sensors state.\nConfiguration Sensor Address is "), model_sensor_configure.getAddr(0));
+                    auto_query_dialog.openDialog(qsTr("Configuring sensors state.\nConfiguration sensor state is "), model_sensor_configure.getAddr(0));
+                    auto_query_dialog.closeCallback = null;
                     _root.gatherController.configureSensorState(0, model_sensor_configure.getAddr(0), cbb_configure_state.value(), ComConfig.sensorTimeout);
                 }
             }
@@ -189,6 +198,7 @@ Rectangle {
     }
     Connections {
         target: gatherController
+        // 配置地址结果回调
         onConfigureSensorAddrCallback: function(result) {
             if (!auto_query_dialog.isRun) {
                 return;
@@ -197,10 +207,9 @@ Rectangle {
                 model_sensor_configure.setAddress(result.index, result.addr);
             }
             auto_query_dialog.addModelData(result.success, model_sensor_configure.getName(result.index));
-            result.index++;
             result.addr++;
-            if (result.index < listview_sensor.count && result.addr <= parseInt(input_end_addr.text)) {
-                _root.gatherController.configureSensorAddr(result.index, result.addr, ComConfig.sensorTimeout);
+            if (result.addr <= parseInt(input_end_addr.text)) {
+                _root.gatherController.configureSensorAddr(model_sensor_configure.getIndexByAddr(result.addr), result.addr, _root.mescOfDay);
                 auto_query_dialog.updateAddress(result.addr);
             } else {
                 auto_query_dialog.finished();
@@ -209,6 +218,7 @@ Rectangle {
             }
         }
 
+        // 配置状态结果回调
         onConfigureSensorStateCallback: function(result/*success, index, state*/) {
             if(!auto_query_dialog.isRun){
                 return;
@@ -226,6 +236,7 @@ Rectangle {
             }
         }
 
+        // 查询版本结果回调
         onQuerySensorVersionCallback: function(result/*success, index, hardware, software, product*/) {
             // stop by click cancel
             if (!auto_query_dialog.isRun) {
@@ -245,6 +256,8 @@ Rectangle {
                 auto_query_dialog.finished();
             }
         }
+
+        // 查询状态结果回调
         onQuerySensorStateCallback: function(result/*success, index, curState, configuredState*/) {
             // stop by click cancel
             if (!auto_query_dialog.isRun) {

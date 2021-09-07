@@ -1,12 +1,12 @@
 #include "ybprotocolchannel.h"
 
 #include "../Protocols/YBProtocol/content/contentfactory.h"
-#include <QDebug>
+#include <QMutexLocker>
 #include <QThread>
+
 YBProtocolChannel::YBProtocolChannel(const QSharedPointer<CommunicationBase> &communication, QObject *parent)
     : ProtocolChannelBase (communication, parent)
     , m_protocol(new YBProtocol())
-    , m_waitResponse(false)
 {
 
 }
@@ -19,7 +19,7 @@ YBProtocolChannel::~YBProtocolChannel()
 
 void YBProtocolChannel::run()
 {
-    if (!m_waitResponse && !m_sendFrameQueue.empty()) {
+    if (!m_sendFrameQueue.empty()) {
 
         auto frame = m_sendFrameQueue.dequeue();
 
@@ -34,6 +34,7 @@ void YBProtocolChannel::run()
 
 void YBProtocolChannel::processFrame(const YBFrame &frame)
 {
+    QMutexLocker locker(&m_mutex);
     if (m_replyList.isEmpty()) {
         return ;
     }
@@ -105,6 +106,7 @@ IContentDeferredPtr YBProtocolChannel::querySensorAddr(int msecTimeout)
 
 IContentDeferredPtr YBProtocolChannel::buildResultContent(int type, int funcode, int msecTimeout)
 {
+    QMutexLocker locker(&m_mutex);
     auto reply = new ProtocolReply(type, funcode, msecTimeout);
     reply->m_timer->moveToThread(this->thread());
     m_replyList.append(reply);
@@ -141,4 +143,21 @@ void YBProtocolChannel::onReadyRead()
         showMessage(eMsgType::eMsgRecv, frame.parseToString(), frame.packetFrameToPureData());
         processFrame(frame);
     }
+}
+
+void YBProtocolChannel::cancelLongConfigAddr()
+{
+    QMutexLocker locker(&m_mutex);
+
+    auto iter = std::find_if(m_replyList.begin(), m_replyList.end(), [](const ProtocolReply* reply) {
+        return reply->interval() == 86400000 && reply->m_type == eYBFrameType::YBSensor
+                && reply->m_funcode == eYBFunCode::SetAddressCode;
+    });
+    if (iter == m_replyList.end()) {
+        return;
+    }
+    auto reply = *iter;
+    m_replyList.erase(iter);
+    reply->cancelTimeout();
+    delete reply;
 }

@@ -37,6 +37,10 @@ public:
         m_dirty = true;
     }
 
+    int interval() const {
+        return m_timer->interval();
+    }
+
     bool m_dirty;
     int m_type;
     int m_funcode;
@@ -80,12 +84,13 @@ signals:
 public slots:
     void onReadyRead() override;
 
+    void cancelLongConfigAddr();
 
 protected:
     YBProtocol* m_protocol;
     QQueue<YBFrame> m_sendFrameQueue;
     QList<ProtocolReply*> m_replyList;
-    bool m_waitResponse;
+    QMutex m_mutex;
 };
 
 #endif // YBPROTOCOLCHANNEL_H

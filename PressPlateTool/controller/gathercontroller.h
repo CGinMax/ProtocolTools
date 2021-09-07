@@ -39,6 +39,7 @@ signals:
     void startPortocolChannel();
     void stopProtocolChannel();
     void showProtocolMsg(const QString& msg);
+    void cancelLongConfigAddr();
     void queryVersionCallback(const QVariantMap& result/* bool success, const QString& hardware = QString(), const QString& software = QString(), const QString& product = QString()*/);
     void configureAddressCallback(const QVariantMap& result/* bool success, int addr = 0*/);
     void configureCountCallback(const QVariantMap& result /*bool success, int count = 0*/);

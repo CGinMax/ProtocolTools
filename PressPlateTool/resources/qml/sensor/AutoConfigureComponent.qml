@@ -14,6 +14,7 @@ Qaterial.ModalDialog {
     property color failedFg: "#E84B55"
     property color successBg: "#ACF5D2"
     property color successFg: "#1AB073"
+    property var closeCallback: null
     standardButtons: Dialog.Cancel
     contentItem: Rectangle {
         id: _content_item
@@ -151,6 +152,9 @@ Qaterial.ModalDialog {
         listmodel_result.clear();
         listmodel_finish.clear();
         isFinish = false;
+        if (closeCallback !== null) {
+            closeCallback();
+        }
     }
 
     function addModelData(success, name) {

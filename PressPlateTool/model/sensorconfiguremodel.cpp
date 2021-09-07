@@ -1,4 +1,5 @@
 #include "sensorconfiguremodel.h"
+#include <algorithm>
 
 QStringList SensorConfigureModel::CURSTATUSDESC = {tr("Open"), tr("Close"), tr("Error Open"), tr("Error Close"), tr("Waiting Open"), tr("Waiting Close")};
 QMap<int, QString> SensorConfigureModel::CONFIGSTATUSDESC = {{0, tr("Open")}, {1, tr("Close")}, {0xFF, tr("Unconfigured")}};
@@ -172,6 +173,17 @@ int SensorConfigureModel::getAddr(int idx)
         return 0;
     }
     return _ybSensorDataList.at(idx)->addr();
+}
+
+int SensorConfigureModel::getIndexByAddr(int addr)
+{
+    auto iter = std::find_if(_ybSensorDataList.begin(), _ybSensorDataList.end(), [addr](const QSharedPointer<YBSensorData>& data) {
+        return data->addr() == addr;
+    });
+    if (iter == _ybSensorDataList.end()) {
+        return -1;
+    }
+    return std::distance(_ybSensorDataList.begin(), iter);
 }
 
 bool SensorConfigureModel::outOfRange(int index)

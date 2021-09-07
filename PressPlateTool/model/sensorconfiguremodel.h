@@ -36,6 +36,7 @@ public:
     Q_INVOKABLE void setConfState(int idx, int state);
     Q_INVOKABLE QString getName(int idx);
     Q_INVOKABLE int getAddr(int idx);
+    Q_INVOKABLE int getIndexByAddr(int addr);
 
     static QStringList CURSTATUSDESC;
     static QMap<int, QString> CONFIGSTATUSDESC;

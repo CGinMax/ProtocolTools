@@ -14,6 +14,7 @@ GatherController::GatherController(QObject *parent)
         connect(this, &GatherController::startPortocolChannel, this->protocol(), &ProtocolChannelBase::start, Qt::BlockingQueuedConnection);
         connect(this, &GatherController::stopProtocolChannel, this->protocol(), &ProtocolChannelBase::stop, Qt::BlockingQueuedConnection);
         connect(this->protocol(), &ProtocolChannelBase::showProtocolMsg, this, &GatherController::showProtocolMsg);
+        connect(this, &GatherController::cancelLongConfigAddr, static_cast<YBProtocolChannel*>(this->protocol()), &YBProtocolChannel::cancelLongConfigAddr);
     });
 }
 
@@ -203,6 +204,11 @@ void GatherController::exitConfigureState(int addr, int timeout)
     auto reply = protocol()->queryStatus(static_cast<uint16_t>(addr), timeout);
     reply->subscribe([=](std::shared_ptr<IContent> result){}, [](){});
 }
+
+//void GatherController::cancelLongConfigAddr()
+//{
+//    protocol()->cancelLongConfigAddr();
+//}
 
 bool GatherController::isConnected()
 {
