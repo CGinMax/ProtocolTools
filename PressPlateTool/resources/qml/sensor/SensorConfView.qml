@@ -41,25 +41,11 @@ Rectangle {
                         onAccepted: {
                             model_sensor_configure.appendSensors(beginNum, count);
                             input_begin_addr.text = beginNum;
-                            input_end_addr.text = parseInt(beginNum) + parseInt(count);
+                            input_end_addr.text = parseInt(beginNum) + parseInt(count) - 1;
                         }
                         onRejected: {}
                         onClosed: dialogLoader.sourceComponent = undefined
                     }
-
-//                    Qaterial.TextFieldDialog {
-//                        id: _textFieldDialog
-//                        title: qsTr("Sensor Number Configuration")
-//                        textTitle: qsTr("Sensor Numbers")
-//                        text: "1"
-//                        validator: IntValidator{ bottom: 1}
-//                        onAccepted: {
-//                            model_sensor_configure.appendSensors(parseInt(text))
-//                            input_end_addr.text = parseInt(input_begin_addr.text) + listview_sensor.count - 1
-//                        }
-//                        onRejected: {}
-//                        onClosed: dialogLoader.sourceComponent = undefined
-//                    }
                 }
             }
             Qaterial.Button {
@@ -222,7 +208,7 @@ Rectangle {
             } else {
                 auto_query_dialog.finished();
                 // query state when finish configure all address
-//                _root.gatherController.querySensorState(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
+                _root.gatherController.querySensorState(0, model_sensor_configure.getAddr(0), 1000);
             }
         }
 
