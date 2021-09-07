@@ -21,5 +21,7 @@
         <file>font/OPPOSans-M.ttf</file>
         <file>qml/quality/QualityTestView.qml</file>
         <file>qml/dialog/AddMultiDialog.qml</file>
+        <file>qml/quality/TestAddress.qml</file>
+        <file>qml/quality/TestState.qml</file>
     </qresource>
 </RCC>
