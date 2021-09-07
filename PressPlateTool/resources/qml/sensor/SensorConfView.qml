@@ -195,10 +195,7 @@ Rectangle {
             }
             if (result.success) {
                 model_sensor_configure.setAddress(result.index, result.addr);
-            } else {
-                model_sensor_configure.setErrorMessage(result.index, result.errorMsg);
             }
-
             auto_query_dialog.addModelData(result.success, model_sensor_configure.getName(result.index));
             result.index++;
             result.addr++;
@@ -218,10 +215,7 @@ Rectangle {
             }
             if (result.success){
                 model_sensor_configure.setConfState(result.index, result.state);
-            } else {
-                model_sensor_configure.setErrorMessage(result.index, result.errorMsg)
             }
-
             auto_query_dialog.addModelData(result.success, model_sensor_configure.getName(result.index));
             result.index++;
             if (result.index < listview_sensor.count) {
@@ -240,10 +234,7 @@ Rectangle {
 
             if (result.success) {
                 model_sensor_configure.setVersion(result.index, result.hardware, result.software, result.product);
-            } else {
-                model_sensor_configure.setErrorMessage(result.index, result.errorMsg);
             }
-
             auto_query_dialog.addModelData(result.success, model_sensor_configure.getName(result.index));
 
             result.index++;
@@ -262,10 +253,7 @@ Rectangle {
 
             if (result.success) {
                 model_sensor_configure.setState(result.index, result.curState, result.confState);
-            } else {
-                model_sensor_configure.setErrorMessage(result.index, result.errorMsg);
             }
-
             auto_query_dialog.addModelData(result.success, model_sensor_configure.getName(result.index));
 
             result.index++;

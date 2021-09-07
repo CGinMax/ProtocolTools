@@ -3,7 +3,6 @@
 
 YBSensorData::YBSensorData(const QString &name, QObject *parent)
     : QObject(parent)
-    , m_errorMessage(QString())
     , m_name(name)
     , m_currentStatus(YBStatus::OffStatus)
     , m_configedStatus(YBStatus::UnsetStatus)
@@ -22,7 +21,6 @@ YBSensorData::YBSensorData(const YBSensorData &other)
 
 YBSensorData &YBSensorData::operator=(const YBSensorData &other)
 {
-    m_errorMessage = other.m_errorMessage;
     m_name = other.m_name;
     m_currentStatus = other.m_currentStatus;
     m_configedStatus = other.m_configedStatus;
@@ -31,16 +29,6 @@ YBSensorData &YBSensorData::operator=(const YBSensorData &other)
     m_softwareVer = other.m_softwareVer;
     m_productDesc = other.m_productDesc;
     return *this;
-}
-
-QString YBSensorData::errorMessage() const
-{
-    return m_errorMessage;
-}
-
-void YBSensorData::setErrorMessage(const QString &errorMessage)
-{
-    m_errorMessage = errorMessage;
 }
 
 QString YBSensorData::name() const

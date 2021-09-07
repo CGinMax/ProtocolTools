@@ -22,9 +22,6 @@ public:
     YBSensorData(const YBSensorData& other);
     YBSensorData& operator=(const YBSensorData& other);
 
-    QString errorMessage() const;
-    void setErrorMessage(const QString &errorMessage);
-
     QString name() const;
     void setName(const QString& name);
 
@@ -55,7 +52,6 @@ signals:
 public slots:
 
 private:
-    QString m_errorMessage;
     QString m_name;
     YBStatus m_currentStatus;
     YBStatus m_configedStatus;
