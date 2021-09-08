@@ -9,7 +9,6 @@
         <file>qml/sensor/SensorConfView.qml</file>
         <file>qml/components/Chip.qml</file>
         <file>qml/components/LoadingButton.qml</file>
-        <file>qml/components/SplitHandle.qml</file>
         <file>qml/sensor/SensorItem.qml</file>
         <file>qml/components/LabelTile.qml</file>
         <file>qml/sensor/AutoConfigureComponent.qml</file>
@@ -23,5 +22,7 @@
         <file>qml/dialog/AddMultiDialog.qml</file>
         <file>qml/quality/TestAddress.qml</file>
         <file>qml/quality/TestState.qml</file>
+        <file>qml/data/ThemeConfig.qml</file>
+        <file>qml/components/RealtimeLabel.qml</file>
     </qresource>
 </RCC>

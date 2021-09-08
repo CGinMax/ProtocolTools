@@ -1,2 +1,3 @@
 
 singleton ComConfig 1.0 ComConfig.qml
+singleton ThemeConfig 1.0 ThemeConfig.qml

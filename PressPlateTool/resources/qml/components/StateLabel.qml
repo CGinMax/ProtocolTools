@@ -2,13 +2,15 @@
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import "../data"
+
 Rectangle {
     id: _root
 
     property string text: ""
     property int value: 0xFF
-    property color foreColor: "#9E9E9E"
-    property color bgColor: "#F6F6F6"
+    property color foreColor: ThemeConfig.unknowFgColor
+    property color bgColor: ThemeConfig.unknowBgColor
     property bool hovered: false
     color: bgColor
     radius: 4
@@ -34,20 +36,20 @@ Rectangle {
     onValueChanged: {
         if (value === 0) {
             // red
-            bgColor = "#FFBEC0";
-            foreColor = "#E84B55";
+            bgColor = ThemeConfig.openBgColor;
+            foreColor = ThemeConfig.openFgColor;
         } else if (value === 1) {
             // green
-            bgColor = "#ACF5D2";
-            foreColor = "#1AB073";
+            bgColor = ThemeConfig.closeBgColor;
+            foreColor = ThemeConfig.closeFgColor;
         } else if (value === 0xFF) {
             // gray
-            bgColor = "#F6F6F6";
-            foreColor = "#9E9E9E";
+            bgColor = ThemeConfig.unknowBgColor;
+            foreColor = ThemeConfig.unknowFgColor;
         } else {
             // yellow
-            bgColor = "#EFD360";
-            foreColor = "#FFF6D7";
+            bgColor = ThemeConfig.exceptionBgColor;
+            foreColor = ThemeConfig.exceptionFgColor;
         }
     }
 

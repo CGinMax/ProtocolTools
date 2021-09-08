@@ -11,17 +11,27 @@ Rectangle {
     property var gatherController: undefined
 
     ColumnLayout {
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: parent.height / 2
+        Layout.margins: 10
+        spacing: 30
         TestState {
             Layout.fillWidth: true
-            Layout.fillHeight: true
+//            Layout.fillHeight: true
+            Layout.margins: 10
+            Layout.alignment: Qt.AlignTop
             gatherController: _root.gatherController
         }
 
         TestAddress {
             gatherController: _root.gatherController
+
             Layout.fillWidth: true
-            Layout.fillHeight: true
+//            Layout.fillHeight: true
+            Layout.margins: 10
+            Layout.alignment: Qt.AlignTop
         }
     }
 

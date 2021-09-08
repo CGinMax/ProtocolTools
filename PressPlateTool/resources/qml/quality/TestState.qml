@@ -9,17 +9,21 @@ import PressPlateTools 1.0
 Qaterial.GroupBox {
     id: _root
     property alias gatherController: _controller.gatherController
-    property string nowTimePrefix: qsTr("Update time:")
-    property string lastTimePrefix: qsTr("Last update time:")
     property string noneSuffix: qsTr("None")
+    property color bgColor: ThemeConfig.failedBgColor
+    property color textColor: ThemeConfig.failedFgColor
     property bool lastTimeSuccess: false
+
     title: qsTr("Test State")
+    inlineTitle: true
 
     ColumnLayout {
         anchors.fill: parent
+        spacing: 30
 
-        Row {
+        RowLayout {
             spacing: 20
+            Layout.alignment: Qt.AlignTop
             Qaterial.TextField {
                 id: text_address
                 title: qsTr("Sensor Address")
@@ -50,7 +54,7 @@ Qaterial.GroupBox {
             }
 
             Qaterial.ToggleSeparator {
-
+                width: 13
             }
 
             Qaterial.ComboBox {
@@ -75,30 +79,43 @@ Qaterial.GroupBox {
                 }
             }
         }
-        Qaterial.Label {
-            id: _nowTimeLabel
-            text: _root.nowTimePrefix
-            property string value: _root.noneSuffix
-            background: Rectangle {
-                id: _nowTimeBg
+        Row {
+            spacing: 20
+//            Layout.alignment: Qt.AlignTop
+            RealtimeLabel {
+                id: _nowTimeLabel
+                prefixText: qsTr("Update time:")
+                suffixText: _root.noneSuffix
+                bgColor: _root.bgColor
+                textColor: _root.textColor
             }
-        }
-        Qaterial.Label {
-            id: _lastTimeLabel
-            text: _root.lastTimePrefix
-            property string value: _root.noneSuffix
-            background: Rectangle {
-                id: _lastTimeBg
-            }
-        }
 
-        Qaterial.Label {
-            id: _versionLabel
-            text: _root.noneSuffix
+            RealtimeLabel {
+                id: _lastTimeLabel
+                prefixText: qsTr("Last update time:")
+                suffixText: _root.noneSuffix
+                bgColor: ThemeConfig.successBgColor
+                textColor: ThemeConfig.successFgColor
+            }
         }
-        Qaterial.Label {
-            id: _stateLabel
-            text: _root.noneSuffix
+        Column {
+            spacing: 20
+//            Layout.alignment: Qt.AlignTop
+            RealtimeLabel {
+                id: _stateLabel
+                prefixText: qsTr("Real time query state:")
+                suffixText: _root.noneSuffix
+                bgColor: _root.bgColor
+                textColor: _root.textColor
+            }
+
+            RealtimeLabel {
+                id: _versionLabel
+                prefixText: qsTr("Real time query version:")
+                suffixText: _root.noneSuffix
+                bgColor: _root.bgColor
+                textColor: _root.textColor
+            }
         }
     }
     Timer {
@@ -138,24 +155,27 @@ Qaterial.GroupBox {
                 var content = qsTr("Hardware version: ") + result.hardware + ", ";
                 content += qsTr("Software version: ") + result.software + ", ";
                 content += qsTr("Product: ") + result.product;
-                _versionLabel.text = content;
+                _versionLabel.suffixText = content;
             }
             else {
-                _versionLabel.text = _root.noneSuffix;
+                _versionLabel.suffixText = _root.noneSuffix;
             }
 
             updateTime(result.success);
+            updateColor(_versionLabel, result.success);
         }
         onQueryStateCallback: function(result/*success, curState, confState*/) {
             if (result.success) {
-                var content = qsTr("current status:") +result.curState + ", " + qsTr("configure status:") + result.confState
-                _stateLabel.text = content;
+                var content = qsTr("current status:") + result.curState + ", ";
+                content += qsTr("configure status:") + result.confState;
+                _stateLabel.suffixText = content;
             }
             else {
-                _versionLabel.text = _root.noneSuffix;
+                _stateLabel.suffixText = _root.noneSuffix;
             }
 
             updateTime(result.success);
+            updateColor(_stateLabel, result.success);
         }
         onConfigureStateCallback: function(result) {
             if (result.success) {
@@ -166,15 +186,17 @@ Qaterial.GroupBox {
 
     function updateTime(success) {
         if (_root.lastTimeSuccess) {
-            _lastTimeLabel.value = _nowTimeLabel.value;
+            _lastTimeLabel.suffixText = _nowTimeLabel.suffixText;
         }
 
-        if(success) {
-            _nowTimeLabel.value = Qt.formatDateTime(new Date(), "yyyy-MM-dd hh:mm:ss")
-        }
-        else {
-            _nowTimeLabel.value = _root.noneSuffix;
-        }
+        _nowTimeLabel.suffixText = success ? Qt.formatDateTime(new Date(), "yyyy-MM-dd hh:mm:ss") : "";
+        updateColor(_nowTimeLabel, success);
+        _root.lastTimeSuccess = succes;
+    }
+
+    function updateColor(label, success) {
+        label.bgColor = success ? ThemeConfig.successBgColor : ThemeConfig.failedBgColor;
+        label.textColor = success ? ThemeConfig.successFgColor : ThemeConfig.failedFgColor;
     }
 
 }

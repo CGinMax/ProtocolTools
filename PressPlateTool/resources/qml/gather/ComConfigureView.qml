@@ -7,7 +7,6 @@ import Qaterial 1.0 as Qaterial
 import PressPlateTools 1.0
 
 import "../data"
-
 Qaterial.GroupBox {
     id: _root
     title: qsTr("Communication configuration")
