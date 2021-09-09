@@ -70,4 +70,4 @@ TRANSLATIONS += $$PWD/ProtocolTool_zh.ts
 
 RESOURCES += \
     resources.qrc
-
+RC_FILE = $$PWD/resources/favicon.ico

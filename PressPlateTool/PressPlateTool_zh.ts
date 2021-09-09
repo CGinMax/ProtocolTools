@@ -4,7 +4,7 @@
 <context>
     <name>AddMultiDialog</name>
     <message>
-        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="12"/>
+        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="13"/>
         <source>Sensor Number Configuration</source>
         <translation>传感器数量配置</translation>
     </message>
@@ -14,9 +14,19 @@
         <translation>传感器起始地址</translation>
     </message>
     <message>
-        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="27"/>
+        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="29"/>
         <source>Sensor Count</source>
         <translation>传感器数量</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="38"/>
+        <source>Confirm</source>
+        <translation>确认</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="43"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -26,57 +36,62 @@
         <source>Automatic operation finish!</source>
         <translation>自动操作完成！</translation>
     </message>
+    <message>
+        <location filename="resources/qml/sensor/AutoConfigureComponent.qml" line="136"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
 </context>
 <context>
     <name>ComConfigureView</name>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="13"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="12"/>
         <source>Communication configuration</source>
         <translation>通讯配置</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="34"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="29"/>
         <source>Device List</source>
         <translation>设备列表</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="48"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="43"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="58"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="53"/>
         <source>Buad Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="74"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="72"/>
         <source>Gather Timeout Time</source>
         <translation>采集器超时时间</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="76"/>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="85"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="74"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="84"/>
         <source>ms</source>
         <translation>毫秒</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="83"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="82"/>
         <source>Sensor Timeout Time</source>
         <translation>传感器超时时间</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="94"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="93"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="94"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="93"/>
         <source>Start</source>
         <translation>启动</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="116"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="119"/>
         <source>Error! Serial Port name is invalid!</source>
         <translation>错误！串口名称无效！</translation>
     </message>
@@ -215,96 +230,111 @@
 <context>
     <name>SensorConfView</name>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="28"/>
-        <source>Add one</source>
-        <translation>添加单个</translation>
-    </message>
-    <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="36"/>
-        <source>Add Multiple</source>
-        <translation>添加多个</translation>
-    </message>
-    <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="54"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="182"/>
         <source>Automatic query sensor version</source>
         <translation>自动查询传感器版本</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="61"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="189"/>
         <source>Querying sensor version.
 Query sensor address is </source>
         <translation>正在查询传感器版本.
 所查询传感器的地址为 </translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="68"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="196"/>
         <source>Automatic query sensor status</source>
         <translation>自动查询传感器状态</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="75"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="203"/>
         <source>Querying sensor state.
 Query sensor address is </source>
         <translation>正在查询传感器状态.
 所查询传感器的地址为 </translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="92"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="77"/>
         <source>Information</source>
         <translation>提示</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="93"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="34"/>
+        <source>Sensor Configuration</source>
+        <translation>传感器配置</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="40"/>
+        <source>Configurate and query sensor information by single or multiple</source>
+        <translation>单个或多个配置和查询传感器信息</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="47"/>
+        <source>Add</source>
+        <translation>添加</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="78"/>
         <source>Are you sure you want to delete all item?</source>
         <translation>确定要删除所有项？</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="108"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="82"/>
+        <source>Confirm</source>
+        <translation>确认</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="88"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="118"/>
         <source>Begin Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="118"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="128"/>
         <source>End Address</source>
         <translation>结束地址</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="125"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="135"/>
         <source>Automatic configure sensor address</source>
         <translation>自动设定传感器地址</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="131"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="141"/>
         <source>Configuring sensors address.
 Configuration Address is </source>
         <translation>正在设定地址.
 所设定地址为 </translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="145"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="158"/>
         <source>Open</source>
         <translation>应分</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="145"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="158"/>
         <source>Close</source>
         <translation>应合</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="145"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="158"/>
         <source>Unconfigured</source>
         <translation>未配置</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="153"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="166"/>
         <source>Automatic configure sensor state</source>
         <translation>自动设定传感器状态</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="159"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="172"/>
         <source>Configuring sensors state.
 Configuration sensor state is </source>
-        <translation type="unfinished">配置传感器状态。
+        <translation>配置传感器状态。
 传感器配置状态为 </translation>
     </message>
 </context>
@@ -397,62 +427,62 @@ Configuration sensor state is </source>
 <context>
     <name>SensorItem</name>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="57"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="32"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="74"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="49"/>
         <source>Configure sensor address</source>
         <translation>设定传感器地址</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="90"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="65"/>
         <source>Query sensor address</source>
         <translation>查询传感器地址</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="108"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="83"/>
         <source>Sensor current state</source>
         <translation>传感器当前状态</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="120"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="95"/>
         <source>Sensor configed state</source>
         <translation>传感器已配地址</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="136"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="111"/>
         <source>Query sensor status</source>
         <translation>查询传感器状态</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="147"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="123"/>
         <source>Open</source>
         <translation>应分</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="147"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="123"/>
         <source>Close</source>
         <translation>应合</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="147"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="123"/>
         <source>Unconfigured</source>
         <translation>未配置</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="165"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="141"/>
         <source>Configure sensor state</source>
         <translation>设定传感器状态</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="197"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="173"/>
         <source>Query sensor version</source>
         <translation>查询传感器版本</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="204"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="180"/>
         <source>Product Description</source>
         <translation>产品描述</translation>
     </message>

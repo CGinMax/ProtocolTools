@@ -15,7 +15,7 @@ Qaterial.ModalDialog {
     property color successBg: "#ACF5D2"
     property color successFg: "#1AB073"
     property var closeCallback: null
-    standardButtons: Dialog.Cancel
+
     contentItem: Rectangle {
         id: _content_item
         RowLayout {
@@ -130,6 +130,14 @@ Qaterial.ModalDialog {
         }
 
     }
+    footer: RowLayout {
+        Qaterial.FlatButton {
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+            text: qsTr("Cancel")
+            onClicked: reject()
+        }
+    }
+
     onClosed: {
         drop();
     }

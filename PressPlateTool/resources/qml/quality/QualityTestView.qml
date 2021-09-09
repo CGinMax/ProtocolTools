@@ -9,6 +9,7 @@ import Qaterial 1.0 as Qaterial
 Rectangle {
     id: _root
     property var gatherController: undefined
+    color: "#C2F5F5F5"
 
     ColumnLayout {
         anchors.left: parent.left

@@ -4,7 +4,7 @@
 <context>
     <name>AddMultiDialog</name>
     <message>
-        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="12"/>
+        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="13"/>
         <source>Sensor Number Configuration</source>
         <translation>Sensor Number Configuration</translation>
     </message>
@@ -14,9 +14,19 @@
         <translation>Sensor Begin Number</translation>
     </message>
     <message>
-        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="27"/>
+        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="29"/>
         <source>Sensor Count</source>
         <translation>Sensor Count</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="38"/>
+        <source>Confirm</source>
+        <translation>Confirm</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/dialog/AddMultiDialog.qml" line="43"/>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
     </message>
 </context>
 <context>
@@ -26,57 +36,62 @@
         <source>Automatic operation finish!</source>
         <translation>Automatic operation finish!</translation>
     </message>
+    <message>
+        <location filename="resources/qml/sensor/AutoConfigureComponent.qml" line="136"/>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
 </context>
 <context>
     <name>ComConfigureView</name>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="13"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="12"/>
         <source>Communication configuration</source>
         <translation>Communication configuration</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="34"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="29"/>
         <source>Device List</source>
         <translation>Device List</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="48"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="43"/>
         <source>Refresh</source>
         <translation>Refresh</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="58"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="53"/>
         <source>Buad Rate</source>
         <translation>Buad Rate</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="74"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="72"/>
         <source>Gather Timeout Time</source>
         <translation>Gather Timeout Time</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="76"/>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="85"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="74"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="84"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="83"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="82"/>
         <source>Sensor Timeout Time</source>
         <translation>Sensor Timeout Time</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="94"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="93"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="94"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="93"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="resources/qml/gather/ComConfigureView.qml" line="116"/>
+        <location filename="resources/qml/gather/ComConfigureView.qml" line="119"/>
         <source>Error! Serial Port name is invalid!</source>
         <translation>Error! Serial Port name is invalid!</translation>
     </message>
@@ -215,96 +230,111 @@
 <context>
     <name>SensorConfView</name>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="28"/>
-        <source>Add one</source>
-        <translation>Add one</translation>
-    </message>
-    <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="36"/>
-        <source>Add Multiple</source>
-        <translation>Add Multiple</translation>
-    </message>
-    <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="54"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="182"/>
         <source>Automatic query sensor version</source>
         <translation>Automatic query sensor version</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="61"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="189"/>
         <source>Querying sensor version.
 Query sensor address is </source>
         <translation>Querying sensor version.
 Query sensor address is </translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="68"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="196"/>
         <source>Automatic query sensor status</source>
         <translation>Automatic query sensor status</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="75"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="203"/>
         <source>Querying sensor state.
 Query sensor address is </source>
         <translation>Querying sensor state.
 Query sensor address is </translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="92"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="77"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="93"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="34"/>
+        <source>Sensor Configuration</source>
+        <translation>Sensor Configuration</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="40"/>
+        <source>Configurate and query sensor information by single or multiple</source>
+        <translation>Configurate and query sensor information by single or multiple</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="47"/>
+        <source>Add</source>
+        <translation>Add</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="78"/>
         <source>Are you sure you want to delete all item?</source>
         <translation>Are you sure you want to delete all item?</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="108"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="82"/>
+        <source>Confirm</source>
+        <translation>Confirm</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="88"/>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="118"/>
         <source>Begin Address</source>
         <translation>Begin Address</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="118"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="128"/>
         <source>End Address</source>
         <translation>End Address</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="125"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="135"/>
         <source>Automatic configure sensor address</source>
         <translation>Automatic configure sensor address</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="131"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="141"/>
         <source>Configuring sensors address.
 Configuration Address is </source>
         <translation>Configuring sensors address.
 Configuration Address is </translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="145"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="158"/>
         <source>Open</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="145"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="158"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="145"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="158"/>
         <source>Unconfigured</source>
         <translation>Unconfigured</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="153"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="166"/>
         <source>Automatic configure sensor state</source>
         <translation>Automatic configure sensor state</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorConfView.qml" line="159"/>
+        <location filename="resources/qml/sensor/SensorConfView.qml" line="172"/>
         <source>Configuring sensors state.
 Configuration sensor state is </source>
-        <translation type="unfinished">Configuring sensors state.
+        <translation>Configuring sensors state.
 Configuration sensor state is </translation>
     </message>
 </context>
@@ -397,62 +427,62 @@ Configuration sensor state is </translation>
 <context>
     <name>SensorItem</name>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="57"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="32"/>
         <source>Address</source>
         <translation>Address</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="74"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="49"/>
         <source>Configure sensor address</source>
         <translation>Configure sensor address</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="90"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="65"/>
         <source>Query sensor address</source>
         <translation>Query sensor address</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="108"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="83"/>
         <source>Sensor current state</source>
         <translation>Sensor current state</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="120"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="95"/>
         <source>Sensor configed state</source>
         <translation>Sensor configed state</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="136"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="111"/>
         <source>Query sensor status</source>
         <translation>Query sensor status</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="147"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="123"/>
         <source>Open</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="147"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="123"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="147"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="123"/>
         <source>Unconfigured</source>
         <translation>Unconfigured</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="165"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="141"/>
         <source>Configure sensor state</source>
         <translation>Configure sensor state</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="197"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="173"/>
         <source>Query sensor version</source>
         <translation>Query sensor version</translation>
     </message>
     <message>
-        <location filename="resources/qml/sensor/SensorItem.qml" line="204"/>
+        <location filename="resources/qml/sensor/SensorItem.qml" line="180"/>
         <source>Product Description</source>
         <translation>Product Description</translation>
     </message>

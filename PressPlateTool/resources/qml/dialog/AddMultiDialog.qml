@@ -11,7 +11,6 @@ Qaterial.ModalDialog {
     property alias count: _inputCount.text
 
     title: qsTr("Sensor Number Configuration")
-    standardButtons: Dialog.Ok | Dialog.Cancel
 
     contentItem: ColumnLayout
     {
@@ -31,6 +30,18 @@ Qaterial.ModalDialog {
             text: "1"
             validator: IntValidator{ bottom: 1 }
             Layout.fillWidth: true
+        }
+    }
+    footer: RowLayout {
+        Qaterial.RawMaterialButton {
+            Layout.alignment: Qt.AlignCenter
+            text: qsTr("Confirm")
+            onClicked: accept()
+        }
+        Qaterial.FlatButton {
+            Layout.alignment: Qt.AlignCenter
+            text: qsTr("Cancel")
+            onClicked: reject()
         }
     }
 }

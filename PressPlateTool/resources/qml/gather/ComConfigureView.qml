@@ -11,7 +11,7 @@ Qaterial.GroupBox {
     id: _root
     title: qsTr("Communication configuration")
     inlineTitle: true
-    property int labelWidth: 90
+    property int labelWidth: 60
     property bool isStarted: false
 
     signal toggleCommunication(var portParam)
@@ -19,56 +19,55 @@ Qaterial.GroupBox {
     implicitWidth: 400
     implicitHeight: 400
 
+    ColumnLayout {
+        RowLayout {
+            spacing: 20
+            Layout.alignment: Qt.AlignLeft
+            Qaterial.Label {
+                Layout.preferredWidth: _root.labelWidth
+                font.pixelSize: 16
+                text: qsTr("Device List")
+            }
 
-    Row {
-        spacing: 20
-        ColumnLayout {
-
-            RowLayout {
-                Layout.fillWidth: true
-
-                Qaterial.Label {
-                    Layout.preferredWidth: _root.labelWidth
-                    font.pixelSize: 16
-                    text: qsTr("Device List")
-                }
-
-                Qaterial.ComboBox {
-                    id: _cbb_devices
-                    Layout.fillWidth: true
-                    borderColor: "gray"
-                    model: ListModel {
-                        id: model_devices
-                    }
-                }
-
-                Qaterial.FlatButton {
-                    Layout.fillWidth: true
-                    text: qsTr("Refresh")
-                    onClicked: _root.refreshDevices()
+            Qaterial.ComboBox {
+                id: _cbb_devices
+//                Layout.fillWidth: true
+                borderColor: "gray"
+                model: ListModel {
+                    id: model_devices
                 }
             }
 
-            RowLayout {
-                Layout.fillWidth: true
-                Qaterial.Label{
-                    Layout.preferredWidth: _root.labelWidth
-                    font.pixelSize: 16
-                    text: qsTr("Buad Rate")
-                }
-                Qaterial.ComboBox {
-                    id: _cbb_baudrate
+            Qaterial.OutlineButton {
+//                Layout.fillWidth: true
+                text: qsTr("Refresh")
+                onClicked: _root.refreshDevices()
+            }
+            Qaterial.ToolSeparator {
 
-                    Layout.fillWidth: true
-                    borderColor: "gray"
+            }
 
-                    model: ListModel{
-                        id: model_baudrate
-                    }
+            Qaterial.Label{
+                Layout.preferredWidth: _root.labelWidth
+                font.pixelSize: 16
+                text: qsTr("Buad Rate")
+            }
+            Qaterial.ComboBox {
+                id: _cbb_baudrate
+
+//                Layout.fillWidth: true
+                borderColor: "gray"
+
+                model: ListModel{
+                    id: model_baudrate
                 }
             }
+
         }
-        Column {
+
+        RowLayout {
+            spacing: 20
+            Layout.alignment: Qt.AlignLeft
             Qaterial.TextField {
                 title: qsTr("Gather Timeout Time")
                 text: ComConfig.gatherTimeout
@@ -77,6 +76,7 @@ Qaterial.GroupBox {
                 onTextChanged: {
                     ComConfig.gatherTimeout = parseInt(text);
                 }
+                Layout.fillWidth: true
             }
             Qaterial.TextField {
                 title: qsTr("Sensor Timeout Time")
@@ -86,15 +86,19 @@ Qaterial.GroupBox {
                 onTextChanged: {
                     ComConfig.sensorTimeout = parseInt(text);
                 }
+                Layout.fillWidth: true
             }
-        }
-        Qaterial.RawMaterialButton {
-            id: btn_start
-            text: _root.isStarted ? qsTr("Stop") : qsTr("Start")
-            flat: _root.isStarted
-            outlined: _root.isStarted
+            Qaterial.RawMaterialButton {
+                id: btn_start
+                text: _root.isStarted ? qsTr("Stop") : qsTr("Start")
+                flat: _root.isStarted
+                outlined: _root.isStarted
+                Layout.fillWidth: true
+            }
+
         }
     }
+
 
     QmlSerialPortHelper{
         id: _serialport_helper

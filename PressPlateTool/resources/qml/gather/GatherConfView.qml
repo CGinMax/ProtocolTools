@@ -11,6 +11,7 @@ Rectangle {
     id: _root
 
     property alias gatherController: gather_item.gatherController
+    color: "#C2F5F5F5"
 
     ColumnLayout {
         anchors.fill: parent

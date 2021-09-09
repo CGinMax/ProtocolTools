@@ -14,6 +14,7 @@ Rectangle {
 
     property var gatherController: null
     property int mescOfDay: 86400000 // 1000 * 60 * 60 * 24
+    color: "#C2F5F5F5"
     Loader {
         id: dialogLoader
         onLoaded: item.open()
@@ -22,18 +23,29 @@ Rectangle {
 
         anchors.fill: parent
 
-        Row {
-            Qaterial.Button {
-                id: btn_add_one_sensor
-                text: qsTr("Add one")
-                onClicked: {
-                    model_sensor_configure.appendSensors(1)
-                    input_end_addr.text = parseInt(input_begin_addr.text) + listview_sensor.count - 1
+        RowLayout {
+            Layout.leftMargin: 12
+            Layout.topMargin: 24
+            Column {
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+                Layout.fillWidth: true
+                spacing: 12
+                Qaterial.Label {
+                    text: qsTr("Sensor Configuration")
+                    font.bold: true
+                    textType: Qaterial.Style.TextType.Heading
+
+                }
+                Qaterial.Label {
+                    text: qsTr("Configurate and query sensor information by single or multiple")
+                    textType: Qaterial.Style.TextType.Subheading
+                    color: Qaterial.Style.disabledTextColor()
                 }
             }
-            Qaterial.Button {
-                id: btn_add_multi
-                text: qsTr("Add Multiple")
+            Qaterial.RawMaterialButton {
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                text: qsTr("Add")
+                icon.source: "image://faicon/plus"
                 onClicked: dialogLoader.sourceComponent = _textFieldDialogComponent
                 Component {
                     id: _textFieldDialogComponent
@@ -49,37 +61,9 @@ Rectangle {
                     }
                 }
             }
-            Qaterial.Button {
-                id: btn_query_all_version
-                text: qsTr("Automatic query sensor version")
-                enabled: listview_sensor.count !== 0
-                onClicked: {
-                    if (!_root.gatherController.isConnected()) {
-                        _root.gatherController.alertNotOpen()
-                        return;
-                    }
-                    auto_query_dialog.openDialog(qsTr("Querying sensor version.\nQuery sensor address is "), model_sensor_configure.getAddr(0))
-                    auto_query_dialog.closeCallback = null;
-                    _root.gatherController.querySensorVersion(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
-                }
-            }
-            Qaterial.Button {
-                id: btn_query_all_status
-                text: qsTr("Automatic query sensor status")
-                enabled: listview_sensor.count !== 0
-                onClicked: {
-                    if (!_root.gatherController.isConnected()) {
-                        _root.gatherController.alertNotOpen()
-                        return;
-                    }
-                    auto_query_dialog.openDialog(qsTr("Querying sensor state.\nQuery sensor address is "), model_sensor_configure.getAddr(0));
-                    auto_query_dialog.closeCallback = null;
-                    _root.gatherController.querySensorState(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
-                }
-            }
 
             Qaterial.RoundButton {
-                id: btn_delete_all
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 enabled: listview_sensor.count !== 0
                 icon.source: "image://faicon/trash"
                 icon.width: 18
@@ -89,9 +73,23 @@ Rectangle {
                 Component {
                     id: _alertComponentTitle
                     Qaterial.AlertDialog {
+                        id: _alertDialog
                         title: qsTr("Information")
                         text: qsTr("Are you sure you want to delete all item?")
-                        standardButtons: Dialog.No | Dialog.Ok
+                        footer: RowLayout {
+                            Qaterial.RawMaterialButton {
+                                Layout.alignment: Qt.AlignCenter
+                                text: qsTr("Confirm")
+                                backgroundColor: "red"
+                                onClicked: _alertDialog.accept()
+                            }
+                            Qaterial.FlatButton {
+                                Layout.alignment: Qt.AlignCenter
+                                text: qsTr("Cancel")
+                                onClicked: _alertDialog.reject()
+                            }
+                        }
+
                         onAccepted: model_sensor_configure.removeAll()
                         onRejected: {}
                         onClosed: dialogLoader.sourceComponent = undefined
@@ -99,75 +97,130 @@ Rectangle {
                 }
             }
         }
-        Row {
-            spacing: 5
-            leftPadding: 10
-            Qaterial.TextField {
-                id: input_begin_addr
-                enabled: listview_sensor.count !== 0
-                title: qsTr("Begin Address")
-                text: "1"
-                validator: IntValidator{ bottom: 1 }
-                onTextChanged: {
-                    input_end_addr.text = parseInt(text) + listview_sensor.count - 1
-                }
-            }
-            Qaterial.TextField {
-                id: input_end_addr
-                enabled: listview_sensor.count !== 0
-                title: qsTr("End Address")
-                text: "1"
-                validator: IntValidator{ bottom: 1 }
-            }
-            Qaterial.Button {
-                id: btn_configure_all_addr
-                enabled: listview_sensor.count !== 0
-                text: qsTr("Automatic configure sensor address")
-                onClicked: {
-                    if (!_root.gatherController.isConnected()) {
-                        _root.gatherController.alertNotOpen()
-                        return;
-                    }
-                    auto_query_dialog.openDialog(qsTr("Configuring sensors address.\nConfiguration Address is "), parseInt(input_begin_addr.text));
-                    auto_query_dialog.closeCallback = function() {
-                        _root.gatherController.cancelLongConfigAddr();
-                    }
 
-                    const beginAddr = parseInt(input_begin_addr.text);
-                    _root.gatherController.configureSensorAddr(model_sensor_configure.getIndexByAddr(beginAddr), beginAddr, _root.mescOfDay);
-                }
-            }
-
-            Qaterial.ComboBox {
-                id: cbb_configure_state
-                enabled: listview_sensor.count !== 0
-                borderColor: "gray"
-                model: [qsTr("Open"), qsTr("Close"), qsTr("Unconfigured")]
-                function value() {
-                    return (currentIndex < 2 || currentIndex >= 0) ? currentIndex : 0xFF
-                }
-            }
-            Qaterial.Button {
-                id: btn_configure_all_state
-                enabled: listview_sensor.count !== 0
-                text: qsTr("Automatic configure sensor state")
-                onClicked: {
-                    if (!_root.gatherController.isConnected()) {
-                        _root.gatherController.alertNotOpen()
-                        return;
-                    }
-                    auto_query_dialog.openDialog(qsTr("Configuring sensors state.\nConfiguration sensor state is "), model_sensor_configure.getAddr(0));
-                    auto_query_dialog.closeCallback = null;
-                    _root.gatherController.configureSensorState(0, model_sensor_configure.getAddr(0), cbb_configure_state.value(), ComConfig.sensorTimeout);
-                }
-            }
+        Qaterial.HorizontalLineSeparator {
+            Layout.fillWidth: true
+            Layout.topMargin: 12
+            Layout.leftMargin: 12
+            Layout.rightMargin: 12
         }
 
+        Column {
+            spacing: 12
+            Layout.leftMargin: 12
+            Layout.topMargin: 18
+            Layout.fillWidth: true
+            Row {
+                spacing: 12
+                Qaterial.TextField {
+                    id: input_begin_addr
+                    enabled: listview_sensor.count !== 0
+                    title: qsTr("Begin Address")
+                    text: "1"
+                    validator: IntValidator{ bottom: 1 }
+                    onTextChanged: {
+                        input_end_addr.text = parseInt(text) + listview_sensor.count - 1
+                    }
+                }
+                Qaterial.TextField {
+                    id: input_end_addr
+                    enabled: listview_sensor.count !== 0
+                    title: qsTr("End Address")
+                    text: "1"
+                    validator: IntValidator{ bottom: 1 }
+                }
+                Qaterial.Button {
+                    id: btn_configure_all_addr
+                    enabled: listview_sensor.count !== 0
+                    text: qsTr("Automatic configure sensor address")
+                    onClicked: {
+                        if (!_root.gatherController.isConnected()) {
+                            _root.gatherController.alertNotOpen()
+                            return;
+                        }
+                        auto_query_dialog.openDialog(qsTr("Configuring sensors address.\nConfiguration Address is "), parseInt(input_begin_addr.text));
+                        auto_query_dialog.closeCallback = function() {
+                            _root.gatherController.cancelLongConfigAddr();
+                        }
+
+                        const beginAddr = parseInt(input_begin_addr.text);
+                        _root.gatherController.configureSensorAddr(model_sensor_configure.getIndexByAddr(beginAddr), beginAddr, _root.mescOfDay);
+                    }
+                }
+                Qaterial.ToolSeparator {
+
+                }
+
+                Qaterial.ComboBox {
+                    id: cbb_configure_state
+                    enabled: listview_sensor.count !== 0
+                    borderColor: "gray"
+                    model: [qsTr("Open"), qsTr("Close"), qsTr("Unconfigured")]
+                    function value() {
+                        return (currentIndex < 2 || currentIndex >= 0) ? currentIndex : 0xFF
+                    }
+                }
+                Qaterial.Button {
+                    id: btn_configure_all_state
+                    enabled: listview_sensor.count !== 0
+                    text: qsTr("Automatic configure sensor state")
+                    onClicked: {
+                        if (!_root.gatherController.isConnected()) {
+                            _root.gatherController.alertNotOpen()
+                            return;
+                        }
+                        auto_query_dialog.openDialog(qsTr("Configuring sensors state.\nConfiguration sensor state is "), model_sensor_configure.getAddr(0));
+                        auto_query_dialog.closeCallback = null;
+                        _root.gatherController.configureSensorState(0, model_sensor_configure.getAddr(0), cbb_configure_state.value(), ComConfig.sensorTimeout);
+                    }
+                }
+            } // configure addr and status
+
+            Row {
+                Qaterial.Button {
+                    id: btn_query_all_version
+                    text: qsTr("Automatic query sensor version")
+                    enabled: listview_sensor.count !== 0
+                    onClicked: {
+                        if (!_root.gatherController.isConnected()) {
+                            _root.gatherController.alertNotOpen()
+                            return;
+                        }
+                        auto_query_dialog.openDialog(qsTr("Querying sensor version.\nQuery sensor address is "), model_sensor_configure.getAddr(0))
+                        auto_query_dialog.closeCallback = null;
+                        _root.gatherController.querySensorVersion(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
+                    }
+                }
+                Qaterial.Button {
+                    id: btn_query_all_status
+                    text: qsTr("Automatic query sensor status")
+                    enabled: listview_sensor.count !== 0
+                    onClicked: {
+                        if (!_root.gatherController.isConnected()) {
+                            _root.gatherController.alertNotOpen()
+                            return;
+                        }
+                        auto_query_dialog.openDialog(qsTr("Querying sensor state.\nQuery sensor address is "), model_sensor_configure.getAddr(0));
+                        auto_query_dialog.closeCallback = null;
+                        _root.gatherController.querySensorState(0, model_sensor_configure.getAddr(0), ComConfig.sensorTimeout);
+                    }
+                }
+            }
+
+        }
         ListView {
             id: listview_sensor
             property int delegateHeight: 80
             clip: true
+            //            layer.enabled: count !== 0
+            //            layer.effect: Qaterial.ElevationEffect
+            //            {
+            //                elevation: 1
+            //            } // ElevationEffect
 
+            //            contentItem: Rectangle{
+            //                color: "white"
+            //            }
             Layout.fillWidth: true
             Layout.fillHeight: true
             model: SensorConfigureModel {
@@ -184,11 +237,11 @@ Rectangle {
                 gatherController: _root.gatherController
                 list_model: model_sensor_configure
             }
-             ScrollBar.vertical: ScrollBar {
-                 background: Rectangle{
-                     color: "transparent"
-                 }
-             }
+            ScrollBar.vertical: ScrollBar {
+                background: Rectangle{
+                    color: "transparent"
+                }
+            }
         }
     }
     AutoConfigureComponent{

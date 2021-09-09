@@ -15,31 +15,6 @@ Qaterial.Card {
 
     RowLayout {
         anchors.fill: parent
-//        Loader {
-//            id: loader_err_icon
-//            asynchronous: true
-//            sourceComponent: Qaterial.ColorIcon {
-//                id: icon_inner
-//                property bool hovered: false
-//                visible: error_message !== ""
-//                source: "image://faicon/times-circle"
-//                color: "red"
-//                ToolTip {
-//                    visible: parent.hovered && parent.visible
-//                    text: error_message
-//                }
-//            }
-//            Layout.leftMargin: 5
-//            Layout.preferredWidth: 20
-//            Layout.preferredHeight: 20
-//            MouseArea {
-//                anchors.fill: parent
-//                hoverEnabled: true
-//                onEntered: parent.item.hovered = true
-//                onExited: parent.item.hovered = false
-//            }
-//        }
-
         Qaterial.Label {
             id: label_name
             text: sensor_name
@@ -138,7 +113,8 @@ Qaterial.Card {
                 }
             }
         }
-        Row {
+
+        RowLayout {
             Loader {
                 id: loader_cbb_configure_state
                 asynchronous: true

@@ -13,11 +13,12 @@
         <file>resources/export-icon.png</file>
         <file>resources/import-icon.png</file>
         <file>resources/start-icon.png</file>
+        <file>resources/favicon.ico</file>
     </qresource>
     <qresource prefix="/translations">
         <file>translations/qt_zh_CN.qm</file>
         <file>translations/ProtocolTool_zh.qm</file>
-	<file>translations/ProtocolTool_en.qm</file>
+        <file>translations/ProtocolTool_en.qm</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/OPPOSans-M.ttf</file>
